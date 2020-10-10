@@ -1,0 +1,579 @@
+/* Dragonfly CSS */
+/* 1.1.0 */
+/* Created by: Levminer */
+
+/* vars */
+:root {
+	--df_red: rgb(222, 10, 10);
+	--df_gray: rgb(42, 36, 36);
+	--df_white: rgb(255, 255, 255);
+	--df_black: rgb(0, 0, 0);
+}
+
+/* body */
+body {
+	color: var(--df_white);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+/* selection */
+::selection {
+	color: var(--df_black);
+	background: var(--df_white);
+}
+
+/* all */
+* {
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
+
+/* links */
+.link1:link {
+	color: var(--df_red);
+	font-size: 2rem;
+	text-decoration: underline;
+	transition: 0.2s ease-in;
+}
+
+.link1:hover {
+	color: var(--df_white) !important;
+	text-decoration: underline dashed !important;
+}
+
+.link1:visited {
+	color: var(--df_red);
+	text-decoration: underline;
+}
+
+.link2:link {
+	color: var(--df_red);
+	font-size: 2rem;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+}
+
+.link2:hover {
+	color: var(--df_white) !important;
+	text-decoration: none !important;
+}
+
+.link2:visited {
+	color: var(--df_red);
+	text-decoration: none;
+}
+
+/* buttons */
+.button1 {
+	color: var(--df_white);
+	background: var(--df_red);
+	border: 1px solid var(--df_red);
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+}
+
+.button1:hover {
+	border: 1px solid var(--df_red);
+	background: var(--df_gray);
+	color: var(--df_red);
+}
+
+.button2 {
+	color: var(--df_red);
+	background: var(--df_gray);
+	border: 1px solid var(--df_red);
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+}
+
+.button2:hover {
+	border: 1px solid var(--df_white);
+	background: var(--df_gray);
+	color: var(--df_white);
+}
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4 {
+	margin: 2rem;
+	font-weight: 600;
+}
+
+h1 {
+	font-size: 4rem;
+}
+
+h2 {
+	font-size: 3rem;
+}
+
+h3 {
+	font-size: 2rem;
+}
+
+h4 {
+	font-size: 1rem;
+}
+
+/* text */
+.text1,
+.text2,
+.text3,
+.text4 {
+	margin: 1rem;
+}
+
+.text1 {
+	font-size: 2rem;
+}
+
+.text2 {
+	font-size: 1.75rem;
+}
+
+.text3 {
+	font-size: 1.5rem;
+}
+
+.text4 {
+	font-size: 1rem;
+}
+
+/* popup */
+.popup {
+	padding: 15px;
+	background-color: var(--df_red);
+	color: var(--df_white);
+	text-align: center;
+	font-weight: bold;
+	display: block;
+}
+
+.popup-close1 {
+	margin-left: 15px;
+	color: var(--df_white);
+	font-weight: bold;
+	float: right;
+	font-size: 20px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.popup-close2 {
+	margin-right: 15px;
+	color: white;
+	font-weight: bold;
+	float: left;
+	font-size: 20px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.popup-close1:hover {
+	color: var(--df_gray);
+}
+
+.popup-close2:hover {
+	color: var(--df_gray);
+}
+
+.popup-link:link {
+	text-decoration: underline;
+	color: var(--df_white);
+	transition: 0.2s ease-in;
+}
+
+.popup-link:hover {
+	text-decoration: underline !important;
+	color: var(--df_gray) !important;
+}
+.popup-link:visited {
+	text-decoration: underline;
+	color: var(--df_white);
+}
+
+/* navbar */
+
+/* nav */
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 10%;
+	font-size: 20px;
+}
+
+.navbar-logo {
+	cursor: pointer;
+	color: var(--df_red);
+	text-decoration: none;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+}
+
+.navbar-logo:hover {
+	cursor: pointer;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.navbar-link a,
+.navbar-button {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.navbar-link {
+	list-style: none;
+	display: flex;
+}
+
+.navbar-link li {
+	padding: 0px 20px;
+}
+
+.navbar-link li a {
+	transition: 0.2s ease-in;
+	color: var(--df_white);
+	text-decoration: none;
+}
+
+.navbar-link li a:hover {
+	color: var(--df_red);
+}
+
+.navbar-button {
+	color: white;
+	padding: 10px 25px;
+	background-color: var(--df_red);
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+	border: 1px solid var(--df_red);
+}
+
+.navbar-button:hover {
+	background: var(--df_gray);
+	border-radius: 50px;
+	border: 1px solid var(--df_red);
+	color: var(--df_red);
+}
+
+/* inputs */
+.input1 {
+	color: var(--df_white);
+	background: var(--df_red);
+	border: 1px solid var(--df_red);
+	font-size: 1rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: text;
+	text-align: center;
+	transition: 0.2s ease-in;
+}
+
+.input1:hover {
+	color: var(--df_red);
+	background-color: var(--df_gray);
+	border: 1px solid var(--df_red);
+}
+
+.input1::placeholder {
+	color: var(--df_white);
+}
+
+.input2 {
+	color: var(--df_red);
+	background: var(--df_gray);
+	border: 1px solid var(--df_red);
+	font-size: 1rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: text;
+	text-align: center;
+	transition: 0.2s ease-in;
+}
+
+.input2:hover {
+	color: var(--df_white);
+	background-color: var(--df_gray);
+	border: 1px solid var(--df_white);
+}
+
+.input2::placeholder {
+	color: var(--df_red);
+}
+
+/* selects */
+.select1 {
+	color: var(--df_white);
+	background: var(--df_red);
+	border: 1px solid var(--df_red);
+	font-size: 1rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-align: center;
+	transition: 0.2s ease-in;
+	-webkit-appearance: none;
+}
+
+.select1:hover {
+	color: var(--df_red);
+	background-color: var(--df_gray);
+	border: 1px solid var(--df_red);
+}
+
+.select2 {
+	color: var(--df_red);
+	background: var(--df_gray);
+	border: 1px solid var(--df_red);
+	font-size: 1rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-align: center;
+	transition: 0.2s ease-in;
+	-webkit-appearance: none;
+}
+
+.select2:hover {
+	color: var(--df_white);
+	background-color: var(--df_gray);
+	border: 1px solid var(--df_white);
+}
+
+/* radio */
+.radio1 {
+	background-color: var(--df_red);
+	color: var(--df_white);
+	border: 1px var(--df_red) solid;
+	-webkit-appearance: none;
+	display: inline-block;
+	position: relative;
+	height: 20px;
+	width: 20px;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.radio1:checked::before {
+	font-family: 15px Open Sans, sans-serif;
+	position: absolute;
+	left: 5px;
+	top: 1px;
+	content: "\02143";
+	transform: rotate(40deg);
+	font-weight: bolder;
+}
+
+.radio1:hover {
+	background-color: var(--df_gray) !important;
+	border: 1px var(--df_red) solid;
+	color: var(--df_red);
+}
+
+.radio1:checked {
+	background-color: var(--df_red);
+}
+
+.radio2 {
+	background-color: var(--df_gray);
+	color: var(--df_red);
+	border: 1px var(--df_red) solid;
+	-webkit-appearance: none;
+	display: inline-block;
+	position: relative;
+	height: 20px;
+	width: 20px;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.radio2:checked::before {
+	font-family: 15px Open Sans, sans-serif;
+	position: absolute;
+	left: 5px;
+	top: 1px;
+	content: "\02143";
+	transform: rotate(40deg);
+	font-weight: bolder;
+}
+
+.radio2:hover {
+	background-color: var(--df_gray) !important;
+	border: 1px var(--df_white) solid;
+	color: var(--df_white);
+}
+
+.radio2:checked {
+	background-color: var(--df_gray);
+}
+
+/* checkbox */
+.checkbox1 {
+	background-color: var(--df_red);
+	color: var(--df_white);
+	border: 1px var(--df_red) solid;
+	-webkit-appearance: none;
+	display: inline-block;
+	position: relative;
+	height: 20px;
+	width: 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.checkbox1:checked::before {
+	font-family: 15px Open Sans, sans-serif;
+	position: absolute;
+	left: 5px;
+	top: 1px;
+	content: "\02143";
+	transform: rotate(40deg);
+	font-weight: bolder;
+}
+
+.checkbox1:hover {
+	background-color: var(--df_gray) !important;
+	border: 1px var(--df_red) solid;
+	color: var(--df_red);
+}
+
+.checkbox1:checked {
+	background-color: var(--df_red);
+}
+
+.checkbox2 {
+	background-color: var(--df_gray);
+	color: var(--df_red);
+	border: 1px var(--df_red) solid;
+	-webkit-appearance: none;
+	display: inline-block;
+	position: relative;
+	height: 20px;
+	width: 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.checkbox2:checked::before {
+	font-family: 15px Open Sans, sans-serif;
+	position: absolute;
+	left: 5px;
+	top: 1px;
+	content: "\02143";
+	transform: rotate(40deg);
+	font-weight: bolder;
+}
+
+.checkbox2:hover {
+	background-color: var(--df_gray) !important;
+	border: 1px var(--df_white) solid;
+	color: var(--df_white);
+}
+
+.checkbox2:checked {
+	background-color: var(--df_gray);
+}
+
+/* divs*/
+.center {
+	background-color: var(--df_gray);
+	position: relative;
+	top: 200px;
+	text-align: center;
+	padding-top: 30px;
+	margin: 130px auto;
+	height: 300px;
+	width: 600px;
+	border-radius: 30px;
+}
+
+.left {
+	background-color: var(--df_gray);
+	position: relative;
+	top: 200px;
+	float: left;
+	text-align: center;
+	padding-top: 30px;
+	margin: 50px auto;
+	margin-left: 25px;
+	height: 300px;
+	width: 600px;
+	border-radius: 30px;
+}
+
+.right {
+	background-color: var(--df_gray);
+	position: relative;
+	top: 200px;
+	float: right;
+	text-align: center;
+	padding-top: 30px;
+	margin: 50px auto;
+	margin-right: 25px;
+	height: 300px;
+	width: 600px;
+	border-radius: 30px;
+}
+
+.left-center {
+	background-color: var(--df_gray);
+	position: relative;
+	top: 200px;
+	float: left;
+	text-align: center;
+	padding-top: 30px;
+	margin: 50px auto;
+	margin-left: 175px;
+	height: 300px;
+	width: 600px;
+	border-radius: 30px;
+}
+
+.right-center {
+	background-color: var(--df_gray);
+	position: relative;
+	top: 200px;
+	float: right;
+	text-align: center;
+	padding-top: 30px;
+	margin: 50px auto;
+	margin-right: 175px;
+	height: 300px;
+	width: 600px;
+	border-radius: 30px;
+}
+
+footer {
+	margin: auto;
+	margin-top: 50px;
+	width: 100%;
+	text-align: center;
+}

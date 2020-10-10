@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Authme</title>
+		<!-- js -->
+		<script defer src="./index.js"></script>
+		<script defer src="./convert.js"></script>
+		<script defer src="./save.js"></script>
+		<!-- css -->
+		<link rel="stylesheet" href="./dragonfly@1.1.0.css" />
+		<link rel="stylesheet" href="./index.css" />
+		<!-- favicon -->
+		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
+	</head>
+	<body>
+		<div class="center">
+			<h1>Authme</h1>
+			<h2>Here are your 2FA codes:</h2>
+
+			<input type="file" class="file" id="file" onchange="handlefiles(this.files)" accept=".txt" />
+			<button type="button" class="button1" class="input" id="input" onclick="document.getElementById('file').click()">Choose a file</button>
+			<br />
+			<button class="button1" id="save" onclick="save()">Save config</button>
+			<!-- grid -->
+			<div class="grid" id="grid0">
+				<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name0">Code</p>
+				</div>
+				<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1" id="code0" />
+				</div>
+				<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time0">Time</p>
+				</div>
+				<div class="div4">
+					<button class="button1" id="copy0">Copy code</button>
+				</div>
+			</div>
+
+			<div class="grid" id="grid1">
+				<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name1">Code</p>
+				</div>
+				<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1" id="code1" />
+				</div>
+				<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time1">Time</p>
+				</div>
+				<div class="div4">
+					<button class="button1" id="copy1">Copy code</button>
+				</div>
+			</div>
+
+			<div class="grid" id="grid2">
+				<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name2">Code</p>
+				</div>
+				<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1" id="code2" />
+				</div>
+				<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time2">Time</p>
+				</div>
+				<div class="div4">
+					<button class="button1" id="copy2">Copy code</button>
+				</div>
+			</div>
+
+			<div class="grid" id="grid3">
+				<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name3">Code</p>
+				</div>
+				<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1" id="code3" />
+				</div>
+				<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time3">Time</p>
+				</div>
+				<div class="div4">
+					<button class="button1" id="copy3">Copy code</button>
+				</div>
+			</div>
+
+			<div class="grid" id="grid4">
+				<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name4">Code</p>
+				</div>
+				<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1" id="code4" />
+				</div>
+				<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time4">Time</p>
+				</div>
+				<div class="div4">
+					<button class="button1" id="copy4">Copy code</button>
+				</div>
+			</div>
+
+			<div class="grid" id="grid5">
+				<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name5">Code</p>
+				</div>
+				<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1" id="code5" />
+				</div>
+				<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time5">Time</p>
+				</div>
+				<div class="div4">
+					<button class="button1" id="copy5">Copy code</button>
+				</div>
+			</div>
+
+				<div class="grid" id="grid6">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name6">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code6" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time6">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy6">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid7">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name7">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code7" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time7">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy7">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid8">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name8">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code8" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time8">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy8">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid9">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name9">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code9" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time9">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy9">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid10">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name10">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code10" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time10">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy10">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid11">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name11">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code11" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time11">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy11">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid12">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name12">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code12" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time12">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy12">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid13">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name13">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code13" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time13">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy13">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid14">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name14">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code14" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time14">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy14">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid15">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name15">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code15" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time15">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy15">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid16">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name16">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code16" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time16">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy16">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid17">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name17">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code17" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time17">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy17">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid18">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name18">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code18" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time18">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy18">Copy code</button>
+					</div>
+				</div>
+
+				<div class="grid" id="grid19">
+					<div class="div1">
+						<h3>Name</h3>
+						<p class="text2" id="name19">Code</p>
+					</div>
+					<div class="div2">
+						<h3>Code</h3>
+						<input type="text" class="input1" id="code19" />
+					</div>
+					<div class="div3">
+						<h3>Time</h3>
+						<p class="text2" id="time19">Time</p>
+					</div>
+					<div class="div4">
+						<button class="button1" id="copy19">Copy code</button>
+					</div>
+				</div>
+				<h4 id="version">Authme 1.0.0</h4>
+			</div>
+			<!-- grid -->
+		</div>
+	</body>
+</html>

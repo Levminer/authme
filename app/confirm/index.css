@@ -1,0 +1,53 @@
+body {
+	background: rgb(0, 0, 0);
+	background: linear-gradient(90deg, rgba(0, 0, 0, 1) 30%, rgba(42, 36, 36, 1) 100%);
+}
+
+.center {
+	top: 80px;
+	width: 1000px;
+	height: 530px;
+}
+
+.button1 {
+	color: black;
+	background-color: white;
+	border-color: white;
+}
+
+.button1:hover {
+	color: white;
+	border-color: white;
+}
+
+.input1 {
+	color: black;
+	background-color: white;
+	border-color: white;
+	width: 250px;
+}
+
+.input1:hover {
+	color: white;
+	border-color: white;
+}
+
+#password_input2 {
+	position: relative;
+	top: 20px;
+}
+
+#password_label2 {
+	position: relative;
+	top: 20px;
+}
+
+#button1 {
+	position: relative;
+	top: 30px;
+}
+
+#version {
+	position: relative;
+	top: 30px;
+}
