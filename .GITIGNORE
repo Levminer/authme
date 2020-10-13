@@ -1,7 +1,3 @@
 node_modules
 __pycache__
 build
-
-exported.txt
-hash.md
-pass.md

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Authme</title>
+		<!-- js -->
+		<script defer src="./src/js/index.js"></script>
+		<!-- css -->
+		<link rel="stylesheet" href="../.././src/dragonfly@1.1.0.css" />
+		<link rel="stylesheet" href="./src/css/index.css" />
+		<!-- favicon -->
+		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
+	</head>
+	<body>
+		<div class="center">
+			<h1>Authme</h1>
+			<h2>Settings</h2>
+			<button class="button1" onclick="hide()">Close</button>
+			<h3>Launch on startup</h3>
+			<p class="text3">Start the app after operating system loaded.</p>
+			<button class="button1" id="but0" onclick="startup()">-</button>
+			<br />
+			<h3>Clear data</h3>
+			<p class="text3">Clear password, 2FA codes and other settings</p>
+			<button class="button1" id="but1" onclick="data()">Clear data</button>
+			<h4 id="version">Authme 1.1.0</h4>
+		</div>
+	</body>
+</html>

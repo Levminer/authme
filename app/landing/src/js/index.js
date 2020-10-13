@@ -45,10 +45,34 @@ let hash_password = async () => {
 	})
 }
 
+//? no password
+let no_password = () => {
+	text.style.color = "green"
+	text.textContent = "Please wait!"
+
+	fs.writeFile("nrpw.md", "nrpw", (err) => {
+		if (err) {
+			console.log("Not require password file don't created!")
+		} else {
+			console.log("Not require password Password file created!")
+
+			to_application1()
+		}
+	})
+}
+
 //? to_confirm
 let to_confirm = () => {
 	console.log("Sending to confirm...")
 	setInterval(() => {
 		ipc.send("to_confirm")
+	}, 3000)
+}
+
+//? to_application1
+let to_application1 = () => {
+	console.log("Sending to application1...")
+	setInterval(() => {
+		ipc.send("to_application1")
 	}, 3000)
 }
