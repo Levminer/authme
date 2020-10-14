@@ -7,11 +7,13 @@ let prev = false
 fs.readFile("hash.md", "utf-8", (err, content) => {
 	if (err) {
 		console.log("The hash.md fle dont exist!")
+
+		document.querySelector("#title").textContent = "Please choose your exported file"
 	} else {
-		console.log(content)
-		let decrypted = cryptr.decrypt(content)
-		console.log(decrypted)
 		prev = true
+
+		let decrypted = cryptr.decrypt(content)
+
 		processdata(decrypted)
 	}
 })
@@ -24,6 +26,9 @@ let save = () => {
 		} else {
 			console.log("Hash created")
 			document.querySelector("#save").textContent = "Config saved"
+			setTimeout(() => {
+				document.querySelector("#save").style.display = "none"
+			}, 1000)
 		}
 	})
 }

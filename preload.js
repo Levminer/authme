@@ -19,3 +19,11 @@ fs.readFile("nrpw.md", "utf-8", (err, data) => {
 		ipc.send("to_application1")
 	}
 })
+
+fs.readFile("saos.md", "utf-8", (err, data) => {
+	if (err) {
+		console.log("The saos.md fle dont exist!")
+	} else {
+		ipc.send("startup")
+	}
+})

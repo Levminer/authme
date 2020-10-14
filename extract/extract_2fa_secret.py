@@ -56,7 +56,7 @@ for line in (line.strip() for line in fileinput.input(args.infile)):
         print(payload)
 
     # write to file
-    file = open("exported.md", "a")
+    file = open("exported.txt", "a")
 
     for otp in payload.otp_parameters:
         print("\nName:   {}".format(otp.name))

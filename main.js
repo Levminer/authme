@@ -1,7 +1,7 @@
 const electron = require("electron")
 const AutoLaunch = require("auto-launch")
 const path = require("path")
-const { app, BrowserWindow, Menu, Tray, shell } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, Notification } = require("electron")
 const ipc = electron.ipcMain
 
 let window0
@@ -83,7 +83,8 @@ let createWindow = () => {
 
 ipc.on("to_confirm", () => {
 	if (ipc0 == false) {
-		window1.hide()
+		window1.maximize()
+		window1.show()
 		window0.hide()
 		ipc0 = true
 	}
@@ -289,4 +290,8 @@ ipc.on("after_startup0", () => {
 
 ipc.on("after_startup1", () => {
 	autoLaunch.enable()
+})
+
+ipc.on("startup", () => {
+	window2.hide()
 })

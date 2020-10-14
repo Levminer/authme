@@ -6,7 +6,7 @@ body {
 .center {
 	top: 80px;
 	width: 1000px;
-	height: 420px;
+	height: auto;
 }
 
 .button1 {
@@ -20,6 +20,24 @@ body {
 	border-color: white;
 }
 
+.button11 {
+	color: black;
+	background: white;
+	border: 1px solid white;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+}
+
+.button11:hover {
+	border: 1px solid wheat;
+	background: black;
+	color: white;
+}
+
 .input1 {
 	color: black;
 	background-color: white;
@@ -30,6 +48,7 @@ body {
 .input1:hover {
 	color: white;
 	border-color: white;
+	background-color: black;
 }
 
 #password_input2 {
@@ -76,6 +95,10 @@ body {
 	margin-top: 20px;
 	width: 600px;
 	height: 250px;
+}
+
+.grid:last-child {
+	margin-bottom: 50px;
 }
 
 .div1 {
@@ -126,5 +149,7 @@ body {
 }
 
 #save {
+	display: unset;
 	visibility: hidden;
+	margin-bottom: 20px;
 }
