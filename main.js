@@ -1,7 +1,8 @@
 const electron = require("electron")
-const AutoLaunch = require("auto-launch")
+const createDesktopShortcut = require("create-desktop-shortcuts")
 const path = require("path")
-const { app, BrowserWindow, Menu, Tray, shell, Notification } = require("electron")
+const fs = require("fs")
+const { app, BrowserWindow, Menu, Tray, shell, dialog } = require("electron")
 const ipc = electron.ipcMain
 
 let window0
@@ -18,6 +19,13 @@ let c3 = false
 let ipc0 = false
 let ipc1 = false
 let ipc2 = false
+
+let confirmed = false
+
+let authme_version = "1.2.1"
+let node_version = process.versions.node
+let chrome_version = process.versions.chrome
+let electron_version = process.versions.electron
 
 let autoLaunch
 
@@ -90,8 +98,9 @@ ipc.on("to_confirm", () => {
 	}
 })
 
-ipc.on("to_application", () => {
+ipc.on("to_application0", () => {
 	if (ipc1 == false) {
+		confirmed = true
 		window2.maximize()
 		window1.hide()
 		ipc1 = true
@@ -124,17 +133,34 @@ ipc.on("after_data", () => {
 	}, 1000)
 })
 
+ipc.on("after_startup0", () => {
+	let link = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+
+	fs.unlink(link, (err) => {
+		if (err && err.code === "ENOENT") {
+			return console.log("startup shortcut not deleted")
+		} else {
+			console.log("startup shortcut deleted")
+		}
+	})
+})
+
+ipc.on("after_startup1", () => {
+	let shortcut_created = createDesktopShortcut({
+		windows: {
+			filePath: app.getPath("exe"),
+			outputPath: "%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
+			name: "Authme Launcher",
+			comment: "Authme Launcher",
+		},
+	})
+})
+
+ipc.on("startup", () => {
+	window2.hide()
+})
+
 app.whenReady().then(() => {
-	// autolaunch
-	autoLaunch = new AutoLaunch({
-		name: "Authme Starter",
-		path: app.getPath("exe"),
-	})
-
-	autoLaunch.isEnabled().then((isEnabled) => {
-		if (!isEnabled) autoLaunch.enable()
-	})
-
 	// make tray
 	let iconpath = path.join(__dirname, "img/icon.png")
 
@@ -143,9 +169,18 @@ app.whenReady().then(() => {
 		{
 			label: "Show app",
 			click: () => {
+				let window = BrowserWindow.getFocusedWindow()
+
 				if (c2 == false) {
-					window2.maximize()
-					window2.show()
+					fs.readFile("pass.md", "utf-8", (err, data) => {
+						if (err) {
+							return console.log("Not found pass.md")
+						} else if (confirmed == true) {
+							window2.maximize()
+							window2.show()
+						}
+					})
+
 					c2 = true
 				} else {
 					window2.hide()
@@ -187,15 +222,6 @@ app.whenReady().then(() => {
 			label: "File",
 			submenu: [
 				{
-					label: "Exit",
-					click: () => {
-						app.quit()
-					},
-				},
-				{
-					type: "separator",
-				},
-				{
 					label: "Settings",
 					click: () => {
 						if (c3 == false) {
@@ -206,6 +232,15 @@ app.whenReady().then(() => {
 							window3.hide()
 							c3 = false
 						}
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Exit",
+					click: () => {
+						app.quit()
 					},
 				},
 			],
@@ -234,7 +269,7 @@ app.whenReady().then(() => {
 					type: "separator",
 				},
 				{
-					label: "Dev Tools",
+					label: "Devtools",
 					click: () => {
 						if (c1 == false) {
 							window0.webContents.openDevTools()
@@ -255,21 +290,35 @@ app.whenReady().then(() => {
 			],
 		},
 		{
-			label: "Update",
+			label: "Info",
 			submenu: [
 				{
-					label: "Info",
+					label: "Update",
 					click: () => {
-						shell.openExternal("https://www.levminer.com")
+						shell.openExternal("https://github.com/Levminer/authme/releases")
 					},
 				},
 				{
 					type: "separator",
 				},
 				{
-					label: "Update",
+					label: "About",
 					click: () => {
-						shell.openExternal("https://github.com/Levminer/authme/releases")
+						let window = BrowserWindow.getFocusedWindow()
+
+						dialog.showMessageBox(window, {
+							title: "Authme",
+							buttons: ["Close"],
+							type: "info",
+							message: `Authme: ${authme_version}
+
+							Node: ${node_version}
+							Chrome: ${chrome_version}
+							Electron: ${electron_version}
+
+							Created by: Levminer
+							`,
+						})
 					},
 				},
 			],
@@ -282,16 +331,4 @@ app.whenReady().then(() => {
 	app.on("activate", () => {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow()
 	})
-})
-
-ipc.on("after_startup0", () => {
-	autoLaunch.disable()
-})
-
-ipc.on("after_startup1", () => {
-	autoLaunch.enable()
-})
-
-ipc.on("startup", () => {
-	window2.hide()
 })

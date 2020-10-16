@@ -15,8 +15,8 @@
 		"electron-packager": "^15.0.0"
 	},
 	"dependencies": {
-		"auto-launch": "^5.0.5",
 		"bcrypt": "^5.0.0",
+		"create-desktop-shortcuts": "^1.1.0",
 		"cryptr": "^6.0.2",
 		"speakeasy": "^2.0.0"
 	}

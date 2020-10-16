@@ -27,7 +27,7 @@ let unhash_password = () => {
 				text.style.color = "green"
 				text.textContent = "Passwords match! Please wait!"
 
-				to_application()
+				to_application0()
 			} else {
 				console.log("Passwords dont match!")
 
@@ -39,9 +39,9 @@ let unhash_password = () => {
 }
 
 //? to_application
-let to_application = () => {
+let to_application0 = () => {
 	console.log("Sending to application...")
 	setInterval(() => {
-		ipc.send("to_application")
+		ipc.send("to_application0")
 	}, 1000)
 }

@@ -19,8 +19,8 @@
 
 ### Main
 
--   auto-launch
 -   bcrypt
+-   create-desktop-shortcuts
 -   cryptr
 -   speakeasy
 
