@@ -1,10 +1,13 @@
 const fs = require("fs")
 const Cryptr = require("cryptr")
 const cryptr = new Cryptr("-3Lu)g%#11h7FpM?")
+const path = require("path")
 
 let prev = false
 
-fs.readFile("hash.md", "utf-8", (err, content) => {
+const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+
+fs.readFile(path.join(file_path, "hash.md"), "utf-8", (err, content) => {
 	if (err) {
 		console.log("The hash.md fle dont exist!")
 
@@ -20,7 +23,7 @@ fs.readFile("hash.md", "utf-8", (err, content) => {
 
 let save = () => {
 	const encryptedString = cryptr.encrypt(save_text)
-	fs.writeFile("hash.md", encryptedString, (err) => {
+	fs.writeFile(path.join(file_path, "hash.md"), encryptedString, (err) => {
 		if (err) {
 			console.log("Hash not created!")
 		} else {

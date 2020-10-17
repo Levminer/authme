@@ -3,8 +3,11 @@ const bcrypt = require("bcrypt")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
+const path = require("path")
 
 let text = document.querySelector("#text")
+
+const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
 
 //? match passwords
 let match_passwords = () => {
@@ -34,7 +37,7 @@ let hash_password = async () => {
 
 	const hashed = await bcrypt.hash(password_input1, salt).then(console.log("Hash completed!"))
 
-	fs.writeFile("pass.md", hashed, (err) => {
+	fs.writeFile(path.join(file_path, "pass.md"), hashed, (err) => {
 		if (err) {
 			console.log("Password file dont created!")
 		} else {
@@ -50,7 +53,9 @@ let no_password = () => {
 	text.style.color = "green"
 	text.textContent = "Please wait!"
 
-	fs.writeFile("nrpw.md", "nrpw", (err) => {
+	console.log(path.join(file_path, "nrpw.md"))
+
+	fs.writeFile(path.join(file_path, "nrpw.md"), "nrpw", (err) => {
 		if (err) {
 			console.log("Not require password file don't created!")
 		} else {

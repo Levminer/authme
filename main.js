@@ -22,12 +22,10 @@ let ipc2 = false
 
 let confirmed = false
 
-let authme_version = "1.2.1"
+let authme_version = "1.2.2"
 let node_version = process.versions.node
 let chrome_version = process.versions.chrome
 let electron_version = process.versions.electron
-
-let autoLaunch
 
 let createWindow = () => {
 	window0 = new BrowserWindow({
@@ -134,9 +132,9 @@ ipc.on("after_data", () => {
 })
 
 ipc.on("after_startup0", () => {
-	let link = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+	let file_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
 
-	fs.unlink(link, (err) => {
+	fs.unlink(file_path, (err) => {
 		if (err && err.code === "ENOENT") {
 			return console.log("startup shortcut not deleted")
 		} else {
@@ -169,13 +167,22 @@ app.whenReady().then(() => {
 		{
 			label: "Show app",
 			click: () => {
-				let window = BrowserWindow.getFocusedWindow()
+				const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
 
 				if (c2 == false) {
-					fs.readFile("pass.md", "utf-8", (err, data) => {
+					fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
 						if (err) {
 							return console.log("Not found pass.md")
 						} else if (confirmed == true) {
+							window2.maximize()
+							window2.show()
+						}
+					})
+
+					fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
+						if (err) {
+							return console.log("Not found pass.md")
+						} else {
 							window2.maximize()
 							window2.show()
 						}

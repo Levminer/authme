@@ -2,6 +2,7 @@ const { ipcMain } = require("electron")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
+const path = require("path")
 
 let but0 = document.querySelector("#but0")
 let but1 = document.querySelector("#but1")
@@ -9,7 +10,9 @@ let but1 = document.querySelector("#but1")
 //? startup
 let startup_state = true
 
-fs.readFile("saos.md", "utf-8", (err, data) => {
+const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+
+fs.readFile(path.join(file_path, "saos.md"), "utf-8", (err, data) => {
 	if (err) {
 		but0.textContent = "Off"
 		startup_state = true
@@ -25,7 +28,7 @@ fs.readFile("saos.md", "utf-8", (err, data) => {
 
 let startup = () => {
 	if (startup_state == true) {
-		fs.writeFile("saos.md", "saos", (err) => {
+		fs.writeFile(path.join(file_path, "saos.md"), "saos", (err) => {
 			if (err) {
 				console.log("Start after os started don't created!")
 			} else {
@@ -38,7 +41,7 @@ let startup = () => {
 			}
 		})
 	} else {
-		fs.unlink("saos.md", (err) => {
+		fs.unlink(path.join(file_path, "saos.md"), (err) => {
 			if (err && err.code === "ENOENT") {
 				return console.log("saos.md not deleted")
 			} else {
@@ -61,7 +64,7 @@ let data = () => {
 		but1.textContent = "Are you sure?"
 		data_state = true
 	} else {
-		fs.unlink("nrpw.md", (err) => {
+		fs.unlink(path.join(file_path, "nrpw.md"), (err) => {
 			if (err && err.code === "ENOENT") {
 				return console.log("nrpw.md not deleted")
 			} else {
@@ -69,7 +72,7 @@ let data = () => {
 			}
 		})
 
-		fs.unlink("pass.md", (err) => {
+		fs.unlink(path.join(file_path, "pass.md"), (err) => {
 			if (err && err.code === "ENOENT") {
 				return console.log("pass.md not deleted")
 			} else {
@@ -77,7 +80,7 @@ let data = () => {
 			}
 		})
 
-		fs.unlink("hash.md", (err) => {
+		fs.unlink(path.join(file_path, "hash.md"), (err) => {
 			if (err && err.code === "ENOENT") {
 				return console.log("hash.md not deleted")
 			} else {
@@ -85,11 +88,21 @@ let data = () => {
 			}
 		})
 
-		fs.unlink("saos.md", (err) => {
+		fs.unlink(path.join(file_path, "saos.md"), (err) => {
 			if (err && err.code === "ENOENT") {
 				return console.log("saos.md not deleted")
 			} else {
 				console.log("saos.md deleted")
+			}
+		})
+
+		let file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+
+		fs.unlink(file_path2, (err) => {
+			if (err && err.code === "ENOENT") {
+				return console.log("startup shortcut not deleted")
+			} else {
+				console.log("startup shortcut deleted")
 			}
 		})
 
