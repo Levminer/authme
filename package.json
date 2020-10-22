@@ -1,23 +1,31 @@
 {
-	"name": "electron-quick-start",
-	"version": "1.0.0",
-	"description": "A minimal Electron application",
+	"name": "authme",
+	"version": "1.3.0",
+	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
-		"start": "electron ."
+		"start": "electron .",
+		"build": "electron-packager . Authme --overwrite --platform=all --arch=x64 --icon=img/icon.icns --out=build"
 	},
-	"repository": "https://github.com/electron/electron-quick-start",
-	"keywords": [],
-	"author": "GitHub",
-	"license": "CC0-1.0",
+	"repository": "https://github.com/Levminer/authme",
+	"keywords": [
+		"authme",
+		"2fa-security",
+		"2fa-client"
+	],
+	"author": "Levminer",
+	"license": "MIT",
 	"devDependencies": {
-		"electron": "^10.1.3",
+		"electron": "^10.1.4",
 		"electron-packager": "^15.0.0"
 	},
 	"dependencies": {
 		"bcrypt": "^5.0.0",
 		"create-desktop-shortcuts": "^1.1.0",
 		"cryptr": "^6.0.2",
+		"jimp": "^0.16.1",
+		"qrcode": "^1.4.4",
+		"qrcode-reader": "^1.0.4",
 		"speakeasy": "^2.0.0"
 	}
 }

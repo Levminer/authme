@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Authme</title>
+		<!-- js -->
+		<script defer src="./src/js/index.js"></script>
+		<!-- css -->
+		<link rel="stylesheet" href="../.././src/dragonfly@1.1.0.css" />
+		<link rel="stylesheet" href="./src/css/index.css" />
+		<!-- favicon -->
+		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
+	</head>
+	<body>
+		<div class="center">
+			<h1>Authme</h1>
+			<h2>Import</h2>
+			<p class="text3">You can import from Google Authenticator here.</p>
+			<button class="button1" onclick="hide()">Close</button>
+
+			<h2>Instructions</h2>
+			<p class="text3">
+				<b>Step 1</b>
+				<br />
+				<br />
+				Export the QR codes from the Google Authenticato app:
+				<br />
+				Tap on the three dots on the top right of the screen > Transfer Accounts > Export Accounts
+				<br />
+				<br />
+				<b>Step 2</b>
+				<br />
+				<br />
+				<u>Option 1: Import from QR code</u>
+				<br />
+				Save the two or one QR code with a screenshot or take a picture of them from another phone. Then transfer them to your computer.
+				<br />
+				<br />
+				<u>Option 2: Import from text</u>
+				<br />
+				Get 3rd party QR code reader from your application store. Scan the two or one QR code and then copy the text thats outputed, and then
+				send them to your computer.
+				<br />
+				<br />
+				<b>Step 3</b>
+				<br />
+				<br />
+				<u>Option 1: Import from QR code</u>
+				<br />
+				On your tray a folder will open, place your image(s) in the folder. If your image(s) not in .jpg then convert them to .jpg (just
+				google "image converter").
+				<br />
+				Rename your picture(s) to "pic0" and if you have one more then rename it to "pic1" (without quotation mark).
+				<br />
+				<br />
+				<u>Option 2: Import from text</u>
+				<br />
+				Scroll down, you will see two input fields.
+				<br />
+				Paste your text from the QR code, if you have one more QR code then use the second input field.
+				<br />
+				<br />
+				<b>Step 4</b>
+				<br />
+				<br />
+				Your file should be ready in your Authme folder. Go back to the main page:
+				<br />
+				Top menu > Advanced > Import
+				<br />
+				Click on the Choose file button, select your "exported.txt" file in your Authme folder.
+				<br />
+				<br />
+				<b>Step 5</b>
+				<br />
+				<br />
+				<i>AFTER YOU DONE DELETE "output.txt" AND "exported.txt" FROM YOUR AUTHME FOLDER.</i>
+			</p>
+
+			<h2 id="choose">Choose option</h2>
+			<button class="button1" id="but0" onclick="import_qrcode()">Import from QR code</button>
+			<button class="button1" id="but1" onclick="import_text0()">Import from text</button>
+
+			<div class="text-inputs">
+				<h2>Input codes</h2>
+				<input type="text" class="input1" id="input0" placeholder="First code" />
+				<input type="text" class="input1" id="input1" placeholder="Second code" />
+				<br />
+				<button class="button1" id="but2" onclick="import_text1()">Convert</button>
+			</div>
+		</div>
+	</body>
+</html>

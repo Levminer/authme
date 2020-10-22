@@ -1,28 +1,16 @@
 # Authme
 
--   A simple 2FA app for desktop built with Electron and Node.js.
+-   A simple 2FA cross platform app for desktop built with Electron and Node.js.
 
 # How to use
 
--   Check out `extract/README.md`
+-   For technical people: Check out `extract/README.md`
+-   For simple people: Instructions in the app
 
-# Build
+# Development
 
-`electron-packager . Authme --overwrite --platform=all --arch=x64 --icon=img/icon.icns --out=build`
-
-# NPM Pacages used
-
-### Dev
-
--   electron
--   electron-packager
-
-### Main
-
--   bcrypt
--   create-desktop-shortcuts
--   cryptr
--   speakeasy
+-   Start `npm run start`
+-   Build `npm run build`
 
 # License
 

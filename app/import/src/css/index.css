@@ -6,13 +6,14 @@ body {
 .center {
 	top: -50px;
 	width: 1000px;
-	height: 1050px;
+	height: auto;
 }
 
 .button1 {
 	color: black;
 	background-color: white;
 	border-color: white;
+	margin-bottom: 30px;
 }
 
 .button1:hover {
@@ -30,6 +31,10 @@ body {
 .input1:hover {
 	color: white;
 	border-color: white;
+}
+
+.input1::placeholder {
+	color: black;
 }
 
 #password_input2 {
@@ -57,4 +62,37 @@ body {
 	position: relative;
 	top: 50px;
 	color: white !important;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+
+	width: 300px;
+	background-color: black;
+	margin: 0 auto;
+}
+
+input:focus::placeholder {
+	transition: 0.2s ease-in;
+	color: transparent;
+}
+
+input:hover::placeholder {
+	transition: 0.2s ease-in;
+	color: transparent;
+}
+
+.text-inputs {
+	display: none;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+#but2 {
+	margin-top: 15px;
+	margin-bottom: 30px;
 }

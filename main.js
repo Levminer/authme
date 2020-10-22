@@ -9,6 +9,7 @@ let window0
 let window1
 let window2
 let window3
+let window4
 
 let c0 = false
 let c1 = false
@@ -16,16 +17,22 @@ let c1 = false
 let c2 = false
 let c3 = false
 
+let c4 = false
+let c5 = false
+
 let ipc0 = false
 let ipc1 = false
 let ipc2 = false
 
 let confirmed = false
 
-let authme_version = "1.2.2"
+let authme_version = "1.3.0"
 let node_version = process.versions.node
 let chrome_version = process.versions.chrome
 let electron_version = process.versions.electron
+
+let to_tray = false
+let show_tray = false
 
 let createWindow = () => {
 	window0 = new BrowserWindow({
@@ -56,19 +63,37 @@ let createWindow = () => {
 		},
 	})
 
+	window4 = new BrowserWindow({
+		webPreferences: {
+			preload: path.join(__dirname, "preload.js"),
+			nodeIntegration: true,
+		},
+	})
+
+	window5 = new BrowserWindow({
+		webPreferences: {
+			preload: path.join(__dirname, "preload.js"),
+			nodeIntegration: true,
+		},
+	})
+
 	// DEVTOOLS
-	/* window1.webContents.openDevTools() */
+	/* window5.webContents.openDevTools() */
 
 	window0.maximize()
 
 	window1.hide()
 	window2.hide()
 	window3.hide()
+	window4.hide()
+	window5.hide()
 
 	window0.loadFile("./app/landing/index.html")
 	window1.loadFile("./app/confirm/index.html")
 	window2.loadFile("./app/application/index.html")
 	window3.loadFile("./app/settings/index.html")
+	window4.loadFile("./app/import/index.html")
+	window5.loadFile("./app/export/index.html")
 
 	window0.on("close", () => {
 		app.quit()
@@ -78,11 +103,37 @@ let createWindow = () => {
 		app.quit()
 	})
 
-	window2.on("close", () => {
+	window2.on("close", async (e) => {
+		if (to_tray == false) {
+			app.exit()
+		} else {
+			e.preventDefault()
+			setTimeout(() => {
+				window2.hide()
+			}, 100)
+			c2 = false
+			show_tray = true
+		}
+	})
+
+	window3.on("close", async (e) => {
+		if (to_tray == false) {
+			app.exit()
+		} else {
+			e.preventDefault()
+			setTimeout(() => {
+				window3.hide()
+			}, 100)
+			c3 = false
+			show_tray = true
+		}
+	})
+
+	window4.on("close", () => {
 		app.quit()
 	})
 
-	window3.on("close", () => {
+	window5.on("close", () => {
 		app.quit()
 	})
 }
@@ -114,7 +165,7 @@ ipc.on("to_application1", () => {
 	}
 })
 
-ipc.on("hide", () => {
+ipc.on("hide0", () => {
 	if (c3 == false) {
 		window3.maximize()
 		window3.show()
@@ -122,6 +173,28 @@ ipc.on("hide", () => {
 	} else {
 		window3.hide()
 		c3 = false
+	}
+})
+
+ipc.on("hide1", () => {
+	if (c4 == false) {
+		window4.maximize()
+		window4.show()
+		c4 = true
+	} else {
+		window4.hide()
+		c4 = false
+	}
+})
+
+ipc.on("hide2", () => {
+	if (c5 == false) {
+		window5.maximize()
+		window5.show()
+		c5 = true
+	} else {
+		window5.hide()
+		c5 = false
 	}
 })
 
@@ -154,6 +227,14 @@ ipc.on("after_startup1", () => {
 	})
 })
 
+ipc.on("after_tray0", () => {
+	to_tray = false
+})
+
+ipc.on("after_tray1", () => {
+	to_tray = true
+})
+
 ipc.on("startup", () => {
 	window2.hide()
 })
@@ -169,7 +250,10 @@ app.whenReady().then(() => {
 			click: () => {
 				const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
 
-				if (c2 == false) {
+				if (show_tray == false) {
+					window2.hide()
+					show_tray = true
+				} else if (c2 == false) {
 					fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
 						if (err) {
 							return console.log("Not found pass.md")
@@ -213,7 +297,8 @@ app.whenReady().then(() => {
 		{
 			label: "Exit app",
 			click: () => {
-				app.quit()
+				to_tray = false
+				app.exit()
 			},
 		},
 	])
@@ -247,7 +332,8 @@ app.whenReady().then(() => {
 				{
 					label: "Exit",
 					click: () => {
-						app.quit()
+						to_tray = false
+						app.exit()
 					},
 				},
 			],
@@ -262,11 +348,13 @@ app.whenReady().then(() => {
 							window0.setFullScreen(true)
 							window1.setFullScreen(true)
 							window2.setFullScreen(true)
+							window3.setFullScreen(true)
 							c0 = true
 						} else {
 							window0.setFullScreen(false)
 							window1.setFullScreen(false)
 							window2.setFullScreen(false)
+							window3.setFullScreen(false)
 							c0 = false
 						}
 						console.log(`FC ${c0}`)
@@ -283,15 +371,53 @@ app.whenReady().then(() => {
 							window1.webContents.openDevTools()
 							window2.webContents.openDevTools()
 							window3.webContents.openDevTools()
+							window4.webContents.openDevTools()
+							window5.webContents.openDevTools()
 							c1 = true
 						} else {
 							window0.webContents.closeDevTools()
 							window1.webContents.closeDevTools()
 							window2.webContents.closeDevTools()
 							window3.webContents.closeDevTools()
+							window4.webContents.closeDevTools()
+							window5.webContents.closeDevTools()
 							c1 = false
 						}
 						console.log(`DT ${c1}`)
+					},
+				},
+			],
+		},
+		{
+			label: "Advanced",
+			submenu: [
+				{
+					label: "Import",
+					click: () => {
+						if (c4 == false) {
+							window4.maximize()
+							window4.show()
+							c4 = true
+						} else {
+							window4.hide()
+							c4 = false
+						}
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Export",
+					click: () => {
+						if (c5 == false) {
+							window5.maximize()
+							window5.show()
+							c5 = true
+						} else {
+							window5.hide()
+							c5 = false
+						}
 					},
 				},
 			],

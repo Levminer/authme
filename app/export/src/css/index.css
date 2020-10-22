@@ -6,7 +6,8 @@ body {
 .center {
 	top: -50px;
 	width: 1000px;
-	height: 1050px;
+	height: auto;
+	padding-bottom: 50px;
 }
 
 .button1 {
@@ -47,14 +48,43 @@ body {
 	top: 45px;
 }
 
-#version {
-	position: relative;
-	top: 30px;
-}
-
 .link1 {
 	font-size: 1rem !important;
 	position: relative;
 	top: 50px;
 	color: white !important;
+}
+
+#result {
+	position: relative;
+	top: 50px;
+	margin: 0 auto;
+	border: 1px solid rgb(0, 0, 0);
+	padding: 1rem;
+	border-radius: 28px;
+	width: 550px;
+	height: 250px;
+	transition: 0.3s;
+	background-color: rgb(0, 0, 0);
+	color: rgb(255, 255, 255);
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	margin-bottom: 100px;
+	display: none;
+}
+
+#result::-webkit-scrollbar {
+	width: 0px;
+	background: transparent; /* make scrollbar transparent */
+}
+
+.qr {
+	padding-top: 250px;
+	background-color: black;
+	margin-top: 50px;
+	border-radius: 30px;
+	margin: 0 auto;
+	margin-top: 20px;
+	width: 600px;
+	height: 500px;
 }

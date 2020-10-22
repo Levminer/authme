@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Authme</title>
+		<!-- js -->
+		<script defer src="./src/js/index.js"></script>
+		<script defer src="./src/js/convert.js"></script>
+		<!-- css -->
+		<link rel="stylesheet" href="../.././src/dragonfly@1.1.0.css" />
+		<link rel="stylesheet" href="./src/css/index.css" />
+		<!-- favicon -->
+		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
+	</head>
+	<body>
+		<div class="center">
+			<h1>Authme</h1>
+			<h2>Export</h2>
+			<p class="text3">You can export everything form your saved config.</p>
+			<button class="button1" onclick="hide()">Close</button>
+			<h3>Export</h3>
+			<p class="text3">If you saved your config you can export the secrects and the QR codes.</p>
+			<button class="button1" id="but0" onclick="exp()">Export</button>
+			<br />
+			<textarea readonly="readonly" id="result" cols="30" rows="10"></textarea>
+		</div>
+	</body>
+</html>

@@ -47,6 +47,7 @@ let separation = () => {
 
 let go = () => {
 	document.querySelector("#title").textContent = "Here are your 2FA codes"
+	document.querySelector("#search").style.display = "grid"
 
 	let generate = () => {
 		// counter
@@ -133,5 +134,47 @@ let go = () => {
 	} else {
 		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "none"
+		document.querySelector("#search").style.display = "grid"
+	}
+}
+
+//? search
+let search = () => {
+	const querry = []
+	let search = document.querySelector("#search")
+	let input = search.value.toLowerCase()
+	let i = 0
+
+	// restart
+	for (let i = 0; i < names.length; i++) {
+		let div = document.querySelector(`#grid${[i]}`)
+		div.style.display = "grid"
+	}
+
+	// get names 
+	for (let i = 0; i < names.length; i++) {
+		let name = document.querySelector(`#name${[i]}`)
+
+		querry.push(name.textContent.toLowerCase().trim())
+	}
+
+	// search
+	console.log(input)
+	querry.forEach((e) => {
+		if (e.startsWith(input)) {
+			console.log("found")
+		} else {
+			let div = document.querySelector(`#grid${[i]}`)
+			div.style.display = "none"
+		}
+		i++
+	})
+
+	// if search empty
+	if (search.value == "") {
+		for (let i = 0; i < names.length; i++) {
+			let div = document.querySelector(`#grid${[i]}`)
+			div.style.display = "grid"
+		}
 	}
 }

@@ -4,13 +4,14 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 
+const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+
 let but0 = document.querySelector("#but0")
 let but1 = document.querySelector("#but1")
+let but2 = document.querySelector("#but2")
 
 //? startup
 let startup_state = true
-
-const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
 
 fs.readFile(path.join(file_path, "saos.md"), "utf-8", (err, data) => {
 	if (err) {
@@ -50,7 +51,54 @@ let startup = () => {
 				but0.textContent = "Off"
 				startup_state = true
 
-				after_startup0()
+				after_tray0()
+			}
+		})
+	}
+}
+
+//? tray
+let tray_state = true
+
+fs.readFile(path.join(file_path, "catt.md"), "utf-8", (err, data) => {
+	if (err) {
+		but2.textContent = "Off"
+		tray_state = true
+
+		after_tray0()
+	} else {
+		but2.textContent = "On"
+		tray_state = false
+
+		after_tray1()
+	}
+})
+
+let tray = () => {
+	if (tray_state == true) {
+		fs.writeFile(path.join(file_path, "catt.md"), "catt", (err) => {
+			if (err) {
+				console.log("Close app to tray don't created!")
+			} else {
+				console.log("Close app to tray file created!")
+
+				but2.textContent = "On"
+				tray_state = false
+
+				after_tray1()
+			}
+		})
+	} else {
+		fs.unlink(path.join(file_path, "catt.md"), (err) => {
+			if (err && err.code === "ENOENT") {
+				return console.log("catt.md not deleted")
+			} else {
+				console.log("catt.md deleted")
+
+				but2.textContent = "Off"
+				tray_state = true
+
+				after_tray0()
 			}
 		})
 	}
@@ -112,7 +160,7 @@ let data = () => {
 }
 
 let hide = () => {
-	after_hide()
+	ipc.send("hide0")
 }
 
 //? after_data
@@ -129,7 +177,11 @@ let after_startup1 = () => {
 	ipc.send("after_startup1")
 }
 
-//? hide
-let after_hide = () => {
-	ipc.send("hide")
+//? after_tray
+let after_tray0 = () => {
+	ipc.send("after_tray0")
+}
+
+let after_tray1 = () => {
+	ipc.send("after_tray1")
 }

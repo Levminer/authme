@@ -11,7 +11,8 @@ fs.readFile(path.join(file_path, "hash.md"), "utf-8", (err, content) => {
 	if (err) {
 		console.log("The hash.md fle dont exist!")
 
-		document.querySelector("#title").textContent = "Please choose your exported file"
+		document.querySelector("#title").textContent =
+			"Please choose your exported file, if you don't have one: Go to the top menu > Advanced > Import"
 	} else {
 		prev = true
 

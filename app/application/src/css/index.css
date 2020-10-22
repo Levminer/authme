@@ -1,6 +1,7 @@
 body {
 	background: rgb(0, 0, 0);
 	background: linear-gradient(90deg, rgba(0, 0, 0, 1) 30%, rgba(42, 36, 36, 1) 100%);
+	overflow-y: scroll;
 }
 
 .center {
@@ -125,31 +126,44 @@ body {
 	font-size: 1.3rem;
 }
 
-#grid0,
-#grid1,
-#grid2,
-#grid3,
-#grid4,
-#grid5,
-#grid6,
-#grid7,
-#grid8,
-#grid9,
-#grid10,
-#grid11,
-#grid12,
-#grid13,
-#grid14,
-#grid15,
-#grid16,
-#grid17,
-#grid18,
-#grid19 {
+.input2 {
+	width: 300px;
+	margin: 0 auto;
+	color: rgb(0, 0, 0);
+	background-color: white;
+	border-color: white;
+	font-size: 1rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: text;
+	text-align: center;
+	transition: 0.2s ease-in;
+	margin-bottom: 50px;
 	display: none;
+}
+
+.input2:hover {
+	background-color: var(--df_gray);
+	color: white;
+	border-color: white;
+}
+
+.input2::placeholder {
+	color: black;
 }
 
 #save {
 	display: unset;
 	visibility: hidden;
 	margin-bottom: 20px;
+}
+
+input:focus::placeholder {
+	transition: 0.2s ease-in;
+	color: transparent;
+}
+
+input:hover::placeholder {
+	transition: 0.2s ease-in;
+	color: transparent;
 }
