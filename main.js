@@ -2,9 +2,10 @@ const electron = require("electron")
 const createDesktopShortcut = require("create-desktop-shortcuts")
 const path = require("path")
 const fs = require("fs")
-const { app, BrowserWindow, Menu, Tray, shell, dialog } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, remote } = require("electron")
 const ipc = electron.ipcMain
 
+let splash
 let window0
 let window1
 let window2
@@ -26,13 +27,14 @@ let ipc2 = false
 
 let confirmed = false
 
-let authme_version = "1.3.0"
+let authme_version = "1.4.0"
 let node_version = process.versions.node
 let chrome_version = process.versions.chrome
 let electron_version = process.versions.electron
 
 let to_tray = false
 let show_tray = false
+let pass_start = false
 
 let createWindow = () => {
 	window0 = new BrowserWindow({
@@ -129,12 +131,30 @@ let createWindow = () => {
 		}
 	})
 
-	window4.on("close", () => {
-		app.quit()
+	window4.on("close", async (e) => {
+		if (to_tray == false) {
+			app.exit()
+		} else {
+			e.preventDefault()
+			setTimeout(() => {
+				window4.hide()
+			}, 100)
+			c4 = false
+			show_tray = true
+		}
 	})
 
-	window5.on("close", () => {
-		app.quit()
+	window5.on("close", async (e) => {
+		if (to_tray == false) {
+			app.exit()
+		} else {
+			e.preventDefault()
+			setTimeout(() => {
+				window5.hide()
+			}, 100)
+			c5 = false
+			show_tray = true
+		}
 	})
 }
 
@@ -161,7 +181,7 @@ ipc.on("to_application1", () => {
 		window0.hide()
 		window2.maximize()
 		window2.show()
-		ipc1 = true
+		ipc2 = true
 	}
 })
 
@@ -237,45 +257,104 @@ ipc.on("after_tray1", () => {
 
 ipc.on("startup", () => {
 	window2.hide()
+	window1.hide()
+})
+
+ipc.on("app_path", () => {
+	shell.showItemInFolder(app.getPath("exe"))
 })
 
 app.whenReady().then(() => {
+	splash = new BrowserWindow({ width: 500, height: 500, transparent: true, frame: false, alwaysOnTop: true, resizable: false })
+
+	splash.loadFile("./app/splash/index.html")
+
+	splash.show()
+
+	setTimeout(() => {
+		splash.hide()
+		createWindow()
+	}, 1500)
+
 	// make tray
-	let iconpath = path.join(__dirname, "img/icon.png")
+	let iconpath = path.join(__dirname, "img/iconb.png")
 
 	tray = new Tray(iconpath)
-	const contextMenu = Menu.buildFromTemplate([
+	const contextmenu = Menu.buildFromTemplate([
 		{
 			label: "Show app",
 			click: () => {
 				const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
 
-				if (show_tray == false) {
-					window2.hide()
-					show_tray = true
-				} else if (c2 == false) {
-					fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
-						if (err) {
-							return console.log("Not found pass.md")
-						} else if (confirmed == true) {
+				let if_pass = false
+				let if_nopass = false
+
+				fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
+					if (err) {
+						return console.log("Not found pass.md")
+					} else {
+						console.log("IT IS PASS")
+						if_pass = true
+						pass_start = true
+
+						toggle()
+					}
+				})
+
+				fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
+					if (err) {
+						return console.log("Not found nrpw.md")
+					} else {
+						console.log("IT IS NOPASS")
+						if_nopass = true
+
+						toggle()
+					}
+				})
+
+				let toggle = () => {
+					if (confirmed == false) {
+						if (pass_start == true) {
+							if (c2 == false) {
+								window1.maximize()
+								window1.show()
+
+								c2 = true
+							} else {
+								window1.hide()
+
+								c2 = false
+							}
+						}
+					}
+
+					if (c3 == false) {
+						if (if_pass == true && confirmed == true) {
 							window2.maximize()
 							window2.show()
-						}
-					})
 
-					fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
-						if (err) {
-							return console.log("Not found pass.md")
-						} else {
+							c3 = true
+						}
+
+						if (if_nopass == true) {
 							window2.maximize()
 							window2.show()
-						}
-					})
 
-					c2 = true
-				} else {
-					window2.hide()
-					c2 = false
+							c3 = true
+						}
+					} else {
+						if (if_pass == true && confirmed == true) {
+							window2.hide()
+
+							c3 = false
+						}
+
+						if (if_nopass == true) {
+							window2.hide()
+
+							c3 = false
+						}
+					}
 				}
 			},
 		},
@@ -303,10 +382,9 @@ app.whenReady().then(() => {
 		},
 	])
 	tray.setToolTip("Authme")
-	tray.setContextMenu(contextMenu)
+	tray.setContextMenu(contextmenu)
 
 	// create windows
-	createWindow()
 
 	// menubar
 	const template = [
@@ -394,13 +472,62 @@ app.whenReady().then(() => {
 				{
 					label: "Import",
 					click: () => {
-						if (c4 == false) {
-							window4.maximize()
-							window4.show()
-							c4 = true
-						} else {
-							window4.hide()
-							c4 = false
+						const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+
+						let if_pass = false
+						let if_nopass = false
+
+						fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
+							if (err) {
+								return console.log("Not found pass.md")
+							} else {
+								console.log("IT IS PASS")
+								if_pass = true
+								pass_start = true
+
+								toggle()
+							}
+						})
+
+						fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
+							if (err) {
+								return console.log("Not found nrpw.md")
+							} else {
+								console.log("IT IS NOPASS")
+								if_nopass = true
+
+								toggle()
+							}
+						})
+
+						let toggle = () => {
+							if (c4 == false) {
+								if (if_pass == true && confirmed == true) {
+									window4.maximize()
+									window4.show()
+
+									c4 = true
+								}
+
+								if (if_nopass == true) {
+									window4.maximize()
+									window4.show()
+
+									c4 = true
+								}
+							} else {
+								if (if_pass == true && confirmed == true) {
+									window4.hide()
+
+									c4 = false
+								}
+
+								if (if_nopass == true) {
+									window4.hide()
+
+									c4 = false
+								}
+							}
 						}
 					},
 				},
@@ -410,13 +537,62 @@ app.whenReady().then(() => {
 				{
 					label: "Export",
 					click: () => {
-						if (c5 == false) {
-							window5.maximize()
-							window5.show()
-							c5 = true
-						} else {
-							window5.hide()
-							c5 = false
+						const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+
+						let if_pass = false
+						let if_nopass = false
+
+						fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
+							if (err) {
+								return console.log("Not found pass.md")
+							} else {
+								console.log("IT IS PASS")
+								if_pass = true
+								pass_start = true
+
+								toggle()
+							}
+						})
+
+						fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
+							if (err) {
+								return console.log("Not found nrpw.md")
+							} else {
+								console.log("IT IS NOPASS")
+								if_nopass = true
+
+								toggle()
+							}
+						})
+
+						let toggle = () => {
+							if (c5 == false) {
+								if (if_pass == true && confirmed == true) {
+									window5.maximize()
+									window5.show()
+
+									c5 = true
+								}
+
+								if (if_nopass == true) {
+									window5.maximize()
+									window5.show()
+
+									c4 = true
+								}
+							} else {
+								if (if_pass == true && confirmed == true) {
+									window5.hide()
+
+									c5 = false
+								}
+
+								if (if_nopass == true) {
+									window5.hide()
+
+									c5 = false
+								}
+							}
 						}
 					},
 				},
@@ -446,8 +622,8 @@ app.whenReady().then(() => {
 							message: `Authme: ${authme_version}
 
 							Node: ${node_version}
-							Chrome: ${chrome_version}
 							Electron: ${electron_version}
+							Chrome: ${chrome_version}
 
 							Created by: Levminer
 							`,
@@ -461,7 +637,7 @@ app.whenReady().then(() => {
 	const menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
 
-	app.on("activate", () => {
-		if (BrowserWindow.getAllWindows().length === 0) createWindow()
-	})
+	/* app.on("activate", () => {
+		if (BrowserWindow.getAllWindows().length === 0) 
+	}) */
 })

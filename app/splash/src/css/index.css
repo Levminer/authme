@@ -1,12 +1,18 @@
 body {
 	background: rgb(0, 0, 0);
 	background: linear-gradient(90deg, rgba(0, 0, 0, 1) 30%, rgba(42, 36, 36, 1) 100%);
+	overflow: hidden;
+	cursor: wait;
+}
+
+h1 {
+	margin-top: 5px;
 }
 
 .center {
-	top: -50px;
-	width: 1000px;
-	height: 1300px;
+	top: -150px;
+	width: 500px;
+	height: 550px;
 }
 
 .button1 {
@@ -49,7 +55,7 @@ body {
 
 #version {
 	position: relative;
-	top: 30px;
+	top: -5px;
 }
 
 .link1 {
