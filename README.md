@@ -5,7 +5,7 @@
 # How to use
 
 -   For technical people: Check out `extract/README.md`
--   For simple people: Instructions in the app
+-   For non technical people: Instructions in the app
 
 # Development
 

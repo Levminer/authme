@@ -4,6 +4,10 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 
+let version = ipc.sendSync("ver")
+
+document.querySelector("#ver").textContent = `Authme ${version}`
+
 const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
 
 let but0 = document.querySelector("#but0")

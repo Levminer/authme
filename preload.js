@@ -1,6 +1,5 @@
 //preload
 const fs = require("fs")
-const { ipcMain } = require("electron")
 const electron = require("electron")
 const path = require("path")
 

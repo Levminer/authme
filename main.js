@@ -2,7 +2,7 @@ const electron = require("electron")
 const createDesktopShortcut = require("create-desktop-shortcuts")
 const path = require("path")
 const fs = require("fs")
-const { app, BrowserWindow, Menu, Tray, shell, dialog, remote } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog } = require("electron")
 const ipc = electron.ipcMain
 
 let splash
@@ -14,10 +14,8 @@ let window4
 
 let c0 = false
 let c1 = false
-
 let c2 = false
 let c3 = false
-
 let c4 = false
 let c5 = false
 
@@ -27,7 +25,13 @@ let ipc2 = false
 
 let confirmed = false
 
-let authme_version = "1.4.0"
+let authme_version = "1.4.1"
+
+ipc.on("ver", (event, data) => {
+	event.returnValue = authme_version
+})
+
+let v8_version = process.versions.v8
 let node_version = process.versions.node
 let chrome_version = process.versions.chrome
 let electron_version = process.versions.electron
@@ -79,9 +83,6 @@ let createWindow = () => {
 		},
 	})
 
-	// DEVTOOLS
-	/* window5.webContents.openDevTools() */
-
 	window0.maximize()
 
 	window1.hide()
@@ -113,8 +114,10 @@ let createWindow = () => {
 			setTimeout(() => {
 				window2.hide()
 			}, 100)
-			c2 = false
+
 			show_tray = true
+
+			c2 = false
 		}
 	})
 
@@ -126,8 +129,9 @@ let createWindow = () => {
 			setTimeout(() => {
 				window3.hide()
 			}, 100)
-			c3 = false
 			show_tray = true
+
+			c3 = false
 		}
 	})
 
@@ -139,8 +143,9 @@ let createWindow = () => {
 			setTimeout(() => {
 				window4.hide()
 			}, 100)
-			c4 = false
 			show_tray = true
+
+			c4 = false
 		}
 	})
 
@@ -152,8 +157,9 @@ let createWindow = () => {
 			setTimeout(() => {
 				window5.hide()
 			}, 100)
-			c5 = false
 			show_tray = true
+
+			c5 = false
 		}
 	})
 }
@@ -265,7 +271,17 @@ ipc.on("app_path", () => {
 })
 
 app.whenReady().then(() => {
-	splash = new BrowserWindow({ width: 500, height: 500, transparent: true, frame: false, alwaysOnTop: true, resizable: false })
+	splash = new BrowserWindow({
+		width: 500,
+		height: 500,
+		transparent: true,
+		frame: false,
+		alwaysOnTop: true,
+		resizable: false,
+		webPreferences: {
+			nodeIntegration: true,
+		},
+	})
 
 	splash.loadFile("./app/splash/index.html")
 
@@ -289,6 +305,7 @@ app.whenReady().then(() => {
 				let if_pass = false
 				let if_nopass = false
 
+				// check if require password
 				fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
 					if (err) {
 						return console.log("Not found pass.md")
@@ -301,6 +318,7 @@ app.whenReady().then(() => {
 					}
 				})
 
+				// check if not require password
 				fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
 					if (err) {
 						return console.log("Not found nrpw.md")
@@ -315,44 +333,63 @@ app.whenReady().then(() => {
 				let toggle = () => {
 					if (confirmed == false) {
 						if (pass_start == true) {
-							if (c2 == false) {
+							if (c1 == false) {
 								window1.maximize()
 								window1.show()
 
-								c2 = true
+								c1 = true
 							} else {
 								window1.hide()
 
-								c2 = false
+								c1 = false
 							}
 						}
 					}
 
-					if (c3 == false) {
+					if (c2 == false) {
+						// if password and password confirmed
 						if (if_pass == true && confirmed == true) {
 							window2.maximize()
 							window2.show()
 
-							c3 = true
+							c2 = true
 						}
 
+						// if no password
 						if (if_nopass == true) {
 							window2.maximize()
 							window2.show()
 
-							c3 = true
+							c2 = true
+						}
+
+						// if exit to tray on
+						if (show_tray == true) {
+							window2.maximize()
+							window2.show()
+
+							c2 = true
 						}
 					} else {
+						// if password and password confirmed
 						if (if_pass == true && confirmed == true) {
 							window2.hide()
 
-							c3 = false
+							c2 = false
 						}
 
+						// if no password
 						if (if_nopass == true) {
 							window2.hide()
 
-							c3 = false
+							c2 = false
+						}
+
+						// if exit to tray on
+						if (show_tray == true) {
+							window2.hide()
+
+							c2 = false
 						}
 					}
 				}
@@ -548,7 +585,6 @@ app.whenReady().then(() => {
 							} else {
 								console.log("IT IS PASS")
 								if_pass = true
-								pass_start = true
 
 								toggle()
 							}
@@ -578,7 +614,7 @@ app.whenReady().then(() => {
 									window5.maximize()
 									window5.show()
 
-									c4 = true
+									c5 = true
 								}
 							} else {
 								if (if_pass == true && confirmed == true) {
@@ -621,6 +657,7 @@ app.whenReady().then(() => {
 							type: "info",
 							message: `Authme: ${authme_version}
 
+							V8: ${v8_version}
 							Node: ${node_version}
 							Electron: ${electron_version}
 							Chrome: ${chrome_version}
@@ -636,8 +673,4 @@ app.whenReady().then(() => {
 
 	const menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
-
-	/* app.on("activate", () => {
-		if (BrowserWindow.getAllWindows().length === 0) 
-	}) */
 })
