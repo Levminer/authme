@@ -24,8 +24,9 @@ let ipc1 = false
 let ipc2 = false
 
 let confirmed = false
+let startup = false
 
-let authme_version = "1.4.1"
+let authme_version = "1.4.2"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -40,8 +41,12 @@ let to_tray = false
 let show_tray = false
 let pass_start = false
 
+const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+
 let createWindow = () => {
 	window0 = new BrowserWindow({
+		show: false,
+		backgroundColor: "#2A2424",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -49,6 +54,8 @@ let createWindow = () => {
 	})
 
 	window1 = new BrowserWindow({
+		show: false,
+		backgroundColor: "#2A2424",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -56,6 +63,8 @@ let createWindow = () => {
 	})
 
 	window2 = new BrowserWindow({
+		show: false,
+		backgroundColor: "#2A2424",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -63,6 +72,8 @@ let createWindow = () => {
 	})
 
 	window3 = new BrowserWindow({
+		show: false,
+		backgroundColor: "#2A2424",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -70,6 +81,8 @@ let createWindow = () => {
 	})
 
 	window4 = new BrowserWindow({
+		show: false,
+		backgroundColor: "#2A2424",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -77,19 +90,25 @@ let createWindow = () => {
 	})
 
 	window5 = new BrowserWindow({
+		show: false,
+		backgroundColor: "#2A2424",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 		},
 	})
 
-	window0.maximize()
-
-	window1.hide()
-	window2.hide()
-	window3.hide()
-	window4.hide()
-	window5.hide()
+	fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
+		if (err) {
+			fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
+				if (err) {
+					window0.maximize()
+				}
+			})
+		} else {
+			window0.maximize()
+		}
+	})
 
 	window0.loadFile("./app/landing/index.html")
 	window1.loadFile("./app/confirm/index.html")
@@ -174,19 +193,29 @@ ipc.on("to_confirm", () => {
 })
 
 ipc.on("to_application0", () => {
-	if (ipc1 == false) {
-		confirmed = true
-		window2.maximize()
+	if (ipc1 == false && startup == false) {
 		window1.hide()
+
+		setTimeout(() => {
+			window2.maximize()
+			window2.show()
+		}, 300)
+
 		ipc1 = true
+
+		confirmed = true
 	}
 })
 
 ipc.on("to_application1", () => {
-	if (ipc2 == false) {
+	if (ipc2 == false && startup == false) {
 		window0.hide()
-		window2.maximize()
-		window2.show()
+
+		setTimeout(() => {
+			window2.maximize()
+			window2.show()
+		}, 300)
+
 		ipc2 = true
 	}
 })
@@ -231,9 +260,9 @@ ipc.on("after_data", () => {
 })
 
 ipc.on("after_startup0", () => {
-	let file_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+	let startup_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
 
-	fs.unlink(file_path, (err) => {
+	fs.unlink(startup_path, (err) => {
 		if (err && err.code === "ENOENT") {
 			return console.log("startup shortcut not deleted")
 		} else {
@@ -264,6 +293,7 @@ ipc.on("after_tray1", () => {
 ipc.on("startup", () => {
 	window2.hide()
 	window1.hide()
+	startup = true
 })
 
 ipc.on("app_path", () => {
@@ -288,8 +318,11 @@ app.whenReady().then(() => {
 	splash.show()
 
 	setTimeout(() => {
-		splash.hide()
 		createWindow()
+	}, 1000)
+
+	setTimeout(() => {
+		splash.hide()
 	}, 1500)
 
 	// make tray
@@ -300,8 +333,6 @@ app.whenReady().then(() => {
 		{
 			label: "Show app",
 			click: () => {
-				const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
-
 				let if_pass = false
 				let if_nopass = false
 
@@ -509,8 +540,6 @@ app.whenReady().then(() => {
 				{
 					label: "Import",
 					click: () => {
-						const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
-
 						let if_pass = false
 						let if_nopass = false
 
@@ -574,8 +603,6 @@ app.whenReady().then(() => {
 				{
 					label: "Export",
 					click: () => {
-						const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
-
 						let if_pass = false
 						let if_nopass = false
 
