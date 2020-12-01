@@ -1,41 +1,41 @@
-//preload
 const fs = require("fs")
 const electron = require("electron")
 const path = require("path")
-
+const { dialog, shell, app } = require("electron").remote
 const ipc = electron.ipcRenderer
 
-const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+//?platform
+let folder
 
-if (!fs.existsSync(file_path)) {
-	console.log("Folder created!")
-	fs.mkdirSync(path.join(process.env.APPDATA, "Levminer"))
-	fs.mkdirSync(path.join(process.env.APPDATA, "Levminer", "Authme"))
+// get platform
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
 }
 
-fs.readFile(path.join(file_path, "saos.md"), "utf-8", (err, data) => {
-	if (err) {
-		return console.log("The saos.md file dont exist!")
-	} else {
-		console.log("The saos.md file exist!")
-		ipc.send("startup")
-	}
-})
+//? settings
+const file_path = path.join(folder, "Levminer/Authme")
 
-fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
-	if (err) {
-		return console.log("The pass.md fle dont exist!")
-	} else {
-		console.log("The pass.md fle  exist!")
-		ipc.send("to_confirm")
-	}
-})
+//read settings
+const file = JSON.parse(
+	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+		if (err) {
+			return console.log(`Error reading settings.json ${err}`)
+		} else {
+			return console.log("settings.json readed")
+		}
+	})
+)
 
-fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
-	if (err) {
-		return console.log("The nrpw.md fle dont exist!")
-	} else {
-		console.log("The nrpw.md fle exist!")
-		ipc.send("to_application1")
-	}
-})
+//settings launch_on_startup
+if (file.settings.launch_on_startup === true) {
+	ipc.send("startup")
+}
+
+//startup require_password
+if (file.security.require_password === true) {
+	ipc.send("to_confirm")
+} else if (file.security.require_password === false) {
+	ipc.send("to_application1")
+}

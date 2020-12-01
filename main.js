@@ -1,9 +1,12 @@
 const electron = require("electron")
 const createDesktopShortcut = require("create-desktop-shortcuts")
+const fetch = require("node-fetch")
 const path = require("path")
 const fs = require("fs")
-const { app, BrowserWindow, Menu, Tray, shell, dialog } = require("electron")
+const os = require("os")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard } = require("electron")
 const ipc = electron.ipcMain
+const exec = require("child_process").exec
 
 let splash
 let window0
@@ -26,7 +29,8 @@ let ipc2 = false
 let confirmed = false
 let startup = false
 
-let authme_version = "1.4.2"
+let authme_version = "2.0.0"
+let tag_name = "2.0.0"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -37,12 +41,90 @@ let node_version = process.versions.node
 let chrome_version = process.versions.chrome
 let electron_version = process.versions.electron
 
+let os_version = `${os.type()} ${os.arch()} ${os.release()}`
+
+let python_version
+
+exec('python -c "import platform; print(platform.python_version())"', (err, stdout, stderr) => {
+	python_version = stdout
+
+	if (python_version === undefined) {
+		python_version = "Not installed"
+	}
+})
+
 let to_tray = false
 let show_tray = false
 let pass_start = false
+let update_start = false
 
-const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+let folder
 
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
+}
+
+let file
+
+//? folders
+const full_path = path.join(folder, "Levminer")
+const file_path = path.join(folder, "Levminer/Authme")
+
+//check if folders exists
+if (!fs.existsSync(full_path)) {
+	fs.mkdirSync(path.join(full_path))
+}
+if (!fs.existsSync(file_path)) {
+	fs.mkdirSync(file_path)
+}
+
+//? settings
+const settings = `{
+		"settings": {
+			"launch_on_startup": false,
+			"close_to_tray": false,
+			"show_2fa_names": false
+		},
+
+		"security": {
+			"require_password": null,
+			"password": null
+		}
+	}
+	`
+
+// create settings if not exists
+if (!fs.existsSync(path.join(file_path, "settings.json"))) {
+	fs.writeFileSync(path.join(file_path, "settings.json"), settings, (err) => {
+		if (err) {
+			return console.log(`error creating settings.json ${err}`)
+		} else {
+			return console.log("settings.json created")
+		}
+	})
+}
+
+// read settings
+file = JSON.parse(
+	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+		if (err) {
+			return console.log(`Error reading settings.json ${err}`)
+		} else {
+			return console.log("settings.json readed")
+		}
+	})
+)
+
+//? install protbuf
+const spawn = require("child_process").spawn
+
+let src = "extract/install.py"
+
+let py = spawn("python", [src])
+
+//? create window
 let createWindow = () => {
 	window0 = new BrowserWindow({
 		show: false,
@@ -50,6 +132,7 @@ let createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
 	})
 
@@ -59,6 +142,7 @@ let createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
 	})
 
@@ -68,6 +152,7 @@ let createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
 	})
 
@@ -77,6 +162,7 @@ let createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
 	})
 
@@ -86,6 +172,7 @@ let createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
 	})
 
@@ -95,19 +182,8 @@ let createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
-	})
-
-	fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
-		if (err) {
-			fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
-				if (err) {
-					window0.maximize()
-				}
-			})
-		} else {
-			window0.maximize()
-		}
 	})
 
 	window0.loadFile("./app/landing/index.html")
@@ -116,6 +192,10 @@ let createWindow = () => {
 	window3.loadFile("./app/settings/index.html")
 	window4.loadFile("./app/import/index.html")
 	window5.loadFile("./app/export/index.html")
+
+	if (file.security.require_password == null) {
+		window0.maximize()
+	}
 
 	window0.on("close", () => {
 		app.quit()
@@ -179,6 +259,50 @@ let createWindow = () => {
 			show_tray = true
 
 			c5 = false
+		}
+	})
+
+	//? check for auto update
+	window2.on("show", () => {
+		let api = () => {
+			fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
+				.then((res) => res.json())
+				.then((data) => {
+					try {
+						if (data.tag_name != tag_name) {
+							dialog
+								.showMessageBox({
+									title: "Authme",
+									buttons: ["Yes", "No"],
+									defaultId: 0,
+									cancelId: 1,
+									type: "info",
+									message: `
+							Update available: Authme ${data.tag_name}
+							
+							Do you want to download it?
+		
+							You currently running: Authme ${tag_name}
+							`,
+								})
+								.then((result) => {
+									update = true
+
+									if (result.response === 0) {
+										shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+									}
+								})
+						}
+					} catch (error) {
+						return console.log(error)
+					}
+				})
+		}
+
+		if (update_start == false) {
+			 api() 
+
+			update_start = true
 		}
 	})
 }
@@ -253,33 +377,31 @@ ipc.on("hide2", () => {
 	}
 })
 
-ipc.on("after_data", () => {
-	setTimeout(() => {
-		app.quit()
-	}, 1000)
-})
-
 ipc.on("after_startup0", () => {
-	let startup_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+	if (process.platform === "win32") {
+		let startup_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
 
-	fs.unlink(startup_path, (err) => {
-		if (err && err.code === "ENOENT") {
-			return console.log("startup shortcut not deleted")
-		} else {
-			console.log("startup shortcut deleted")
-		}
-	})
+		fs.unlink(startup_path, (err) => {
+			if (err && err.code === "ENOENT") {
+				return console.log("startup shortcut not deleted")
+			} else {
+				console.log("startup shortcut deleted")
+			}
+		})
+	}
 })
 
 ipc.on("after_startup1", () => {
-	let shortcut_created = createDesktopShortcut({
-		windows: {
-			filePath: app.getPath("exe"),
-			outputPath: "%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
-			name: "Authme Launcher",
-			comment: "Authme Launcher",
-		},
-	})
+	if (process.platform === "win32") {
+		let shortcut_created = createDesktopShortcut({
+			windows: {
+				filePath: app.getPath("exe"),
+				outputPath: "%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
+				name: "Authme Launcher",
+				comment: "Authme Launcher",
+			},
+		})
+	}
 })
 
 ipc.on("after_tray0", () => {
@@ -333,34 +455,6 @@ app.whenReady().then(() => {
 		{
 			label: "Show app",
 			click: () => {
-				let if_pass = false
-				let if_nopass = false
-
-				// check if require password
-				fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
-					if (err) {
-						return console.log("Not found pass.md")
-					} else {
-						console.log("IT IS PASS")
-						if_pass = true
-						pass_start = true
-
-						toggle()
-					}
-				})
-
-				// check if not require password
-				fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
-					if (err) {
-						return console.log("Not found nrpw.md")
-					} else {
-						console.log("IT IS NOPASS")
-						if_nopass = true
-
-						toggle()
-					}
-				})
-
 				let toggle = () => {
 					if (confirmed == false) {
 						if (pass_start == true) {
@@ -424,6 +518,21 @@ app.whenReady().then(() => {
 						}
 					}
 				}
+
+				let if_pass = false
+				let if_nopass = false
+
+				// check if require password
+				if (file.security.require_password == true) {
+					if_pass = true
+					pass_start = true
+
+					toggle()
+				} else {
+					if_nopass = true
+
+					toggle()
+				}
 			},
 		},
 		{ type: "separator" },
@@ -451,8 +560,6 @@ app.whenReady().then(() => {
 	])
 	tray.setToolTip("Authme")
 	tray.setContextMenu(contextmenu)
-
-	// create windows
 
 	// menubar
 	const template = [
@@ -490,17 +597,15 @@ app.whenReady().then(() => {
 				{
 					label: "Fullscreen",
 					click: () => {
+						let window = BrowserWindow.getFocusedWindow()
+
 						if (c0 == false) {
-							window0.setFullScreen(true)
-							window1.setFullScreen(true)
-							window2.setFullScreen(true)
-							window3.setFullScreen(true)
+							window.setFullScreen(true)
+
 							c0 = true
 						} else {
-							window0.setFullScreen(false)
-							window1.setFullScreen(false)
-							window2.setFullScreen(false)
-							window3.setFullScreen(false)
+							window.setFullScreen(false)
+
 							c0 = false
 						}
 						console.log(`FC ${c0}`)
@@ -512,21 +617,15 @@ app.whenReady().then(() => {
 				{
 					label: "Devtools",
 					click: () => {
+						let window = BrowserWindow.getFocusedWindow()
+
 						if (c1 == false) {
-							window0.webContents.openDevTools()
-							window1.webContents.openDevTools()
-							window2.webContents.openDevTools()
-							window3.webContents.openDevTools()
-							window4.webContents.openDevTools()
-							window5.webContents.openDevTools()
+							window.webContents.openDevTools()
+
 							c1 = true
 						} else {
-							window0.webContents.closeDevTools()
-							window1.webContents.closeDevTools()
-							window2.webContents.closeDevTools()
-							window3.webContents.closeDevTools()
-							window4.webContents.closeDevTools()
-							window5.webContents.closeDevTools()
+							window.webContents.closeDevTools()
+
 							c1 = false
 						}
 						console.log(`DT ${c1}`)
@@ -540,32 +639,6 @@ app.whenReady().then(() => {
 				{
 					label: "Import",
 					click: () => {
-						let if_pass = false
-						let if_nopass = false
-
-						fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
-							if (err) {
-								return console.log("Not found pass.md")
-							} else {
-								console.log("IT IS PASS")
-								if_pass = true
-								pass_start = true
-
-								toggle()
-							}
-						})
-
-						fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
-							if (err) {
-								return console.log("Not found nrpw.md")
-							} else {
-								console.log("IT IS NOPASS")
-								if_nopass = true
-
-								toggle()
-							}
-						})
-
 						let toggle = () => {
 							if (c4 == false) {
 								if (if_pass == true && confirmed == true) {
@@ -595,6 +668,21 @@ app.whenReady().then(() => {
 								}
 							}
 						}
+
+						let if_pass = false
+						let if_nopass = false
+
+						// check if require password
+						if (file.security.require_password == true) {
+							if_pass = true
+							pass_start = true
+
+							toggle()
+						} else {
+							if_nopass = true
+
+							toggle()
+						}
 					},
 				},
 				{
@@ -603,31 +691,6 @@ app.whenReady().then(() => {
 				{
 					label: "Export",
 					click: () => {
-						let if_pass = false
-						let if_nopass = false
-
-						fs.readFile(path.join(file_path, "pass.md"), "utf-8", (err, data) => {
-							if (err) {
-								return console.log("Not found pass.md")
-							} else {
-								console.log("IT IS PASS")
-								if_pass = true
-
-								toggle()
-							}
-						})
-
-						fs.readFile(path.join(file_path, "nrpw.md"), "utf-8", (err, data) => {
-							if (err) {
-								return console.log("Not found nrpw.md")
-							} else {
-								console.log("IT IS NOPASS")
-								if_nopass = true
-
-								toggle()
-							}
-						})
-
 						let toggle = () => {
 							if (c5 == false) {
 								if (if_pass == true && confirmed == true) {
@@ -657,6 +720,21 @@ app.whenReady().then(() => {
 								}
 							}
 						}
+
+						let if_pass = false
+						let if_nopass = false
+
+						// check if require password
+						if (file.security.require_password == true) {
+							if_pass = true
+							pass_start = true
+
+							toggle()
+						} else {
+							if_nopass = true
+
+							toggle()
+						}
 					},
 				},
 			],
@@ -667,7 +745,57 @@ app.whenReady().then(() => {
 				{
 					label: "Update",
 					click: () => {
-						shell.openExternal("https://github.com/Levminer/authme/releases")
+						let api = () => {
+							fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
+								.then((res) => res.json())
+								.then((data) => {
+									try {
+										if (data.tag_name != tag_name) {
+											dialog
+												.showMessageBox({
+													title: "Authme",
+													buttons: ["Yes", "No"],
+													defaultId: 0,
+													cancelId: 1,
+													type: "info",
+													message: `
+													Update available: Authme ${data.tag_name}
+													
+													Do you want to download it?
+								
+													You currently running: Authme ${tag_name}
+													`,
+												})
+												.then((result) => {
+													update = true
+
+													if (result.response === 0) {
+														shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+													}
+												})
+										} else {
+											dialog.showMessageBox({
+												title: "Authme",
+												buttons: ["Close"],
+												defaultId: 0,
+												cancelId: 1,
+												type: "info",
+												message: `
+												No update available:
+												
+												You running the latest version!
+							
+												You currently running: Authme ${tag_name}
+												`,
+											})
+										}
+									} catch (error) {
+										return console.log(error)
+									}
+								})
+						}
+
+						api()
 					},
 				},
 				{
@@ -676,22 +804,25 @@ app.whenReady().then(() => {
 				{
 					label: "About",
 					click: () => {
-						let window = BrowserWindow.getFocusedWindow()
+						const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
 
-						dialog.showMessageBox(window, {
-							title: "Authme",
-							buttons: ["Close"],
-							type: "info",
-							message: `Authme: ${authme_version}
+						dialog
+							.showMessageBox({
+								title: "Authme",
+								buttons: ["Close", "Copy"],
+								defaultId: 0,
+								cancelId: 1,
+								noLink: true,
+								type: "info",
+								message: message,
+							})
+							.then((result) => {
+								update = true
 
-							V8: ${v8_version}
-							Node: ${node_version}
-							Electron: ${electron_version}
-							Chrome: ${chrome_version}
-
-							Created by: Levminer
-							`,
-						})
+								if (result.response === 1) {
+									clipboard.writeText(message)
+								}
+							})
 					},
 				},
 			],

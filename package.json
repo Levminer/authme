@@ -1,11 +1,36 @@
 {
 	"name": "authme",
-	"version": "1.4.2",
+	"version": "2.0.0",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
-		"build": "electron-packager . Authme --overwrite --platform=all --arch=x64 --icon=img/icon.icns --out=build"
+		"package": "electron-packager . Authme --platform=win32,linux --arch=x64 --icon=img/icon.icns --out=build --overwrite",
+		"build": "electron-builder"
+	},
+	"build": {
+		"productName": "Authme",
+		"appId": "com.levminer.authme",
+		"asar": false,
+		"win": {
+			"target": [
+				"nsis"
+			],
+			"icon": "img/icon.ico"
+		},
+		"nsis": {
+			"installerIcon": "img/icon.ico",
+			"uninstallerIcon": "img/icon.ico",
+			"uninstallDisplayName": "Authme",
+			"license": "LICENSE.md",
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true
+		},
+		"linux": {
+			"target": "deb",
+			"icon": "img/icon.png",
+			"maintainer": "levminer@levminer.com"
+		}
 	},
 	"repository": "https://github.com/Levminer/authme",
 	"keywords": [
@@ -17,13 +42,15 @@
 	"license": "MIT",
 	"devDependencies": {
 		"electron": "^11.0.3",
+		"electron-builder": "^22.9.1",
 		"electron-packager": "^15.0.0"
 	},
 	"dependencies": {
-		"bcrypt": "^5.0.0",
+		"bcryptjs": "^2.4.3",
 		"create-desktop-shortcuts": "^1.2.0",
 		"cryptr": "^6.0.2",
 		"jimp": "^0.16.1",
+		"node-fetch": "^2.6.1",
 		"qrcode": "^1.4.4",
 		"qrcode-reader": "^1.0.4",
 		"speakeasy": "^2.0.0"

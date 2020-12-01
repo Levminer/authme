@@ -61,9 +61,9 @@ body {
 	margin: 0 auto;
 	border: 1px solid rgb(0, 0, 0);
 	padding: 1rem;
-	border-radius: 28px;
-	width: 550px;
-	height: 250px;
+	border-radius: 30px;
+	width: 570px;
+	height: 500px;
 	transition: 0.3s;
 	background-color: rgb(0, 0, 0);
 	color: rgb(255, 255, 255);
@@ -87,4 +87,8 @@ body {
 	margin-top: 20px;
 	width: 600px;
 	height: 500px;
+}
+
+.after_export {
+	display: none;
 }

@@ -96,3 +96,24 @@ input:hover::placeholder {
 	margin-top: 15px;
 	margin-bottom: 30px;
 }
+
+.details1 {
+	width: 98%;
+}
+
+a {
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+.summary1 {
+	color: white;
+	color: white;
+	font-weight: bolder;
+	text-decoration: underline;
+}

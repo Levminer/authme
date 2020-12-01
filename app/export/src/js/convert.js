@@ -6,7 +6,6 @@ const handlefiles = (files) => {
 	if (window.FileReader) {
 		getastext(files[0])
 		console.log("File uploaded successfully!")
-		/* state = 1 */
 	} else {
 		console.log("Can't upload file!")
 	}

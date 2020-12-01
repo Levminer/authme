@@ -6,7 +6,7 @@
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/dragonfly@1.1.0.css" />
+		<link rel="stylesheet" href="../.././src/dragonfly@1.3.0.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 		<!-- favicon -->
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
@@ -18,23 +18,27 @@
 			<p class="text3">You can configure the app setting here.</p>
 			<button class="button1" onclick="hide()">Close</button>
 			<h3>Launch on startup</h3>
-			<p class="text3">Start the app after the operating system loaded. The app will start on the tray. Windows only.</p>
+			<p class="text3">Start the app after the operating system loaded. The app will start on the tray (Windows only).</p>
 			<button class="button1" id="but0" onclick="startup()">-</button>
 			<br />
 			<h3>Close app to tray</h3>
-			<p class="text3">On closing the app will not quit. You can open the app from the tray menu. Windows only.</p>
+			<p class="text3">On closing the app will not quit. You can open the app from the tray menu (Windows only).</p>
 			<button class="button1" id="but2" onclick="tray()">-</button>
+			<br />
+			<h3>Show 2FA names</h3>
+			<p class="text3">The saved 2FA names will show up.</p>
+			<button class="button1" id="but5" onclick="names()">-</button>
 			<br />
 			<h3>Open folders</h3>
 			<p class="text3">
-				You can open your Authme folder (this is where you unpackaged your app) and your settings folder (this is where the app stores the
-				settings).
+				You can open your Authme folder (this is where you unpackaged or installed your app) and your settings folder (this is where the app
+				stores the settings).
 			</p>
 			<button class="button1" id="but3" onclick="folder0()">Authme folder</button>
 			<button class="button1" id="but4" onclick="folder1()">Settings folder</button>
 			<h3>Clear data</h3>
 			<p class="text3">Clear password, 2FA codes and other settings</p>
-			<button class="button1" id="but1" onclick="data()">Clear data</button>
+			<button class="button1" id="but1" onclick="reset()">Clear data</button>
 			<h4 id="ver"></h4>
 		</div>
 	</body>

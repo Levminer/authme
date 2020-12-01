@@ -1,39 +1,39 @@
-const { ipcMain } = require("electron")
-const fs = require("fs")
 const electron = require("electron")
-const ipc = electron.ipcRenderer
+const { app, dialog } = require("electron").remote
+const fs = require("fs")
 const path = require("path")
-const Cryptr = require("cryptr")
-const cryptr = new Cryptr("-3Lu)g%#11h7FpM?")
 const qrcode = require("qrcode")
 
-const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+//? init ipc
+const ipc = electron.ipcRenderer
 
-let names = []
+//? init file for save to file
+let file
+
+//? init codes for save to qr codes
+const codes = []
+
+//? os specific folders
+let folder
+
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
+}
+
+const file_path = path.join(folder, "Levminer/Authme")
+
+//? read file from settings folder
+let name = []
 let secret = []
 let issuer = []
 let type = []
 
-let exp = () => {
-	fs.readFile(path.join(file_path, "hash.md"), "utf-8", (err, content) => {
-		if (err) {
-			console.log("The hash.md fle dont exist!")
-		} else {
-			let decrypted = cryptr.decrypt(content)
-
-			console.log(decrypted)
-
-			let result = document.querySelector("#result")
-			result.value = decrypted
-			result.style.display = "flex"
-
-			processdata(decrypted)
-		}
-	})
-}
-
+//? separete value
 let separation = () => {
-	document.querySelector("#but0").style.display = "none"
+	document.querySelector(".before_export").style.display = "none"
+	document.querySelector(".after_export").style.display = "block"
 
 	let c0 = 0
 	let c1 = 1
@@ -42,7 +42,9 @@ let separation = () => {
 
 	for (let i = 0; i < data.length; i++) {
 		if (i == c0) {
-			names.push(data[i])
+			let name_before = data[i]
+			let name_after = name_before.slice(8)
+			name.push(name_after)
 			c0 = c0 + 4
 		}
 
@@ -66,7 +68,7 @@ let separation = () => {
 		}
 	}
 
-	console.log(names)
+	console.log(name)
 	console.log(secret)
 	console.log(issuer)
 	console.log(type)
@@ -74,30 +76,92 @@ let separation = () => {
 	go()
 }
 
+//? render values
 let go = () => {
-	for (let i = 0; i < names.length; i++) {
-		// create div
+	for (let i = 0; i < name.length; i++) {
 		let element = document.createElement("div")
 
-		qrcode.toDataURL(`otpauth://totp/${issuer[i]}?secret=${secret[i]}`, (err, data) => {
+		qrcode.toDataURL(`otpauth://totp/${name[i]}?secret=${secret[i]}&issuer=${issuer[i]}`, (err, data) => {
 			qr_data = data
 
-			element.innerHTML = `
-			<div class="qr">
+			let text = `
+			<div data-scroll class="qr">
 				<img src="${data}">
 				<h2>${issuer[i]}</h2>
 			</div>`
+
+			element.innerHTML = text
+
+			codes.push(text)
 		})
 
-		// set div elements
-
-		// set div in html
 		document.querySelector(".center").appendChild(element)
-
-		// add one to counter
 	}
 }
 
+//? save file
+let save_file = () => {
+	dialog
+		.showSaveDialog({
+			title: "Save exported file",
+			filters: [{ name: "Text file", extensions: ["txt"] }],
+			defaultPath: "~/authme_export.txt",
+		})
+		.then((result) => {
+			canceled = result.canceled
+			output = result.filePath
+
+			console.log(canceled)
+			console.log(output)
+
+			if (canceled === false) {
+				fs.writeFile(output, file, (err) => {
+					if (err) {
+						return console.log(`error creating file ${err}`)
+					} else {
+						return console.log("file created")
+					}
+				})
+			}
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+}
+
+//? save qr codes
+let save_qr_codes = () => {
+	dialog
+		.showSaveDialog({
+			title: "Save QR codes",
+			filters: [{ name: "HTML file", extensions: ["html"] }],
+			defaultPath: "~/authme_export.html",
+		})
+		.then((result) => {
+			canceled = result.canceled
+			output = result.filePath
+
+			console.log(canceled)
+			console.log(output)
+
+			if (canceled === false) {
+				for (let i = 0; i < codes.length; i++) {
+					fs.appendFile(output, `${codes[i]} \n`, (err) => {
+						if (err) {
+							return console.log(`error creating file ${err}`)
+						} else {
+							return console.log("file created")
+						}
+					})
+				}
+			}
+		})
+		.catch((err) => {
+			console.log(err)
+		})
+}
+
+//? hide
 let hide = () => {
 	ipc.send("hide2")
 }

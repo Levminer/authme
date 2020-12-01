@@ -1,4 +1,4 @@
-const { ipcMain, shell } = require("electron")
+const { ipcMain, shell, app } = require("electron").remote
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -8,159 +8,177 @@ let version = ipc.sendSync("ver")
 
 document.querySelector("#ver").textContent = `Authme ${version}`
 
-const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+let folder
+
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
+}
+
+const file_path = path.join(folder, "/Levminer/Authme")
 
 let but0 = document.querySelector("#but0")
 let but1 = document.querySelector("#but1")
 let but2 = document.querySelector("#but2")
+let but5 = document.querySelector("#but5")
+
+//? read settings
+const file = JSON.parse(
+	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+		if (err) {
+			return console.log(`Error reading settings.json ${err}`)
+		} else {
+			return console.log("settings.json readed")
+		}
+	})
+)
+
+// launch on startup
+let startup_state = file.settings.launch_on_startup
+if (startup_state === true) {
+	but0.textContent = "On"
+
+	ipc.send("after_startup1")
+} else {
+	but0.textContent = "Off"
+
+	ipc.send("after_startup0")
+}
+
+// close to tray
+let tray_state = file.settings.close_to_tray
+if (tray_state === true) {
+	but2.textContent = "On"
+
+	ipc.send("after_tray1")
+} else {
+	but2.textContent = "Off"
+
+	ipc.send("after_tray0")
+}
+
+// names
+let names_state = file.settings.show_2fa_names
+if (names_state === true) {
+	but5.textContent = "On"
+} else {
+	but5.textContent = "Off"
+}
 
 //? startup
-let startup_state = true
-
-fs.readFile(path.join(file_path, "saos.md"), "utf-8", (err, data) => {
-	if (err) {
-		but0.textContent = "Off"
-		startup_state = true
-
-		after_startup0()
-	} else {
-		but0.textContent = "On"
-		startup_state = false
-
-		after_startup1()
-	}
-})
-
 let startup = () => {
 	if (startup_state == true) {
-		fs.writeFile(path.join(file_path, "saos.md"), "saos", (err) => {
-			if (err) {
-				console.log("Start after os started don't created!")
-			} else {
-				console.log("Start after os started file created!")
+		file.settings.launch_on_startup = false
 
-				but0.textContent = "On"
-				startup_state = false
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-				after_startup1()
-			}
-		})
+		but0.textContent = "Off"
+		startup_state = false
+
+		ipc.send("after_startup0")
 	} else {
-		fs.unlink(path.join(file_path, "saos.md"), (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log("saos.md not deleted")
-			} else {
-				console.log("saos.md deleted")
+		file.settings.launch_on_startup = true
 
-				but0.textContent = "Off"
-				startup_state = true
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-				after_tray0()
-			}
-		})
+		but0.textContent = "On"
+		startup_state = true
+
+		ipc.send("after_startup1")
 	}
 }
 
 //? tray
-let tray_state = true
-
-fs.readFile(path.join(file_path, "catt.md"), "utf-8", (err, data) => {
-	if (err) {
-		but2.textContent = "Off"
-		tray_state = true
-
-		after_tray0()
-	} else {
-		but2.textContent = "On"
-		tray_state = false
-
-		after_tray1()
-	}
-})
-
 let tray = () => {
 	if (tray_state == true) {
-		fs.writeFile(path.join(file_path, "catt.md"), "catt", (err) => {
-			if (err) {
-				console.log("Close app to tray don't created!")
-			} else {
-				console.log("Close app to tray file created!")
+		file.settings.close_to_tray = false
 
-				but2.textContent = "On"
-				tray_state = false
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-				after_tray1()
-			}
-		})
+		but2.textContent = "Off"
+		tray_state = false
+
+		ipc.send("after_tray0")
 	} else {
-		fs.unlink(path.join(file_path, "catt.md"), (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log("catt.md not deleted")
-			} else {
-				console.log("catt.md deleted")
+		file.settings.close_to_tray = true
 
-				but2.textContent = "Off"
-				tray_state = true
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-				after_tray0()
-			}
-		})
+		but2.textContent = "On"
+		tray_state = true
+
+		ipc.send("after_tray1")
 	}
 }
 
-//? data
-let data_state = false
+//? reset
+let reset_state = false
 
-let data = () => {
-	if (data_state == false) {
+let reset = () => {
+	if (reset_state == false) {
 		but1.textContent = "Confirm"
-		data_state = true
+		reset_state = true
 	} else {
-		fs.unlink(path.join(file_path, "nrpw.md"), (err) => {
+		fs.unlink(path.join(file_path, "settings.json"), (err) => {
 			if (err && err.code === "ENOENT") {
-				return console.log("nrpw.md not deleted")
+				return console.log(`error deleting settings.json ${err}`)
 			} else {
-				console.log("nrpw.md deleted")
+				console.log("settings.json deleted")
 			}
 		})
 
-		fs.unlink(path.join(file_path, "pass.md"), (err) => {
+		fs.unlink(path.join(file_path, "hash.authme"), (err) => {
 			if (err && err.code === "ENOENT") {
-				return console.log("pass.md not deleted")
+				return console.log(`error deleting hash.authme ${err}`)
 			} else {
-				console.log("pass.md deleted")
+				console.log("hash.authme deleted")
 			}
 		})
 
-		fs.unlink(path.join(file_path, "hash.md"), (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log("hash.md not deleted")
-			} else {
-				console.log("hash.md deleted")
-			}
-		})
-
-		fs.unlink(path.join(file_path, "saos.md"), (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log("saos.md not deleted")
-			} else {
-				console.log("saos.md deleted")
-			}
-		})
-
-		let file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+		const file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
 
 		fs.unlink(file_path2, (err) => {
 			if (err && err.code === "ENOENT") {
-				return console.log("startup shortcut not deleted")
+				return console.log(`error deleting shortcut ${err}`)
 			} else {
-				console.log("startup shortcut deleted")
+				console.log("shortcut deleted")
 			}
 		})
 
-		but1.textContent = "Exiting app"
-		after_data()
+		but1.textContent = "Restarting app"
+
+		setTimeout(() => {
+			app.relaunch()
+			app.exit()
+		}, 1000)
 	}
+}
+
+//? names
+let names = () => {
+	if (names_state == true) {
+		file.settings.show_2fa_names = false
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		but5.textContent = "Off"
+		names_state = false
+	} else {
+		file.settings.show_2fa_names = true
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		but5.textContent = "On"
+		names_state = true
+	}
+
+	but5.textContent = "Restarting app"
+
+	setTimeout(() => {
+		app.relaunch()
+		app.exit()
+	}, 1000)
 }
 
 //? folder 0
@@ -175,27 +193,4 @@ let folder1 = () => {
 
 let hide = () => {
 	ipc.send("hide0")
-}
-
-//? after_data
-let after_data = () => {
-	ipc.send("after_data")
-}
-
-//? after_startup
-let after_startup0 = () => {
-	ipc.send("after_startup0")
-}
-
-let after_startup1 = () => {
-	ipc.send("after_startup1")
-}
-
-//? after_tray
-let after_tray0 = () => {
-	ipc.send("after_tray0")
-}
-
-let after_tray1 = () => {
-	ipc.send("after_tray1")
 }

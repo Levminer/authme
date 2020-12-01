@@ -1,6 +1,6 @@
 # Authme
 
--   A simple 2FA cross platform app for desktop built with Electron and Node.js.
+### A cross platform simple two-factor authentication app for desktop.
 
 # How to use
 

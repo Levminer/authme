@@ -1,5 +1,5 @@
 const { ipcMain } = require("electron")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -7,7 +7,15 @@ const path = require("path")
 
 let text = document.querySelector("#text")
 
-const file_path = path.join(process.env.APPDATA, "/Levminer/Authme")
+let folder
+
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
+}
+
+const file_path = path.join(folder, "/Levminer/Authme")
 
 //? match passwords
 let match_passwords = () => {
@@ -37,15 +45,25 @@ let hash_password = async () => {
 
 	const hashed = await bcrypt.hash(password_input1, salt).then(console.log("Hash completed!"))
 
-	fs.writeFile(path.join(file_path, "pass.md"), hashed, (err) => {
-		if (err) {
-			console.log("Password file dont created!")
-		} else {
-			console.log("Password file created!")
+	const file = JSON.parse(
+		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+			if (err) {
+				return console.log(`Error reading settings.json ${err}`)
+			} else {
+				return console.log("settings.json readed")
+			}
+		})
+	)
 
-			to_confirm()
-		}
-	})
+	file.security.require_password = true
+
+	file.security.password = hashed
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+	setInterval(() => {
+		ipc.send("to_confirm")
+	}, 3000)
 }
 
 //? no password
@@ -53,30 +71,20 @@ let no_password = () => {
 	text.style.color = "green"
 	text.textContent = "Please wait!"
 
-	console.log(path.join(file_path, "nrpw.md"))
+	const file = JSON.parse(
+		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+			if (err) {
+				return console.log(`Error reading settings.json ${err}`)
+			} else {
+				return console.log("settings.json readed")
+			}
+		})
+	)
 
-	fs.writeFile(path.join(file_path, "nrpw.md"), "nrpw", (err) => {
-		if (err) {
-			console.log("Not require password file don't created!")
-		} else {
-			console.log("Not require password Password file created!")
+	file.security.require_password = false
 
-			to_application1()
-		}
-	})
-}
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-//? to_confirm
-let to_confirm = () => {
-	console.log("Sending to confirm...")
-	setInterval(() => {
-		ipc.send("to_confirm")
-	}, 3000)
-}
-
-//? to_application1
-let to_application1 = () => {
-	console.log("Sending to application1...")
 	setInterval(() => {
 		ipc.send("to_application1")
 	}, 3000)
