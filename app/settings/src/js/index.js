@@ -4,7 +4,7 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 
-let version = ipc.sendSync("ver")
+const version = ipc.sendSync("ver")
 
 document.querySelector("#ver").textContent = `Authme ${version}`
 
@@ -18,12 +18,12 @@ if (process.platform === "win32") {
 
 const file_path = path.join(folder, "/Levminer/Authme")
 
-let but0 = document.querySelector("#but0")
-let but1 = document.querySelector("#but1")
-let but2 = document.querySelector("#but2")
-let but5 = document.querySelector("#but5")
+const but0 = document.querySelector("#but0")
+const but1 = document.querySelector("#but1")
+const but2 = document.querySelector("#but2")
+const but5 = document.querySelector("#but5")
 
-//? read settings
+// ? read settings
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
@@ -66,8 +66,8 @@ if (names_state === true) {
 	but5.textContent = "Off"
 }
 
-//? startup
-let startup = () => {
+// ? startup
+const startup = () => {
 	if (startup_state == true) {
 		file.settings.launch_on_startup = false
 
@@ -89,8 +89,8 @@ let startup = () => {
 	}
 }
 
-//? tray
-let tray = () => {
+// ? tray
+const tray = () => {
 	if (tray_state == true) {
 		file.settings.close_to_tray = false
 
@@ -112,10 +112,10 @@ let tray = () => {
 	}
 }
 
-//? reset
+// ? reset
 let reset_state = false
 
-let reset = () => {
+const reset = () => {
 	if (reset_state == false) {
 		but1.textContent = "Confirm"
 		reset_state = true
@@ -155,8 +155,8 @@ let reset = () => {
 	}
 }
 
-//? names
-let names = () => {
+// ? names
+const names = () => {
 	if (names_state == true) {
 		file.settings.show_2fa_names = false
 
@@ -181,16 +181,16 @@ let names = () => {
 	}, 1000)
 }
 
-//? folder 0
-let folder0 = () => {
+// ? folder 0
+const folder0 = () => {
 	ipc.send("app_path")
 }
 
-//? folder 1
-let folder1 = () => {
+// ? folder 1
+const folder1 = () => {
 	shell.showItemInFolder(file_path)
 }
 
-let hide = () => {
+const hide = () => {
 	ipc.send("hide0")
 }

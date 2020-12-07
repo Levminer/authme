@@ -5,7 +5,7 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 
-let text = document.querySelector("#text")
+const text = document.querySelector("#text")
 
 let folder
 
@@ -17,10 +17,10 @@ if (process.platform === "win32") {
 
 const file_path = path.join(folder, "/Levminer/Authme")
 
-//? match passwords
-let match_passwords = () => {
-	let password_input1 = document.querySelector("#password_input1").value
-	let password_input2 = document.querySelector("#password_input2").value
+// ? match passwords
+const match_passwords = () => {
+	const password_input1 = document.querySelector("#password_input1").value
+	const password_input2 = document.querySelector("#password_input2").value
 
 	if (password_input1 == password_input2) {
 		console.log("Passwords match!")
@@ -37,9 +37,9 @@ let match_passwords = () => {
 	}
 }
 
-//? hash password
-let hash_password = async () => {
-	let password_input1 = document.querySelector("#password_input1").value
+// ? hash password
+const hash_password = async () => {
+	const password_input1 = document.querySelector("#password_input1").value
 
 	const salt = await bcrypt.genSalt(10).then(console.log("Salt completed!"))
 
@@ -66,8 +66,8 @@ let hash_password = async () => {
 	}, 3000)
 }
 
-//? no password
-let no_password = () => {
+// ? no password
+const no_password = () => {
 	text.style.color = "green"
 	text.textContent = "Please wait!"
 

@@ -4,7 +4,7 @@ const fetch = require("node-fetch")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
 const ipc = electron.ipcMain
 const exec = require("child_process").exec
 
@@ -14,38 +14,43 @@ let window1
 let window2
 let window3
 let window4
+let window5
 
-let c0 = false
-let c1 = false
-let c2 = false
-let c3 = false
-let c4 = false
-let c5 = false
+let confirm_shown = false
+let application_shown = false
+let settings_shown = false
+let import_shown = false
+let export_shown = false
 
-let ipc0 = false
-let ipc1 = false
-let ipc2 = false
+let ipc_to_confirm = false
+let ipc_to_application_0 = false
+let ipc_to_application_1 = false
 
 let confirmed = false
 let startup = false
 
-let authme_version = "2.0.0"
-let tag_name = "2.0.0"
+const authme_version = "2.1.0"
+const tag_name = "2.1.0"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
 })
 
-let v8_version = process.versions.v8
-let node_version = process.versions.node
-let chrome_version = process.versions.chrome
-let electron_version = process.versions.electron
+const v8_version = process.versions.v8
+const node_version = process.versions.node
+const chrome_version = process.versions.chrome
+const electron_version = process.versions.electron
 
-let os_version = `${os.type()} ${os.arch()} ${os.release()}`
+const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 
 let python_version
 
+// eslint-disable-next-line
 exec('python -c "import platform; print(platform.python_version())"', (err, stdout, stderr) => {
+	if (err) {
+		console.log(err)
+	}
+
 	python_version = stdout
 
 	if (python_version === undefined) {
@@ -66,13 +71,11 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-let file
-
-//? folders
+// ? folders
 const full_path = path.join(folder, "Levminer")
 const file_path = path.join(folder, "Levminer/Authme")
 
-//check if folders exists
+// check if folders exists
 if (!fs.existsSync(full_path)) {
 	fs.mkdirSync(path.join(full_path))
 }
@@ -80,7 +83,7 @@ if (!fs.existsSync(file_path)) {
 	fs.mkdirSync(file_path)
 }
 
-//? settings
+// ? settings
 const settings = `{
 		"settings": {
 			"launch_on_startup": false,
@@ -91,6 +94,21 @@ const settings = `{
 		"security": {
 			"require_password": null,
 			"password": null
+		},
+
+		"shortcuts": {
+			"settings": "CommandOrControl+s",
+			"exit": "CommandOrControl+w",
+			"import": "CommandOrControl+i",
+			"export": "CommandOrControl+e",
+			"update": "CommandOrControl+u",
+			"about": "CommandOrControl+d"
+		},
+
+		"global_shortcuts": {
+			"show": "CommandOrControl+Shift+a",
+			"settings": "CommandOrControl+Shift+s",
+			"exit": "CommandOrControl+Shift+d"
 		}
 	}
 	`
@@ -107,7 +125,7 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 }
 
 // read settings
-file = JSON.parse(
+const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
 			return console.log(`Error reading settings.json ${err}`)
@@ -117,15 +135,117 @@ file = JSON.parse(
 	})
 )
 
-//? install protbuf
+// ? install protbuf
 const spawn = require("child_process").spawn
 
-let src = "extract/install.py"
+const src = "extract/install.py"
 
-let py = spawn("python", [src])
+const py = spawn("python", [src])
 
-//? create window
-let createWindow = () => {
+// ? open functions
+
+// open tray
+const tray_show = () => {
+	const toggle = () => {
+		if (confirmed == false) {
+			if (pass_start == true) {
+				if (confirm_shown == false) {
+					window1.maximize()
+					window1.show()
+
+					confirm_shown = true
+				} else {
+					window1.hide()
+
+					confirm_shown = false
+				}
+			}
+		}
+
+		if (application_shown == false) {
+			// if password and password confirmed
+			if (if_pass == true && confirmed == true) {
+				window2.maximize()
+				window2.show()
+
+				application_shown = true
+			}
+
+			// if no password
+			if (if_nopass == true) {
+				window2.maximize()
+				window2.show()
+
+				application_shown = true
+			}
+
+			// if exit to tray on
+			if (show_tray == true) {
+				window2.maximize()
+				window2.show()
+
+				application_shown = true
+			}
+		} else {
+			// if password and password confirmed
+			if (if_pass == true && confirmed == true) {
+				window2.hide()
+
+				application_shown = false
+			}
+
+			// if no password
+			if (if_nopass == true) {
+				window2.hide()
+
+				application_shown = false
+			}
+
+			// if exit to tray on
+			if (show_tray == true) {
+				window2.hide()
+
+				application_shown = false
+			}
+		}
+	}
+
+	let if_pass = false
+	let if_nopass = false
+
+	// check if require password
+	if (file.security.require_password == true) {
+		if_pass = true
+		pass_start = true
+
+		toggle()
+	} else {
+		if_nopass = true
+
+		toggle()
+	}
+}
+
+// tray settings
+const tray_settings = () => {
+	if (settings_shown == false) {
+		window3.maximize()
+		window3.show()
+		settings_shown = true
+	} else {
+		window3.hide()
+		settings_shown = false
+	}
+}
+
+// tray exit
+const tray_exit = () => {
+	to_tray = false
+	app.exit()
+}
+
+// ? create window
+const createWindow = () => {
 	window0 = new BrowserWindow({
 		show: false,
 		backgroundColor: "#2A2424",
@@ -216,7 +336,7 @@ let createWindow = () => {
 
 			show_tray = true
 
-			c2 = false
+			application_shown = false
 		}
 	})
 
@@ -230,7 +350,7 @@ let createWindow = () => {
 			}, 100)
 			show_tray = true
 
-			c3 = false
+			settings_shown = false
 		}
 	})
 
@@ -244,7 +364,7 @@ let createWindow = () => {
 			}, 100)
 			show_tray = true
 
-			c4 = false
+			import_shown = false
 		}
 	})
 
@@ -258,18 +378,35 @@ let createWindow = () => {
 			}, 100)
 			show_tray = true
 
-			c5 = false
+			export_shown = false
 		}
 	})
 
-	//? check for auto update
+	// ? dev tools
+	let dt = false
+
+	globalShortcut.register("CommandOrControl+Enter", () => {
+		const window = BrowserWindow.getFocusedWindow()
+
+		if (dt == false) {
+			window.webContents.openDevTools()
+
+			dt = true
+		} else {
+			window.webContents.closeDevTools()
+
+			dt = false
+		}
+	})
+
+	// ? check for auto update
 	window2.on("show", () => {
-		let api = () => {
+		const api = () => {
 			fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
 				.then((res) => res.json())
 				.then((data) => {
 					try {
-						if (data.tag_name != tag_name) {
+						if (data.tag_name != tag_name && data.tag_name != undefined) {
 							dialog
 								.showMessageBox({
 									title: "Authme",
@@ -300,24 +437,37 @@ let createWindow = () => {
 		}
 
 		if (update_start == false) {
-			 api() 
+			api()
 
 			update_start = true
 		}
 	})
+
+	// ? global shortcuts
+	globalShortcut.register(file.global_shortcuts.show, () => {
+		tray_show()
+	})
+
+	globalShortcut.register(file.global_shortcuts.settings, () => {
+		tray_settings()
+	})
+
+	globalShortcut.register(file.global_shortcuts.exit, () => {
+		tray_exit()
+	})
 }
 
 ipc.on("to_confirm", () => {
-	if (ipc0 == false) {
+	if (ipc_to_confirm == false) {
 		window1.maximize()
 		window1.show()
 		window0.hide()
-		ipc0 = true
+		ipc_to_confirm = true
 	}
 })
 
 ipc.on("to_application0", () => {
-	if (ipc1 == false && startup == false) {
+	if (ipc_to_application_0 == false && startup == false) {
 		window1.hide()
 
 		setTimeout(() => {
@@ -325,14 +475,14 @@ ipc.on("to_application0", () => {
 			window2.show()
 		}, 300)
 
-		ipc1 = true
+		ipc_to_application_0 = true
 
 		confirmed = true
 	}
 })
 
 ipc.on("to_application1", () => {
-	if (ipc2 == false && startup == false) {
+	if (ipc_to_application_1 == false && startup == false) {
 		window0.hide()
 
 		setTimeout(() => {
@@ -340,46 +490,46 @@ ipc.on("to_application1", () => {
 			window2.show()
 		}, 300)
 
-		ipc2 = true
+		ipc_to_application_1 = true
 	}
 })
 
 ipc.on("hide0", () => {
-	if (c3 == false) {
+	if (settings_shown == false) {
 		window3.maximize()
 		window3.show()
-		c3 = true
+		settings_shown = true
 	} else {
 		window3.hide()
-		c3 = false
+		settings_shown = false
 	}
 })
 
 ipc.on("hide1", () => {
-	if (c4 == false) {
+	if (import_shown == false) {
 		window4.maximize()
 		window4.show()
-		c4 = true
+		import_shown = true
 	} else {
 		window4.hide()
-		c4 = false
+		import_shown = false
 	}
 })
 
 ipc.on("hide2", () => {
-	if (c5 == false) {
+	if (export_shown == false) {
 		window5.maximize()
 		window5.show()
-		c5 = true
+		export_shown = true
 	} else {
 		window5.hide()
-		c5 = false
+		export_shown = false
 	}
 })
 
 ipc.on("after_startup0", () => {
 	if (process.platform === "win32") {
-		let startup_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+		const startup_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
 
 		fs.unlink(startup_path, (err) => {
 			if (err && err.code === "ENOENT") {
@@ -393,7 +543,7 @@ ipc.on("after_startup0", () => {
 
 ipc.on("after_startup1", () => {
 	if (process.platform === "win32") {
-		let shortcut_created = createDesktopShortcut({
+		const shortcut_created = createDesktopShortcut({
 			windows: {
 				filePath: app.getPath("exe"),
 				outputPath: "%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
@@ -448,113 +598,36 @@ app.whenReady().then(() => {
 	}, 1500)
 
 	// make tray
-	let iconpath = path.join(__dirname, "img/iconb.png")
+	const iconpath = path.join(__dirname, "img/iconb.png")
 
 	tray = new Tray(iconpath)
+
+	tray.on("click", () => {
+		tray_show()
+	})
+
 	const contextmenu = Menu.buildFromTemplate([
 		{
 			label: "Show app",
+			accelerator: file.global_shortcuts.show,
 			click: () => {
-				let toggle = () => {
-					if (confirmed == false) {
-						if (pass_start == true) {
-							if (c1 == false) {
-								window1.maximize()
-								window1.show()
-
-								c1 = true
-							} else {
-								window1.hide()
-
-								c1 = false
-							}
-						}
-					}
-
-					if (c2 == false) {
-						// if password and password confirmed
-						if (if_pass == true && confirmed == true) {
-							window2.maximize()
-							window2.show()
-
-							c2 = true
-						}
-
-						// if no password
-						if (if_nopass == true) {
-							window2.maximize()
-							window2.show()
-
-							c2 = true
-						}
-
-						// if exit to tray on
-						if (show_tray == true) {
-							window2.maximize()
-							window2.show()
-
-							c2 = true
-						}
-					} else {
-						// if password and password confirmed
-						if (if_pass == true && confirmed == true) {
-							window2.hide()
-
-							c2 = false
-						}
-
-						// if no password
-						if (if_nopass == true) {
-							window2.hide()
-
-							c2 = false
-						}
-
-						// if exit to tray on
-						if (show_tray == true) {
-							window2.hide()
-
-							c2 = false
-						}
-					}
-				}
-
-				let if_pass = false
-				let if_nopass = false
-
-				// check if require password
-				if (file.security.require_password == true) {
-					if_pass = true
-					pass_start = true
-
-					toggle()
-				} else {
-					if_nopass = true
-
-					toggle()
-				}
+				tray_show()
 			},
 		},
 		{ type: "separator" },
 		{
 			label: "Settings",
+			accelerator: file.global_shortcuts.settings,
 			click: () => {
-				if (c3 == false) {
-					window3.maximize()
-					window3.show()
-					c3 = true
-				} else {
-					window3.hide()
-					c3 = false
-				}
+				tray_settings()
 			},
 		},
 		{ type: "separator" },
 		{
 			label: "Exit app",
+			accelerator: file.global_shortcuts.exit,
 			click: () => {
-				to_tray = false
-				app.exit()
+				tray_exit()
 			},
 		},
 	])
@@ -568,14 +641,15 @@ app.whenReady().then(() => {
 			submenu: [
 				{
 					label: "Settings",
+					accelerator: file.shortcuts.settings,
 					click: () => {
-						if (c3 == false) {
+						if (settings_shown == false) {
 							window3.maximize()
 							window3.show()
-							c3 = true
+							settings_shown = true
 						} else {
 							window3.hide()
-							c3 = false
+							settings_shown = false
 						}
 					},
 				},
@@ -584,51 +658,10 @@ app.whenReady().then(() => {
 				},
 				{
 					label: "Exit",
+					accelerator: file.shortcuts.exit,
 					click: () => {
 						to_tray = false
 						app.exit()
-					},
-				},
-			],
-		},
-		{
-			label: "Window",
-			submenu: [
-				{
-					label: "Fullscreen",
-					click: () => {
-						let window = BrowserWindow.getFocusedWindow()
-
-						if (c0 == false) {
-							window.setFullScreen(true)
-
-							c0 = true
-						} else {
-							window.setFullScreen(false)
-
-							c0 = false
-						}
-						console.log(`FC ${c0}`)
-					},
-				},
-				{
-					type: "separator",
-				},
-				{
-					label: "Devtools",
-					click: () => {
-						let window = BrowserWindow.getFocusedWindow()
-
-						if (c1 == false) {
-							window.webContents.openDevTools()
-
-							c1 = true
-						} else {
-							window.webContents.closeDevTools()
-
-							c1 = false
-						}
-						console.log(`DT ${c1}`)
 					},
 				},
 			],
@@ -638,33 +671,34 @@ app.whenReady().then(() => {
 			submenu: [
 				{
 					label: "Import",
+					accelerator: file.shortcuts.import,
 					click: () => {
-						let toggle = () => {
-							if (c4 == false) {
+						const toggle = () => {
+							if (import_shown == false) {
 								if (if_pass == true && confirmed == true) {
 									window4.maximize()
 									window4.show()
 
-									c4 = true
+									import_shown = true
 								}
 
 								if (if_nopass == true) {
 									window4.maximize()
 									window4.show()
 
-									c4 = true
+									import_shown = true
 								}
 							} else {
 								if (if_pass == true && confirmed == true) {
 									window4.hide()
 
-									c4 = false
+									import_shown = false
 								}
 
 								if (if_nopass == true) {
 									window4.hide()
 
-									c4 = false
+									import_shown = false
 								}
 							}
 						}
@@ -690,33 +724,34 @@ app.whenReady().then(() => {
 				},
 				{
 					label: "Export",
+					accelerator: file.shortcuts.export,
 					click: () => {
-						let toggle = () => {
-							if (c5 == false) {
+						const toggle = () => {
+							if (export_shown == false) {
 								if (if_pass == true && confirmed == true) {
 									window5.maximize()
 									window5.show()
 
-									c5 = true
+									export_shown = true
 								}
 
 								if (if_nopass == true) {
 									window5.maximize()
 									window5.show()
 
-									c5 = true
+									export_shown = true
 								}
 							} else {
 								if (if_pass == true && confirmed == true) {
 									window5.hide()
 
-									c5 = false
+									export_shown = false
 								}
 
 								if (if_nopass == true) {
 									window5.hide()
 
-									c5 = false
+									export_shown = false
 								}
 							}
 						}
@@ -744,13 +779,14 @@ app.whenReady().then(() => {
 			submenu: [
 				{
 					label: "Update",
+					accelerator: file.shortcuts.update,
 					click: () => {
-						let api = () => {
+						const api = () => {
 							fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
 								.then((res) => res.json())
 								.then((data) => {
 									try {
-										if (data.tag_name != tag_name) {
+										if (data.tag_name != tag_name && data.tag_name != undefined) {
 											dialog
 												.showMessageBox({
 													title: "Authme",
@@ -803,6 +839,7 @@ app.whenReady().then(() => {
 				},
 				{
 					label: "About",
+					accelerator: file.shortcuts.about,
 					click: () => {
 						const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
 

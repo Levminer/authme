@@ -3,12 +3,12 @@ const electron = require("electron")
 const { dialog, shell } = require("electron").remote
 const ipc = electron.ipcRenderer
 const path = require("path")
-const qr_reader = require("qrcode-reader")
+const Qr_Reader = require("qrcode-reader")
 const jimp = require("jimp")
 const readline = require("readline")
 const spawn = require("child_process").spawn
 
-//? os specific folders
+// ? os specific folders
 let folder
 
 if (process.platform === "win32") {
@@ -22,12 +22,12 @@ const python_path = path.join(__dirname, "src/py/extract_2fa_secret.py")
 
 console.log(python_path)
 
-//? init
+// ? init
 let canceled
 let output
 
-//? import from qr code
-let import_qrcode = () => {
+// ? import from qr code
+const import_qrcode = () => {
 	// request file
 	dialog
 		.showOpenDialog({
@@ -51,10 +51,10 @@ let import_qrcode = () => {
 		})
 
 	// process picture
-	let resume = () => {
+	const resume = () => {
 		for (let i = 0; i < output.length; i++) {
-			let run = async () => {
-				let error = () => {
+			const run = async () => {
+				const error = () => {
 					dialog.showMessageBox({
 						title: "Authme",
 						buttons: ["Close"],
@@ -69,7 +69,7 @@ let import_qrcode = () => {
 
 				const img = await jimp.read(fs.readFileSync(output[i]))
 
-				const qr = new qr_reader()
+				const qr = new Qr_Reader()
 
 				const value = await new Promise((resolve, reject) => {
 					qr.callback = (err, v) => (err != null ? error() : resolve(v))
@@ -110,18 +110,18 @@ let import_qrcode = () => {
 	}
 }
 
-//? start input text
-let import_text = () => {
-	let text_inputs = document.querySelector(".text-inputs")
+// ? start input text
+const import_text = () => {
+	const text_inputs = document.querySelector(".text-inputs")
 	text_inputs.style.display = "block"
 
 	document.querySelector(".choose").style.display = "none"
 }
 
 // resume input text
-let import_text_resume = () => {
-	let input0 = document.querySelector("#input0").value
-	let input1 = document.querySelector("#input1").value
+const import_text_resume = () => {
+	const input0 = document.querySelector("#input0").value
+	const input1 = document.querySelector("#input1").value
 
 	if (input0 !== "") {
 		fs.writeFile(path.join("output.txt"), `${input0} \n${input1}`, (err) => {
@@ -156,9 +156,9 @@ let import_text_resume = () => {
 	}
 }
 
-//? generate file
-let generate = () => {
-	let python = spawn("python", [python_path, "output.txt"])
+// ? generate file
+const generate = () => {
+	const python = spawn("python", [python_path, "output.txt"])
 
 	python.stdout.on("data", (data) => {
 		console.log(data.toString())
@@ -179,7 +179,7 @@ let generate = () => {
 				console.log(output)
 
 				if (canceled === false) {
-					let file = fs.readFileSync(path.join("exported.txt"), "utf-8", (err) => {
+					const file = fs.readFileSync(path.join("exported.txt"), "utf-8", (err) => {
 						if (err) {
 							return console.log(`error creating file ${err}`)
 						} else {
@@ -204,8 +204,8 @@ let generate = () => {
 	}, 800)
 }
 
-//? clear
-let clear = () => {
+// ? clear
+const clear = () => {
 	fs.unlink(path.join(file_path, "exported.txt"), (err) => {
 		if (err && err.code === "ENOENT") {
 			return console.log("exported.txt not deleted")
@@ -223,17 +223,17 @@ let clear = () => {
 	})
 }
 
-//? link
-let link0 = () => {
+// ? link
+const link0 = () => {
 	shell.openExternal("https://www.python.org/downloads/")
 }
 
-let link1 = () => {
+const link1 = () => {
 	shell.openExternal("https://github.com/Levminer/authme")
 }
 
-//? import from stand alone qr code
-let import_sa_qrcode = () => {
+// ? import from stand alone qr code
+const import_sa_qrcode = () => {
 	// request file
 	dialog
 		.showOpenDialog({
@@ -257,16 +257,16 @@ let import_sa_qrcode = () => {
 		})
 
 	// process picture
-	let resume_sa_qrcode = () => {
+	const resume_sa_qrcode = () => {
 		for (let i = 0; i < output.length; i++) {
-			let run_sa_qrcode = async () => {
-				let error = () => {
+			const run_sa_qrcode = async () => {
+				const error = () => {
 					console.log(error)
 				}
 
 				const img = await jimp.read(fs.readFileSync(output[i]))
 
-				const qr = new qr_reader()
+				const qr = new Qr_Reader()
 
 				const value = await new Promise((resolve, reject) => {
 					qr.callback = (err, v) => (err != null ? error() : resolve(v))
@@ -307,7 +307,7 @@ let import_sa_qrcode = () => {
 	}
 }
 
-let generte_sa = () => {
+const generte_sa = () => {
 	dialog
 		.showSaveDialog({
 			title: "Save import file",
@@ -322,11 +322,11 @@ let generte_sa = () => {
 			console.log(output)
 
 			if (canceled === false) {
-				let lineReader = readline.createInterface({
+				const lineReader = readline.createInterface({
 					input: fs.createReadStream(path.join("output.txt")),
 				})
 
-				//set counter
+				// set counter
 				let counter = 0
 
 				// detect last line
@@ -335,9 +335,9 @@ let generte_sa = () => {
 				})
 
 				lineReader.on("line", (line) => {
-					//line1
+					// line1
 					if (counter === 0) {
-						let fl = line.slice(15)
+						const fl = line.slice(15)
 						fs.appendFileSync(path.join("exported.txt"), `\nName: ${fl} \n`, (err) => {
 							if (err) {
 								console.log("Output don't modified and don't created!")
@@ -347,9 +347,9 @@ let generte_sa = () => {
 						})
 					}
 
-					//line2
+					// line2
 					if (counter === 1) {
-						let fl = line.slice(8)
+						const fl = line.slice(8)
 						fs.appendFileSync(path.join("exported.txt"), `Secret: ${fl} \n`, (err) => {
 							if (err) {
 								console.log("Output don't modified and don't created!")
@@ -359,9 +359,9 @@ let generte_sa = () => {
 						})
 					}
 
-					//line3
+					// line3
 					if (counter === 2) {
-						let fl = line.slice(8)
+						const fl = line.slice(8)
 						fs.appendFileSync(path.join("exported.txt"), `Issuer: ${fl} \n`, (err) => {
 							if (err) {
 								console.log("Output don't modified and don't created!")
@@ -370,8 +370,8 @@ let generte_sa = () => {
 							}
 						})
 
-						//line 4
-						fs.appendFileSync(path.join("exported.txt"), `Type:   OTP_TOTP  \n`, (err) => {
+						// line 4
+						fs.appendFileSync(path.join("exported.txt"), "Type:   OTP_TOTP  \n", (err) => {
 							if (err) {
 								console.log("Output don't modified and don't created!")
 							} else {
@@ -380,7 +380,7 @@ let generte_sa = () => {
 						})
 					}
 
-					//increment on reset
+					// increment on reset
 					if (counter !== 2) {
 						counter++
 					} else {
@@ -388,9 +388,9 @@ let generte_sa = () => {
 					}
 				})
 
-				let done = () => {
-					//read exported.txt
-					let file = fs.readFileSync(path.join("exported.txt"), "utf-8", (err) => {
+				const done = () => {
+					// read exported.txt
+					const file = fs.readFileSync(path.join("exported.txt"), "utf-8", (err) => {
 						if (err) {
 							return console.log(`error creating file ${err}`)
 						} else {
@@ -398,7 +398,7 @@ let generte_sa = () => {
 						}
 					})
 
-					//write to destination
+					// write to destination
 					fs.writeFileSync(output, file, (err) => {
 						if (err) {
 							return console.log(`error creating file ${err}`)
@@ -417,7 +417,7 @@ let generte_sa = () => {
 		})
 }
 
-//? hide
-let hide = () => {
+// ? hide
+const hide = () => {
 	ipc.send("hide1")
 }

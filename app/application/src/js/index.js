@@ -3,6 +3,7 @@ const { app } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 
+// eslint-disable-next-line
 let prev = false
 
 let folder
@@ -24,7 +25,7 @@ const querry = []
 
 let clear
 
-//? read settings
+// ? read settings
 // read settings
 file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
@@ -36,10 +37,10 @@ file = JSON.parse(
 	})
 )
 
-let name_state = file.settings.show_2fa_names
+const name_state = file.settings.show_2fa_names
 
-//? separet values
-let separation = () => {
+// ? separet values
+const separation = () => {
 	let c0 = 0
 	let c1 = 1
 	let c2 = 2
@@ -47,22 +48,22 @@ let separation = () => {
 
 	for (let i = 0; i < data.length; i++) {
 		if (i == c0) {
-			let names_before = data[i]
-			let names_after = names_before.slice(8)
+			const names_before = data[i]
+			const names_after = names_before.slice(8)
 			names.push(names_after)
 			c0 = c0 + 4
 		}
 
 		if (i == c1) {
-			let secret_before = data[i]
-			let secret_after = secret_before.slice(8)
+			const secret_before = data[i]
+			const secret_after = secret_before.slice(8)
 			secret.push(secret_after)
 			c1 = c1 + 4
 		}
 
 		if (i == c2) {
-			let issuer_before = data[i]
-			let issuer_after = issuer_before.slice(8)
+			const issuer_before = data[i]
+			const issuer_after = issuer_before.slice(8)
 			issuer.push(issuer_after)
 			c2 = c2 + 4
 		}
@@ -81,17 +82,17 @@ let separation = () => {
 	go()
 }
 
-let go = () => {
+const go = () => {
 	document.querySelector("#title").textContent = "Here are your 2FA codes"
 	document.querySelector("#search").style.display = "grid"
 
-	let generate = () => {
+	const generate = () => {
 		// counter
 		let counter = 0
 
 		for (let i = 0; i < names.length; i++) {
 			// create div
-			let element = document.createElement("div")
+			const element = document.createElement("div")
 
 			// set div elements
 			if (name_state == true) {
@@ -186,60 +187,61 @@ let go = () => {
 			document.querySelector(".center").appendChild(element)
 
 			// elements
-			let name = document.querySelector(`#name${counter}`)
-			let code = document.querySelector(`#code${counter}`)
-			let time = document.querySelector(`#time${counter}`)
-			let text = document.querySelector(`#text${counter}`)
-			let copy = document.querySelector(`#copy${counter}`)
+			const name = document.querySelector(`#name${counter}`)
+			const code = document.querySelector(`#code${counter}`)
+			const time = document.querySelector(`#time${counter}`)
+			const text = document.querySelector(`#text${counter}`)
+			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
-			let item = issuer[i].toLowerCase().trim()
+			const item = issuer[i].toLowerCase().trim()
 
 			querry.push(item)
 
 			// interval0
-			let int0 = setInterval(() => {
+			const int0 = setInterval(() => {
 				// generate token
-				let token = speakeasy.totp({
+				const token = speakeasy.totp({
 					secret: secret[i],
 					encoding: "base32",
 				})
 
 				// time
-				let remaining = 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
+				const remaining = 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
 
-				//settting elements
+				// settting elements
 				try {
 					text.textContent = names[i]
 				} catch (error) {
-					return
+					console.log(error)
 				}
+
 				name.textContent = issuer[i]
 				code.value = token
 				time.textContent = remaining
 			}, 100)
 
-			//interval1
-			let int1 = setInterval(() => {
+			// interval1
+			const int1 = setInterval(() => {
 				// generate token
-				let token = speakeasy.totp({
+				const token = speakeasy.totp({
 					secret: secret[i],
 					encoding: "base32",
 				})
 
 				// time
-				let remaining = 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
+				const remaining = 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
 
-				//settting elements
+				// settting elements
 				name.textContent = issuer[i]
 				code.value = token
 				time.textContent = remaining
 
 				clearInterval(int0)
-			}, 1000)
+			}, 800)
 
-			//copy
-			let el = copy.addEventListener("click", () => {
+			// copy
+			const el = copy.addEventListener("click", () => {
 				code.select()
 				code.setSelectionRange(0, 9999)
 				document.execCommand("copy")
@@ -250,7 +252,7 @@ let go = () => {
 			})
 
 			if (name_state) {
-				let grid = document.querySelector(`#grid${i}`)
+				const grid = document.querySelector(`#grid${i}`)
 				grid.style.height = "310px"
 			}
 
@@ -264,12 +266,12 @@ let go = () => {
 	generate()
 
 	// set block count
-	for (let i = 0; i < name.length; i++) {
-		let block = document.querySelector(`#grid${i}`)
+	for (let i = 0; i < names.length; i++) {
+		const block = document.querySelector(`#grid${i}`)
 		block.style.display = "grid"
 	}
 
-	//prev
+	// prev
 	if (prev == false) {
 		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.visibility = "visible"
@@ -280,15 +282,15 @@ let go = () => {
 	}
 }
 
-//? search
-let search = () => {
-	let search = document.querySelector("#search")
-	let input = search.value.toLowerCase()
+// ? search
+const search = () => {
+	const search = document.querySelector("#search")
+	const input = search.value.toLowerCase()
 	let i = 0
 
 	// restart
-	for (let i = 0; i < name.length; i++) {
-		let div = document.querySelector(`#grid${[i]}`)
+	for (let i = 0; i < names.length; i++) {
+		const div = document.querySelector(`#grid${[i]}`)
 		div.style.display = "grid"
 	}
 
@@ -297,7 +299,7 @@ let search = () => {
 		if (e.startsWith(input)) {
 			console.log("found")
 		} else {
-			let div = document.querySelector(`#grid${[i]}`)
+			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "none"
 		}
 		i++
@@ -305,8 +307,8 @@ let search = () => {
 
 	// if search empty
 	if (search.value == "") {
-		for (let i = 0; i < name.length; i++) {
-			let div = document.querySelector(`#grid${[i]}`)
+		for (let i = 0; i < names.length; i++) {
+			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "grid"
 		}
 	}
@@ -328,19 +330,19 @@ let diva1
 app.on("browser-window-focus", () => {
 	if (focus === true) {
 		try {
-			let center = document.querySelector(".center")
+			const center = document.querySelector(".center")
 			center.classList.add("animate__animated", "animate__fadeIn")
 
-			let h1 = document.querySelector(".h1")
+			const h1 = document.querySelector(".h1")
 			h1.classList.add("animate__animated", "animate__slideInDown")
 
-			let h2 = document.querySelector(".h2")
+			const h2 = document.querySelector(".h2")
 			h2.classList.add("animate__animated", "animate__slideInDown")
 
-			let input = document.querySelector(".input")
+			const input = document.querySelector(".input")
 			input.classList.add("animate__animated", "animate__slideInDown")
 
-			let button = document.querySelector(".button")
+			const button = document.querySelector(".button")
 			button.classList.add("animate__animated", "animate__slideInDown")
 
 			if (clear == true) {
@@ -360,9 +362,7 @@ app.on("browser-window-focus", () => {
 					diva0.classList.remove("animate__animated", "animate__zoomIn")
 					diva1.classList.remove("animate__animated", "animate__zoomIn")
 				}
-			} catch (error) {
-				return
-			}
+			} catch (error) {}
 		}, 1500)
 
 		focus = false
