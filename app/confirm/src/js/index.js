@@ -5,7 +5,7 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 
-let text = document.querySelector("#text")
+const text = document.querySelector("#text")
 
 let folder
 
@@ -23,8 +23,8 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	}
 })
 
-let unhash_password = async () => {
-	let password_input = document.querySelector("#password_input").value
+const unhash_password = async () => {
+	const password_input = document.querySelector("#password_input").value
 
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {

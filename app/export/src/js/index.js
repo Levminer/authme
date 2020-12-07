@@ -4,16 +4,16 @@ const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
 
-//? init ipc
+// ? init ipc
 const ipc = electron.ipcRenderer
 
-//? init file for save to file
+// ? init file for save to file
 let file
 
-//? init codes for save to qr codes
+// ? init codes for save to qr codes
 const codes = []
 
-//? os specific folders
+// ? os specific folders
 let folder
 
 if (process.platform === "win32") {
@@ -24,14 +24,14 @@ if (process.platform === "win32") {
 
 const file_path = path.join(folder, "Levminer/Authme")
 
-//? read file from settings folder
-let name = []
-let secret = []
-let issuer = []
-let type = []
+// ? read file from settings folder
+const name = []
+const secret = []
+const issuer = []
+const type = []
 
-//? separete value
-let separation = () => {
+// ? separete value
+const separation = () => {
 	document.querySelector(".before_export").style.display = "none"
 	document.querySelector(".after_export").style.display = "block"
 
@@ -42,22 +42,22 @@ let separation = () => {
 
 	for (let i = 0; i < data.length; i++) {
 		if (i == c0) {
-			let name_before = data[i]
-			let name_after = name_before.slice(8)
+			const name_before = data[i]
+			const name_after = name_before.slice(8)
 			name.push(name_after)
 			c0 = c0 + 4
 		}
 
 		if (i == c1) {
-			let secret_before = data[i]
-			let secret_after = secret_before.slice(8)
+			const secret_before = data[i]
+			const secret_after = secret_before.slice(8)
 			secret.push(secret_after)
 			c1 = c1 + 4
 		}
 
 		if (i == c2) {
-			let issuer_before = data[i]
-			let issuer_after = issuer_before.slice(8)
+			const issuer_before = data[i]
+			const issuer_after = issuer_before.slice(8)
 			issuer.push(issuer_after)
 			c2 = c2 + 4
 		}
@@ -76,15 +76,19 @@ let separation = () => {
 	go()
 }
 
-//? render values
-let go = () => {
+// ? render values
+const go = () => {
 	for (let i = 0; i < name.length; i++) {
-		let element = document.createElement("div")
+		const element = document.createElement("div")
 
 		qrcode.toDataURL(`otpauth://totp/${name[i]}?secret=${secret[i]}&issuer=${issuer[i]}`, (err, data) => {
+			if (err) {
+				console.log(err)
+			}
+
 			qr_data = data
 
-			let text = `
+			const text = `
 			<div data-scroll class="qr">
 				<img src="${data}">
 				<h2>${issuer[i]}</h2>
@@ -99,8 +103,8 @@ let go = () => {
 	}
 }
 
-//? save file
-let save_file = () => {
+// ? save file
+const save_file = () => {
 	dialog
 		.showSaveDialog({
 			title: "Save exported file",
@@ -129,8 +133,8 @@ let save_file = () => {
 		})
 }
 
-//? save qr codes
-let save_qr_codes = () => {
+// ? save qr codes
+const save_qr_codes = () => {
 	dialog
 		.showSaveDialog({
 			title: "Save QR codes",
@@ -161,7 +165,7 @@ let save_qr_codes = () => {
 		})
 }
 
-//? hide
-let hide = () => {
+// ? hide
+const hide = () => {
 	ipc.send("hide2")
 }
