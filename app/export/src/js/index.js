@@ -1,5 +1,5 @@
 const electron = require("electron")
-const { app, dialog } = require("electron").remote
+const { app, dialog, shell } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
@@ -168,4 +168,8 @@ const save_qr_codes = () => {
 // ? hide
 const hide = () => {
 	ipc.send("hide2")
+}
+
+const aw = () => {
+	shell.openExternal("https://web.authme.levminer.com")
 }

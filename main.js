@@ -29,8 +29,8 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
-const authme_version = "2.1.0"
-const tag_name = "2.1.0"
+const authme_version = "2.1.1"
+const tag_name = "2.1.1"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -401,39 +401,56 @@ const createWindow = () => {
 
 	// ? check for auto update
 	window2.on("show", () => {
-		const api = () => {
-			fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
-				.then((res) => res.json())
-				.then((data) => {
-					try {
-						if (data.tag_name != tag_name && data.tag_name != undefined) {
-							dialog
-								.showMessageBox({
-									title: "Authme",
-									buttons: ["Yes", "No"],
-									defaultId: 0,
-									cancelId: 1,
-									type: "info",
-									message: `
-							Update available: Authme ${data.tag_name}
-							
-							Do you want to download it?
-		
-							You currently running: Authme ${tag_name}
-							`,
-								})
-								.then((result) => {
-									update = true
+		const api = async () => {
+			try {
+				await fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
+					.then((res) => res.json())
+					.then((data) => {
+						try {
+							if (data.tag_name != tag_name && data.tag_name != undefined) {
+								dialog
+									.showMessageBox({
+										title: "Authme",
+										buttons: ["Yes", "No"],
+										defaultId: 0,
+										cancelId: 1,
+										type: "info",
+										message: `
+										Update available: Authme ${data.tag_name}
+										
+										Do you want to download it?
+					
+										You currently running: Authme ${tag_name}
+										`,
+									})
+									.then((result) => {
+										update = true
 
-									if (result.response === 0) {
-										shell.openExternal("https://github.com/Levminer/authme/releases/latest")
-									}
-								})
+										if (result.response === 0) {
+											shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+										}
+									})
+							}
+						} catch (error) {
+							return console.log(error)
 						}
-					} catch (error) {
-						return console.log(error)
-					}
+					})
+			} catch (error) {
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					defaultId: 0,
+					cancelId: 1,
+					type: "info",
+					message: `
+					No update available:
+					
+					Can't connect to API!
+
+					You currently running: Authme ${tag_name}
+					`,
 				})
+			}
 		}
 
 		if (update_start == false) {
@@ -781,54 +798,71 @@ app.whenReady().then(() => {
 					label: "Update",
 					accelerator: file.shortcuts.update,
 					click: () => {
-						const api = () => {
-							fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
-								.then((res) => res.json())
-								.then((data) => {
-									try {
-										if (data.tag_name != tag_name && data.tag_name != undefined) {
-											dialog
-												.showMessageBox({
+						const api = async () => {
+							try {
+								await fetch("https://api.levminer.com/api/v1/authme/releases")
+									.then((res) => res.json())
+									.then((data) => {
+										try {
+											if (data.tag_name != tag_name && data.tag_name != undefined) {
+												dialog
+													.showMessageBox({
+														title: "Authme",
+														buttons: ["Yes", "No"],
+														defaultId: 0,
+														cancelId: 1,
+														type: "info",
+														message: `
+														Update available: Authme ${data.tag_name}
+														
+														Do you want to download it?
+									
+														You currently running: Authme ${tag_name}
+														`,
+													})
+													.then((result) => {
+														update = true
+
+														if (result.response === 0) {
+															shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+														}
+													})
+											} else {
+												dialog.showMessageBox({
 													title: "Authme",
-													buttons: ["Yes", "No"],
+													buttons: ["Close"],
 													defaultId: 0,
 													cancelId: 1,
 													type: "info",
 													message: `
-													Update available: Authme ${data.tag_name}
+													No update available:
 													
-													Do you want to download it?
+													You running the latest version!
 								
 													You currently running: Authme ${tag_name}
 													`,
 												})
-												.then((result) => {
-													update = true
-
-													if (result.response === 0) {
-														shell.openExternal("https://github.com/Levminer/authme/releases/latest")
-													}
-												})
-										} else {
-											dialog.showMessageBox({
-												title: "Authme",
-												buttons: ["Close"],
-												defaultId: 0,
-												cancelId: 1,
-												type: "info",
-												message: `
-												No update available:
-												
-												You running the latest version!
-							
-												You currently running: Authme ${tag_name}
-												`,
-											})
+											}
+										} catch (error) {
+											return console.log(error)
 										}
-									} catch (error) {
-										return console.log(error)
-									}
+									})
+							} catch (error) {
+								dialog.showMessageBox({
+									title: "Authme",
+									buttons: ["Close"],
+									defaultId: 0,
+									cancelId: 1,
+									type: "info",
+									message: `
+									No update available:
+									
+									Can't connect to API!
+				
+									You currently running: Authme ${tag_name}
+									`,
 								})
+							}
 						}
 
 						api()

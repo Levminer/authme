@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
@@ -42,27 +42,28 @@
 	"author": "Levminer",
 	"license": "MIT",
 	"devDependencies": {
-		"electron": "^11.0.3",
+		"electron": "^11.1.0",
 		"electron-builder": "^22.9.1",
-		"electron-packager": "^15.0.0",
+		"electron-packager": "^15.2.0",
 		"eslint": "^7.15.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^7.0.0",
 		"eslint-config-promise": "^2.0.2",
 		"eslint-config-standard": "^16.0.2",
 		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-prettier": "^3.2.0",
+		"eslint-plugin-prettier": "^3.3.0",
 		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.2.1"
 	},
 	"dependencies": {
+		"@levminer/speakeasy": "^1.0.3",
 		"bcryptjs": "^2.4.3",
 		"create-desktop-shortcuts": "^1.2.0",
 		"cryptr": "^6.0.2",
 		"jimp": "^0.16.1",
 		"node-fetch": "^2.6.1",
 		"qrcode": "^1.4.4",
-		"qrcode-reader": "^1.0.4",
-		"speakeasy": "^2.0.0"
+		"qrcode-reader": "^1.0.4"
 	}
 }

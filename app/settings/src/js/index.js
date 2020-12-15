@@ -3,6 +3,7 @@ const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
+const fetch = require("node-fetch")
 
 const version = ipc.sendSync("ver")
 
@@ -189,6 +190,38 @@ const folder0 = () => {
 // ? folder 1
 const folder1 = () => {
 	shell.showItemInFolder(file_path)
+}
+
+// ? Status API
+const status = document.querySelector("#status")
+
+const api = async () => {
+	try {
+		await fetch("https://api.levminer.com/api/v1/status/all")
+			.then((res) => res.json())
+			.then((data) => {
+				try {
+					if (data.state === "up") {
+						status.style.color = "green"
+					} else {
+						status.textContent = "Some systems offline"
+						status.style.color = "red"
+					}
+				} catch (error) {
+					return console.log(error)
+				}
+			})
+	} catch (error) {
+		status.textContent = "Can't connect to API"
+		status.style.color = "red"
+	}
+}
+
+api()
+
+// ? Open Status
+const page = () => {
+	shell.openExternal("https://status.levminer.com")
 }
 
 const hide = () => {

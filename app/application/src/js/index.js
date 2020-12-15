@@ -1,4 +1,4 @@
-const speakeasy = require("speakeasy")
+const speakeasy = require("@levminer/speakeasy")
 const { app } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
@@ -105,7 +105,7 @@ const go = () => {
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" />
+					<input type="text" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
@@ -113,7 +113,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}" >Copy code</button>
 					</div>
 					</div>
 					`
@@ -126,7 +126,7 @@ const go = () => {
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" />
+					<input type="text" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
@@ -149,7 +149,7 @@ const go = () => {
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" />
+					<input type="text" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
@@ -169,7 +169,7 @@ const go = () => {
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" />
+					<input type="text" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
@@ -238,7 +238,7 @@ const go = () => {
 				time.textContent = remaining
 
 				clearInterval(int0)
-			}, 800)
+			}, 500)
 
 			// copy
 			const el = copy.addEventListener("click", () => {
