@@ -6,7 +6,7 @@ body {
 .center {
 	top: -50px;
 	width: 1000px;
-	height: 1700px;
+	height: 1850px;
 }
 
 .button1 {
@@ -47,19 +47,9 @@ body {
 	top: 45px;
 }
 
-#version {
-	position: relative;
-	top: 30px;
-}
-
 .link1 {
 	font-size: 1rem !important;
 	position: relative;
 	top: 50px;
 	color: white !important;
-}
-
-#status {
-	font-size: 28px;
-	font-weight: bold;
 }
