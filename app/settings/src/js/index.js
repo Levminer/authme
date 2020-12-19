@@ -7,7 +7,7 @@ const fetch = require("node-fetch")
 
 const version = ipc.sendSync("ver")
 
-document.querySelector("#ver").textContent = `Authme ${version}`
+document.querySelector("#but7").textContent = `Authme ${version}`
 
 let folder
 
@@ -193,7 +193,7 @@ const folder1 = () => {
 }
 
 // ? Status API
-const status = document.querySelector("#status")
+const status = document.querySelector("#but6")
 
 const api = async () => {
 	try {
@@ -202,10 +202,9 @@ const api = async () => {
 			.then((data) => {
 				try {
 					if (data.state === "up") {
-						status.style.color = "green"
+						status.textContent = "All systems online"
 					} else {
 						status.textContent = "Some systems offline"
-						status.style.color = "red"
 					}
 				} catch (error) {
 					return console.log(error)
@@ -213,15 +212,19 @@ const api = async () => {
 			})
 	} catch (error) {
 		status.textContent = "Can't connect to API"
-		status.style.color = "red"
 	}
 }
 
 api()
 
 // ? Open Status
-const page = () => {
+const link0 = () => {
 	shell.openExternal("https://status.levminer.com")
+}
+
+// ? Open Releases
+const link1 = () => {
+	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
 
 const hide = () => {

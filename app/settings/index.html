@@ -17,13 +17,9 @@
 			<h2>Settings</h2>
 			<p class="text3">You can configure the app setting here.</p>
 			<button class="button1" onclick="hide()">Close</button>
-			<h3>Status</h3>
-			<p class="text3" id="status">All systems online.</p>
-			<button class="button1" id="but6" onclick="page()">Status</button>
-			<br />
 			<h3>Launch on startup</h3>
 			<p class="text3">Start the app after the operating system loaded. The app will start on the tray (Windows only).</p>
-			<button class="button1" id="but0" onclick="page()">-</button>
+			<button class="button1" id="but0" onclick="startup()">-</button>
 			<br />
 			<h3>Close app to tray</h3>
 			<p class="text3">On closing the app will not quit. You can open the app from the tray menu (Windows only).</p>
@@ -43,7 +39,13 @@
 			<h3>Clear data</h3>
 			<p class="text3">Clear password, 2FA codes and other settings</p>
 			<button class="button1" id="but1" onclick="reset()">Clear data</button>
-			<h4 id="ver"></h4>
+			<h3>Status</h3>
+			<p class="text3">Current status of the API, click for all the status informations.</p>
+			<button class="button1" id="but6" onclick="link0()">-</button>
+			<br />
+			<h3>Version</h3>
+			<p class="text3">Your current Authme version, click for release notes.</p>
+			<button class="button1" id="but7" onclick="link1()">-</button>
 		</div>
 	</body>
 </html>
