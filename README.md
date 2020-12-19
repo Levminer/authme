@@ -2,6 +2,11 @@
 
 -   Simple cross platform two-factor authentication app for desktop.
 
+## Authme Web Beta
+
+-   Authme is now available as a web app in beta version. It's a PWA app to, so you can install it on your phone!
+-   Try it out and give feedback: [Authme Web](https://github.com/levminer/authme-web)
+
 ## How to use
 
 -   Simple quick start guide.
@@ -23,7 +28,7 @@
 ## Release cycle
 
 -   Standard updates: Coming on Tuesdays if everything is going well.
--   Hotfix updates or Security updates: On Tuesdays, Thursdays or Saturdays if there is a probelm that can not wait until the next Tuesday.
+-   Hotfix updates or Security updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
 
 ## Development
 

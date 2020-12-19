@@ -1,10 +1,10 @@
 # Security Policy
 
-* This is Authme's security policy.
+-   This is Authme's security policy.
 
 ## Supported Versions
 
-* There are the currently supported versions:
+-   There are the currently supported versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -13,4 +13,9 @@
 
 ## Reporting a Vulnerability
 
-* Please report security vulnerabilitys thru issues.
+-   Please report security vulnerabilitys thru email at: <authme@levminer.com>
+
+## Release cycle
+
+-   Standard updates: Coming on Tuesdays if everything is going well.
+-   Hotfix updates or Security updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
