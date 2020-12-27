@@ -1,4 +1,4 @@
-name: Publish GitHub Actions Artifacts Example
+name: Artifacts Windows
 
 on:
     push:
@@ -19,5 +19,5 @@ jobs:
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-latest-linux-x64
+                  name: authme-latest-windows-x64
                   path: dist
