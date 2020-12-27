@@ -19,5 +19,5 @@ jobs:
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-latest-windows-x64-installer-portable.zip
+                  name: authme-latest-windows-x64-installer-portable
                   path: dist

@@ -385,7 +385,7 @@ const createWindow = () => {
 	// ? dev tools
 	let dt = false
 
-	globalShortcut.register("CommandOrControl+Enter", () => {
+	globalShortcut.register("CommandOrControl+Shift+Enter", () => {
 		const window = BrowserWindow.getFocusedWindow()
 
 		if (dt == false) {
