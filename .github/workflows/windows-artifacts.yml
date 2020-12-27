@@ -1,0 +1,23 @@
+name: Windows Artifacts
+
+on:
+    push:
+        branches: [dev]
+
+jobs:
+    archive-build-artifacts:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install modules
+              run: npm i
+
+            - name: Run Build
+              run: npm run build
+
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: authme-latest-windows-x64-installer-portable.zip
+                  path: dist
