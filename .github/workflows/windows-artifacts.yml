@@ -1,8 +1,8 @@
-name: Artifacts Windows
+name: Windows Artifacts
 
 on:
     push:
-        branches: [test]
+        branches: [dev]
 
 jobs:
     archive-build-artifacts:
@@ -19,5 +19,5 @@ jobs:
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-latest-windows-x64
+                  name: authme-latest-windows-x64-installer-portable.zip
                   path: dist
