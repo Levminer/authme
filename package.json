@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "electron .",
 		"package": "electron-packager . Authme --platform=win32,linux --arch=x64 --icon=img/icon.icns --out=build --overwrite",
-		"build": "electron-builder",
+		"build": "electron-builder --publish=never",
 		"lint": "eslint --fix."
 	},
 	"build": {
