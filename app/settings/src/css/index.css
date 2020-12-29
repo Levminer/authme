@@ -1,7 +1,7 @@
 .center {
 	top: -50px;
 	width: 1000px;
-	height: 2100px;
+	height: 2250px;
 }
 
 .button1 {
@@ -42,4 +42,61 @@
 hr {
 	margin-top: 30px;
 	color: white;
+}
+
+/* tabs */
+/* Style the tab */
+.tab {
+	overflow: hidden;
+
+	text-align: center;
+}
+
+/* Style the buttons that are used to open the tab content */
+
+.tabcontent {
+	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+#shortcuts{
+	display: none;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 0.5fr 1fr 0.5fr;
+	grid-template-rows: 0.5fr;
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+	margin-bottom: 30px;
+}
+
+.div1 {
+	grid-area: 1 / 1 / 2 / 2;
+}
+.div2 {
+	grid-area: 1 / 2 / 2 / 3;
+}
+.div3 {
+	grid-area: 1 / 3 / 2 / 4;
+}
+
+.text {
+	position: relative;
+	left: 130px;
+}
+
+.button {
+	position: relative;
+	right: 130px;
 }

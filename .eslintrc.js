@@ -25,5 +25,6 @@ module.exports = {
 		"node/no-unpublished-require": ["off"],
 		"no-unused-vars": ["off"],
 		"no-undef": ["off"],
+		"no-case-declarations": ["off"],
 	},
 }
