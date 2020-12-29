@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.1.2",
+	"version": "2.1.3",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
@@ -25,7 +25,8 @@
 			"uninstallDisplayName": "Authme",
 			"license": "LICENSE.md",
 			"oneClick": false,
-			"allowToChangeInstallationDirectory": true
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": "always"
 		},
 		"linux": {
 			"target": "deb",
@@ -42,7 +43,7 @@
 	"author": "Levminer",
 	"license": "MIT",
 	"devDependencies": {
-		"electron": "^11.1.0",
+		"electron": "^11.1.1",
 		"electron-builder": "^22.9.1",
 		"electron-packager": "^15.2.0",
 		"eslint": "^7.16.0",
@@ -57,7 +58,7 @@
 		"prettier": "^2.2.1"
 	},
 	"dependencies": {
-		"@levminer/speakeasy": "^1.0.5",
+		"@levminer/speakeasy": "^1.0.7",
 		"bcryptjs": "^2.4.3",
 		"create-desktop-shortcuts": "^1.2.0",
 		"cryptr": "^6.0.2",

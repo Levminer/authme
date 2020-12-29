@@ -18,9 +18,11 @@
 1. From Google Authenticator: (Example: Import all of your saved QR codes from your Google Authenticator app.)
 1. From stand alone QR codes: (Example: You screenshot all the QR codes from your favourite websites, and import all of them to Authme.)
 
+- If you just want to test the app download this sample import file: 
+
 ### How to import
 
--   If you are importing from Google Authenticator you have to install [Python](https://www.python.org/downloads/)
+-   If you are importing from Google Authenticator you have to install: [Python](https://www.python.org/downloads/)
 
 1.  For non technical people: Instructions in the app.
 1.  For technical people: Check out this: [Readme](https://github.com/Levminer/authme/blob/main/extract/README.md)

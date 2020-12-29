@@ -225,11 +225,11 @@ const clear = () => {
 
 // ? link
 const link0 = () => {
-	shell.openExternal("https://www.python.org/downloads/")
+	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")
 }
 
 const link1 = () => {
-	shell.openExternal("https://github.com/Levminer/authme")
+	shell.openExternal("https://github.com/Levminer/authme/tree/main/extract#usage")
 }
 
 // ? import from stand alone qr code
