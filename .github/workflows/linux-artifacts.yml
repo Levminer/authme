@@ -1,0 +1,23 @@
+name: Linux Artifacts
+
+on:
+    push:
+        branches: [dev]
+
+jobs:
+    archive-build-artifacts:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install modules
+              run: npm i
+
+            - name: Run Build
+              run: npm run build
+
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: authme-latest-linux-x64-installer-portable
+                  path: dist

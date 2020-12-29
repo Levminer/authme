@@ -5,6 +5,8 @@ const ipc = electron.ipcRenderer
 const path = require("path")
 const fetch = require("node-fetch")
 
+document.querySelector("#setting").click()
+
 const version = ipc.sendSync("ver")
 
 document.querySelector("#but7").textContent = `Authme ${version}`
@@ -217,16 +219,150 @@ const api = async () => {
 
 api()
 
-// ? Open Status
+// ? open Status
 const link0 = () => {
 	shell.openExternal("https://status.levminer.com")
 }
 
-// ? Open Releases
+// ? open Releases
 const link1 = () => {
 	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
 
+// ? open docs
+const link2 = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=settings")
+}
+
 const hide = () => {
 	ipc.send("hide0")
+}
+
+// ? hotkeys
+let modify = true
+
+let inp_name
+let but_name
+let id
+
+const hk0 = document.querySelector("#hk0_input")
+const hk1 = document.querySelector("#hk1_input")
+const hk2 = document.querySelector("#hk2_input")
+const hk3 = document.querySelector("#hk3_input")
+const hk4 = document.querySelector("#hk4_input")
+const hk5 = document.querySelector("#hk5_input")
+
+hk0.value = file.shortcuts.settings
+hk1.value = file.shortcuts.exit
+hk2.value = file.shortcuts.import
+hk3.value = file.shortcuts.export
+hk4.value = file.shortcuts.update
+hk5.value = file.shortcuts.about
+
+const call = (event) => {
+	console.log(event)
+	console.log(event.key + event.ctrlKey)
+
+	if (event.ctrlKey === true) {
+		inp_name.value = `CommandOrControl+${event.key}`
+	}
+
+	if (event.altKey === true) {
+		inp_name.value = `Alt+${event.key}`
+	}
+
+	if (event.shiftKey === true) {
+		inp_name.value = `Shift+${event.key.toLowerCase()}`
+	}
+}
+
+const hk_modify = (value) => {
+	id = value
+	inp_name = document.querySelector(`#hk${value}_input`)
+	but_name = document.querySelector(`#hk${value}_button`)
+
+	if (modify === true) {
+		document.addEventListener("keydown", call, true)
+
+		inp_name.value = "Press any key combiantion"
+		but_name.textContent = "Done"
+
+		modify = false
+	} else {
+		but_name.textContent = "Modify"
+
+		document.removeEventListener("keydown", call, true)
+
+		console.log(id)
+		switch (id) {
+			case 0:
+				const hk0 = document.querySelector("#hk0_input").value
+
+				file.shortcuts.settings = hk0
+				break
+			case 1:
+				const hk1 = document.querySelector("#hk1_input").value
+
+				file.shortcuts.exit = hk1
+				break
+			case 2:
+				const hk2 = document.querySelector("#hk2_input").value
+
+				file.shortcuts.import = hk2
+				break
+			case 3:
+				const hk3 = document.querySelector("#hk3_input").value
+
+				file.shortcuts.export = hk3
+				break
+			case 4:
+				const hk4 = document.querySelector("#hk4_input").value
+
+				file.shortcuts.update = hk4
+				break
+			case 5:
+				const hk5 = document.querySelector("#hk5_input").value
+
+				file.shortcuts.about = hk5
+				break
+
+			default:
+				console.warn("No save file found")
+				break
+		}
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		modify = true
+	}
+}
+
+// ? menu
+const menu = (evt, name) => {
+	let i
+
+	if (name === "shortcuts") {
+		document.querySelector(".center").style.height = "1700px"
+	} else {
+		document.querySelector(".center").style.height = "2250px"
+	}
+
+	const tabcontent = document.getElementsByClassName("tabcontent")
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none"
+	}
+
+	const tablinks = document.getElementsByClassName("tablinks")
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" active", "")
+	}
+
+	document.getElementById(name).style.display = "block"
+	evt.currentTarget.className += " active"
+}
+
+// ? restart
+const restart = () => {
+	app.relaunch()
+	app.exit()
 }

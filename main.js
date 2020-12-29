@@ -29,8 +29,8 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
-const authme_version = "2.1.2"
-const tag_name = "2.1.2"
+const authme_version = "2.1.3"
+const tag_name = "2.1.3"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -385,7 +385,7 @@ const createWindow = () => {
 	// ? dev tools
 	let dt = false
 
-	globalShortcut.register("CommandOrControl+Enter", () => {
+	globalShortcut.register("CommandOrControl+Shift+Enter", () => {
 		const window = BrowserWindow.getFocusedWindow()
 
 		if (dt == false) {
@@ -403,11 +403,11 @@ const createWindow = () => {
 	window2.on("show", () => {
 		const api = async () => {
 			try {
-				await fetch("https://api.github.com/repos/Levminer/authme/releases/latest")
+				await fetch("https://api.levminer.com/api/v1/authme/releases")
 					.then((res) => res.json())
 					.then((data) => {
 						try {
-							if (data.tag_name != tag_name && data.tag_name != undefined) {
+							if (data.tag_name != tag_name && data.tag_name != undefined && data.prerelease != true) {
 								dialog
 									.showMessageBox({
 										title: "Authme",
@@ -804,7 +804,7 @@ app.whenReady().then(() => {
 									.then((res) => res.json())
 									.then((data) => {
 										try {
-											if (data.tag_name != tag_name && data.tag_name != undefined) {
+											if (data.tag_name != tag_name && data.tag_name != undefined && data.prerelease != true) {
 												dialog
 													.showMessageBox({
 														title: "Authme",
@@ -837,9 +837,9 @@ app.whenReady().then(() => {
 													message: `
 													No update available:
 													
-													You running the latest version!
+													You are running the latest version!
 								
-													You currently running: Authme ${tag_name}
+													You are currently running: Authme ${tag_name}
 													`,
 												})
 											}

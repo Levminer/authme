@@ -1,7 +1,12 @@
 body {
-	background: rgb(0, 0, 0);
-	background: linear-gradient(90deg, rgba(0, 0, 0, 1) 30%, rgba(42, 36, 36, 1) 100%);
 	overflow-y: scroll;
+	margin: 0;
+	padding: 0;
+	background: rgb(20, 20, 20);
+}
+
+:root {
+	--df_gray: rgb(10, 10, 10);
 }
 
 h4 {
