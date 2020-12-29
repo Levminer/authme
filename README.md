@@ -34,14 +34,7 @@
 -   Standard updates: Coming on Tuesdays if everything is going well.
 -   Hotfix updates or Security updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
 
-## Development
-
--   Start app: `npm run start`
--   Build app: `npm run build`
--   Package app: `npm run package`
--   Lint app: `npm run lint`
-
-## Contributing
+## Contributing and development
 
 -   Read: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
 

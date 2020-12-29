@@ -30,7 +30,7 @@ let confirmed = false
 let startup = false
 
 const authme_version = "2.1.3"
-const tag_name = "2.1.2"
+const tag_name = "2.1.3"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
