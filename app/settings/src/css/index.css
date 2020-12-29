@@ -1,7 +1,7 @@
 .center {
 	top: -50px;
 	width: 1000px;
-	height: 1850px;
+	height: 2100px;
 }
 
 .button1 {
@@ -27,16 +27,6 @@
 	border-color: white;
 }
 
-#password_input2 {
-	position: relative;
-	top: 20px;
-}
-
-#password_label2 {
-	position: relative;
-	top: 20px;
-}
-
 #button1 {
 	position: relative;
 	top: 45px;
@@ -47,4 +37,9 @@
 	position: relative;
 	top: 50px;
 	color: white !important;
+}
+
+hr {
+	margin-top: 30px;
+	color: white;
 }

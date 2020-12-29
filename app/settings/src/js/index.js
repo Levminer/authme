@@ -230,3 +230,43 @@ const link1 = () => {
 const hide = () => {
 	ipc.send("hide0")
 }
+
+// ? Hotkeys
+
+const hk0 = document.querySelector("#hk0")
+const hk0_button = document.querySelector("#hk0_button")
+
+hk0.value = file.shortcuts.settings
+
+const call = (event) => {
+	console.log(event)
+	console.log(event.key + event.ctrlKey)
+
+	if (event.ctrlKey === true) {
+		hk0.value = `CommandOrControl+${event.key}`
+	}
+
+	if (event.altKey === true) {
+		hk0.value = `Alt+${event.key}`
+	}
+}
+
+let modify = true
+const hk0_modify = () => {
+	if (modify === true) {
+		document.addEventListener("keydown", call, true)
+
+		hk0.value = "Press any key combiantion"
+		hk0_button.textContent = "Done"
+
+		modify = false
+	} else {
+		hk0_button.textContent = "Modify"
+
+		document.removeEventListener("keydown", call, true)
+
+		modify = true
+	}
+}
+
+console.log(file.shortcuts)
