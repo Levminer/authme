@@ -2,6 +2,11 @@ body {
 	overflow-y: scroll;
 	margin: 0;
 	padding: 0;
+	background: rgb(20, 20, 20);
+}
+
+:root {
+	--df_gray: rgb(10, 10, 10);
 }
 
 h4 {

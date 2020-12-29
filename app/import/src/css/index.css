@@ -23,25 +23,6 @@
 	width: 250px;
 }
 
-.input1:hover {
-	color: white;
-	border-color: white;
-}
-
-.input1::placeholder {
-	color: black;
-}
-
-#password_input2 {
-	position: relative;
-	top: 20px;
-}
-
-#password_label2 {
-	position: relative;
-	top: 20px;
-}
-
 #button1 {
 	position: relative;
 	top: 45px;

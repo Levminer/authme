@@ -110,52 +110,6 @@ const import_qrcode = () => {
 	}
 }
 
-// ? start input text
-const import_text = () => {
-	const text_inputs = document.querySelector(".text-inputs")
-	text_inputs.style.display = "block"
-
-	document.querySelector(".choose").style.display = "none"
-}
-
-// resume input text
-const import_text_resume = () => {
-	const input0 = document.querySelector("#input0").value
-	const input1 = document.querySelector("#input1").value
-
-	if (input0 !== "") {
-		fs.writeFile(path.join("output.txt"), `${input0} \n${input1}`, (err) => {
-			if (err) {
-				console.log("Output file don't created!")
-				document.querySelector("#but2").textContent = "Error, restart the app please"
-			} else {
-				console.log("Output file created!")
-				document.querySelector("#but2").textContent = "File created"
-			}
-		})
-
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Close"],
-				type: "info",
-				defaultId: 0,
-				message: `
-				QR code(s) found.
-				
-				Now select where do you want to save the file!
-			`,
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					generate()
-				}
-			})
-	} else {
-		document.querySelector("#but2").textContent = "Error, fill in at least the frist input"
-	}
-}
-
 // ? generate file
 const generate = () => {
 	const python = spawn("python", [python_path, "output.txt"])

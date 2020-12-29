@@ -45,20 +45,16 @@ hr {
 }
 
 /* tabs */
-/* Style the tab */
 .tab {
 	overflow: hidden;
 
 	text-align: center;
 }
 
-/* Style the buttons that are used to open the tab content */
-
 .tabcontent {
-	animation: fadeEffect 1s; /* Fading effect takes 1 second */
+	animation: fadeEffect 1s;
 }
 
-/* Go from zero to full opacity */
 @keyframes fadeEffect {
 	from {
 		opacity: 0;
@@ -68,10 +64,11 @@ hr {
 	}
 }
 
-#shortcuts{
+#shortcuts {
 	display: none;
 }
 
+/* grid */
 .grid {
 	display: grid;
 	grid-template-columns: 0.5fr 1fr 0.5fr;

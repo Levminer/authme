@@ -219,17 +219,17 @@ const api = async () => {
 
 api()
 
-// ? Open Status
+// ? open Status
 const link0 = () => {
 	shell.openExternal("https://status.levminer.com")
 }
 
-// ? Open Releases
+// ? open Releases
 const link1 = () => {
 	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
 
-// ? Open Releases
+// ? open docs
 const link2 = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=settings")
 }
@@ -238,7 +238,7 @@ const hide = () => {
 	ipc.send("hide0")
 }
 
-// ? Hotkeys
+// ? hotkeys
 let modify = true
 
 let inp_name
@@ -337,7 +337,7 @@ const hk_modify = (value) => {
 	}
 }
 
-// ? Menu
+// ? menu
 const menu = (evt, name) => {
 	let i
 
@@ -361,7 +361,7 @@ const menu = (evt, name) => {
 	evt.currentTarget.className += " active"
 }
 
-// ? Restart
+// ? restart
 const restart = () => {
 	app.relaunch()
 	app.exit()
