@@ -1,7 +1,7 @@
 body {
-	background: rgb(0, 0, 0);
-	background: linear-gradient(90deg, rgba(0, 0, 0, 1) 30%, rgba(42, 36, 36, 1) 100%);
 	overflow-y: scroll;
+	margin: 0;
+	padding: 0;
 }
 
 h4 {
