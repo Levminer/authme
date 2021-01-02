@@ -32,6 +32,11 @@
 			"target": "deb",
 			"icon": "img/icon.png",
 			"maintainer": "levminer@levminer.com"
+		},
+		"mac": {
+			"target": "dmg",
+			"icon": "img/icon.icns",
+			"category": "public.app-category.utilities"
 		}
 	},
 	"repository": "https://github.com/Levminer/authme",
