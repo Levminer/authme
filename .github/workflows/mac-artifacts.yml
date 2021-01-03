@@ -19,5 +19,5 @@ jobs:
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-latest-linux-x64-installer-portable
+                  name: authme-latest-mac-x64-installer-portable
                   path: dist
