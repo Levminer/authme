@@ -86,7 +86,7 @@ if (!fs.existsSync(file_path)) {
 // ? settings
 const settings = `{
 		"version":{
-			"tag": ${tag_name}  
+			"tag": "${tag_name}"  
 		},
 
 		"settings": {
@@ -947,7 +947,7 @@ app.whenReady().then(() => {
 					label: "Info",
 					accelerator: file.shortcuts.info,
 					click: () => {
-						const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Lőrik Levente\n`
+						const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
 
 						dialog
 							.showMessageBox({
