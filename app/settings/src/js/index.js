@@ -25,6 +25,7 @@ const but0 = document.querySelector("#but0")
 const but1 = document.querySelector("#but1")
 const but2 = document.querySelector("#but2")
 const but5 = document.querySelector("#but5")
+const but10 = document.querySelector("#but10")
 
 // ? read settings
 const file = JSON.parse(
@@ -67,6 +68,14 @@ if (names_state === true) {
 	but5.textContent = "On"
 } else {
 	but5.textContent = "Off"
+}
+
+// copy
+let copy_state = file.settings.reset_after_copy
+if (copy_state === true) {
+	but10.textContent = "On"
+} else {
+	but10.textContent = "Off"
 }
 
 // ? startup
@@ -184,6 +193,32 @@ const names = () => {
 	}, 1000)
 }
 
+// ? copy
+const copy = () => {
+	if (copy_state == true) {
+		file.settings.reset_after_copy = false
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		but10.textContent = "Off"
+		copy_state = false
+	} else {
+		file.settings.reset_after_copy = true
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		but10.textContent = "On"
+		copy_state = true
+	}
+
+	but10.textContent = "Restarting app"
+
+	setTimeout(() => {
+		app.relaunch()
+		app.exit()
+	}, 1000)
+}
+
 // ? folder 0
 const folder0 = () => {
 	ipc.send("app_path")
@@ -194,7 +229,7 @@ const folder1 = () => {
 	shell.showItemInFolder(file_path)
 }
 
-// ? Status API
+// ? status api
 const status = document.querySelector("#but6")
 
 const api = async () => {
@@ -219,12 +254,12 @@ const api = async () => {
 
 api()
 
-// ? open Status
+// ? open status
 const link0 = () => {
 	shell.openExternal("https://status.levminer.com")
 }
 
-// ? open Releases
+// ? open releases
 const link1 = () => {
 	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
@@ -344,7 +379,7 @@ const menu = (evt, name) => {
 	if (name === "shortcuts") {
 		document.querySelector(".center").style.height = "1700px"
 	} else {
-		document.querySelector(".center").style.height = "2250px"
+		document.querySelector(".center").style.height = "2450px"
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")

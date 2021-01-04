@@ -38,6 +38,7 @@ file = JSON.parse(
 )
 
 const name_state = file.settings.show_2fa_names
+const copy_state = file.settings.reset_after_copy
 
 // ? separet values
 const separation = () => {
@@ -246,8 +247,20 @@ const go = () => {
 				code.setSelectionRange(0, 9999)
 				document.execCommand("copy")
 				copy.textContent = "Copied"
+
 				setTimeout(() => {
 					copy.textContent = "Copy code"
+
+					setTimeout(() => {
+						if (copy_state === true) {
+							for (let i = 0; i < names.length; i++) {
+								const div = document.querySelector(`#grid${[i]}`)
+								div.style.display = "grid"
+							}
+						}
+
+						document.querySelector("#search").value = ""
+					}, 1200)
 				}, 1000)
 			})
 

@@ -29,7 +29,7 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
-const authme_version = "2.1.3"
+const authme_version = "2.1.4"
 const tag_name = "2.1.3"
 
 ipc.on("ver", (event, data) => {
@@ -85,10 +85,15 @@ if (!fs.existsSync(file_path)) {
 
 // ? settings
 const settings = `{
+		"version":{
+			"tag": ${tag_name}  
+		},
+
 		"settings": {
 			"launch_on_startup": false,
 			"close_to_tray": false,
-			"show_2fa_names": false
+			"show_2fa_names": false,
+			"reset_after_copy": false
 		},
 
 		"security": {
@@ -110,8 +115,7 @@ const settings = `{
 			"settings": "CommandOrControl+Shift+s",
 			"exit": "CommandOrControl+Shift+d"
 		}
-	}
-	`
+	}`
 
 // create settings if not exists
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
