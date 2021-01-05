@@ -25,6 +25,7 @@ const but0 = document.querySelector("#but0")
 const but1 = document.querySelector("#but1")
 const but2 = document.querySelector("#but2")
 const but5 = document.querySelector("#but5")
+const but10 = document.querySelector("#but10")
 
 // ? read settings
 const file = JSON.parse(
@@ -67,6 +68,14 @@ if (names_state === true) {
 	but5.textContent = "On"
 } else {
 	but5.textContent = "Off"
+}
+
+// copy
+let copy_state = file.settings.reset_after_copy
+if (copy_state === true) {
+	but10.textContent = "On"
+} else {
+	but10.textContent = "Off"
 }
 
 // ? startup
@@ -184,6 +193,32 @@ const names = () => {
 	}, 1000)
 }
 
+// ? copy
+const copy = () => {
+	if (copy_state == true) {
+		file.settings.reset_after_copy = false
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		but10.textContent = "Off"
+		copy_state = false
+	} else {
+		file.settings.reset_after_copy = true
+
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+		but10.textContent = "On"
+		copy_state = true
+	}
+
+	but10.textContent = "Restarting app"
+
+	setTimeout(() => {
+		app.relaunch()
+		app.exit()
+	}, 1000)
+}
+
 // ? folder 0
 const folder0 = () => {
 	ipc.send("app_path")
@@ -194,7 +229,7 @@ const folder1 = () => {
 	shell.showItemInFolder(file_path)
 }
 
-// ? Status API
+// ? status api
 const status = document.querySelector("#but6")
 
 const api = async () => {
@@ -219,12 +254,12 @@ const api = async () => {
 
 api()
 
-// ? open Status
+// ? open status
 const link0 = () => {
 	shell.openExternal("https://status.levminer.com")
 }
 
-// ? open Releases
+// ? open releases
 const link1 = () => {
 	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
@@ -238,113 +273,14 @@ const hide = () => {
 	ipc.send("hide0")
 }
 
-// ? hotkeys
-let modify = true
-
-let inp_name
-let but_name
-let id
-
-const hk0 = document.querySelector("#hk0_input")
-const hk1 = document.querySelector("#hk1_input")
-const hk2 = document.querySelector("#hk2_input")
-const hk3 = document.querySelector("#hk3_input")
-const hk4 = document.querySelector("#hk4_input")
-const hk5 = document.querySelector("#hk5_input")
-
-hk0.value = file.shortcuts.settings
-hk1.value = file.shortcuts.exit
-hk2.value = file.shortcuts.import
-hk3.value = file.shortcuts.export
-hk4.value = file.shortcuts.update
-hk5.value = file.shortcuts.about
-
-const call = (event) => {
-	console.log(event)
-	console.log(event.key + event.ctrlKey)
-
-	if (event.ctrlKey === true) {
-		inp_name.value = `CommandOrControl+${event.key}`
-	}
-
-	if (event.altKey === true) {
-		inp_name.value = `Alt+${event.key}`
-	}
-
-	if (event.shiftKey === true) {
-		inp_name.value = `Shift+${event.key.toLowerCase()}`
-	}
-}
-
-const hk_modify = (value) => {
-	id = value
-	inp_name = document.querySelector(`#hk${value}_input`)
-	but_name = document.querySelector(`#hk${value}_button`)
-
-	if (modify === true) {
-		document.addEventListener("keydown", call, true)
-
-		inp_name.value = "Press any key combiantion"
-		but_name.textContent = "Done"
-
-		modify = false
-	} else {
-		but_name.textContent = "Modify"
-
-		document.removeEventListener("keydown", call, true)
-
-		console.log(id)
-		switch (id) {
-			case 0:
-				const hk0 = document.querySelector("#hk0_input").value
-
-				file.shortcuts.settings = hk0
-				break
-			case 1:
-				const hk1 = document.querySelector("#hk1_input").value
-
-				file.shortcuts.exit = hk1
-				break
-			case 2:
-				const hk2 = document.querySelector("#hk2_input").value
-
-				file.shortcuts.import = hk2
-				break
-			case 3:
-				const hk3 = document.querySelector("#hk3_input").value
-
-				file.shortcuts.export = hk3
-				break
-			case 4:
-				const hk4 = document.querySelector("#hk4_input").value
-
-				file.shortcuts.update = hk4
-				break
-			case 5:
-				const hk5 = document.querySelector("#hk5_input").value
-
-				file.shortcuts.about = hk5
-				break
-
-			default:
-				console.warn("No save file found")
-				break
-		}
-
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
-
-		modify = true
-	}
-}
-
 // ? menu
 const menu = (evt, name) => {
 	let i
 
 	if (name === "shortcuts") {
-		document.querySelector(".center").style.height = "1700px"
+		document.querySelector(".center").style.height = "2400px"
 	} else {
-		document.querySelector(".center").style.height = "2250px"
+		document.querySelector(".center").style.height = "2450px"
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")

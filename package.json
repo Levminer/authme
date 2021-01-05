@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.1.3",
+	"version": "2.1.4",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
@@ -32,6 +32,11 @@
 			"target": "deb",
 			"icon": "img/icon.png",
 			"maintainer": "levminer@levminer.com"
+		},
+		"mac": {
+			"target": "dmg",
+			"icon": "img/icon.icns",
+			"category": "public.app-category.utilities"
 		}
 	},
 	"repository": "https://github.com/Levminer/authme",

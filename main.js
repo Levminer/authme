@@ -29,8 +29,8 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
-const authme_version = "2.1.3"
-const tag_name = "2.1.3"
+const authme_version = "2.1.4"
+const tag_name = "2.1.4"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -85,10 +85,15 @@ if (!fs.existsSync(file_path)) {
 
 // ? settings
 const settings = `{
+		"version":{
+			"tag": "${tag_name}"  
+		},
+
 		"settings": {
 			"launch_on_startup": false,
 			"close_to_tray": false,
-			"show_2fa_names": false
+			"show_2fa_names": false,
+			"reset_after_copy": false
 		},
 
 		"security": {
@@ -97,12 +102,18 @@ const settings = `{
 		},
 
 		"shortcuts": {
+			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
 			"exit": "CommandOrControl+w",
+			"web": "CommandOrControl+a",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
+			"release": "CommandOrControl+r",
+			"issues": "CommandOrControl+p",
+			"docs": "CommandOrControl+d",
+			"licenses": "CommandOrControl+l",
 			"update": "CommandOrControl+u",
-			"about": "CommandOrControl+d"
+			"info": "CommandOrControl+o"
 		},
 
 		"global_shortcuts": {
@@ -110,8 +121,7 @@ const settings = `{
 			"settings": "CommandOrControl+Shift+s",
 			"exit": "CommandOrControl+Shift+d"
 		}
-	}
-	`
+	}`
 
 // create settings if not exists
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
@@ -657,6 +667,16 @@ app.whenReady().then(() => {
 			label: "File",
 			submenu: [
 				{
+					label: "Show app",
+					accelerator: file.shortcuts.show,
+					click: () => {
+						tray_show()
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
 					label: "Settings",
 					accelerator: file.shortcuts.settings,
 					click: () => {
@@ -686,6 +706,16 @@ app.whenReady().then(() => {
 		{
 			label: "Advanced",
 			submenu: [
+				{
+					label: "Authme Web",
+					accelerator: file.shortcuts.web,
+					click: () => {
+						shell.openExternal("https://web.authme.levminer.com")
+					},
+				},
+				{
+					type: "separator",
+				},
 				{
 					label: "Import",
 					accelerator: file.shortcuts.import,
@@ -792,8 +822,50 @@ app.whenReady().then(() => {
 			],
 		},
 		{
-			label: "Info",
+			label: "Help",
 			submenu: [
+				{
+					label: "Release notes",
+					accelerator: file.shortcuts.release,
+					click: () => {
+						shell.openExternal("https://github.com/Levminer/authme/releases")
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Issues",
+					accelerator: file.shortcuts.issues,
+					click: () => {
+						shell.openExternal("https://github.com/Levminer/authme/issues")
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Docs",
+					accelerator: file.shortcuts.docs,
+					click: () => {
+						shell.openExternal("https://docs.authme.levminer.com")
+					},
+				},
+			],
+		},
+		{
+			label: "About",
+			submenu: [
+				{
+					label: "Show licenses",
+					accelerator: file.shortcuts.licenses,
+					click: () => {
+						shell.openExternal("https://authme.levminer.com/licenses.html")
+					},
+				},
+				{
+					type: "separator",
+				},
 				{
 					label: "Update",
 					accelerator: file.shortcuts.update,
@@ -872,8 +944,8 @@ app.whenReady().then(() => {
 					type: "separator",
 				},
 				{
-					label: "About",
-					accelerator: file.shortcuts.about,
+					label: "Info",
+					accelerator: file.shortcuts.info,
 					click: () => {
 						const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
 

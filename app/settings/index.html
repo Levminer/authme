@@ -5,6 +5,7 @@
 		<title>Authme</title>
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
+		<script defer src="./src/js/keys.js"></script>
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly@1.3.0.css" />
 		<link rel="stylesheet" href="../.././src/var.css" />
@@ -41,6 +42,11 @@
 				<button class="button1" id="but2" onclick="tray()">-</button>
 				<br />
 				<hr />
+				<h3>Reset search after copy</h3>
+				<p class="text3">Reset the search bar after you copied your code.</p>
+				<button class="button1" id="but10" onclick="copy()">-</button>
+				<br />
+				<hr />
 				<h3>Show 2FA names</h3>
 				<p class="text3">The saved 2FA names will show up.</p>
 				<button class="button1" id="but5" onclick="names()">-</button>
@@ -74,8 +80,8 @@
 			<div id="shortcuts" class="tabcontent">
 				<h3>Shortcuts</h3>
 				<p class="text3">
-					You can modify the not global shortcuts here. If you don't understand something just read the docs. After you done, restart the
-					app to make the new shortcuts work.
+					You can modify the shortcuts here. If you don't understand something just read the docs. After you done, restart the app to make
+					the new shortcuts work.
 				</p>
 				<button class="button1" id="but9" onclick="link2()">Docs</button>
 				<button class="button1" id="but9" onclick="restart()">Restart</button>
@@ -84,7 +90,7 @@
 				<br />
 				<div class="grid">
 					<div class="div1">
-						<p class="text3 text">Settings</p>
+						<p class="text3 text">Show</p>
 					</div>
 					<div class="div2">
 						<input class="input1" disabled type="text" id="hk0_input" />
@@ -95,7 +101,7 @@
 				</div>
 				<div class="grid">
 					<div class="div1">
-						<p class="text3 text">Exit</p>
+						<p class="text3 text">Settings</p>
 					</div>
 					<div class="div2">
 						<input class="input1" disabled type="text" id="hk1_input" />
@@ -106,7 +112,7 @@
 				</div>
 				<div class="grid">
 					<div class="div1">
-						<p class="text3 text">Import</p>
+						<p class="text3 text">Exit</p>
 					</div>
 					<div class="div2">
 						<input class="input1" disabled type="text" id="hk2_input" />
@@ -117,7 +123,7 @@
 				</div>
 				<div class="grid">
 					<div class="div1">
-						<p class="text3 text">Export</p>
+						<p class="text3 text">Web</p>
 					</div>
 					<div class="div2">
 						<input class="input1" disabled type="text" id="hk3_input" />
@@ -128,7 +134,7 @@
 				</div>
 				<div class="grid">
 					<div class="div1">
-						<p class="text3 text">Update</p>
+						<p class="text3 text">Import</p>
 					</div>
 					<div class="div2">
 						<input class="input1" disabled type="text" id="hk4_input" />
@@ -139,7 +145,7 @@
 				</div>
 				<div class="grid">
 					<div class="div1">
-						<p class="text3 text">About</p>
+						<p class="text3 text">Export</p>
 					</div>
 					<div class="div2">
 						<input class="input1" disabled type="text" id="hk5_input" />
@@ -148,15 +154,117 @@
 						<button class="button1 button" id="hk5_button" onclick="hk_modify(5)">Modify</button>
 					</div>
 				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Release</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk6_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk6_button" onclick="hk_modify(6)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Issues</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk7_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk7_button" onclick="hk_modify(7)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Docs</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk8_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk8_button" onclick="hk_modify(8)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Licenses</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk9_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk9_button" onclick="hk_modify(9)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Update</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk10_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk10_button" onclick="hk_modify(10)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Info</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk11_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk11_button" onclick="hk_modify(11)">Modify</button>
+					</div>
+				</div>
 				<br />
 				<hr />
 				<h3>Global shortcuts</h3>
 				<p class="text3">
-					You can't directly modify the global shortcuts.Read the docs for more informations. After you done, restart the app to make the
-					new shortcuts work.
+					You can modify the global shortcuts. If you don't understand something or you want to use two modifier and a key please read the
+					docs. After you done, restart the app to make the new shortcuts work.
 				</p>
 				<button class="button1" id="but9" onclick="link2()">Docs</button>
 				<button class="button1" id="but9" onclick="restart()">Restart</button>
+				<br />
+				<br />
+				<br />
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Show app</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk100_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk100_button" onclick="hk_modify(100)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Settings</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk101_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk101_button" onclick="hk_modify(101)">Modify</button>
+					</div>
+				</div>
+				<div class="grid">
+					<div class="div1">
+						<p class="text3 text">Exit app</p>
+					</div>
+					<div class="div2">
+						<input class="input1" disabled type="text" id="hk102_input" />
+					</div>
+					<div class="div3">
+						<button class="button1 button" id="hk102_button" onclick="hk_modify(102)">Modify</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

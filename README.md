@@ -32,7 +32,7 @@
 ## Release cycle
 
 -   Standard updates: Coming on Tuesdays if everything is going well.
--   Hotfix updates or Security updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
+-   Hotfix updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
 
 ## Contributing and development
 
@@ -40,6 +40,6 @@
 
 ## License
 
--   This software is licensed under: [MIT](https://github.com/Levminer/authme/blob/main/LICENSE.md)
+-   This software is licensed under: [GPL-3.0](https://github.com/Levminer/authme/blob/main/LICENSE.md)
 
 -   If you are planning to use this software as a business please contact me at: <authme@levminer.com>
