@@ -29,7 +29,7 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
-const authme_version = "2.1.4"
+const authme_version = "2.1.5"
 const tag_name = "2.1.4"
 
 ipc.on("ver", (event, data) => {

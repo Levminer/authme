@@ -1,12 +1,12 @@
 {
 	"name": "authme",
-	"version": "2.1.4",
+	"version": "2.1.5",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
 		"package": "electron-packager . Authme --platform=win32,linux --arch=x64 --icon=img/icon.icns --out=build --overwrite",
-		"build": "electron-builder --publish=never",
+		"build": "electron-builder --publish=never --x64",
 		"lint": "eslint --fix."
 	},
 	"build": {
