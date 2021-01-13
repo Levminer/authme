@@ -278,7 +278,7 @@ const menu = (evt, name) => {
 	let i
 
 	if (name === "shortcuts") {
-		document.querySelector(".center").style.height = "2400px"
+		document.querySelector(".center").style.height = "2500px"
 	} else {
 		document.querySelector(".center").style.height = "2450px"
 	}
