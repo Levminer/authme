@@ -84,8 +84,9 @@ const separation = () => {
 }
 
 const go = () => {
-	document.querySelector("#title").textContent = "Here are your 2FA codes"
+	document.querySelector("#title").style.display = "none"
 	document.querySelector("#search").style.display = "grid"
+	document.querySelector(".h1").style.marginBottom = "0px"
 
 	const generate = () => {
 		// counter
