@@ -1,4 +1,4 @@
-const { ipcMain, shell, app } = require("electron").remote
+const { ipcMain, shell, app, dialog } = require("electron").remote
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -125,98 +125,131 @@ const tray = () => {
 }
 
 // ? reset
-let reset_state = false
 
 const reset = () => {
-	if (reset_state == false) {
-		but1.textContent = "Confirm"
-		reset_state = true
-	} else {
-		fs.unlink(path.join(file_path, "settings.json"), (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log(`error deleting settings.json ${err}`)
-			} else {
-				console.log("settings.json deleted")
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No"],
+			defaultId: 0,
+			cancelId: 1,
+			type: "warning",
+			message: "Are you sure you want to clear all data? This cannot be undone!",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				fs.unlink(path.join(file_path, "settings.json"), (err) => {
+					if (err && err.code === "ENOENT") {
+						return console.log(`error deleting settings.json ${err}`)
+					} else {
+						console.log("settings.json deleted")
+					}
+				})
+
+				fs.unlink(path.join(file_path, "hash.authme"), (err) => {
+					if (err && err.code === "ENOENT") {
+						return console.log(`error deleting hash.authme ${err}`)
+					} else {
+						console.log("hash.authme deleted")
+					}
+				})
+
+				const file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+
+				fs.unlink(file_path2, (err) => {
+					if (err && err.code === "ENOENT") {
+						return console.log(`error deleting shortcut ${err}`)
+					} else {
+						console.log("shortcut deleted")
+					}
+				})
+
+				but1.textContent = "Restarting app"
+
+				setTimeout(() => {
+					app.relaunch()
+					app.exit()
+				}, 1000)
 			}
 		})
-
-		fs.unlink(path.join(file_path, "hash.authme"), (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log(`error deleting hash.authme ${err}`)
-			} else {
-				console.log("hash.authme deleted")
-			}
-		})
-
-		const file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
-
-		fs.unlink(file_path2, (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log(`error deleting shortcut ${err}`)
-			} else {
-				console.log("shortcut deleted")
-			}
-		})
-
-		but1.textContent = "Restarting app"
-
-		setTimeout(() => {
-			app.relaunch()
-			app.exit()
-		}, 1000)
-	}
 }
 
 // ? names
 const names = () => {
-	if (names_state == true) {
-		file.settings.show_2fa_names = false
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No"],
+			defaultId: 0,
+			cancelId: 1,
+			type: "warning",
+			message: "Are you sure you want change this setting? This is requires a restart!",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				if (names_state == true) {
+					file.settings.show_2fa_names = false
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-		but5.textContent = "Off"
-		names_state = false
-	} else {
-		file.settings.show_2fa_names = true
+					but5.textContent = "Off"
+					names_state = false
+				} else {
+					file.settings.show_2fa_names = true
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-		but5.textContent = "On"
-		names_state = true
-	}
+					but5.textContent = "On"
+					names_state = true
+				}
 
-	but5.textContent = "Restarting app"
+				but5.textContent = "Restarting app"
 
-	setTimeout(() => {
-		app.relaunch()
-		app.exit()
-	}, 1000)
+				setTimeout(() => {
+					app.relaunch()
+					app.exit()
+				}, 1000)
+			}
+		})
 }
 
 // ? copy
 const copy = () => {
-	if (copy_state == true) {
-		file.settings.reset_after_copy = false
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No"],
+			defaultId: 0,
+			cancelId: 1,
+			type: "warning",
+			message: "Are you sure you want change this setting? This is requires a restart!",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				if (copy_state == true) {
+					file.settings.reset_after_copy = false
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-		but10.textContent = "Off"
-		copy_state = false
-	} else {
-		file.settings.reset_after_copy = true
+					but10.textContent = "Off"
+					copy_state = false
+				} else {
+					file.settings.reset_after_copy = true
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
 
-		but10.textContent = "On"
-		copy_state = true
-	}
+					but10.textContent = "On"
+					copy_state = true
+				}
 
-	but10.textContent = "Restarting app"
+				but10.textContent = "Restarting app"
 
-	setTimeout(() => {
-		app.relaunch()
-		app.exit()
-	}, 1000)
+				setTimeout(() => {
+					app.relaunch()
+					app.exit()
+				}, 1000)
+			}
+		})
 }
 
 // ? folder 0
