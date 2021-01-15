@@ -87,3 +87,26 @@
 .after_export {
 	display: none;
 }
+
+.parent {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: 1fr;
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+}
+
+.div1 {
+	grid-area: 1 / 1 / 2 / 2;
+	position: relative;
+	width: 180px;
+	left: 320px;
+	top: 10px;
+}
+.div2 {
+	grid-area: 1 / 2 / 2 / 3;
+	position: relative;
+	width: 180px;
+	right: 5px;
+	top: 10px;
+}
