@@ -39,18 +39,16 @@ const unhash_password = async () => {
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
 			if (err) {
-				return console.log(`Error reading settings.json ${err}`)
+				return console.warn(`Authme - Error reading settings.json - ${err}`)
 			} else {
-				return console.log("settings.json readed")
+				return console.warn("Authme - Succesfully readed settings.json")
 			}
 		})
 	)
 
-	const compare = await bcrypt.compare(password_input, file.security.password).then(console.log("Passwords compared!"))
+	const compare = await bcrypt.compare(password_input, file.security.password).then(console.warn("Passwords compared!"))
 
 	if (compare == true) {
-		console.log("Passwords match!")
-
 		text.style.color = "green"
 		text.textContent = "Passwords match! Please wait!"
 
@@ -58,7 +56,7 @@ const unhash_password = async () => {
 			ipc.send("to_application0")
 		}, 1000)
 	} else {
-		console.log("Passwords dont match!")
+		console.warn("Authme - Passwords dont match!")
 
 		text.style.color = "red"
 		text.textContent = "Passwords don't match! Try again!"

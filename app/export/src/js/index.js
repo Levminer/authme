@@ -76,11 +76,6 @@ const separation = () => {
 		}
 	}
 
-	console.log(name)
-	console.log(secret)
-	console.log(issuer)
-	console.log(type)
-
 	go()
 }
 
@@ -91,7 +86,7 @@ const go = () => {
 
 		qrcode.toDataURL(`otpauth://totp/${name[i]}?secret=${secret[i]}&issuer=${issuer[i]}`, (err, data) => {
 			if (err) {
-				console.log(err)
+				console.warn(`Authme - Failed to generate QR code - ${err}`)
 			}
 
 			qr_data = data
@@ -123,21 +118,18 @@ const save_file = () => {
 			canceled = result.canceled
 			output = result.filePath
 
-			console.log(canceled)
-			console.log(output)
-
 			if (canceled === false) {
 				fs.writeFile(output, file, (err) => {
 					if (err) {
-						return console.log(`error creating file ${err}`)
+						return console.warn(`Authme - Error creating file - ${err}`)
 					} else {
-						return console.log("file created")
+						return console.warn("Authme - File created")
 					}
 				})
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			console.warn(`Authme - Failed to save - ${err}`)
 		})
 }
 
@@ -153,23 +145,20 @@ const save_qr_codes = () => {
 			canceled = result.canceled
 			output = result.filePath
 
-			console.log(canceled)
-			console.log(output)
-
 			if (canceled === false) {
 				for (let i = 0; i < codes.length; i++) {
 					fs.appendFile(output, `${codes[i]} \n`, (err) => {
 						if (err) {
-							return console.log(`error creating file ${err}`)
+							return console.warn(`Authme - Error creating file - ${err}`)
 						} else {
-							return console.log("file created")
+							return console.warn("Authme - File created")
 						}
 					})
 				}
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			console.warn(`Authme - Failed to save - ${err}`)
 		})
 }
 

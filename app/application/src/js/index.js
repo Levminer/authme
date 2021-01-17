@@ -40,9 +40,9 @@ let clear
 file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Error reading settings.json ${err}`)
+			return console.warn(`Authme - Error reading settings.json - ${err}`)
 		} else {
-			return console.log("settings.json readed")
+			return console.warn("Authme - Succefully readed settings.json ")
 		}
 	})
 )
@@ -85,11 +85,6 @@ const separation = () => {
 			c3 = c3 + 4
 		}
 	}
-
-	console.log(names)
-	console.log(secret)
-	console.log(issuer)
-	console.log(type)
 
 	go()
 }
@@ -312,7 +307,7 @@ const go = () => {
 				try {
 					text.textContent = names[i]
 				} catch (error) {
-					console.log(error)
+					console.warn(`Authme - Setting names - ${error}`)
 				}
 
 				name.textContent = issuer[i]
@@ -410,7 +405,7 @@ const search = () => {
 	// search
 	querry.forEach((e) => {
 		if (e.startsWith(input)) {
-			console.log("found")
+			console.warn("Authme - Search result found")
 		} else {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "none"

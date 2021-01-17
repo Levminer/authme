@@ -44,9 +44,9 @@ const but11 = document.querySelector("#but11")
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Error reading settings.json ${err}`)
+			return console.warn(`Authme - Error reading settings.json - ${err}`)
 		} else {
-			return console.log("settings.json readed")
+			return console.warn("Authme - File settings.json readed")
 		}
 	})
 )
@@ -157,17 +157,17 @@ const reset = () => {
 			if (result.response === 0) {
 				fs.unlink(path.join(file_path, "settings.json"), (err) => {
 					if (err && err.code === "ENOENT") {
-						return console.log(`error deleting settings.json ${err}`)
+						return console.warn(`Authme - Rrror deleting settings.json - ${err}`)
 					} else {
-						console.log("settings.json deleted")
+						console.warn("Authme - File settings.json deleted")
 					}
 				})
 
 				fs.unlink(path.join(file_path, "hash.authme"), (err) => {
 					if (err && err.code === "ENOENT") {
-						return console.log(`error deleting hash.authme ${err}`)
+						return console.warn(`Authme - Rrror deleting hash.authme - ${err}`)
 					} else {
-						console.log("hash.authme deleted")
+						console.warn("Authme - File hash.authme deleted")
 					}
 				})
 
@@ -175,9 +175,9 @@ const reset = () => {
 
 				fs.unlink(file_path2, (err) => {
 					if (err && err.code === "ENOENT") {
-						return console.log(`error deleting shortcut ${err}`)
+						return console.warn(`Authme - Rrror deleting shortcut - ${err}`)
 					} else {
-						console.log("shortcut deleted")
+						console.warn("Authme - File shortcut deleted")
 					}
 				})
 
@@ -333,7 +333,7 @@ const api = async () => {
 						status.textContent = "Some systems offline"
 					}
 				} catch (error) {
-					return console.log(error)
+					return console.warn(`Authme - Error loading API - ${error}`)
 				}
 			})
 	} catch (error) {

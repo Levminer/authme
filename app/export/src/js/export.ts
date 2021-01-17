@@ -4,7 +4,7 @@ let exp = () => {
 
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, content) => {
 		if (err) {
-			console.log("The hash.md fle dont exist!")
+			console.warn("Authme - The hash.md fle dont exist")
 		} else {
 			let decrypted = cryptr.decrypt(content)
 

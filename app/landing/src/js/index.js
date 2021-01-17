@@ -31,14 +31,14 @@ const match_passwords = () => {
 	const password_input2 = document.querySelector("#password_input2").value
 
 	if (password_input1 == password_input2) {
-		console.log("Passwords match!")
+		console.warn("Authme - Passwords match!")
 
 		text.style.color = "green"
 		text.textContent = "Passwords match! Please wait!"
 
 		hash_password()
 	} else {
-		console.log("Passwords dont match!")
+		console.warn("Authme - Passwords dont match!")
 
 		text.style.color = "red"
 		text.textContent = "Passwords don't match! Try again!"
@@ -49,16 +49,16 @@ const match_passwords = () => {
 const hash_password = async () => {
 	const password_input1 = document.querySelector("#password_input1").value
 
-	const salt = await bcrypt.genSalt(10).then(console.log("Salt completed!"))
+	const salt = await bcrypt.genSalt(10)
 
-	const hashed = await bcrypt.hash(password_input1, salt).then(console.log("Hash completed!"))
+	const hashed = await bcrypt.hash(password_input1, salt).then(console.warn("Hash completed!"))
 
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 			if (err) {
-				return console.log(`Error reading settings.json ${err}`)
+				return console.warn(`Authme - Error reading settings.json - ${err}`)
 			} else {
-				return console.log("settings.json readed")
+				return console.warn("Authme - File settings.json readed")
 			}
 		})
 	)
@@ -82,9 +82,9 @@ const no_password = () => {
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 			if (err) {
-				return console.log(`Error reading settings.json ${err}`)
+				return console.warn(`Authme - Error reading settings.json - ${err}`)
 			} else {
-				return console.log("settings.json readed")
+				return console.warn("Authme - File settings.json readed")
 			}
 		})
 	)
