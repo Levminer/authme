@@ -85,8 +85,6 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-console.log(dev)
-
 // init folders
 const full_path = path.join(folder, "Levminer")
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
@@ -447,10 +445,6 @@ const createWindow = () => {
 			window.webContents.closeDevTools()
 
 			dt = false
-		}
-
-		if (window == null) {
-			console.log("GEBASZ")
 		}
 	})
 

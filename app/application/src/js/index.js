@@ -49,6 +49,7 @@ file = JSON.parse(
 
 const name_state = file.settings.show_2fa_names
 const copy_state = file.settings.reset_after_copy
+const reveal_state = file.settings.click_to_reveal
 
 // ? separet values
 const separation = () => {
@@ -107,7 +108,93 @@ const go = () => {
 			const element = document.createElement("div")
 
 			// set div elements
-			if (name_state == true) {
+			if (reveal_state === true && name_state === true) {
+				if (i < 2) {
+					element.innerHTML = `
+					<div class="grid diva${i}" id="grid${counter}">
+					<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name${counter}">Code</p>
+					</div>
+					<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					</div>
+					<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time${counter}">Time</p>
+					</div>
+					<div class="div4">
+					<p class="text3" id="text${counter}">Text</p>
+					<button class="button11" id="copy${counter}" >Copy code</button>
+					</div>
+					</div>
+					`
+				} else {
+					element.innerHTML = `
+					<div data-scroll class="grid" id="grid${counter}">
+					<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name${counter}">Code</p>
+					</div>
+					<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					</div>
+					<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time${counter}">Time</p>
+					</div>
+					<div class="div4">
+					<p class="text3" id="text${counter}">Text</p>
+					<button class="button11" id="copy${counter}">Copy code</button>
+					</div>
+					</div>
+					`
+				}
+			} else if (reveal_state === true) {
+				if (i < 2) {
+					element.innerHTML = `
+					<div class="grid diva${i}" id="grid${counter}">
+					<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name${counter}">Code</p>
+					</div>
+					<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					</div>
+					<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time${counter}">Time</p>
+					</div>
+					<div class="div4">
+					<button class="button11" id="copy${counter}">Copy code</button>
+					</div>
+					</div>
+					`
+				} else {
+					element.innerHTML = `
+					<div data-scroll class="grid" id="grid${counter}">
+					<div class="div1">
+					<h3>Name</h3>
+					<p class="text2" id="name${counter}">Code</p>
+					</div>
+					<div class="div2">
+					<h3>Code</h3>
+					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					</div>
+					<div class="div3">
+					<h3>Time</h3>
+					<p class="text2" id="time${counter}">Time</p>
+					</div>
+					<div class="div4">
+					<button class="button11" id="copy${counter}">Copy code</button>
+					</div>
+					</div>
+					`
+				}
+			} else if (name_state === true) {
 				if (i < 2) {
 					element.innerHTML = `
 					<div class="grid diva${i}" id="grid${counter}">
@@ -258,6 +345,8 @@ const go = () => {
 				code.setSelectionRange(0, 9999)
 				document.execCommand("copy")
 				copy.textContent = "Copied"
+
+				window.getSelection().removeAllRanges()
 
 				setTimeout(() => {
 					copy.textContent = "Copy code"

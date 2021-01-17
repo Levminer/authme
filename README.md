@@ -4,7 +4,8 @@
 
 ## How to use
 
--   Simple quick start guide.
+-   For detailed instructions check out the: [Docs](https://docs.authme.levminer.com/#/import?id=import)
+-   If you just want to test the app download this sample import file, unzip it, and import it to Authme: [Download](https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true)
 
 #### Getting started
 
@@ -13,16 +14,12 @@
 1. From Google Authenticator: (Example: Import all of your saved QR codes from your Google Authenticator app.)
 1. From stand alone QR codes: (Example: You screenshot all the QR codes from your favourite websites, and import all of them to Authme.)
 
--   If you just want to test the app download this sample import file, unzip it, and import it to Authme: [Download](https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true)
+#### How to import
 
-### How to import
-
--   For detailed instructions check out the: [Docs](https://docs.authme.levminer.com/#/import?id=import)
+-   If you are importing from Google Authenticator you have to install: [Python](https://www.python.org/downloads/)
 
 1.  For non technical people: Instructions in the app.
 1.  For technical people: Check out this: [README](https://github.com/Levminer/authme/blob/main/extract/README.md)
-
--   If you are importing from Google Authenticator you have to install: [Python](https://www.python.org/downloads/)
 
 ## Authme Web Beta
 
