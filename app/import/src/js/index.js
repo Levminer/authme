@@ -28,8 +28,6 @@ if (process.platform === "win32") {
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 const python_path = path.join(__dirname, "src/py/extract_2fa_secret.py")
 
-console.log(python_path)
-
 // ? init
 let canceled
 let output
@@ -47,15 +45,12 @@ const import_qrcode = () => {
 			canceled = result.canceled
 			output = result.filePaths
 
-			console.log(canceled)
-			console.log(output)
-
 			if (canceled === false) {
 				resume()
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			console.warn(`Authme - Error saving file - ${err}`)
 		})
 
 	// process picture
@@ -86,9 +81,9 @@ const import_qrcode = () => {
 
 				fs.appendFile(path.join("output.txt"), `${value.result}\n`, (err) => {
 					if (err) {
-						console.log("Output don't modified and don't created!")
+						console.warn("Authme - Output don't modified and don't created")
 					} else {
-						console.log("Output modified or created")
+						console.warn("Authme - Output modified or created")
 					}
 				})
 
@@ -123,7 +118,7 @@ const generate = () => {
 	const python = spawn("python", [python_path, "output.txt"])
 
 	python.stdout.on("data", (data) => {
-		console.log(data.toString())
+		console.warn("Python data recived")
 	})
 
 	setTimeout(() => {
@@ -137,50 +132,47 @@ const generate = () => {
 				canceled = result.canceled
 				output = result.filePath
 
-				console.log(canceled)
-				console.log(output)
-
 				if (canceled === false) {
 					const file = fs.readFileSync(path.join("exported.txt"), "utf-8", (err) => {
 						if (err) {
-							return console.log(`error creating file ${err}`)
+							return console.warn(`Authme - Error creating file - ${err}`)
 						} else {
-							return console.log("file created")
+							return console.warn("Authme - File created")
 						}
 					})
 
 					fs.writeFile(output, file, (err) => {
 						if (err) {
-							return console.log(`error creating file ${err}`)
+							console.warn(`Authme - Error creating file - ${err}`)
 						} else {
-							return console.log("file created")
+							console.warn("Authme - File created")
+
+							clear()
 						}
 					})
 				}
 			})
 			.catch((err) => {
-				console.log(err)
+				console.warn(`Authme - Error saving file - ${err}`)
 			})
-
-		clear()
 	}, 800)
 }
 
 // ? clear
 const clear = () => {
-	fs.unlink(path.join(file_path, "exported.txt"), (err) => {
+	fs.unlink("exported.txt", (err) => {
 		if (err && err.code === "ENOENT") {
-			return console.log("exported.txt not deleted")
+			return console.warn(`Authme - File exported.txt not deleted - ${err}`)
 		} else {
-			console.log("exported.txt deleted")
+			console.warn("Authme - File exported.txt deleted")
 		}
 	})
 
-	fs.unlink(path.join(file_path, "output.txt"), (err) => {
+	fs.unlink("output.txt", (err) => {
 		if (err && err.code === "ENOENT") {
-			return console.log("output.txt not deleted")
+			return console.warn(`Authme - File output.txt not deleted - ${err}`)
 		} else {
-			console.log("output.txt deleted")
+			console.warn("Authme - File output.txt deleted")
 		}
 	})
 }
@@ -207,15 +199,12 @@ const import_sa_qrcode = () => {
 			canceled = result.canceled
 			output = result.filePaths
 
-			console.log(canceled)
-			console.log(output)
-
 			if (canceled === false) {
 				resume_sa_qrcode()
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			console.warn(`Authme - Error opening file - ${err}`)
 		})
 
 	// process picture
@@ -223,7 +212,18 @@ const import_sa_qrcode = () => {
 		for (let i = 0; i < output.length; i++) {
 			const run_sa_qrcode = async () => {
 				const error = () => {
-					console.log(error)
+					console.warn("Authme - Error loading qr code")
+
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						type: "error",
+						message: `
+						Error reading QR code(s).
+						
+						Try to take a better picture and try again!
+						`,
+					})
 				}
 
 				const img = await jimp.read(fs.readFileSync(output[i]))
@@ -237,9 +237,9 @@ const import_sa_qrcode = () => {
 
 				fs.appendFile(path.join("output.txt"), `${value.result}\n`, (err) => {
 					if (err) {
-						console.log("Output don't modified and don't created!")
+						console.warn("Authme - Output don't modified and don't created")
 					} else {
-						console.log("Output modified or created")
+						console.warn("Authme -Output modified or created")
 					}
 				})
 
@@ -280,9 +280,6 @@ const generte_sa = () => {
 			canceled = result.canceled
 			output = result.filePath
 
-			console.log(canceled)
-			console.log(output)
-
 			if (canceled === false) {
 				const lineReader = readline.createInterface({
 					input: fs.createReadStream(path.join("output.txt")),
@@ -302,9 +299,9 @@ const generte_sa = () => {
 						const fl = line.slice(15)
 						fs.appendFileSync(path.join("exported.txt"), `\nName: ${fl} \n`, (err) => {
 							if (err) {
-								console.log("Output don't modified and don't created!")
+								console.warn(`Authme - Output don't modified and don't created - ${err}`)
 							} else {
-								console.log("Output modified or created")
+								console.warn("Authme - Output modified or created")
 							}
 						})
 					}
@@ -314,9 +311,9 @@ const generte_sa = () => {
 						const fl = line.slice(8)
 						fs.appendFileSync(path.join("exported.txt"), `Secret: ${fl} \n`, (err) => {
 							if (err) {
-								console.log("Output don't modified and don't created!")
+								console.warn(`Authme - Output don't modified and don't created - ${err}`)
 							} else {
-								console.log("Output modified or created")
+								console.warn("Authme - Output modified or created")
 							}
 						})
 					}
@@ -326,18 +323,18 @@ const generte_sa = () => {
 						const fl = line.slice(8)
 						fs.appendFileSync(path.join("exported.txt"), `Issuer: ${fl} \n`, (err) => {
 							if (err) {
-								console.log("Output don't modified and don't created!")
+								console.warn(`Authme - Output don't modified and don't created - ${err}`)
 							} else {
-								console.log("Output modified or created")
+								console.warn("Authme - Output modified or created")
 							}
 						})
 
 						// line 4
 						fs.appendFileSync(path.join("exported.txt"), "Type:   OTP_TOTP  \n", (err) => {
 							if (err) {
-								console.log("Output don't modified and don't created!")
+								console.warn(`Authme - Output don't modified and don't created - ${err}`)
 							} else {
-								console.log("Output modified or created")
+								console.warn("Authme - Output modified or created")
 							}
 						})
 					}
@@ -354,28 +351,27 @@ const generte_sa = () => {
 					// read exported.txt
 					const file = fs.readFileSync(path.join("exported.txt"), "utf-8", (err) => {
 						if (err) {
-							return console.log(`error creating file ${err}`)
+							return console.warn(`Authme - Error creating file - ${err}`)
 						} else {
-							return console.log("file created")
+							return console.warn("Authme - File created")
 						}
 					})
 
 					// write to destination
 					fs.writeFileSync(output, file, (err) => {
 						if (err) {
-							return console.log(`error creating file ${err}`)
+							return console.warn(`Authme - Error creating file - ${err}`)
 						} else {
-							return console.log("file created")
+							return console.warn("Authme - File created")
 						}
 					})
 
-					console.log("temp filed deleted")
 					clear()
 				}
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			console.warn(`Authme - Error saving file - ${err}`)
 		})
 }
 
