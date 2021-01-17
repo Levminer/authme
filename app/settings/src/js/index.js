@@ -38,18 +38,6 @@ const file = JSON.parse(
 	})
 )
 
-// launch on startup
-let startup_state = file.settings.launch_on_startup
-if (startup_state === true) {
-	but0.textContent = "On"
-
-	ipc.send("after_startup1")
-} else {
-	but0.textContent = "Off"
-
-	ipc.send("after_startup0")
-}
-
 // close to tray
 let tray_state = file.settings.close_to_tray
 if (tray_state === true) {
@@ -60,6 +48,14 @@ if (tray_state === true) {
 	but2.textContent = "Off"
 
 	ipc.send("after_tray0")
+}
+
+// launch on startup
+let startup_state = file.settings.launch_on_startup
+if (startup_state === true) {
+	but0.textContent = "On"
+} else {
+	but0.textContent = "Off"
 }
 
 // names
