@@ -4,18 +4,28 @@ const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
+const { is } = require("electron-util")
 
-const text = document.querySelector("#text")
+// ? if development
+let dev
 
+if (is.development === true) {
+	dev = true
+}
+
+// ?platform
 let folder
 
+// get platform
 if (process.platform === "win32") {
 	folder = process.env.APPDATA
 } else {
 	folder = process.env.HOME
 }
 
-const file_path = path.join(folder, "/Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+
+const text = document.querySelector("#text")
 
 document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	if (e.key === "Enter") {

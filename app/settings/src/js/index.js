@@ -4,13 +4,24 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 const fetch = require("node-fetch")
+const { is } = require("electron-util")
 
+// ? choose settings
 document.querySelector("#setting").click()
 
+// ? version
 const version = ipc.sendSync("ver")
 
 document.querySelector("#but7").textContent = `Authme ${version}`
 
+// ? if development
+let dev
+
+if (is.development === true) {
+	dev = true
+}
+
+// ? platform
 let folder
 
 if (process.platform === "win32") {
@@ -19,13 +30,15 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-const file_path = path.join(folder, "/Levminer/Authme")
+// ? settings
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
 const but0 = document.querySelector("#but0")
 const but1 = document.querySelector("#but1")
 const but2 = document.querySelector("#but2")
 const but5 = document.querySelector("#but5")
 const but10 = document.querySelector("#but10")
+const but11 = document.querySelector("#but11")
 
 // ? read settings
 const file = JSON.parse(
@@ -72,6 +85,14 @@ if (copy_state === true) {
 	but10.textContent = "On"
 } else {
 	but10.textContent = "Off"
+}
+
+// reveal
+let reveal_state = file.settings.click_to_reveal
+if (reveal_state === true) {
+	but11.textContent = "On"
+} else {
+	but11.textContent = "Off"
 }
 
 // ? startup
@@ -248,6 +269,45 @@ const copy = () => {
 		})
 }
 
+// ? reveal
+const reveal = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No"],
+			defaultId: 0,
+			cancelId: 1,
+			type: "warning",
+			message: "Are you sure you want change this setting? This is requires a restart!",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				if (reveal_state == true) {
+					file.settings.click_to_reveal = false
+
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+					but11.textContent = "Off"
+					reveal_state = false
+				} else {
+					file.settings.click_to_reveal = true
+
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+					but11.textContent = "On"
+					reveal_state = true
+				}
+
+				but11.textContent = "Restarting app"
+
+				setTimeout(() => {
+					app.relaunch()
+					app.exit()
+				}, 1000)
+			}
+		})
+}
+
 // ? folder 0
 const folder0 = () => {
 	ipc.send("app_path")
@@ -309,7 +369,7 @@ const menu = (evt, name) => {
 	if (name === "shortcuts") {
 		document.querySelector(".center").style.height = "2500px"
 	} else {
-		document.querySelector(".center").style.height = "2450px"
+		document.querySelector(".center").style.height = "2700px"
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")

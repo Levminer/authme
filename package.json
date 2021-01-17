@@ -5,7 +5,7 @@
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
-		"package": "electron-packager . Authme --platform=win32,linux --arch=x64 --icon=img/icon.icns --out=build --overwrite",
+		"package": "electron-packager . Authme --platform=win32,linux,darwin --arch=x64 --icon=img/icon.icns --out=build --overwrite",
 		"build": "electron-builder --publish=never --x64",
 		"lint": "eslint --fix."
 	},
@@ -67,6 +67,7 @@
 		"bcryptjs": "^2.4.3",
 		"create-desktop-shortcuts": "^1.2.0",
 		"cryptr": "^6.0.2",
+		"electron-util": "^0.14.2",
 		"jimp": "^0.16.1",
 		"node-fetch": "^2.6.1",
 		"qrcode": "^1.4.4",

@@ -2,19 +2,29 @@ const speakeasy = require("@levminer/speakeasy")
 const { app } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
+const { is } = require("electron-util")
 
-// eslint-disable-next-line
-let prev = false
+// ? if development
+let dev
 
+if (is.development === true) {
+	dev = true
+}
+
+// ?platform
 let folder
 
+// get platform
 if (process.platform === "win32") {
 	folder = process.env.APPDATA
 } else {
 	folder = process.env.HOME
 }
 
-const file_path = path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+
+// eslint-disable-next-line
+let prev = false
 
 const names = []
 const secret = []

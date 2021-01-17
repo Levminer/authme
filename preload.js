@@ -1,8 +1,15 @@
 const fs = require("fs")
 const electron = require("electron")
 const path = require("path")
-const { dialog, shell, app } = require("electron").remote
 const ipc = electron.ipcRenderer
+const { is } = require("electron-util")
+
+// ? if development
+let dev
+
+if (is.development === true) {
+	dev = true
+}
 
 // ?platform
 let folder
@@ -15,7 +22,7 @@ if (process.platform === "win32") {
 }
 
 // ? settings
-const file_path = path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
 // read settings
 const file = JSON.parse(
@@ -34,8 +41,12 @@ if (file.settings.launch_on_startup === true) {
 }
 
 // startup require_password
-if (file.security.require_password === true) {
+if (file.security.require_password === true && file.security.password !== null) {
 	ipc.send("to_confirm")
-} else if (file.security.require_password === false) {
+} else if (file.security.require_password === false && file.security.password === null) {
 	ipc.send("to_application1")
+} else if (file.security.require_password === null && file.security.password === null) {
+	return console.log("First restart")
+} else {
+	ipc.send("to_confirm")
 }

@@ -3,6 +3,14 @@ const { app, dialog, shell } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
+const { is } = require("electron-util")
+
+// ? if development
+let dev
+
+if (is.development === true) {
+	dev = true
+}
 
 // ? init ipc
 const ipc = electron.ipcRenderer
@@ -22,7 +30,7 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-const file_path = path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
 // ? read file from settings folder
 const name = []
