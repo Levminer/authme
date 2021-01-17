@@ -1,14 +1,14 @@
-# Feature PR
+# Reference issue
 
--   Describe the feature you worked on.
+-   Reference the issue with #number here.
+
+## Purpose
+
+-   Describe the problem or feature.
 
 ## Approach
 
--   How does this change address the problem
-
-## Reference issue
-
--   Tag the issue.
+-   How does this change or address the problem.
 
 ## TODO
 
