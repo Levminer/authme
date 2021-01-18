@@ -9,16 +9,6 @@ const ipc = electron.ipcMain
 const exec = require("child_process").exec
 const { is } = require("electron-util")
 const debug = require("electron-debug")
-const unhandled = require("electron-unhandled")
-
-// ? catch errors
-unhandled({
-	showDialog: true,
-	reportButton: (error) => {
-		shell.openExternal("https://github.com/Levminer/authme/issues")
-		console.warn(`Authme - Error in main process - ${error}`)
-	},
-})
 
 // ?  init
 let splash
@@ -49,7 +39,7 @@ let update_start = false
 
 // ? version
 const authme_version = "2.2.0"
-const tag_name = "2.1.4"
+const tag_name = "2.2.0"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -185,9 +175,7 @@ const src = "extract/install.py"
 
 const py = spawn("python", [src])
 
-// ? open functions
-
-// open tray
+// ? open tray
 const tray_show = () => {
 	const toggle = () => {
 		if (confirmed == false) {
@@ -253,10 +241,10 @@ const tray_show = () => {
 		}
 	}
 
+	// ? check for required password
 	let if_pass = false
 	let if_nopass = false
 
-	// check if require password
 	if (file.security.require_password == true) {
 		if_pass = true
 		pass_start = true
@@ -269,7 +257,7 @@ const tray_show = () => {
 	}
 }
 
-// tray settings
+// ? tray settings
 const tray_settings = () => {
 	if (settings_shown == false) {
 		window3.maximize()
