@@ -4,18 +4,28 @@ const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
+const { is } = require("electron-util")
 
-const text = document.querySelector("#text")
+// ? if development
+let dev
 
+if (is.development === true) {
+	dev = true
+}
+
+// ?platform
 let folder
 
+// get platform
 if (process.platform === "win32") {
 	folder = process.env.APPDATA
 } else {
 	folder = process.env.HOME
 }
 
-const file_path = path.join(folder, "/Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+
+const text = document.querySelector("#text")
 
 document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	if (e.key === "Enter") {
@@ -29,18 +39,16 @@ const unhash_password = async () => {
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
 			if (err) {
-				return console.log(`Error reading settings.json ${err}`)
+				return console.warn(`Authme - Error reading settings.json - ${err}`)
 			} else {
-				return console.log("settings.json readed")
+				return console.warn("Authme - Succesfully readed settings.json")
 			}
 		})
 	)
 
-	const compare = await bcrypt.compare(password_input, file.security.password).then(console.log("Passwords compared!"))
+	const compare = await bcrypt.compare(password_input, file.security.password).then(console.warn("Passwords compared!"))
 
 	if (compare == true) {
-		console.log("Passwords match!")
-
 		text.style.color = "green"
 		text.textContent = "Passwords match! Please wait!"
 
@@ -48,7 +56,7 @@ const unhash_password = async () => {
 			ipc.send("to_application0")
 		}, 1000)
 	} else {
-		console.log("Passwords dont match!")
+		console.warn("Authme - Passwords dont match!")
 
 		text.style.color = "red"
 		text.textContent = "Passwords don't match! Try again!"

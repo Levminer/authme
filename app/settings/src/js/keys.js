@@ -32,9 +32,6 @@ hk10.value = file.shortcuts.update
 hk11.value = file.shortcuts.info
 
 const call = (event) => {
-	console.log(event)
-	console.log(event.key + event.ctrlKey)
-
 	if (event.ctrlKey === true) {
 		inp_name.value = `CommandOrControl+${event.key}`
 	}
@@ -65,7 +62,6 @@ const hk_modify = (value) => {
 
 		document.removeEventListener("keydown", call, true)
 
-		console.log(id)
 		switch (id) {
 			case 0:
 				const hk0 = document.querySelector("#hk0_input").value

@@ -5,9 +5,9 @@ const handlefiles = (files) => {
 	// read file
 	if (window.FileReader) {
 		getastext(files[0])
-		console.log("File uploaded successfully!")
+		console.warn("Authme - File uploaded successfully")
 	} else {
-		console.log("Can't upload file!")
+		console.warn("Authme - Can't upload file")
 	}
 }
 
@@ -20,15 +20,13 @@ const getastext = (fileToRead) => {
 
 const loadhandler = (event) => {
 	const text = event.target.result
-	console.log(text)
 	save_text = text
-	console.log(save_text)
 	processdata(text)
 }
 
 const errorhandler = (evt) => {
 	if (evt.target.error.name == "NotReadableError") {
-		alert("Failed to upload the file! You uploaded a corrupted or not supported file!")
+		console.warn("Failed to upload the file! You uploaded a corrupted or not supported file")
 	}
 }
 
@@ -51,10 +49,6 @@ const processdata = (text) => {
 	data = data.filter((_, i) => {
 		return (i + 1) % 5
 	})
-
-	console.log("Data:")
-	console.log(data.length)
-	console.log(data)
 
 	separation()
 }

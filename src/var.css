@@ -1,6 +1,5 @@
 body {
 	background: rgb(20, 20, 20);
-	background: linear-gradient(100deg, rgba(20, 20, 20, 1) 0%, rgba(30, 30, 30, 1) 100%);
 }
 
 :root {

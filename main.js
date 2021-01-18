@@ -7,7 +7,10 @@ const os = require("os")
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
 const ipc = electron.ipcMain
 const exec = require("child_process").exec
+const { is } = require("electron-util")
+const debug = require("electron-debug")
 
+// ?  init
 let splash
 let window0
 let window1
@@ -29,8 +32,14 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
-const authme_version = "2.1.4"
-const tag_name = "2.1.4"
+let to_tray = false
+let show_tray = false
+let pass_start = false
+let update_start = false
+
+// ? version
+const authme_version = "2.2.0"
+const tag_name = "2.2.0"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -58,22 +67,35 @@ exec('python -c "import platform; print(platform.python_version())"', (err, stdo
 	}
 })
 
-let to_tray = false
-let show_tray = false
-let pass_start = false
-let update_start = false
+// ? development
+let dev
 
+if (is.development === true) {
+	setTimeout(() => {
+		window2.setTitle("Authme Dev")
+	}, 2000)
+
+	// dev tools
+	debug({
+		showDevTools: false,
+	})
+
+	dev = true
+}
+
+// ? folders
 let folder
 
+// choose platform
 if (process.platform === "win32") {
 	folder = process.env.APPDATA
 } else {
 	folder = process.env.HOME
 }
 
-// ? folders
+// init folders
 const full_path = path.join(folder, "Levminer")
-const file_path = path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
 // check if folders exists
 if (!fs.existsSync(full_path)) {
@@ -93,7 +115,8 @@ const settings = `{
 			"launch_on_startup": false,
 			"close_to_tray": false,
 			"show_2fa_names": false,
-			"reset_after_copy": false
+			"click_to_reveal": false,
+			"reset_after_copy": true
 		},
 
 		"security": {
@@ -152,9 +175,7 @@ const src = "extract/install.py"
 
 const py = spawn("python", [src])
 
-// ? open functions
-
-// open tray
+// ? open tray
 const tray_show = () => {
 	const toggle = () => {
 		if (confirmed == false) {
@@ -220,10 +241,10 @@ const tray_show = () => {
 		}
 	}
 
+	// ? check for required password
 	let if_pass = false
 	let if_nopass = false
 
-	// check if require password
 	if (file.security.require_password == true) {
 		if_pass = true
 		pass_start = true
@@ -236,7 +257,7 @@ const tray_show = () => {
 	}
 }
 
-// tray settings
+// ? tray settings
 const tray_settings = () => {
 	if (settings_shown == false) {
 		window3.maximize()
@@ -257,8 +278,12 @@ const tray_exit = () => {
 // ? create window
 const createWindow = () => {
 	window0 = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
 		show: false,
-		backgroundColor: "#2A2424",
+		backgroundColor: "#141414",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -267,8 +292,12 @@ const createWindow = () => {
 	})
 
 	window1 = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
 		show: false,
-		backgroundColor: "#2A2424",
+		backgroundColor: "#141414",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -277,8 +306,12 @@ const createWindow = () => {
 	})
 
 	window2 = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
 		show: false,
-		backgroundColor: "#2A2424",
+		backgroundColor: "#141414",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -287,8 +320,12 @@ const createWindow = () => {
 	})
 
 	window3 = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
 		show: false,
-		backgroundColor: "#2A2424",
+		backgroundColor: "#141414",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -297,8 +334,12 @@ const createWindow = () => {
 	})
 
 	window4 = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
 		show: false,
-		backgroundColor: "#2A2424",
+		backgroundColor: "#141414",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -307,8 +348,12 @@ const createWindow = () => {
 	})
 
 	window5 = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
 		show: false,
-		backgroundColor: "#2A2424",
+		backgroundColor: "#141414",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -389,23 +434,6 @@ const createWindow = () => {
 			show_tray = true
 
 			export_shown = false
-		}
-	})
-
-	// ? dev tools
-	let dt = false
-
-	globalShortcut.register("CommandOrControl+Shift+Enter", () => {
-		const window = BrowserWindow.getFocusedWindow()
-
-		if (dt == false) {
-			window.webContents.openDevTools()
-
-			dt = true
-		} else {
-			window.webContents.closeDevTools()
-
-			dt = false
 		}
 	})
 

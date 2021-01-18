@@ -180,3 +180,8 @@ input:hover::placeholder {
 	position: relative;
 	top: 10px;
 }
+
+.blur {
+	color: transparent;
+	text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}

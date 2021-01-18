@@ -1,28 +1,31 @@
 ---
 name: Bug report
 about: Use this template for reporting a bug.
-title: ''
-labels: 'Type: Bug'
+title: ""
+labels: "Type: Bug"
 assignees: Levminer
-
 ---
 
-**Describe the bug:**
+# Describe the bug:
 
--   A clear and concise description of what the bug is.
+-   `A clear and concise description of what the bug is.`
 
-**To Reproduce:**
+## Error message:
 
--   Steps to reproduce the behavior (Detailed steps):
+-   `Paste the error message here or the screenshot of the error`
 
-**Expected behavior:**
+## To reproduce:
 
--   A clear and concise description of what you expected to happen.
+-   `Steps to reproduce the behavior (Detailed steps):`
 
-**Version Info:**
+## Expected behavior:
 
--   Paste version informations here (Top menu > Info > About > Copy):
+-   `A clear and concise description of what you expected to happen.`
 
-**Additional context:**
+## Version Info:
 
--   Add any other context about the problem here.
+-   `Paste version informations here (Top menu > Info > About > Copy):`
+
+## Additional context:
+
+-   `Add any other context about the problem here.`
