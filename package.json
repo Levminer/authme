@@ -67,6 +67,8 @@
 		"bcryptjs": "^2.4.3",
 		"create-desktop-shortcuts": "^1.2.0",
 		"cryptr": "^6.0.2",
+		"electron-debug": "^3.2.0",
+		"electron-unhandled": "^3.0.2",
 		"electron-util": "^0.14.2",
 		"jimp": "^0.16.1",
 		"node-fetch": "^2.6.1",

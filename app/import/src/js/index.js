@@ -7,25 +7,7 @@ const Qr_Reader = require("qrcode-reader")
 const jimp = require("jimp")
 const readline = require("readline")
 const spawn = require("child_process").spawn
-const { is } = require("electron-util")
 
-// ? if development
-let dev
-
-if (is.development === true) {
-	dev = true
-}
-
-// ? os specific folders
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 const python_path = path.join(__dirname, "src/py/extract_2fa_secret.py")
 
 // ? init
@@ -154,6 +136,19 @@ const generate = () => {
 			})
 			.catch((err) => {
 				console.warn(`Authme - Error saving file - ${err}`)
+
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					type: "error",
+					message: `
+					No Google Authenticator QR code found on the picture!
+					
+					Try to take a better picture and try again!
+					`,
+				})
+
+				clear()
 			})
 	}, 800)
 }
@@ -219,7 +214,7 @@ const import_sa_qrcode = () => {
 						buttons: ["Close"],
 						type: "error",
 						message: `
-						Error reading QR code(s).
+						No QR code found on the picture: ${output[i]}.
 						
 						Try to take a better picture and try again!
 						`,

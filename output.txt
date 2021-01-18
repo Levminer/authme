@@ -1,1 +1,0 @@
-otpauth://totp/st@levminer.com  ?secret=qwertz1234567890 &issuer=Google 

@@ -8,7 +8,19 @@ const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut
 const ipc = electron.ipcMain
 const exec = require("child_process").exec
 const { is } = require("electron-util")
+const debug = require("electron-debug")
+const unhandled = require("electron-unhandled")
 
+// ? catch errors
+unhandled({
+	showDialog: true,
+	reportButton: (error) => {
+		shell.openExternal("https://github.com/Levminer/authme/issues")
+		console.warn(`Authme - Error in main process - ${error}`)
+	},
+})
+
+// ?  init
 let splash
 let window0
 let window1
@@ -30,8 +42,14 @@ let ipc_to_application_1 = false
 let confirmed = false
 let startup = false
 
+let to_tray = false
+let show_tray = false
+let pass_start = false
+let update_start = false
+
+// ? version
 const authme_version = "2.2.0"
-const tag_name = "2.2.0"
+const tag_name = "2.1.4"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -59,18 +77,18 @@ exec('python -c "import platform; print(platform.python_version())"', (err, stdo
 	}
 })
 
-let to_tray = false
-let show_tray = false
-let pass_start = false
-let update_start = false
-
-// ? if development
+// ? development
 let dev
 
 if (is.development === true) {
 	setTimeout(() => {
 		window2.setTitle("Authme Dev")
 	}, 2000)
+
+	// dev tools
+	debug({
+		showDevTools: false,
+	})
 
 	dev = true
 }
@@ -428,23 +446,6 @@ const createWindow = () => {
 			show_tray = true
 
 			export_shown = false
-		}
-	})
-
-	// ? dev tools
-	let dt = false
-
-	globalShortcut.register("CommandOrControl+Shift+Enter", () => {
-		const window = BrowserWindow.getFocusedWindow()
-
-		if (dt == false) {
-			window.webContents.openDevTools()
-
-			dt = true
-		} else {
-			window.webContents.closeDevTools()
-
-			dt = false
 		}
 	})
 
