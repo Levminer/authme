@@ -49,7 +49,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"electron": "^11.2.0",
-		"electron-builder": "^22.10.4",
+		"electron-builder": "^22.9.1",
 		"electron-packager": "^15.2.0",
 		"eslint": "^7.17.0",
 		"eslint-config-node": "^4.1.0",
