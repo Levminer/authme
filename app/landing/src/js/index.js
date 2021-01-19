@@ -6,13 +6,18 @@ const ipc = electron.ipcRenderer
 const path = require("path")
 const { is } = require("electron-util")
 
+// ? init
 const text = document.querySelector("#text")
 
 // ? if development
-let dev
+let dev = false
+let integrity = false
 
 if (is.development === true) {
 	dev = true
+
+	// check for integrity
+	integrity = true
 }
 
 let folder
@@ -63,8 +68,16 @@ const hash_password = async () => {
 		})
 	)
 
-	file.security.require_password = true
+	if (integrity === false) {
+		const storage = {
+			require_password: true,
+			password: hashed,
+		}
 
+		localStorage.setItem("storage", JSON.stringify(storage))
+	}
+
+	file.security.require_password = true
 	file.security.password = hashed
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))

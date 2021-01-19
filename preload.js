@@ -40,7 +40,7 @@ if (file.settings.launch_on_startup === true) {
 	ipc.send("startup")
 }
 
-// startup require_password
+// ?  security
 if (file.security.require_password === true && file.security.password !== null) {
 	ipc.send("to_confirm")
 } else if (file.security.require_password === false && file.security.password === null) {

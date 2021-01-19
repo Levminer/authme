@@ -38,8 +38,8 @@ let pass_start = false
 let update_start = false
 
 // ? version
-const authme_version = "2.2.0"
-const tag_name = "2.2.0"
+const authme_version = "2.2.1"
+const tag_name = "2.2.1"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -259,13 +259,49 @@ const tray_show = () => {
 
 // ? tray settings
 const tray_settings = () => {
-	if (settings_shown == false) {
-		window3.maximize()
-		window3.show()
-		settings_shown = true
+	const toggle = () => {
+		if (settings_shown == false) {
+			if (if_pass == true && confirmed == true) {
+				window3.maximize()
+				window3.show()
+
+				settings_shown = true
+			}
+
+			if (if_nopass == true) {
+				window3.maximize()
+				window3.show()
+
+				settings_shown = true
+			}
+		} else {
+			if (if_pass == true && confirmed == true) {
+				window3.hide()
+
+				settings_shown = false
+			}
+
+			if (if_nopass == true) {
+				window3.hide()
+
+				settings_shown = false
+			}
+		}
+	}
+
+	let if_pass = false
+	let if_nopass = false
+
+	// check if require password
+	if (file.security.require_password == true) {
+		if_pass = true
+		pass_start = true
+
+		toggle()
 	} else {
-		window3.hide()
-		settings_shown = false
+		if_nopass = true
+
+		toggle()
 	}
 }
 
@@ -708,13 +744,49 @@ app.whenReady().then(() => {
 					label: "Settings",
 					accelerator: file.shortcuts.settings,
 					click: () => {
-						if (settings_shown == false) {
-							window3.maximize()
-							window3.show()
-							settings_shown = true
+						const toggle = () => {
+							if (settings_shown == false) {
+								if (if_pass == true && confirmed == true) {
+									window3.maximize()
+									window3.show()
+
+									settings_shown = true
+								}
+
+								if (if_nopass == true) {
+									window3.maximize()
+									window3.show()
+
+									settings_shown = true
+								}
+							} else {
+								if (if_pass == true && confirmed == true) {
+									window3.hide()
+
+									settings_shown = false
+								}
+
+								if (if_nopass == true) {
+									window3.hide()
+
+									settings_shown = false
+								}
+							}
+						}
+
+						let if_pass = false
+						let if_nopass = false
+
+						// check if require password
+						if (file.security.require_password == true) {
+							if_pass = true
+							pass_start = true
+
+							toggle()
 						} else {
-							window3.hide()
-							settings_shown = false
+							if_nopass = true
+
+							toggle()
 						}
 					},
 				},
