@@ -13,9 +13,4 @@
 
 ## Reporting a Vulnerability
 
--   Please report security vulnerabilitys thru email at: <authme@levminer.com>.
-
-## Release cycle
-
--   Standard updates: Coming on Tuesdays if everything is going well.
--   Hotfix updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
+-   Please report security vulnerabilitys in email at: <authme@levminer.com>

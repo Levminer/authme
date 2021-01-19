@@ -26,7 +26,7 @@
 
 ## Authme Web
 
--   Authme is now available as a web app. It's a PWA app to, so you can install it on your Android or IOS phone!
+-   Authme is now available as a web app. It's a PWA app to, so you can install it on your Android or IOS phone.
 -   Try it out and give feedback: [Authme Web](https://github.com/levminer/authme-web)
 
 ## Release cycle

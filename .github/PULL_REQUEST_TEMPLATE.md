@@ -1,14 +1,14 @@
 # Reference issue
 
--   Reference the issue with #number here.
+-   `Reference the issue with #number here.`
 
 ## Purpose
 
--   Describe the problem or feature.
+-   `Describe the problem or feature.`
 
 ## Approach
 
--   How does this change or address the problem.
+-   `How does this change or address the problem.`
 
 ## TODO
 
