@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.2.1",
+	"version": "2.2.2",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {

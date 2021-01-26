@@ -38,7 +38,7 @@ let pass_start = false
 let update_start = false
 
 // ? version
-const authme_version = "2.2.1"
+const authme_version = "2.2.2"
 const tag_name = "2.2.1"
 
 ipc.on("ver", (event, data) => {
@@ -171,7 +171,7 @@ const file = JSON.parse(
 // ? install protbuf
 const spawn = require("child_process").spawn
 
-const src = "extract/install.py"
+const src = "src/install.py"
 
 const py = spawn("python", [src])
 
