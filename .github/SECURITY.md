@@ -13,7 +13,7 @@
 
 ## Reporting a Vulnerability
 
--   Please report security vulnerabilitys thru email at: <authme@levminer.com>.
+-   Please report security vulnerabilitys in email at: <authme@levminer.com>
 
 ## Release cycle
 

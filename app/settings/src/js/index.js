@@ -142,7 +142,6 @@ const tray = () => {
 }
 
 // ? reset
-
 const reset = () => {
 	dialog
 		.showMessageBox({
@@ -155,38 +154,54 @@ const reset = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
+				// remove settings file
 				fs.unlink(path.join(file_path, "settings.json"), (err) => {
 					if (err && err.code === "ENOENT") {
-						return console.warn(`Authme - Rrror deleting settings.json - ${err}`)
+						return console.warn(`Authme - Error deleting settings.json - ${err}`)
 					} else {
 						console.warn("Authme - File settings.json deleted")
 					}
 				})
 
+				// remove hash file
 				fs.unlink(path.join(file_path, "hash.authme"), (err) => {
 					if (err && err.code === "ENOENT") {
-						return console.warn(`Authme - Rrror deleting hash.authme - ${err}`)
+						return console.warn(`Authme - Error deleting hash.authme - ${err}`)
 					} else {
 						console.warn("Authme - File hash.authme deleted")
 					}
 				})
 
+				// remove start shortcut
 				const file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
 
-				fs.unlink(file_path2, (err) => {
-					if (err && err.code === "ENOENT") {
-						return console.warn(`Authme - Rrror deleting shortcut - ${err}`)
-					} else {
-						console.warn("Authme - File shortcut deleted")
-					}
-				})
+				if (dev !== true) {
+					fs.unlink(file_path2, (err) => {
+						if (err && err.code === "ENOENT") {
+							return console.warn(`Authme - Error deleting shortcut - ${err}`)
+						} else {
+							console.warn("Authme - File shortcut deleted")
+						}
+					})
+				}
 
+				// remove cache folder
+				const spawn = require("child_process").spawn
+
+				const src = "src/remove.py"
+
+				const py = spawn("python", [src])
+
+				// clear localstorage
+				localStorage.clear()
+
+				// restart
 				but1.textContent = "Restarting app"
 
-				setTimeout(() => {
+				/* 				setTimeout(() => {
 					app.relaunch()
 					app.exit()
-				}, 1000)
+				}, 1000) */
 			}
 		})
 }
