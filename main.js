@@ -39,7 +39,7 @@ let update_start = false
 
 // ? version
 const authme_version = "2.3.0"
-const tag_name = "2.2.2"
+const tag_name = "2.3.0"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -485,7 +485,7 @@ const createWindow = () => {
 					.then((res) => res.json())
 					.then((data) => {
 						try {
-							if (data.tag_name != tag_name && data.tag_name != undefined && data.prerelease != true) {
+							if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
 								dialog
 									.showMessageBox({
 										title: "Authme",
@@ -667,6 +667,34 @@ ipc.on("app_path", () => {
 	shell.showItemInFolder(app.getPath("exe"))
 })
 
+ipc.on("about", () => {
+	about()
+})
+
+// ? about
+const about = () => {
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Copy", "Close"],
+			defaultId: 0,
+			cancelId: 1,
+			noLink: true,
+			type: "info",
+			message: message,
+		})
+		.then((result) => {
+			update = true
+
+			if (result.response === 0) {
+				clipboard.writeText(message)
+			}
+		})
+}
+
+// ? start app
 app.whenReady().then(() => {
 	splash = new BrowserWindow({
 		width: 500,
@@ -980,7 +1008,7 @@ app.whenReady().then(() => {
 									.then((res) => res.json())
 									.then((data) => {
 										try {
-											if (data.tag_name != tag_name && data.tag_name != undefined && data.prerelease != true) {
+											if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
 												dialog
 													.showMessageBox({
 														title: "Authme",
@@ -1051,25 +1079,7 @@ app.whenReady().then(() => {
 					label: "Info",
 					accelerator: file.shortcuts.info,
 					click: () => {
-						const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
-
-						dialog
-							.showMessageBox({
-								title: "Authme",
-								buttons: ["Close", "Copy"],
-								defaultId: 0,
-								cancelId: 1,
-								noLink: true,
-								type: "info",
-								message: message,
-							})
-							.then((result) => {
-								update = true
-
-								if (result.response === 1) {
-									clipboard.writeText(message)
-								}
-							})
+						about()
 					},
 				},
 			],
