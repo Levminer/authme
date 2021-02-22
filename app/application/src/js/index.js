@@ -3,6 +3,8 @@ const { app } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 const { is } = require("electron-util")
+const electron = require("electron")
+const ipc = electron.ipcRenderer
 
 // ? if development
 let dev
@@ -435,6 +437,7 @@ let focus = true
 let diva0
 let diva1
 
+// ? aniamtions
 app.on("browser-window-focus", () => {
 	if (focus === true) {
 		try {
@@ -476,3 +479,9 @@ app.on("browser-window-focus", () => {
 		focus = false
 	}
 })
+
+// ? focus search bar
+
+const focus_search = () => {
+	document.getElementById("search").focus()
+}

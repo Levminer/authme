@@ -408,6 +408,10 @@ const createWindow = () => {
 		window0.maximize()
 	}
 
+	window2.on("show", () => {
+		window2.webContents.executeJavaScript("focus_search()")
+	})
+
 	window0.on("close", () => {
 		app.quit()
 	})
