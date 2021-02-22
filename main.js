@@ -38,7 +38,7 @@ let pass_start = false
 let update_start = false
 
 // ? version
-const authme_version = "2.2.2"
+const authme_version = "2.3.0"
 const tag_name = "2.2.2"
 
 ipc.on("ver", (event, data) => {
