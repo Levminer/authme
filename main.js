@@ -116,7 +116,8 @@ const settings = `{
 			"close_to_tray": false,
 			"show_2fa_names": false,
 			"click_to_reveal": false,
-			"reset_after_copy": true
+			"reset_after_copy": true,
+			"save_search_results": true
 		},
 
 		"security": {
@@ -143,6 +144,10 @@ const settings = `{
 			"show": "CommandOrControl+Shift+a",
 			"settings": "CommandOrControl+Shift+s",
 			"exit": "CommandOrControl+Shift+d"
+		},
+
+		"search_history": {
+			"latest": null
 		}
 	}`
 

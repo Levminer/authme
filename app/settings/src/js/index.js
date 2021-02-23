@@ -39,6 +39,7 @@ const but2 = document.querySelector("#but2")
 const but5 = document.querySelector("#but5")
 const but10 = document.querySelector("#but10")
 const but11 = document.querySelector("#but11")
+const but13 = document.querySelector("#but13")
 
 // ? read settings
 const file = JSON.parse(
@@ -79,6 +80,14 @@ if (names_state === true) {
 	but5.textContent = "Off"
 }
 
+// reveal
+let reveal_state = file.settings.click_to_reveal
+if (reveal_state === true) {
+	but11.textContent = "On"
+} else {
+	but11.textContent = "Off"
+}
+
 // copy
 let copy_state = file.settings.reset_after_copy
 if (copy_state === true) {
@@ -87,12 +96,12 @@ if (copy_state === true) {
 	but10.textContent = "Off"
 }
 
-// reveal
-let reveal_state = file.settings.click_to_reveal
-if (reveal_state === true) {
-	but11.textContent = "On"
+// search
+let search_state = file.settings.save_search_results
+if (search_state === true) {
+	but13.textContent = "On"
 } else {
-	but11.textContent = "Off"
+	but13.textContent = "Off"
 }
 
 // ? startup
@@ -321,6 +330,59 @@ const copy = () => {
 		})
 }
 
+// ? search
+const search = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			cancelId: 2,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				if (search_state == true) {
+					file.settings.save_search_results = false
+
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+					but13.textContent = "Off"
+					search_state = false
+				} else {
+					file.settings.save_search_results = true
+
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+					but13.textContent = "On"
+					search_state = true
+				}
+
+				but10.textContent = "Restarting app"
+
+				restart()
+			}
+
+			if (result.response === 1) {
+				if (search_state == true) {
+					file.settings.save_search_results = false
+
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+					but13.textContent = "Off"
+					search_state = false
+				} else {
+					file.settings.save_search_results = true
+
+					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+
+					but13.textContent = "On"
+					search_state = true
+				}
+			}
+		})
+}
+
 // ? reveal
 const reveal = () => {
 	dialog
@@ -445,7 +507,7 @@ const menu = (evt, name) => {
 	if (name === "shortcuts") {
 		document.querySelector(".center").style.height = "2500px"
 	} else {
-		document.querySelector(".center").style.height = "2700px"
+		document.querySelector(".center").style.height = "2950px"
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")
