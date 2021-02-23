@@ -17,4 +17,6 @@ let exp = () => {
 			processdata(decrypted)
 		}
 	})
+
+	error()
 }
