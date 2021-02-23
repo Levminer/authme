@@ -3,6 +3,8 @@ const { app } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 const { is } = require("electron-util")
+const electron = require("electron")
+const ipc = electron.ipcRenderer
 
 // ? if development
 let dev
@@ -50,6 +52,7 @@ file = JSON.parse(
 const name_state = file.settings.show_2fa_names
 const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
+const search_state = file.settings.save_search_results
 
 // ? separet values
 const separation = () => {
@@ -396,13 +399,19 @@ const search = () => {
 	const input = search.value.toLowerCase()
 	let i = 0
 
+	// save result
+	if (search_state === true) {
+		file.search_history.latest = input
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+	}
+
 	// restart
 	for (let i = 0; i < names.length; i++) {
 		const div = document.querySelector(`#grid${[i]}`)
 		div.style.display = "grid"
 	}
 
-	// search
+	// search algorithm
 	querry.forEach((e) => {
 		if (e.startsWith(input)) {
 			console.warn("Authme - Search result found")
@@ -422,6 +431,18 @@ const search = () => {
 	}
 }
 
+// ? seach history
+const search_history = file.search_history.latest
+
+if (search_history !== null && search_history !== "" && search_state === true) {
+	document.querySelector("#search").value = file.search_history.latest
+
+	setTimeout(() => {
+		search()
+	}, 100)
+}
+
+// ? block animations
 setTimeout(() => {
 	ScrollOut({
 		onShown(el) {
@@ -435,6 +456,7 @@ let focus = true
 let diva0
 let diva1
 
+// ? animations
 app.on("browser-window-focus", () => {
 	if (focus === true) {
 		try {
@@ -476,3 +498,8 @@ app.on("browser-window-focus", () => {
 		focus = false
 	}
 })
+
+// ? focus search bar
+const focus_search = () => {
+	document.getElementById("search").focus()
+}

@@ -167,6 +167,25 @@ const hide = () => {
 	ipc.send("hide2")
 }
 
+// ? authme web
 const aw = () => {
 	shell.openExternal("https://web.authme.levminer.com")
+}
+
+// ? error handeling
+const error = () => {
+	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, content) => {
+		if (err) {
+			dialog.showMessageBox({
+				title: "Authme",
+				buttons: ["Close"],
+				type: "error",
+				message: `
+				No save file found.
+				
+				Go back to the main page and save your codes!
+				`,
+			})
+		}
+	})
 }

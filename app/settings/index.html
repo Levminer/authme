@@ -25,6 +25,7 @@
 				<p class="text3">Choose a configuration menu.</p>
 				<button id="settings" class="button1" onclick="menu(event, 'setting')">Settings</button>
 				<button id="shortcuts " class="button1" onclick="menu(event, 'shortcuts')">Shortcuts</button>
+				<button id="shortcuts " class="button1" onclick="about()">About</button>
 				<br />
 				<hr />
 			</div>
@@ -56,27 +57,30 @@
 				<button class="button1" id="but10" onclick="copy()">-</button>
 				<br />
 				<hr />
-				<h3>Open folders</h3>
-				<p class="text3">
-					You can open your Authme folder (this is where you unpackaged or installed your app) and your settings folder (this is where the
-					app stores the settings).
-				</p>
-				<button class="button1" id="but3" onclick="folder0()">Authme folder</button>
-				<button class="button1" id="but4" onclick="folder1()">Settings folder</button>
+				<h3>Save search history</h3>
+				<p class="text3">Keep your search history. Needs restart.</p>
+				<button class="button1" id="but13" onclick="search()">-</button>
 				<br />
 				<hr />
 				<h3>Clear data</h3>
-				<p class="text3">Clear password, 2FA codes and all other settings.</p>
+				<p class="text3">Clear password, 2FA codes and all other settings. Be careful.</p>
 				<button class="button1" id="but1" onclick="reset()">Clear data</button>
 				<br />
 				<hr />
+				<h3>Open folders</h3>
+				<p class="text3">You can open the folders Authme uses to function. Editing or deleting files might cause a crash.</p>
+				<button class="button1" id="but3" onclick="folder0()">Authme folder</button>
+				<button class="button1" id="but4" onclick="folder1()">Settings folder</button>
+				<button class="button1" id="but12" onclick="folder2()">Cache folder</button>
+				<br />
+				<hr />
 				<h3>Status</h3>
-				<p class="text3">Current status of the API, click for all the status informations.</p>
+				<p class="text3">Current status of the API. Click for all the status informations.</p>
 				<button class="button1" id="but6" onclick="link0()">-</button>
 				<br />
 				<hr />
 				<h3>Version</h3>
-				<p class="text3">Your current Authme version, click for release notes.</p>
+				<p class="text3">Your current Authme version. Click for release notes.</p>
 				<button class="button1" id="but7" onclick="link1()">-</button>
 			</div>
 

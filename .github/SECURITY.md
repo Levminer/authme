@@ -6,10 +6,10 @@
 
 -   There are the currently supported versions:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x.x   | :x:                |
-| 2.x.x   | :white_check_mark: |
+| Version | Supported | Release Date    | End Of Support  |
+| ------- | ----------| --------------- | ----------------|
+| 1.x.x   | No        | 2020 October 10 | 2020 December 1 |
+| 2.x.x   | Yes       | 2020 December 1 | -               |
 
 ## Reporting a Vulnerability
 
