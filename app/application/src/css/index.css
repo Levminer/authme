@@ -163,13 +163,18 @@ h4 {
 }
 
 input:focus::placeholder {
-	transition: 0.2s ease-in;
-	color: transparent;
+	transition: 0.2s ease-in !important;
+	color: transparent !important;
 }
 
 input:hover::placeholder {
-	transition: 0.2s ease-in;
-	color: transparent;
+	transition: 0.2s ease-in !important;
+	color: transparent !important;
+}
+
+input:active::placeholder {
+	transition: 0.2s ease-in !important;
+	color: transparent !important;
 }
 
 .text3 {
@@ -180,4 +185,24 @@ input:hover::placeholder {
 .blur {
 	color: transparent;
 	text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+a {
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#docs {
+	position: relative;
+	right: 20px;
+}
+
+#sample {
+	position: relative;
+	left: 20px;
 }

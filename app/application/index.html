@@ -3,8 +3,6 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Authme</title>
-		<meta charset="UTF-8" />
-		<title>Authme</title>
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly@1.4.0.css" />
 		<link rel="stylesheet" href="../.././src/animate@2.4.1.css" />
@@ -18,6 +16,14 @@
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
+		<div class="popup offline">
+			Authme runs in offline mode. The app will work fine, but the app can't look for new updates!
+			<a class="popup_link" onclick="this.parentElement.style.display='none';">Close</a>
+		</div>
+		<div class="popup online">
+			Authme runs in online mode. The app reconnected to the internet, you can look for new updates!
+			<a class="popup_link" onclick="this.parentElement.style.display='none';">Close</a>
+		</div>
 		<div class="center">
 			<h1 class="h1">Authme</h1>
 			<h2 class="h2" id="title">Here are your 2FA codes:</h2>
@@ -26,7 +32,12 @@
 				Choose a file
 			</button>
 			<br />
-			<button class="button1 button" id="save" onclick="save()">Save config</button>
+			<p class="text3" id="information">
+				<span id="docs">More information: <a href="#" onclick="link0()">Docs</a> </span>
+				<span id="sample">For testing: <a href="#" onclick="link1()">Sample import file</a></span>
+			</p>
+			<br />
+			<button class="button1 button" id="save" onclick="save()">Save codes</button>
 			<br />
 			<input
 				name="search"
