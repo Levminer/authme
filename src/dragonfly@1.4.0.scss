@@ -351,3 +351,49 @@ h4 {
 ::-webkit-scrollbar-thumb {
 	background-color: #000000;
 }
+
+/* popup */
+.popup {
+	padding: 15px;
+	background-color: red;
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	display: none;
+}
+
+.popup_close1 {
+	margin-left: 15px;
+	color: var(--df_secondary_color);
+	font-weight: bold;
+	float: right;
+	font-size: 20px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.popup_close2 {
+	margin-right: 15px;
+	color: white;
+	font-weight: bold;
+	float: left;
+	font-size: 20px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}
+
+.popup_close1:hover {
+	color: var(--df_primary_background);
+}
+
+.popup_close2:hover {
+	color: var(--df_primary_background);
+}
+
+.popup_link {
+	text-decoration: underline !important;
+	cursor: pointer;
+	transition: 0.2s ease-in;
+}

@@ -38,8 +38,8 @@ let pass_start = false
 let update_start = false
 
 // ? version
-const authme_version = "2.3.0"
-const tag_name = "2.3.0"
+const authme_version = "2.3.1"
+const tag_name = "2.3.1"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = authme_version
@@ -329,6 +329,7 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			contextIsolation: false,
 		},
 	})
 
@@ -343,6 +344,7 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			contextIsolation: false,
 		},
 	})
 
@@ -357,6 +359,7 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			contextIsolation: false,
 		},
 	})
 
@@ -371,6 +374,7 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			contextIsolation: false,
 		},
 	})
 
@@ -385,6 +389,7 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			contextIsolation: false,
 		},
 	})
 
@@ -399,6 +404,7 @@ const createWindow = () => {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			contextIsolation: false,
 		},
 	})
 
@@ -519,20 +525,7 @@ const createWindow = () => {
 						}
 					})
 			} catch (error) {
-				dialog.showMessageBox({
-					title: "Authme",
-					buttons: ["Close"],
-					defaultId: 0,
-					cancelId: 1,
-					type: "info",
-					message: `
-					No update available:
-					
-					Can't connect to API!
-
-					You currently running: Authme ${tag_name}
-					`,
-				})
+				return console.log(error)
 			}
 		}
 
@@ -710,6 +703,7 @@ app.whenReady().then(() => {
 		resizable: false,
 		webPreferences: {
 			nodeIntegration: true,
+			contextIsolation: false,
 		},
 	})
 

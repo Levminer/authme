@@ -358,7 +358,7 @@ const search = () => {
 					search_state = true
 				}
 
-				but10.textContent = "Restarting app"
+				but13.textContent = "Restarting app"
 
 				restart()
 			}
@@ -536,3 +536,22 @@ const restart = () => {
 const about = () => {
 	ipc.send("about")
 }
+
+// ? offline mode
+let offline_mode = false
+
+setInterval(() => {
+	dns.lookup("google.com", (err) => {
+		if (err && err.code == "ENOTFOUND") {
+			document.querySelector(".popup").style.display = "block"
+			console.warn("Authme - Can't connect to the internet!")
+
+			offline_mode = true
+		} else if (offline_mode === true) {
+			document.querySelector(".popup").style.display = "none"
+			console.warn("Authme - Connected to the internet!")
+
+			offline_mode = false
+		}
+	})
+}, 1000)

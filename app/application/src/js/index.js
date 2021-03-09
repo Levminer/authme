@@ -5,6 +5,7 @@ const path = require("path")
 const { is } = require("electron-util")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
+const dns = require("dns")
 
 // ? if development
 let dev
@@ -503,3 +504,22 @@ app.on("browser-window-focus", () => {
 const focus_search = () => {
 	document.getElementById("search").focus()
 }
+
+// ? offline mode
+let offline_mode = false
+
+setInterval(() => {
+	dns.lookup("google.com", (err) => {
+		if (err && err.code == "ENOTFOUND") {
+			document.querySelector(".popup").style.display = "block"
+			console.warn("Authme - Can't connect to the internet!")
+
+			offline_mode = true
+		} else if (offline_mode === true) {
+			document.querySelector(".popup").style.display = "none"
+			console.warn("Authme - Connected to the internet!")
+
+			offline_mode = false
+		}
+	})
+}, 1000)

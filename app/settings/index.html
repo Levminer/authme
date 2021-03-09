@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
 		<title>Authme</title>
+		<meta charset="UTF-8" />
+		<meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<script defer src="./src/js/keys.js"></script>
@@ -13,6 +14,10 @@
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
+		<div class="popup">
+			Authme runs in offline mode. The app will work fine, but the app can't look for new updates!
+			<a class="popup_link" onclick="this.parentElement.style.display='none';">Close</a>
+		</div>
 		<div class="center">
 			<!-- navigation -->
 			<div class="tab">
