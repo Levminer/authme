@@ -47,7 +47,7 @@
 		"electron-packager": "^15.2.0",
 		"eslint": "^7.21.0",
 		"eslint-config-node": "^4.1.0",
-		"eslint-config-prettier": "^7.2.0",
+		"eslint-config-prettier": "^8.1.0",
 		"eslint-config-promise": "^2.0.2",
 		"eslint-config-standard": "^16.0.2",
 		"eslint-plugin-node": "^11.1.0",

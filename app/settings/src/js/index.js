@@ -5,6 +5,7 @@ const ipc = electron.ipcRenderer
 const path = require("path")
 const fetch = require("node-fetch")
 const { is } = require("electron-util")
+const dns = require("dns")
 
 // ? choose settings
 document.querySelector("#setting").click()
@@ -540,18 +541,26 @@ const about = () => {
 // ? offline mode
 let offline_mode = false
 
-setInterval(() => {
+const check_for_internet = () => {
 	dns.lookup("google.com", (err) => {
 		if (err && err.code == "ENOTFOUND") {
-			document.querySelector(".popup").style.display = "block"
-			console.warn("Authme - Can't connect to the internet!")
+			document.querySelector(".online").style.display = "none"
+			document.querySelector(".offline").style.display = "block"
 
 			offline_mode = true
+			console.warn("Authme - Can't connect to the internet!")
 		} else if (offline_mode === true) {
-			document.querySelector(".popup").style.display = "none"
-			console.warn("Authme - Connected to the internet!")
+			document.querySelector(".online").style.display = "block"
+			document.querySelector(".offline").style.display = "none"
 
-			offline_mode = false
+			offline_mode = true
+			console.warn("Authme - Reconnected to the internet!")
 		}
 	})
-}, 1000)
+}
+
+check_for_internet()
+
+setInterval(() => {
+	check_for_internet()
+}, 10000)

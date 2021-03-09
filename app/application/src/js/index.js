@@ -1,5 +1,5 @@
 const speakeasy = require("@levminer/speakeasy")
-const { app } = require("electron").remote
+const { app, shell } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 const { is } = require("electron-util")
@@ -97,6 +97,7 @@ const go = () => {
 	document.querySelector("#title").style.display = "none"
 	document.querySelector("#search").style.display = "grid"
 	document.querySelector(".h1").style.marginBottom = "0px"
+	document.querySelector("#information").style.display = "none"
 
 	const generate = () => {
 		// counter
@@ -360,10 +361,12 @@ const go = () => {
 
 						document.querySelector("#search").value = ""
 					}, 1200)
+
+					document.getElementById("search").focus()
 				}, 1000)
 			})
 
-			if (name_state) {
+			if (name_state === true) {
 				const grid = document.querySelector(`#grid${i}`)
 				grid.style.height = "310px"
 			}
@@ -440,7 +443,7 @@ if (search_history !== null && search_history !== "" && search_state === true) {
 
 	setTimeout(() => {
 		search()
-	}, 100)
+	}, 300)
 }
 
 // ? block animations
@@ -508,18 +511,35 @@ const focus_search = () => {
 // ? offline mode
 let offline_mode = false
 
-setInterval(() => {
+const check_for_internet = () => {
 	dns.lookup("google.com", (err) => {
 		if (err && err.code == "ENOTFOUND") {
-			document.querySelector(".popup").style.display = "block"
-			console.warn("Authme - Can't connect to the internet!")
+			document.querySelector(".online").style.display = "none"
+			document.querySelector(".offline").style.display = "block"
 
 			offline_mode = true
+			console.warn("Authme - Can't connect to the internet!")
 		} else if (offline_mode === true) {
-			document.querySelector(".popup").style.display = "none"
-			console.warn("Authme - Connected to the internet!")
+			document.querySelector(".online").style.display = "block"
+			document.querySelector(".offline").style.display = "none"
 
-			offline_mode = false
+			offline_mode = true
+			console.warn("Authme - Reconnected to the internet!")
 		}
 	})
-}, 1000)
+}
+
+check_for_internet()
+
+setInterval(() => {
+	check_for_internet()
+}, 3000)
+
+// ? links
+const link0 = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/web")
+}
+
+const link1 = () => {
+	shell.openExternal("https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true")
+}
