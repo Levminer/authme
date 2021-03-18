@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.3.1",
+	"version": "2.3.2",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
@@ -42,10 +42,10 @@
 	"author": "Levminer",
 	"license": "MIT",
 	"devDependencies": {
-		"electron": "^12.0.0",
+		"electron": "^12.0.1",
 		"electron-builder": "^22.10.5",
 		"electron-packager": "^15.2.0",
-		"eslint": "^7.21.0",
+		"eslint": "^7.22.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.1.0",
 		"eslint-config-promise": "^2.0.2",
