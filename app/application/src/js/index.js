@@ -510,20 +510,24 @@ const focus_search = () => {
 
 // ? offline mode
 let offline_mode = false
+let offline_closed = false
+let online_closed = false
 
 const check_for_internet = () => {
 	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND") {
+		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
 			document.querySelector(".online").style.display = "none"
 			document.querySelector(".offline").style.display = "block"
 
 			offline_mode = true
+			offline_closed = true
 			console.warn("Authme - Can't connect to the internet!")
-		} else if (offline_mode === true) {
+		} else if (offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
 			document.querySelector(".offline").style.display = "none"
 
 			offline_mode = true
+			online_closed = true
 			console.warn("Authme - Reconnected to the internet!")
 		}
 	})
