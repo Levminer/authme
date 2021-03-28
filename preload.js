@@ -66,6 +66,8 @@ if (file.security.require_password === true && file.security.password !== null) 
 
 			ipc.send("abort")
 		}
+	} else {
+		ipc.send("to_application1")
 	}
 } else if (file.security.require_password === null && file.security.password === null) {
 	return console.log("First restart")

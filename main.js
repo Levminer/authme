@@ -1087,7 +1087,7 @@ app.whenReady().then(() => {
 									message: `
 									No update available:
 									
-									Can't connect to API!
+									Can't connect to API, check your internet connection or the API status in the settings!
 				
 									You currently running: Authme ${tag_name}
 									`,

@@ -61,10 +61,30 @@ const check_inegrity = () => {
 	// check integritiy
 	const storage = JSON.parse(localStorage.getItem("storage"))
 
-	try {
-		console.log(storage)
+	if (integrity == false) {
+		try {
+			console.log(storage)
 
-		if (file.security.password !== storage.password || file.security.require_password !== storage.require_password) {
+			if (file.security.password !== storage.password || file.security.require_password !== storage.require_password) {
+				dialog
+					.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						type: "error",
+						defaultId: 0,
+						message: `
+						Failed to check the integrity of the files.
+						
+						You or someone messed with the settings file, shutting down for security reasons!
+						`,
+					})
+					.then((result) => {
+						api.app.exit()
+					})
+			}
+		} catch (error) {
+			console.warn("Authme - Local storage not found")
+
 			dialog
 				.showMessageBox({
 					title: "Authme",
@@ -72,33 +92,15 @@ const check_inegrity = () => {
 					type: "error",
 					defaultId: 0,
 					message: `
-					Failed to check the integrity of the files.
-					
-					You or someone messed with the settings file, shutting down for security reasons!
-					`,
+						Failed to check the integrity of the files.
+						
+						You or someone messed with the settings file, shutting down for security reasons!
+						`,
 				})
 				.then((result) => {
 					api.app.exit()
 				})
 		}
-	} catch (error) {
-		console.warn("Authme - Local storage not found")
-
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Close"],
-				type: "error",
-				defaultId: 0,
-				message: `
-					Failed to check the integrity of the files.
-					
-					You or someone messed with the settings file, shutting down for security reasons!
-					`,
-			})
-			.then((result) => {
-				api.app.exit()
-			})
 	}
 }
 

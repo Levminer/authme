@@ -575,4 +575,5 @@ check_for_internet()
 
 setInterval(() => {
 	check_for_internet()
+	api()
 }, 10000)

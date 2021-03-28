@@ -121,6 +121,8 @@ const no_password = () => {
 }
 
 // ? rewrite
-if (fs.existsSync(path.join(file_path, "hash.authme"))) {
-	ipc.send("abort")
+if (integrity === false) {
+	if (fs.existsSync(path.join(file_path, "hash.authme"))) {
+		ipc.send("abort")
+	}
 }
