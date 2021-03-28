@@ -6,9 +6,11 @@ const { is } = require("electron-util")
 
 // ? if development
 let dev
+let integrity = false
 
 if (is.development === true) {
 	dev = true
+	integrity = true
 }
 
 // ?platform
@@ -40,11 +42,31 @@ if (file.settings.launch_on_startup === true) {
 	ipc.send("startup")
 }
 
-// ?  security
+if (integrity === false) {
+	const storage = JSON.parse(localStorage.getItem("storage"))
+}
+
+// ? controller
 if (file.security.require_password === true && file.security.password !== null) {
 	ipc.send("to_confirm")
 } else if (file.security.require_password === false && file.security.password === null) {
-	ipc.send("to_application1")
+	if (integrity === false) {
+		try {
+			console.log(storage)
+		} catch (error) {
+			console.warn("Authme - Local storage not found in controller")
+
+			ipc.send("abort")
+		}
+
+		if (file.security.require_password === storage.require_password) {
+			ipc.send("to_application1")
+		} else {
+			console.warn("Authme - Local storage not found in controller")
+
+			ipc.send("abort")
+		}
+	}
 } else if (file.security.require_password === null && file.security.password === null) {
 	return console.log("First restart")
 } else {

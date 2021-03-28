@@ -102,6 +102,15 @@ const no_password = () => {
 		})
 	)
 
+	if (integrity === false) {
+		const storage = {
+			require_password: false,
+			password: null,
+		}
+
+		localStorage.setItem("storage", JSON.stringify(storage))
+	}
+
 	file.security.require_password = false
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
@@ -109,4 +118,9 @@ const no_password = () => {
 	setInterval(() => {
 		ipc.send("to_application1")
 	}, 3000)
+}
+
+// ? rewrite
+if (fs.existsSync(path.join(file_path, "hash.authme"))) {
+	ipc.send("abort")
 }
