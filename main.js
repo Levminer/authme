@@ -681,9 +681,11 @@ ipc.on("abort", () => {
 		dialog
 			.showMessageBox({
 				title: "Authme",
-				buttons: ["Close"],
+				buttons: ["Help", "Close"],
 				type: "error",
 				defaultId: 0,
+				cancelId: 0,
+				noLink: true,
 				message: `
 				Failed to check the integrity of the files.
 				
@@ -691,6 +693,10 @@ ipc.on("abort", () => {
 				`,
 			})
 			.then((result) => {
+				if (result.response === 0) {
+					shell.openExternal("https://github.com/Levminer/authme/issues")
+				}
+
 				app.exit()
 			})
 	})
@@ -721,6 +727,30 @@ const about = () => {
 
 // ? start app
 app.whenReady().then(() => {
+	process.on("uncaughtException", (error) => {
+		console.log("Unknown error occurred", error.stack)
+
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: ["Report", "Close"],
+				defaultId: 0,
+				cancelId: 1,
+				noLink: true,
+				type: "error",
+				message: `Unknown error occurred! \n\n ${error.stack}`,
+			})
+			.then((result) => {
+				update = true
+
+				if (result.response === 0) {
+					shell.openExternal("https://github.com/Levminer/authme/issues/")
+				} else if (result.response === 1) {
+					app.exit()
+				}
+			})
+	})
+
 	window_splash = new BrowserWindow({
 		width: 500,
 		height: 500,
