@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron")
 
-const ipc = ipcRenderer.sendSync("ver")
+const res = ipcRenderer.sendSync("ver")
 
-document.querySelector("#ver").textContent = `Authme ${ipc.authme_version} (${ipc.release_date})`
+document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${res.release_date})`

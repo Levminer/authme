@@ -31,6 +31,7 @@ let ipc_to_application_1 = false
 
 let confirmed = false
 let startup = false
+let offline = false
 
 let to_tray = false
 let show_tray = false
@@ -41,6 +42,7 @@ let update_start = false
 const authme_version = "2.3.2"
 const tag_name = "2.3.2"
 const release_date = "2021. April 06."
+const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = { authme_version, release_date }
@@ -703,9 +705,25 @@ ipc.on("abort", () => {
 	})
 })
 
+ipc.on("offline", () => {
+	if (offline === false) {
+		setTimeout(() => {
+			window_application.setTitle("Authme (Offline)")
+			window_settings.setTitle("Authme (Offline)")
+		}, 1000)
+		offline = true
+	} else {
+		setTimeout(() => {
+			window_application.setTitle("Authme")
+			window_settings.setTitle("Authme ")
+		}, 1000)
+		offline = false
+	}
+})
+
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Levminer\n`
 
 	dialog
 		.showMessageBox({

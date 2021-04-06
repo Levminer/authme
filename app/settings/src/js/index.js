@@ -11,9 +11,9 @@ const dns = require("dns")
 document.querySelector("#setting").click()
 
 // ? version
-const version = ipc.sendSync("ver")
+const res = ipc.sendSync("ver")
 
-document.querySelector("#but7").textContent = `Authme ${version}`
+document.querySelector("#but7").textContent = `Authme ${res.authme_version}`
 
 // ? if development
 let dev

@@ -522,6 +522,8 @@ const check_for_internet = () => {
 			offline_mode = true
 			offline_closed = true
 
+			ipc.send("offline")
+
 			console.warn("Authme - Can't connect to the internet")
 		} else if (err === null && offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
@@ -529,6 +531,8 @@ const check_for_internet = () => {
 
 			offline_mode = false
 			online_closed = true
+
+			ipc.send("offline")
 
 			console.warn("Authme - Connected to the internet")
 		} else if ((online_closed === true || offline_closed === true) && err === null) {
