@@ -1,13 +1,13 @@
 {
 	"name": "authme",
-	"version": "2.3.1",
+	"version": "2.3.2",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
 		"package": "electron-packager . Authme --platform=win32,linux,darwin --arch=x64 --icon=img/icon.icns --out=build --overwrite",
 		"build": "electron-builder --publish=never --x64",
-		"lint": "eslint --fix."
+		"lint": "eslint --fix ."
 	},
 	"build": {
 		"productName": "Authme",
@@ -42,10 +42,10 @@
 	"author": "Levminer",
 	"license": "MIT",
 	"devDependencies": {
-		"electron": "^12.0.0",
+		"electron": "^12.0.2",
 		"electron-builder": "^22.10.5",
 		"electron-packager": "^15.2.0",
-		"eslint": "^7.21.0",
+		"eslint": "^7.23.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.1.0",
 		"eslint-config-promise": "^2.0.2",
@@ -57,7 +57,7 @@
 		"prettier": "^2.2.1"
 	},
 	"dependencies": {
-		"@levminer/speakeasy": "^1.0.7",
+		"@levminer/speakeasy": "^1.2.0",
 		"bcryptjs": "^2.4.3",
 		"create-desktop-shortcuts": "^1.4.0",
 		"cryptr": "^6.0.2",

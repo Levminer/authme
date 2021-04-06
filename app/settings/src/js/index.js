@@ -11,9 +11,9 @@ const dns = require("dns")
 document.querySelector("#setting").click()
 
 // ? version
-const version = ipc.sendSync("ver")
+const res = ipc.sendSync("ver")
 
-document.querySelector("#but7").textContent = `Authme ${version}`
+document.querySelector("#but7").textContent = `Authme ${res.authme_version}`
 
 // ? if development
 let dev
@@ -43,7 +43,7 @@ const but11 = document.querySelector("#but11")
 const but13 = document.querySelector("#but13")
 
 // ? read settings
-const file = JSON.parse(
+let file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
 			return console.warn(`Authme - Error reading settings.json - ${err}`)
@@ -52,6 +52,26 @@ const file = JSON.parse(
 		}
 	})
 )
+
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(
+		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+			if (err) {
+				return console.warn(`Authme - Error reading settings.json - ${err}`)
+			} else {
+				return console.warn("Authme - File settings.json readed")
+			}
+		})
+	)
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		console.warn("Authme - Settings refresh completed")
+	}
+
+	console.warn("Authme - Settings refreshed")
+}, 100)
 
 // close to tray
 let tray_state = file.settings.close_to_tray
@@ -540,21 +560,33 @@ const about = () => {
 
 // ? offline mode
 let offline_mode = false
+let offline_closed = false
+let online_closed = false
 
 const check_for_internet = () => {
 	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND") {
+		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
 			document.querySelector(".online").style.display = "none"
 			document.querySelector(".offline").style.display = "block"
 
 			offline_mode = true
-			console.warn("Authme - Can't connect to the internet!")
-		} else if (offline_mode === true) {
+			offline_closed = true
+
+			console.warn("Authme - Can't connect to the internet")
+		} else if (err === null && offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
 			document.querySelector(".offline").style.display = "none"
 
-			offline_mode = true
-			console.warn("Authme - Reconnected to the internet!")
+			offline_mode = false
+			online_closed = true
+
+			console.warn("Authme - Connected to the internet")
+		} else if ((online_closed === true || offline_closed === true) && err === null) {
+			offline_mode = false
+			offline_closed = false
+			online_closed = false
+
+			console.warn("Authme - Connection resetted")
 		}
 	})
 }
@@ -563,4 +595,5 @@ check_for_internet()
 
 setInterval(() => {
 	check_for_internet()
+	api()
 }, 10000)

@@ -11,13 +11,13 @@ const { is } = require("electron-util")
 const debug = require("electron-debug")
 
 // ?  init
-let splash
-let window0
-let window1
-let window2
-let window3
-let window4
-let window5
+let window_splash
+let window_landing
+let window_confirm
+let window_application
+let window_settings
+let window_import
+let window_export
 
 let confirm_shown = false
 let application_shown = false
@@ -31,6 +31,7 @@ let ipc_to_application_1 = false
 
 let confirmed = false
 let startup = false
+let offline = false
 
 let to_tray = false
 let show_tray = false
@@ -38,11 +39,13 @@ let pass_start = false
 let update_start = false
 
 // ? version
-const authme_version = "2.3.1"
-const tag_name = "2.3.1"
+const authme_version = "2.3.2"
+const tag_name = "2.3.2"
+const release_date = "2021. April 06."
+const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
-	event.returnValue = authme_version
+	event.returnValue = { authme_version, release_date }
 })
 
 const v8_version = process.versions.v8
@@ -72,7 +75,7 @@ let dev
 
 if (is.development === true) {
 	setTimeout(() => {
-		window2.setTitle("Authme Dev")
+		window_application.setTitle("Authme Dev")
 	}, 2000)
 
 	// dev tools
@@ -186,12 +189,12 @@ const tray_show = () => {
 		if (confirmed == false) {
 			if (pass_start == true) {
 				if (confirm_shown == false) {
-					window1.maximize()
-					window1.show()
+					window_confirm.maximize()
+					window_confirm.show()
 
 					confirm_shown = true
 				} else {
-					window1.hide()
+					window_confirm.hide()
 
 					confirm_shown = false
 				}
@@ -201,45 +204,45 @@ const tray_show = () => {
 		if (application_shown == false) {
 			// if password and password confirmed
 			if (if_pass == true && confirmed == true) {
-				window2.maximize()
-				window2.show()
+				window_application.maximize()
+				window_application.show()
 
 				application_shown = true
 			}
 
 			// if no password
 			if (if_nopass == true) {
-				window2.maximize()
-				window2.show()
+				window_application.maximize()
+				window_application.show()
 
 				application_shown = true
 			}
 
 			// if exit to tray on
 			if (show_tray == true) {
-				window2.maximize()
-				window2.show()
+				window_application.maximize()
+				window_application.show()
 
 				application_shown = true
 			}
 		} else {
 			// if password and password confirmed
 			if (if_pass == true && confirmed == true) {
-				window2.hide()
+				window_application.hide()
 
 				application_shown = false
 			}
 
 			// if no password
 			if (if_nopass == true) {
-				window2.hide()
+				window_application.hide()
 
 				application_shown = false
 			}
 
 			// if exit to tray on
 			if (show_tray == true) {
-				window2.hide()
+				window_application.hide()
 
 				application_shown = false
 			}
@@ -267,27 +270,27 @@ const tray_settings = () => {
 	const toggle = () => {
 		if (settings_shown == false) {
 			if (if_pass == true && confirmed == true) {
-				window3.maximize()
-				window3.show()
+				window_settings.maximize()
+				window_settings.show()
 
 				settings_shown = true
 			}
 
 			if (if_nopass == true) {
-				window3.maximize()
-				window3.show()
+				window_settings.maximize()
+				window_settings.show()
 
 				settings_shown = true
 			}
 		} else {
 			if (if_pass == true && confirmed == true) {
-				window3.hide()
+				window_settings.hide()
 
 				settings_shown = false
 			}
 
 			if (if_nopass == true) {
-				window3.hide()
+				window_settings.hide()
 
 				settings_shown = false
 			}
@@ -318,7 +321,7 @@ const tray_exit = () => {
 
 // ? create window
 const createWindow = () => {
-	window0 = new BrowserWindow({
+	window_landing = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -333,7 +336,7 @@ const createWindow = () => {
 		},
 	})
 
-	window1 = new BrowserWindow({
+	window_confirm = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -348,7 +351,7 @@ const createWindow = () => {
 		},
 	})
 
-	window2 = new BrowserWindow({
+	window_application = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -363,7 +366,7 @@ const createWindow = () => {
 		},
 	})
 
-	window3 = new BrowserWindow({
+	window_settings = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -378,7 +381,7 @@ const createWindow = () => {
 		},
 	})
 
-	window4 = new BrowserWindow({
+	window_import = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -393,7 +396,7 @@ const createWindow = () => {
 		},
 	})
 
-	window5 = new BrowserWindow({
+	window_export = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -408,36 +411,36 @@ const createWindow = () => {
 		},
 	})
 
-	window0.loadFile("./app/landing/index.html")
-	window1.loadFile("./app/confirm/index.html")
-	window2.loadFile("./app/application/index.html")
-	window3.loadFile("./app/settings/index.html")
-	window4.loadFile("./app/import/index.html")
-	window5.loadFile("./app/export/index.html")
+	window_landing.loadFile("./app/landing/index.html")
+	window_confirm.loadFile("./app/confirm/index.html")
+	window_application.loadFile("./app/application/index.html")
+	window_settings.loadFile("./app/settings/index.html")
+	window_import.loadFile("./app/import/index.html")
+	window_export.loadFile("./app/export/index.html")
 
 	if (file.security.require_password == null) {
-		window0.maximize()
+		window_landing.maximize()
 	}
 
-	window2.on("show", () => {
-		window2.webContents.executeJavaScript("focus_search()")
+	window_application.on("show", () => {
+		window_application.webContents.executeJavaScript("focus_search()")
 	})
 
-	window0.on("close", () => {
+	window_landing.on("close", () => {
 		app.quit()
 	})
 
-	window1.on("close", () => {
+	window_confirm.on("close", () => {
 		app.quit()
 	})
 
-	window2.on("close", async (e) => {
+	window_application.on("close", async (e) => {
 		if (to_tray == false) {
 			app.exit()
 		} else {
 			e.preventDefault()
 			setTimeout(() => {
-				window2.hide()
+				window_application.hide()
 			}, 100)
 
 			show_tray = true
@@ -446,13 +449,13 @@ const createWindow = () => {
 		}
 	})
 
-	window3.on("close", async (e) => {
+	window_settings.on("close", async (e) => {
 		if (to_tray == false) {
 			app.exit()
 		} else {
 			e.preventDefault()
 			setTimeout(() => {
-				window3.hide()
+				window_settings.hide()
 			}, 100)
 			show_tray = true
 
@@ -460,13 +463,13 @@ const createWindow = () => {
 		}
 	})
 
-	window4.on("close", async (e) => {
+	window_import.on("close", async (e) => {
 		if (to_tray == false) {
 			app.exit()
 		} else {
 			e.preventDefault()
 			setTimeout(() => {
-				window4.hide()
+				window_import.hide()
 			}, 100)
 			show_tray = true
 
@@ -474,13 +477,13 @@ const createWindow = () => {
 		}
 	})
 
-	window5.on("close", async (e) => {
+	window_export.on("close", async (e) => {
 		if (to_tray == false) {
 			app.exit()
 		} else {
 			e.preventDefault()
 			setTimeout(() => {
-				window5.hide()
+				window_export.hide()
 			}, 100)
 			show_tray = true
 
@@ -489,7 +492,7 @@ const createWindow = () => {
 	})
 
 	// ? check for auto update
-	window2.on("show", () => {
+	window_application.on("show", () => {
 		const api = async () => {
 			try {
 				await fetch("https://api.levminer.com/api/v1/authme/releases")
@@ -552,20 +555,20 @@ const createWindow = () => {
 
 ipc.on("to_confirm", () => {
 	if (ipc_to_confirm == false) {
-		window1.maximize()
-		window1.show()
-		window0.hide()
+		window_confirm.maximize()
+		window_confirm.show()
+		window_landing.hide()
 		ipc_to_confirm = true
 	}
 })
 
 ipc.on("to_application0", () => {
 	if (ipc_to_application_0 == false && startup == false) {
-		window1.hide()
+		window_confirm.hide()
 
 		setTimeout(() => {
-			window2.maximize()
-			window2.show()
+			window_application.maximize()
+			window_application.show()
 		}, 300)
 
 		ipc_to_application_0 = true
@@ -576,11 +579,11 @@ ipc.on("to_application0", () => {
 
 ipc.on("to_application1", () => {
 	if (ipc_to_application_1 == false && startup == false) {
-		window0.hide()
+		window_landing.hide()
 
 		setTimeout(() => {
-			window2.maximize()
-			window2.show()
+			window_application.maximize()
+			window_application.show()
 		}, 300)
 
 		ipc_to_application_1 = true
@@ -589,33 +592,33 @@ ipc.on("to_application1", () => {
 
 ipc.on("hide0", () => {
 	if (settings_shown == false) {
-		window3.maximize()
-		window3.show()
+		window_settings.maximize()
+		window_settings.show()
 		settings_shown = true
 	} else {
-		window3.hide()
+		window_settings.hide()
 		settings_shown = false
 	}
 })
 
 ipc.on("hide1", () => {
 	if (import_shown == false) {
-		window4.maximize()
-		window4.show()
+		window_import.maximize()
+		window_import.show()
 		import_shown = true
 	} else {
-		window4.hide()
+		window_import.hide()
 		import_shown = false
 	}
 })
 
 ipc.on("hide2", () => {
 	if (export_shown == false) {
-		window5.maximize()
-		window5.show()
+		window_export.maximize()
+		window_export.show()
 		export_shown = true
 	} else {
-		window5.hide()
+		window_export.hide()
 		export_shown = false
 	}
 })
@@ -656,8 +659,8 @@ ipc.on("after_tray1", () => {
 })
 
 ipc.on("startup", () => {
-	window2.hide()
-	window1.hide()
+	window_application.hide()
+	window_confirm.hide()
 	startup = true
 })
 
@@ -669,9 +672,58 @@ ipc.on("about", () => {
 	about()
 })
 
+ipc.on("abort", () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Help", "Close"],
+			type: "error",
+			defaultId: 0,
+			cancelId: 1,
+			noLink: true,
+			message: `
+		Failed to check the integrity of the files.
+		
+		You or someone messed with the settings file, shutting down for security reasons!
+		`,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				shell.openExternal("https://github.com/Levminer/authme/issues")
+			} else if (result.response === 1) {
+				app.exit()
+			}
+		})
+
+	window_landing.destroy()
+	window_application.destroy()
+	window_settings.destroy()
+	window_export.destroy()
+
+	process.on("uncaughtException", (error) => {
+		console.warn(`Authme - Execution aborted - ${error}`)
+	})
+})
+
+ipc.on("offline", () => {
+	if (offline === false) {
+		setTimeout(() => {
+			window_application.setTitle("Authme (Offline)")
+			window_settings.setTitle("Authme (Offline)")
+		}, 1000)
+		offline = true
+	} else {
+		setTimeout(() => {
+			window_application.setTitle("Authme")
+			window_settings.setTitle("Authme ")
+		}, 1000)
+		offline = false
+	}
+})
+
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nCreated by: Levminer\n`
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Levminer\n`
 
 	dialog
 		.showMessageBox({
@@ -694,7 +746,31 @@ const about = () => {
 
 // ? start app
 app.whenReady().then(() => {
-	splash = new BrowserWindow({
+	process.on("uncaughtException", (error) => {
+		console.log("Unknown error occurred", error.stack)
+
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: ["Report", "Close"],
+				defaultId: 0,
+				cancelId: 1,
+				noLink: true,
+				type: "error",
+				message: `Unknown error occurred! \n\n ${error.stack}`,
+			})
+			.then((result) => {
+				update = true
+
+				if (result.response === 0) {
+					shell.openExternal("https://github.com/Levminer/authme/issues/")
+				} else if (result.response === 1) {
+					app.exit()
+				}
+			})
+	})
+
+	window_splash = new BrowserWindow({
 		width: 500,
 		height: 500,
 		transparent: true,
@@ -707,16 +783,16 @@ app.whenReady().then(() => {
 		},
 	})
 
-	splash.loadFile("./app/splash/index.html")
+	window_splash.loadFile("./app/splash/index.html")
 
-	splash.show()
+	window_splash.show()
 
 	setTimeout(() => {
 		createWindow()
 	}, 1000)
 
 	setTimeout(() => {
-		splash.hide()
+		window_splash.hide()
 	}, 1500)
 
 	// make tray
@@ -729,6 +805,16 @@ app.whenReady().then(() => {
 	})
 
 	const contextmenu = Menu.buildFromTemplate([
+		{
+			label: `Authme ${authme_version}`,
+			enabled: false,
+			icon: path.join(__dirname, "img/iconwsmall.png"),
+		},
+		{
+			label: `(${release_date})`,
+			enabled: false,
+		},
+		{ type: "separator" },
 		{
 			label: "Show app",
 			accelerator: file.global_shortcuts.show,
@@ -778,27 +864,27 @@ app.whenReady().then(() => {
 						const toggle = () => {
 							if (settings_shown == false) {
 								if (if_pass == true && confirmed == true) {
-									window3.maximize()
-									window3.show()
+									window_settings.maximize()
+									window_settings.show()
 
 									settings_shown = true
 								}
 
 								if (if_nopass == true) {
-									window3.maximize()
-									window3.show()
+									window_settings.maximize()
+									window_settings.show()
 
 									settings_shown = true
 								}
 							} else {
 								if (if_pass == true && confirmed == true) {
-									window3.hide()
+									window_settings.hide()
 
 									settings_shown = false
 								}
 
 								if (if_nopass == true) {
-									window3.hide()
+									window_settings.hide()
 
 									settings_shown = false
 								}
@@ -854,27 +940,27 @@ app.whenReady().then(() => {
 						const toggle = () => {
 							if (import_shown == false) {
 								if (if_pass == true && confirmed == true) {
-									window4.maximize()
-									window4.show()
+									window_import.maximize()
+									window_import.show()
 
 									import_shown = true
 								}
 
 								if (if_nopass == true) {
-									window4.maximize()
-									window4.show()
+									window_import.maximize()
+									window_import.show()
 
 									import_shown = true
 								}
 							} else {
 								if (if_pass == true && confirmed == true) {
-									window4.hide()
+									window_import.hide()
 
 									import_shown = false
 								}
 
 								if (if_nopass == true) {
-									window4.hide()
+									window_import.hide()
 
 									import_shown = false
 								}
@@ -907,27 +993,27 @@ app.whenReady().then(() => {
 						const toggle = () => {
 							if (export_shown == false) {
 								if (if_pass == true && confirmed == true) {
-									window5.maximize()
-									window5.show()
+									window_export.maximize()
+									window_export.show()
 
 									export_shown = true
 								}
 
 								if (if_nopass == true) {
-									window5.maximize()
-									window5.show()
+									window_export.maximize()
+									window_export.show()
 
 									export_shown = true
 								}
 							} else {
 								if (if_pass == true && confirmed == true) {
-									window5.hide()
+									window_export.hide()
 
 									export_shown = false
 								}
 
 								if (if_nopass == true) {
-									window5.hide()
+									window_export.hide()
 
 									export_shown = false
 								}
@@ -1060,7 +1146,7 @@ app.whenReady().then(() => {
 									message: `
 									No update available:
 									
-									Can't connect to API!
+									Can't connect to API, check your internet connection or the API status in the settings!
 				
 									You currently running: Authme ${tag_name}
 									`,
