@@ -43,7 +43,7 @@ const but11 = document.querySelector("#but11")
 const but13 = document.querySelector("#but13")
 
 // ? read settings
-const file = JSON.parse(
+let file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
 			return console.warn(`Authme - Error reading settings.json - ${err}`)
@@ -52,6 +52,26 @@ const file = JSON.parse(
 		}
 	})
 )
+
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(
+		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
+			if (err) {
+				return console.warn(`Authme - Error reading settings.json - ${err}`)
+			} else {
+				return console.warn("Authme - File settings.json readed")
+			}
+		})
+	)
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		console.warn("Authme - Settings refresh completed")
+	}
+
+	console.warn("Authme - Settings refreshed")
+}, 100)
 
 // close to tray
 let tray_state = file.settings.close_to_tray

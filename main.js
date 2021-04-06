@@ -40,9 +40,10 @@ let update_start = false
 // ? version
 const authme_version = "2.3.2"
 const tag_name = "2.3.2"
+const release_date = "2021. April 06."
 
 ipc.on("ver", (event, data) => {
-	event.returnValue = authme_version
+	event.returnValue = { authme_version, release_date }
 })
 
 const v8_version = process.versions.v8
@@ -684,7 +685,7 @@ ipc.on("abort", () => {
 				buttons: ["Help", "Close"],
 				type: "error",
 				defaultId: 0,
-				cancelId: 0,
+				cancelId: 1,
 				noLink: true,
 				message: `
 				Failed to check the integrity of the files.
@@ -695,9 +696,9 @@ ipc.on("abort", () => {
 			.then((result) => {
 				if (result.response === 0) {
 					shell.openExternal("https://github.com/Levminer/authme/issues")
+				} else if (result.response === 1) {
+					app.exit()
 				}
-
-				app.exit()
 			})
 	})
 })
@@ -786,6 +787,16 @@ app.whenReady().then(() => {
 	})
 
 	const contextmenu = Menu.buildFromTemplate([
+		{
+			label: `Authme ${authme_version}`,
+			enabled: false,
+			icon: path.join(__dirname, "img/iconwsmall.png"),
+		},
+		{
+			label: `(${release_date})`,
+			enabled: false,
+		},
+		{ type: "separator" },
 		{
 			label: "Show app",
 			accelerator: file.global_shortcuts.show,
