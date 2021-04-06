@@ -119,10 +119,3 @@ const no_password = () => {
 		ipc.send("to_application1")
 	}, 3000)
 }
-
-// ? rewrite
-if (integrity === false) {
-	if (fs.existsSync(path.join(file_path, "hash.authme"))) {
-		ipc.send("abort")
-	}
-}

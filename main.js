@@ -671,6 +671,28 @@ ipc.on("about", () => {
 })
 
 ipc.on("abort", () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Help", "Close"],
+			type: "error",
+			defaultId: 0,
+			cancelId: 1,
+			noLink: true,
+			message: `
+		Failed to check the integrity of the files.
+		
+		You or someone messed with the settings file, shutting down for security reasons!
+		`,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				shell.openExternal("https://github.com/Levminer/authme/issues")
+			} else if (result.response === 1) {
+				app.exit()
+			}
+		})
+
 	window_landing.destroy()
 	window_application.destroy()
 	window_settings.destroy()
@@ -678,28 +700,6 @@ ipc.on("abort", () => {
 
 	process.on("uncaughtException", (error) => {
 		console.warn(`Authme - Execution aborted - ${error}`)
-
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Help", "Close"],
-				type: "error",
-				defaultId: 0,
-				cancelId: 1,
-				noLink: true,
-				message: `
-				Failed to check the integrity of the files.
-				
-				You or someone messed with the settings file, shutting down for security reasons!
-				`,
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					shell.openExternal("https://github.com/Levminer/authme/issues")
-				} else if (result.response === 1) {
-					app.exit()
-				}
-			})
 	})
 })
 

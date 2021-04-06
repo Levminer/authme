@@ -42,8 +42,11 @@ if (file.settings.launch_on_startup === true) {
 	ipc.send("startup")
 }
 
+// ? local storage
+let storage
+
 if (integrity === false) {
-	const storage = JSON.parse(localStorage.getItem("storage"))
+	storage = JSON.parse(localStorage.getItem("storage"))
 }
 
 // ? controller
