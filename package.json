@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.3.2",
+	"version": "2.4.0",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -15,6 +15,7 @@
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
 		"asar": true,
+		"asarUnpack": "app/import/src/py/*",
 		"win": {
 			"target": [
 				"nsis"
@@ -50,19 +51,19 @@
 		"electron-util": "^0.14.2",
 		"node-fetch": "^2.6.1",
 		"qrcode": "^1.4.4",
-		"qrcode-decoder": "^0.1.2"
+		"qrcode-decoder": "0.1.2"
 	},
 	"devDependencies": {
-		"electron": "^12.0.2",
+		"electron": "^12.0.5",
 		"electron-builder": "^22.10.5",
 		"electron-packager": "^15.2.0",
-		"eslint": "^7.23.0",
+		"eslint": "^7.24.0",
 		"eslint-config-node": "^4.1.0",
-		"eslint-config-prettier": "^8.1.0",
+		"eslint-config-prettier": "^8.2.0",
 		"eslint-config-promise": "^2.0.2",
 		"eslint-config-standard": "^16.0.2",
 		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-prettier": "^3.3.1",
+		"eslint-plugin-prettier": "^3.4.0",
 		"eslint-plugin-promise": "^4.3.1",
 		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.2.1"

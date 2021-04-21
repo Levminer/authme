@@ -5,6 +5,8 @@
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
+		<script defer src="./src/js/qr.js"></script>
+		<script defer src="./src/js/ga.js"></script>
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly@1.4.0.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
@@ -37,11 +39,11 @@
 
 			<div class="choose">
 				<h2 id="choose">Choose option</h2>
-				<p class="text3">Google Authenticator</p>
-				<button class="button1" id="but0" onclick="import_qrcode()">Import from Google Authenticator QR code(s)</button>
+				<p class="text3">QR code(s)</p>
+				<button class="button1" id="but0" onclick="qr_import()">Import from QR code(s)</button>
 				<br />
-				<p class="text3">Stand alone</p>
-				<button class="button1" id="but0" onclick="import_sa_qrcode()">Import from stand alone QR code(s)</button>
+				<p class="text3">Google Authenticator QR code(s)</p>
+				<button class="button1" id="but0" onclick="ga_import()">Import from Google Authenticator QR code(s)</button>
 			</div>
 		</div>
 	</body>
