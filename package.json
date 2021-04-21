@@ -2,17 +2,19 @@
 	"name": "authme",
 	"version": "2.3.2",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
-	"main": "main.js",
+	"author": "Levminer",
+	"license": "GPL-3.0",
 	"scripts": {
 		"start": "electron .",
 		"package": "electron-packager . Authme --platform=win32,linux,darwin --arch=x64 --icon=img/icon.icns --out=build --overwrite",
 		"build": "electron-builder --publish=never --x64",
 		"lint": "eslint --fix ."
 	},
+	"main": "main.js",
 	"build": {
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
-		"asar": false,
+		"asar": true,
 		"win": {
 			"target": [
 				"nsis"
@@ -39,8 +41,17 @@
 			"category": "public.app-category.utilities"
 		}
 	},
-	"author": "Levminer",
-	"license": "MIT",
+	"dependencies": {
+		"@levminer/speakeasy": "^1.2.0",
+		"bcryptjs": "^2.4.3",
+		"create-desktop-shortcuts": "^1.4.0",
+		"cryptr": "^6.0.2",
+		"electron-debug": "^3.2.0",
+		"electron-util": "^0.14.2",
+		"node-fetch": "^2.6.1",
+		"qrcode": "^1.4.4",
+		"qrcode-decoder": "^0.1.2"
+	},
 	"devDependencies": {
 		"electron": "^12.0.2",
 		"electron-builder": "^22.10.5",
@@ -55,17 +66,5 @@
 		"eslint-plugin-promise": "^4.3.1",
 		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.2.1"
-	},
-	"dependencies": {
-		"@levminer/speakeasy": "^1.2.0",
-		"bcryptjs": "^2.4.3",
-		"create-desktop-shortcuts": "^1.4.0",
-		"cryptr": "^6.0.2",
-		"electron-debug": "^3.2.0",
-		"electron-util": "^0.14.2",
-		"jimp": "^0.16.1",
-		"node-fetch": "^2.6.1",
-		"qrcode": "^1.4.4",
-		"qrcode-reader": "^1.0.4"
 	}
 }
