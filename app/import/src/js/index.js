@@ -17,26 +17,9 @@ if (is.development === true) {
 	console.log(python_path)
 }
 
-const error_not_found = (name) => {
-	dialog.showMessageBox({
-		title: "Authme",
-		buttons: ["Close"],
-		type: "error",
-		message: `
-		No QR code found on the picture: ${name}.
-		
-		Try to take a better picture and try again!
-		`,
-	})
-}
-
 // ? link
 const link0 = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")
-}
-
-const link1 = () => {
-	shell.openExternal("https://github.com/Levminer/authme/tree/main/extract#usage")
 }
 
 // ? hide

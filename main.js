@@ -135,7 +135,7 @@ const settings = `{
 			"web": "CommandOrControl+a",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
-			"release": "CommandOrControl+r",
+			"release": "CommandOrControl+n",
 			"issues": "CommandOrControl+p",
 			"docs": "CommandOrControl+d",
 			"licenses": "CommandOrControl+l",

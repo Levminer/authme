@@ -79,17 +79,14 @@ input:hover::placeholder {
 
 a {
 	color: white;
-	font-weight: bold;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
 }
 
 .summary1 {
 	color: white;
 	color: white;
 	font-weight: bolder;
-	text-decoration: underline;
+}
+
+#dt {
+	margin-bottom: 30px;
 }
