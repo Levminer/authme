@@ -521,14 +521,24 @@ const hide = () => {
 	ipc.send("hide0")
 }
 
+document.querySelector(".settings").disabled = true
+
 // ? menu
 const menu = (evt, name) => {
 	let i
 
 	if (name === "shortcuts") {
-		document.querySelector(".center").style.height = "2500px"
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".shortcuts ").disabled = true
+
+		document.querySelector(".center").style.height = "2550px"
+		ipc.send("shortcuts")
 	} else {
+		document.querySelector(".settings").disabled = true
+		document.querySelector(".shortcuts").disabled = false
+
 		document.querySelector(".center").style.height = "2950px"
+		ipc.send("shortcuts")
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")

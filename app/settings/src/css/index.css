@@ -71,9 +71,11 @@ hr {
 /* grid */
 .grid {
 	display: grid;
-	grid-template-columns: 0.5fr 1fr 0.5fr;
-	grid-template-rows: 0.5fr;
-	grid-column-gap: 0px;
+	width: 1500px;
+	position: relative;
+	left: -290px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: 1fr;
 	grid-row-gap: 0px;
 	margin-bottom: 30px;
 }
@@ -96,4 +98,22 @@ hr {
 .button {
 	position: relative;
 	right: 130px;
+}
+
+.buttoni {
+	color: black;
+	background: var(--df_primary_color);
+	border: 1px solid var(--df_primary_color);
+	font-size: 1.25rem;
+	padding: 13px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+}
+
+.buttoni:hover {
+	border: 1px solid var(--df_primary_color);
+	background: var(--df_primary_background);
+	color: var(--df_primary_color);
 }
