@@ -133,7 +133,7 @@ const settings = `{
 			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
 			"exit": "CommandOrControl+w",
-			"web": "CommandOrControl+a",
+			"web": "CommandOrControl+b",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
 			"release": "CommandOrControl+n",
