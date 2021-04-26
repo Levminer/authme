@@ -7,7 +7,7 @@
 -   There are the currently supported versions:
 
 | Version | Supported | Release Date    | End Of Support  |
-| ------- | ----------| --------------- | ----------------|
+| ------- | --------- | --------------- | --------------- |
 | 1.x.x   | No        | 2020 October 10 | 2020 December 1 |
 | 2.x.x   | Yes       | 2020 December 1 | -               |
 

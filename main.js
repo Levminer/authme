@@ -42,7 +42,7 @@ let update_start = false
 // ? version
 const authme_version = "2.4.0"
 const tag_name = "2.4.0"
-const release_date = "2021. April 28."
+const release_date = "2021. April 27."
 const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
