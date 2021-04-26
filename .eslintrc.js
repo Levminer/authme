@@ -19,7 +19,8 @@ module.exports = {
 		camelcase: ["off"],
 
 		"prettier/prettier": ["error"],
-		"linebreak-style": ["error", "windows"],
+		"linebreak-style": ["warn", "windows"],
+		"prefer-const": ["warn"],
 		"prefer-arrow-callback": ["error"],
 		"prefer-template": ["error"],
 		"node/no-unpublished-require": ["off"],
