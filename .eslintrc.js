@@ -18,7 +18,7 @@ module.exports = {
 		eqeqeq: ["off"],
 		camelcase: ["off"],
 
-		"prettier/prettier": ["error"],
+		"prettier/prettier": ["warn"],
 		"linebreak-style": ["warn", "windows"],
 		"prefer-const": ["warn"],
 		"prefer-arrow-callback": ["error"],
