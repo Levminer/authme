@@ -66,6 +66,7 @@
 	font-size: 20px;
 	margin-bottom: 100px;
 	display: none;
+	resize: none;
 }
 
 #result::-webkit-scrollbar {

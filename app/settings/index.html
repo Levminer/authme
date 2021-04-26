@@ -31,9 +31,9 @@
 				<br />
 				<h3>Menu</h3>
 				<p class="text3">Choose a configuration menu.</p>
-				<button id="settings" class="button1" onclick="menu(event, 'setting')">Settings</button>
-				<button id="shortcuts " class="button1" onclick="menu(event, 'shortcuts')">Shortcuts</button>
-				<button id="shortcuts " class="button1" onclick="about()">About</button>
+				<button id="settings" class="button1 settings" onclick="menu(event, 'setting')">Settings</button>
+				<button id="shortcuts " class="button1 shortcuts" onclick="menu(event, 'shortcuts')">Shortcuts</button>
+				<button id="about" class="button1 about" onclick="about()">About</button>
 				<br />
 				<hr />
 			</div>
@@ -41,12 +41,12 @@
 			<!-- settings -->
 			<div id="setting" class="tabcontent">
 				<h3>Launch on startup</h3>
-				<p class="text3">Start the app after the operating system loaded. The app will start on the tray (Windows only).</p>
+				<p class="text3">Start the app after the operating system loaded. The app will start on the tray (Ideal for Windows).</p>
 				<button class="button1" id="but0" onclick="startup()">-</button>
 				<br />
 				<hr />
 				<h3>Close app to tray</h3>
-				<p class="text3">On closing the app will not quit. You can open the app from the tray menu (Windows only).</p>
+				<p class="text3">On closing the app will not quit. You can open the app from the tray menu (Ideal for Windows).</p>
 				<button class="button1" id="but2" onclick="tray()">-</button>
 				<br />
 				<hr />
@@ -96,8 +96,8 @@
 			<div id="shortcuts" class="tabcontent">
 				<h3>Shortcuts</h3>
 				<p class="text3">
-					You can modify the shortcuts here. If you don't understand something just read the docs. After you done, restart the app to make
-					the new shortcuts work.
+					You can modify the shortcuts here, if you don't understand something just read the docs. After you done, restart the app to make
+					the new shortcuts work. Shortcuts not work on this page, go back to the settings tab to reactivate them!
 				</p>
 				<button class="button1" id="but9" onclick="link2()">Docs</button>
 				<button class="button1" id="but9" onclick="restart()">Restart</button>
@@ -112,7 +112,26 @@
 						<input class="input1" disabled type="text" id="hk0_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk0_button" onclick="hk_modify(0)">Modify</button>
+						<button class="buttoni button" id="hk0_button_edit" onclick="hk_edit(0)">
+							<svg id="hk0_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk0_button_reset" onclick="hk_reset(0)">
+							<svg id="hk0_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk0_button_delete" onclick="hk_delete(0)">
+							<svg id="hk0_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -123,7 +142,26 @@
 						<input class="input1" disabled type="text" id="hk1_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk1_button" onclick="hk_modify(1)">Modify</button>
+						<button class="buttoni button" id="hk1_button_edit" onclick="hk_edit(1)">
+							<svg id="hk1_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk1_button_reset" onclick="hk_reset(1)">
+							<svg id="hk1_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk1_button_delete" onclick="hk_delete(1)">
+							<svg id="hk1_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -134,7 +172,26 @@
 						<input class="input1" disabled type="text" id="hk2_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk2_button" onclick="hk_modify(2)">Modify</button>
+						<button class="buttoni button" id="hk2_button_edit" onclick="hk_edit(2)">
+							<svg id="hk2_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk2_button_reset" onclick="hk_reset(2)">
+							<svg id="hk2_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk2_button_delete" onclick="hk_delete(2)">
+							<svg id="hk2_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -145,7 +202,26 @@
 						<input class="input1" disabled type="text" id="hk3_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk3_button" onclick="hk_modify(3)">Modify</button>
+						<button class="buttoni button" id="hk3_button_edit" onclick="hk_edit(3)">
+							<svg id="hk3_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk3_button_reset" onclick="hk_reset(3)">
+							<svg id="hk3_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk3_button_delete" onclick="hk_delete(3)">
+							<svg id="hk3_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -156,7 +232,26 @@
 						<input class="input1" disabled type="text" id="hk4_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk4_button" onclick="hk_modify(4)">Modify</button>
+						<button class="buttoni button" id="hk4_button_edit" onclick="hk_edit(4)">
+							<svg id="hk4_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk4_button_reset" onclick="hk_reset(4)">
+							<svg id="hk4_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk4_button_delete" onclick="hk_delete(4)">
+							<svg id="hk4_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -167,7 +262,26 @@
 						<input class="input1" disabled type="text" id="hk5_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk5_button" onclick="hk_modify(5)">Modify</button>
+						<button class="buttoni button" id="hk5_button_edit" onclick="hk_edit(5)">
+							<svg id="hk5_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk5_button_reset" onclick="hk_reset(5)">
+							<svg id="hk5_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk5_button_delete" onclick="hk_delete(5)">
+							<svg id="hk5_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -178,7 +292,26 @@
 						<input class="input1" disabled type="text" id="hk6_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk6_button" onclick="hk_modify(6)">Modify</button>
+						<button class="buttoni button" id="hk6_button_edit" onclick="hk_edit(6)">
+							<svg id="hk6_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk6_button_reset" onclick="hk_reset(6)">
+							<svg id="hk6_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk6_button_delete" onclick="hk_delete(6)">
+							<svg id="hk6_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -189,7 +322,26 @@
 						<input class="input1" disabled type="text" id="hk7_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk7_button" onclick="hk_modify(7)">Modify</button>
+						<button class="buttoni button" id="hk7_button_edit" onclick="hk_edit(7)">
+							<svg id="hk7_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk7_button_reset" onclick="hk_reset(7)">
+							<svg id="hk7_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk7_button_delete" onclick="hk_delete(7)">
+							<svg id="hk7_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -200,7 +352,26 @@
 						<input class="input1" disabled type="text" id="hk8_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk8_button" onclick="hk_modify(8)">Modify</button>
+						<button class="buttoni button" id="hk8_button_edit" onclick="hk_edit(8)">
+							<svg id="hk8_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk8_button_reset" onclick="hk_reset(8)">
+							<svg id="hk8_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk8_button_delete" onclick="hk_delete(8)">
+							<svg id="hk8_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -211,7 +382,26 @@
 						<input class="input1" disabled type="text" id="hk9_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk9_button" onclick="hk_modify(9)">Modify</button>
+						<button class="buttoni button" id="hk9_button_edit" onclick="hk_edit(9)">
+							<svg id="hk9_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk9_button_reset" onclick="hk_reset(9)">
+							<svg id="hk9_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk9_button_delete" onclick="hk_delete(9)">
+							<svg id="hk9_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -222,7 +412,26 @@
 						<input class="input1" disabled type="text" id="hk10_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk10_button" onclick="hk_modify(10)">Modify</button>
+						<button class="buttoni button" id="hk10_button_edit" onclick="hk_edit(10)">
+							<svg id="hk10_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk10_button_reset" onclick="hk_reset(10)">
+							<svg id="hk10_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk10_button_delete" onclick="hk_delete(10)">
+							<svg id="hk10_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<div class="grid">
@@ -233,15 +442,34 @@
 						<input class="input1" disabled type="text" id="hk11_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk11_button" onclick="hk_modify(11)">Modify</button>
+						<button class="buttoni button" id="hk11_button_edit" onclick="hk_edit(11)">
+							<svg id="hk11_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk11_button_reset" onclick="hk_reset(11)">
+							<svg id="hk11_svg_reset" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="23 4 23 10 17 10"></polyline>
+								<polyline points="1 20 1 14 7 14"></polyline>
+								<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+							</svg>
+						</button>
+
+						<button class="buttoni button" id="hk11_button_delete" onclick="hk_delete(11)">
+							<svg id="hk11_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<polyline points="3 6 5 6 21 6"></polyline>
+								<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+							</svg>
+						</button>
 					</div>
 				</div>
 				<br />
 				<hr />
 				<h3>Global shortcuts</h3>
 				<p class="text3">
-					You can modify the global shortcuts. If you don't understand something or you want to use two modifier and a key please read the
-					docs. After you done, restart the app to make the new shortcuts work.
+					You can modify the global shortcuts here, if you don't understand something just read the docs. After you done, restart the app to
+					make the new shortcuts work. Shortcuts not work on this page, go back to the settings tab to reactivate them!
 				</p>
 				<button class="button1" id="but9" onclick="link2()">Docs</button>
 				<button class="button1" id="but9" onclick="restart()">Restart</button>
@@ -256,7 +484,52 @@
 						<input class="input1" disabled type="text" id="hk100_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk100_button" onclick="hk_modify(100)">Modify</button>
+						<div class="div3">
+							<button class="buttoni button" id="hk100_button_edit" onclick="hk_edit(100)">
+								<svg
+									id="hk100_svg_edit"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+								</svg>
+							</button>
+
+							<button class="buttoni button" id="hk100_button_reset" onclick="hk_reset(100)">
+								<svg
+									id="hk100_svg_reset"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<polyline points="23 4 23 10 17 10"></polyline>
+									<polyline points="1 20 1 14 7 14"></polyline>
+									<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+								</svg>
+							</button>
+
+							<button class="buttoni button" id="hk100_button_delete" onclick="hk_delete(100)">
+								<svg
+									id="hk100_svg_delete"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<polyline points="3 6 5 6 21 6"></polyline>
+									<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+								</svg>
+							</button>
+						</div>
 					</div>
 				</div>
 				<div class="grid">
@@ -267,7 +540,52 @@
 						<input class="input1" disabled type="text" id="hk101_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk101_button" onclick="hk_modify(101)">Modify</button>
+						<div class="div3">
+							<button class="buttoni button" id="hk101_button_edit" onclick="hk_edit(101)">
+								<svg
+									id="hk101_svg_edit"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+								</svg>
+							</button>
+
+							<button class="buttoni button" id="hk101_button_reset" onclick="hk_reset(101)">
+								<svg
+									id="hk101_svg_reset"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<polyline points="23 4 23 10 17 10"></polyline>
+									<polyline points="1 20 1 14 7 14"></polyline>
+									<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+								</svg>
+							</button>
+
+							<button class="buttoni button" id="hk101_button_delete" onclick="hk_delete(101)">
+								<svg
+									id="hk101_svg_delete"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<polyline points="3 6 5 6 21 6"></polyline>
+									<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+								</svg>
+							</button>
+						</div>
 					</div>
 				</div>
 				<div class="grid">
@@ -278,7 +596,52 @@
 						<input class="input1" disabled type="text" id="hk102_input" />
 					</div>
 					<div class="div3">
-						<button class="button1 button" id="hk102_button" onclick="hk_modify(102)">Modify</button>
+						<div class="div3">
+							<button class="buttoni button" id="hk102_button_edit" onclick="hk_edit(102)">
+								<svg
+									id="hk102_svg_edit"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+								</svg>
+							</button>
+
+							<button class="buttoni button" id="hk102_button_reset" onclick="hk_reset(102)">
+								<svg
+									id="hk102_svg_reset"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<polyline points="23 4 23 10 17 10"></polyline>
+									<polyline points="1 20 1 14 7 14"></polyline>
+									<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+								</svg>
+							</button>
+
+							<button class="buttoni button" id="hk102_button_delete" onclick="hk_delete(102)">
+								<svg
+									id="hk102_svg_delete"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<polyline points="3 6 5 6 21 6"></polyline>
+									<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+								</svg>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

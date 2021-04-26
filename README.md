@@ -10,19 +10,10 @@
 -   For detailed instructions check out the: [Docs](https://docs.authme.levminer.com/#/import?id=import)
 -   If you just want to test the app download this sample import file, unzip it, and import it to Authme: [Download](https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true)
 
-#### Getting started
+## Importing
 
--   Currently you can import codes to Authme two ways:
-
-1. From Google Authenticator: (Example: Import all of your saved QR codes from your Google Authenticator app.)
-1. From stand alone QR codes: (Example: You screenshot all the QR codes from your favourite websites, and import all of them to Authme.)
-
-#### How to import
-
--   If you are importing from Google Authenticator you have to install: [Python](https://www.python.org/downloads/)
-
-1.  For non technical people: Instructions in the app.
-1.  For technical people: Check out this: [README](https://github.com/Levminer/authme/blob/main/extract/README.md)
+-   From QR codes: You screenshot all the QR codes from your favourite websites, and import all of them to Authme
+-   From Google Authenticator: Import all of your saved QR codes from your Google Authenticator app.
 
 ## Authme Web
 
@@ -31,8 +22,13 @@
 
 ## Release cycle
 
--   Standard updates coming on Tuesdays if everything is going well and hotfix updates can come on Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
+-   Standard updates coming on Tuesdays if there is something to update and hotfix updates can come on Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
 -   More information at: [Security](https://github.com/Levminer/authme/security/policy)
+
+## Project board
+
+-   You can check out all the issues in progress at the project board!
+-   Check out at: [Prjects](https://github.com/Levminer/authme/projects/1)
 
 ## Contributing and development
 
