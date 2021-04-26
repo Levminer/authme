@@ -8,7 +8,8 @@
 		"start": "electron .",
 		"package": "electron-packager . Authme --platform=win32,linux,darwin --arch=x64 --icon=img/icon.icns --out=build --overwrite",
 		"build": "electron-builder --publish=never --x64",
-		"lint": "eslint --fix ."
+		"lint": "eslint --fix .",
+		"eslint": "eslint ."
 	},
 	"main": "main.js",
 	"build": {

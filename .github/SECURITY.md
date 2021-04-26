@@ -17,5 +17,4 @@
 
 ## Release cycle
 
--   Standard updates: Coming on Tuesdays if everything is going well.
--   Hotfix updates: On Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
+-   Standard updates coming on Tuesdays if there is something to update and hotfix updates can come on Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
