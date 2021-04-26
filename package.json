@@ -44,8 +44,8 @@
 	},
 	"dependencies": {
 		"@levminer/speakeasy": "^1.2.0",
+		"auto-launch": "^5.0.5",
 		"bcryptjs": "^2.4.3",
-		"create-desktop-shortcuts": "^1.4.0",
 		"cryptr": "^6.0.2",
 		"electron-debug": "^3.2.0",
 		"electron-util": "^0.14.2",

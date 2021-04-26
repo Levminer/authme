@@ -12,8 +12,8 @@
 
 ## Importing
 
-1. From QR codes: (Example: You screenshot all the QR codes from your favourite websites, and import all of them to Authme.)
-1. From Google Authenticator: (Example: Import all of your saved QR codes from your Google Authenticator app.)
+-   From QR codes: (Example: You screenshot all the QR codes from your favourite websites, and import all of them to Authme.)
+-   From Google Authenticator: (Example: Import all of your saved QR codes from your Google Authenticator app.)
 
 ## Authme Web
 

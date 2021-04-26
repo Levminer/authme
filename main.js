@@ -1,14 +1,14 @@
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
+const { exec } = require("child_process")
+const AutoLaunch = require("auto-launch")
+const { is } = require("electron-util")
+const debug = require("electron-debug")
 const electron = require("electron")
-const createDesktopShortcut = require("create-desktop-shortcuts")
 const fetch = require("node-fetch")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
 const ipc = electron.ipcMain
-const exec = require("child_process").exec
-const { is } = require("electron-util")
-const debug = require("electron-debug")
 
 // ?  init
 let window_splash
@@ -435,11 +435,11 @@ const createWindow = () => {
 		app.quit()
 	})
 
-	window_application.on("close", async (e) => {
+	window_application.on("close", async (event) => {
 		if (to_tray == false) {
 			app.exit()
 		} else {
-			e.preventDefault()
+			event.preventDefault()
 			setTimeout(() => {
 				window_application.hide()
 			}, 100)
@@ -450,11 +450,11 @@ const createWindow = () => {
 		}
 	})
 
-	window_settings.on("close", async (e) => {
-		if (to_tray == false) {
+	window_settings.on("close", async (event) => {
+		if (dev === true) {
 			app.exit()
 		} else {
-			e.preventDefault()
+			event.preventDefault()
 			setTimeout(() => {
 				window_settings.hide()
 			}, 100)
@@ -464,11 +464,11 @@ const createWindow = () => {
 		}
 	})
 
-	window_import.on("close", async (e) => {
-		if (to_tray == false) {
+	window_import.on("close", async (event) => {
+		if (dev === true) {
 			app.exit()
 		} else {
-			e.preventDefault()
+			event.preventDefault()
 			setTimeout(() => {
 				window_import.hide()
 			}, 100)
@@ -478,11 +478,11 @@ const createWindow = () => {
 		}
 	})
 
-	window_export.on("close", async (e) => {
-		if (to_tray == false) {
+	window_export.on("close", async (event) => {
+		if (dev === true) {
 			app.exit()
 		} else {
-			e.preventDefault()
+			event.preventDefault()
 			setTimeout(() => {
 				window_export.hide()
 			}, 100)
@@ -560,6 +560,14 @@ const createWindow = () => {
 	}
 }
 
+// ? init auto launch
+const authme_launcher = new AutoLaunch({
+	name: "Authme",
+	path: app.getPath("exe"),
+})
+
+// ? ipcs
+
 ipc.on("to_confirm", () => {
 	if (ipc_to_confirm == false) {
 		window_confirm.maximize()
@@ -631,30 +639,15 @@ ipc.on("hide2", () => {
 })
 
 ipc.on("after_startup0", () => {
-	if (process.platform === "win32") {
-		const startup_path = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
+	authme_launcher.disable()
 
-		fs.unlink(startup_path, (err) => {
-			if (err && err.code === "ENOENT") {
-				return console.log("startup shortcut not deleted")
-			} else {
-				console.log("startup shortcut deleted")
-			}
-		})
-	}
+	console.log("Startup disabled")
 })
 
 ipc.on("after_startup1", () => {
-	if (process.platform === "win32") {
-		const shortcut_created = createDesktopShortcut({
-			windows: {
-				filePath: app.getPath("exe"),
-				outputPath: "%USERPROFILE%\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
-				name: "Authme Launcher",
-				comment: "Authme Launcher",
-			},
-		})
-	}
+	authme_launcher.enable()
+
+	console.log("Startup enabled")
 })
 
 ipc.on("after_tray0", () => {
