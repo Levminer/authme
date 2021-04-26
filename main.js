@@ -77,7 +77,7 @@ let dev
 if (is.development === true) {
 	setTimeout(() => {
 		window_application.setTitle("Authme Dev")
-	}, 2000)
+	}, 2500)
 
 	// dev tools
 	debug({
@@ -779,7 +779,7 @@ app.whenReady().then(() => {
 
 	window_splash = new BrowserWindow({
 		width: 500,
-		height: 500,
+		height: 550,
 		transparent: true,
 		frame: false,
 		alwaysOnTop: true,
@@ -794,13 +794,23 @@ app.whenReady().then(() => {
 
 	window_splash.show()
 
-	setTimeout(() => {
-		createWindow()
-	}, 1000)
+	if (is.development === true) {
+		setTimeout(() => {
+			createWindow()
+		}, 1000)
 
-	setTimeout(() => {
-		window_splash.hide()
-	}, 1500)
+		setTimeout(() => {
+			window_splash.hide()
+		}, 1500)
+	} else {
+		setTimeout(() => {
+			createWindow()
+		}, 2000)
+
+		setTimeout(() => {
+			window_splash.hide()
+		}, 2500)
+	}
 
 	// make tray
 	const iconpath = path.join(__dirname, "img/iconb.png")
