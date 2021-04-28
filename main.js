@@ -66,6 +66,8 @@ exec('python -c "import platform; print(platform.python_version())"', (err, stdo
 
 	python_version = stdout
 
+	console.log(python_version)
+
 	if (python_version === undefined) {
 		python_version = "Not installed"
 	}
@@ -75,10 +77,6 @@ exec('python -c "import platform; print(platform.python_version())"', (err, stdo
 let dev
 
 if (is.development === true) {
-	setTimeout(() => {
-		window_application.setTitle("Authme Dev")
-	}, 2500)
-
 	// dev tools
 	debug({
 		showDevTools: false,

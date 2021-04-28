@@ -1,7 +1,7 @@
 body {
 	overflow: hidden;
 	cursor: wait;
-	background: transparent;
+	background: transparent !important;
 }
 
 h1 {
