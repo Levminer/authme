@@ -1,7 +1,7 @@
 # Authme
 
 -   Simple cross platform two-factor authentication app for desktop.
--   Available on: [Windows x64](https://github.com/Levminer/authme/releases/latest), [Linux x64](https://github.com/Levminer/authme/releases/latest), [Mac x64 (Alpha)](https://nightly.link/Levminer/authme/workflows/mac-artifacts/dev/authme-latest-mac-x64-installer-portable.zip)
+-   Download: [Windows x64](https://github.com/Levminer/authme/releases/latest), [Linux x64](https://github.com/Levminer/authme/releases/latest), [Mac x64 (Alpha)](https://nightly.link/Levminer/authme/workflows/mac-artifacts/dev/authme-latest-mac-x64-installer-portable.zip)
 
 <img src="https://raw.githubusercontent.com/Levminer/authme/main/img/screenshot.png?raw=true">
 
@@ -28,7 +28,7 @@
 ## Project board
 
 -   You can check out all the issues in progress at the project board!
--   Check out at: [Prjects](https://github.com/Levminer/authme/projects/1)
+-   Check out at: [Projects](https://github.com/Levminer/authme/projects/1)
 
 ## Contributing and development
 
