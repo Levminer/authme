@@ -39,7 +39,8 @@
 		},
 		"linux": {
 			"target": "deb",
-			"maintainer": "levminer@levminer.com"
+			"maintainer": "levminer@levminer.com",
+			"icon": "img/icon256x256.icns"
 		},
 		"mac": {
 			"target": "dmg",
