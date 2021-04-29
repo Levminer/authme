@@ -39,7 +39,7 @@
 		},
 		"linux": {
 			"target": "deb",
-			"icon": "img/icon256x256.png",
+			"icon": "img/icon.icns",
 			"maintainer": "levminer@levminer.com"
 		},
 		"mac": {
