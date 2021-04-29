@@ -12,7 +12,7 @@ h1 {
 #ver {
 	font-size: 1rem;
 	position: relative;
-	top: 70px;
+	top: 35px;
 }
 
 .center {
@@ -28,7 +28,7 @@ h1 {
 	position: relative;
 	width: 200%;
 	left: -30%;
-	top: 35px;
+	top: -15px;
 }
 
 .loader {
@@ -69,4 +69,8 @@ h1 {
 	100% {
 		left: 100%;
 	}
+}
+
+.mask {
+	background-color: transparent;
 }

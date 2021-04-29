@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
-const { exec } = require("child_process")
+const { spawn } = require("child_process")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
 const debug = require("electron-debug")
@@ -56,21 +56,20 @@ const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 
+// python version
 let python_version
 
-// eslint-disable-next-line
-exec('python -c "import platform; print(platform.python_version())"', (err, stdout, stderr) => {
-	if (err) {
-		console.log(err)
-	}
+const version_src = "src/version.py"
+const version = spawn("python", [version_src])
 
-	python_version = stdout
+version.stdout.on("data", (res) => {
+	python_version = res.toString()
+})
 
-	console.log(python_version)
+version.on("error", (err) => {
+	console.log(`Error getting python version: ${err}`)
 
-	if (python_version === undefined) {
-		python_version = "Not installed"
-	}
+	python_version = "Not installed"
 })
 
 // ? development
@@ -176,11 +175,12 @@ const file = JSON.parse(
 )
 
 // ? install protbuf
-const spawn = require("child_process").spawn
+const install_src = "src/install.py"
+const install = spawn("python", [install_src])
 
-const src = "src/install.py"
-
-const py = spawn("python", [src])
+install.on("error", (err) => {
+	console.log(`Error installing protobuff: ${err}`)
+})
 
 // ? open tray
 const tray_show = () => {
@@ -777,6 +777,7 @@ app.whenReady().then(() => {
 		resizable: false,
 		webPreferences: {
 			nodeIntegration: true,
+			enableRemoteModule: true,
 			contextIsolation: false,
 		},
 	})
