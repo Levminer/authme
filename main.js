@@ -39,6 +39,18 @@ let show_tray = false
 let pass_start = false
 let update_start = false
 
+// ? development
+let dev
+
+if (is.development === true) {
+	// dev tools
+	debug({
+		showDevTools: false,
+	})
+
+	dev = true
+}
+
 // ? version
 const authme_version = "2.4.0"
 const tag_name = "2.4.0"
@@ -58,8 +70,16 @@ const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 
 // python version
 let python_version
+let version_src
 
-const version_src = "src/version.py"
+if (dev === true) {
+	version_src = "src/version.py"
+	console.log(version_src)
+} else {
+	version_src = path.join(__dirname, "../app.asar.unpacked/src/version.py")
+	console.log(version_src)
+}
+
 const version = spawn("python", [version_src])
 
 version.stdout.on("data", (res) => {
@@ -69,20 +89,8 @@ version.stdout.on("data", (res) => {
 version.on("error", (err) => {
 	console.log(`Error getting python version: ${err}`)
 
-	python_version = "Not installed"
+	python_version = "Not installed \n"
 })
-
-// ? development
-let dev
-
-if (is.development === true) {
-	// dev tools
-	debug({
-		showDevTools: false,
-	})
-
-	dev = true
-}
 
 // ? folders
 let folder
@@ -175,7 +183,14 @@ const file = JSON.parse(
 )
 
 // ? install protbuf
-const install_src = "src/install.py"
+let install_src
+
+if (dev === true) {
+	install_src = "src/install.py"
+} else {
+	install_src = "../app.asar.unpacked/src/version.py"
+}
+
 const install = spawn("python", [install_src])
 
 install.on("error", (err) => {

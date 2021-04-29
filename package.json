@@ -16,7 +16,12 @@
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
 		"asar": true,
-		"asarUnpack": "app/import/src/py/*",
+		"asarUnpack": [
+			"app/import/src/py/*",
+			"src/install.py",
+			"src/remove.py",
+			"src/version.py"
+		],
 		"win": {
 			"target": [
 				"nsis"
