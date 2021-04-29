@@ -40,7 +40,7 @@
 		"linux": {
 			"target": "deb",
 			"maintainer": "levminer@levminer.com",
-			"icon": "img/512x512.png"
+			"icon": "img/icon.png"
 		},
 		"mac": {
 			"target": "dmg",
