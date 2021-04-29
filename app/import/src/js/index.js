@@ -4,7 +4,7 @@ const { dialog, shell } = require("electron").remote
 const ipc = electron.ipcRenderer
 const path = require("path")
 const QrcodeDecoder = require("qrcode-decoder")
-const spawn = require("child_process").spawn
+const { spawn } = require("child_process")
 const { is } = require("electron-util")
 
 let python_path

@@ -52,8 +52,8 @@ if (is.development === true) {
 }
 
 // ? version
-const authme_version = "2.4.0"
-const tag_name = "2.4.0"
+const authme_version = "2.4.1"
+const tag_name = "2.4.1"
 const release_date = "2021. April 27."
 const update_type = "Standard update"
 
@@ -73,11 +73,9 @@ let python_version
 let version_src
 
 if (dev === true) {
-	version_src = "src/version.py"
-	console.log(version_src)
+	version_src = path.join(__dirname, "src/version.py")
 } else {
 	version_src = path.join(__dirname, "../app.asar.unpacked/src/version.py")
-	console.log(version_src)
 }
 
 const version = spawn("python", [version_src])
@@ -87,7 +85,7 @@ version.stdout.on("data", (res) => {
 })
 
 version.on("error", (err) => {
-	console.log(`Error getting python version: ${err}`)
+	console.log(`Authme - Error getting python version - ${err}`)
 
 	python_version = "Not installed \n"
 })
@@ -164,9 +162,9 @@ const settings = `{
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 	fs.writeFileSync(path.join(file_path, "settings.json"), settings, (err) => {
 		if (err) {
-			return console.log(`error creating settings.json ${err}`)
+			return console.log(`Authme - Error creating settings.json - ${err}`)
 		} else {
-			return console.log("settings.json created")
+			return console.log("Authme - File settings.json created")
 		}
 	})
 }
@@ -175,9 +173,9 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Error reading settings.json ${err}`)
+			return console.log(`Authme - Error reading settings.json - ${err}`)
 		} else {
-			return console.log("settings.json readed")
+			return console.log("Authme - File settings.json readed")
 		}
 	})
 )
@@ -186,15 +184,15 @@ const file = JSON.parse(
 let install_src
 
 if (dev === true) {
-	install_src = "src/install.py"
+	install_src = path.join(__dirname, "src/install.py")
 } else {
-	install_src = "../app.asar.unpacked/src/version.py"
+	install_src = path.join(__dirname, "../app.asar.unpacked/src/install.py")
 }
 
 const install = spawn("python", [install_src])
 
 install.on("error", (err) => {
-	console.log(`Error installing protobuff: ${err}`)
+	console.log(`Authme - Error installing protobuff - ${err}`)
 })
 
 // ? open tray
@@ -654,13 +652,13 @@ ipc.on("hide2", () => {
 ipc.on("after_startup0", () => {
 	authme_launcher.disable()
 
-	console.log("Startup disabled")
+	console.log("Authme - Startup disabled")
 })
 
 ipc.on("after_startup1", () => {
 	authme_launcher.enable()
 
-	console.log("Startup enabled")
+	console.log("Authme - Startup enabled")
 })
 
 ipc.on("after_tray0", () => {

@@ -1,4 +1,4 @@
-const { ipcMain, shell, app, dialog } = require("electron").remote
+const { shell, app, dialog } = require("electron").remote
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -226,13 +226,9 @@ const reset = () => {
 								})
 							}
 
-							// remove cache folder
-							const spawn = require("child_process").spawn
-							const src = "src/remove.py"
-							const py = spawn("python", [src])
-
 							// clear localstorage
 							localStorage.clear()
+							sessionStorage.clear()
 
 							// restarting
 							but1.textContent = "Restarting app"
