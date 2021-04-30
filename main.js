@@ -54,7 +54,7 @@ if (is.development === true) {
 // ? version
 const authme_version = "2.4.1"
 const tag_name = "2.4.1"
-const release_date = "2021. April 27."
+const release_date = "2021. May 4."
 const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
@@ -799,23 +799,25 @@ app.whenReady().then(() => {
 
 	window_splash.show()
 
-	if (is.development === true) {
-		setTimeout(() => {
-			createWindow()
-		}, 1000)
+	window_splash.once("ready-to-show", () => {
+		if (is.development === true) {
+			setTimeout(() => {
+				createWindow()
+			}, 1000)
 
-		setTimeout(() => {
-			window_splash.hide()
-		}, 1500)
-	} else {
-		setTimeout(() => {
-			createWindow()
-		}, 2000)
+			setTimeout(() => {
+				window_splash.hide()
+			}, 1500)
+		} else {
+			setTimeout(() => {
+				createWindow()
+			}, 2000)
 
-		setTimeout(() => {
-			window_splash.hide()
-		}, 2500)
-	}
+			setTimeout(() => {
+				window_splash.hide()
+			}, 2500)
+		}
+	})
 
 	// make tray
 	const iconpath = path.join(__dirname, "img/iconb.png")

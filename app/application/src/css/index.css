@@ -189,11 +189,6 @@ input:active::placeholder {
 
 a {
 	color: white;
-	font-weight: bold;
-	text-decoration: none;
-}
-
-a:hover {
 	text-decoration: underline;
 }
 
