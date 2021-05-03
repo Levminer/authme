@@ -164,7 +164,7 @@ const save_qr_codes = () => {
 
 // ? hide
 const hide = () => {
-	ipc.send("hide2")
+	ipc.send("hide_export")
 }
 
 // ? authme web

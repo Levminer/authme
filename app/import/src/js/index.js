@@ -24,5 +24,5 @@ const link0 = () => {
 
 // ? hide
 const hide = () => {
-	ipc.send("hide1")
+	ipc.send("hide_import")
 }

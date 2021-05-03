@@ -578,7 +578,6 @@ const authme_launcher = new AutoLaunch({
 })
 
 // ? ipcs
-
 ipc.on("to_confirm", () => {
 	if (ipc_to_confirm == false) {
 		window_confirm.maximize()
@@ -616,7 +615,7 @@ ipc.on("to_application1", () => {
 	}
 })
 
-ipc.on("hide0", () => {
+ipc.on("hide_settings", () => {
 	if (settings_shown == false) {
 		window_settings.maximize()
 		window_settings.show()
@@ -627,7 +626,7 @@ ipc.on("hide0", () => {
 	}
 })
 
-ipc.on("hide1", () => {
+ipc.on("hide_import", () => {
 	if (import_shown == false) {
 		window_import.maximize()
 		window_import.show()
@@ -638,7 +637,7 @@ ipc.on("hide1", () => {
 	}
 })
 
-ipc.on("hide2", () => {
+ipc.on("hide_export", () => {
 	if (export_shown == false) {
 		window_export.maximize()
 		window_export.show()
@@ -649,13 +648,13 @@ ipc.on("hide2", () => {
 	}
 })
 
-ipc.on("after_startup0", () => {
+ipc.on("disable_startup", () => {
 	authme_launcher.disable()
 
 	console.log("Authme - Startup disabled")
 })
 
-ipc.on("after_startup1", () => {
+ipc.on("enable_startup", () => {
 	authme_launcher.enable()
 
 	console.log("Authme - Startup enabled")
@@ -693,10 +692,10 @@ ipc.on("abort", () => {
 			cancelId: 1,
 			noLink: true,
 			message: `
-		Failed to check the integrity of the files.
-		
-		You or someone messed with the settings file, shutting down for security reasons!
-		`,
+			Failed to check the integrity of the files.
+			
+			You or someone messed with the settings file, shutting down for security reasons!
+			`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
