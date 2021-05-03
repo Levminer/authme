@@ -811,11 +811,11 @@ app.whenReady().then(() => {
 		} else {
 			setTimeout(() => {
 				createWindow()
-			}, 2000)
+			}, 3000)
 
 			setTimeout(() => {
 				window_splash.hide()
-			}, 2500)
+			}, 3500)
 		}
 	})
 
