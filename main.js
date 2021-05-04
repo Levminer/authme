@@ -43,11 +43,6 @@ let update_start = false
 let dev
 
 if (is.development === true) {
-	// dev tools
-	debug({
-		showDevTools: false,
-	})
-
 	dev = true
 }
 
@@ -180,7 +175,7 @@ const file = JSON.parse(
 	})
 )
 
-// ? install protbuf
+// ? install protobuf
 let install_src
 
 if (dev === true) {
