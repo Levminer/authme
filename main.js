@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
-const { exec } = require("child_process")
+const { spawn } = require("child_process")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
 const debug = require("electron-debug")
@@ -39,10 +39,17 @@ let show_tray = false
 let pass_start = false
 let update_start = false
 
+// ? development
+let dev
+
+if (is.development === true) {
+	dev = true
+}
+
 // ? version
-const authme_version = "2.4.0"
-const tag_name = "2.4.0"
-const release_date = "2021. April 27."
+const authme_version = "2.4.1"
+const tag_name = "2.4.1"
+const release_date = "2021. May 4."
 const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
@@ -56,36 +63,27 @@ const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 
+// python version
 let python_version
+let version_src
 
-// eslint-disable-next-line
-exec('python -c "import platform; print(platform.python_version())"', (err, stdout, stderr) => {
-	if (err) {
-		console.log(err)
-	}
+if (dev === true) {
+	version_src = path.join(__dirname, "src/version.py")
+} else {
+	version_src = path.join(__dirname, "../app.asar.unpacked/src/version.py")
+}
 
-	python_version = stdout
+const version = spawn("python", [version_src])
 
-	if (python_version === undefined) {
-		python_version = "Not installed"
-	}
+version.stdout.on("data", (res) => {
+	python_version = res.toString()
 })
 
-// ? development
-let dev
+version.on("error", (err) => {
+	console.log(`Authme - Error getting python version - ${err}`)
 
-if (is.development === true) {
-	setTimeout(() => {
-		window_application.setTitle("Authme Dev")
-	}, 2500)
-
-	// dev tools
-	debug({
-		showDevTools: false,
-	})
-
-	dev = true
-}
+	python_version = "Not installed \n"
+})
 
 // ? folders
 let folder
@@ -159,9 +157,9 @@ const settings = `{
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 	fs.writeFileSync(path.join(file_path, "settings.json"), settings, (err) => {
 		if (err) {
-			return console.log(`error creating settings.json ${err}`)
+			return console.log(`Authme - Error creating settings.json - ${err}`)
 		} else {
-			return console.log("settings.json created")
+			return console.log("Authme - File settings.json created")
 		}
 	})
 }
@@ -170,19 +168,27 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Error reading settings.json ${err}`)
+			return console.log(`Authme - Error reading settings.json - ${err}`)
 		} else {
-			return console.log("settings.json readed")
+			return console.log("Authme - File settings.json readed")
 		}
 	})
 )
 
-// ? install protbuf
-const spawn = require("child_process").spawn
+// ? install protobuf
+let install_src
 
-const src = "src/install.py"
+if (dev === true) {
+	install_src = path.join(__dirname, "src/install.py")
+} else {
+	install_src = path.join(__dirname, "../app.asar.unpacked/src/install.py")
+}
 
-const py = spawn("python", [src])
+const install = spawn("python", [install_src])
+
+install.on("error", (err) => {
+	console.log(`Authme - Error installing protobuff - ${err}`)
+})
 
 // ? open tray
 const tray_show = () => {
@@ -567,7 +573,6 @@ const authme_launcher = new AutoLaunch({
 })
 
 // ? ipcs
-
 ipc.on("to_confirm", () => {
 	if (ipc_to_confirm == false) {
 		window_confirm.maximize()
@@ -605,7 +610,7 @@ ipc.on("to_application1", () => {
 	}
 })
 
-ipc.on("hide0", () => {
+ipc.on("hide_settings", () => {
 	if (settings_shown == false) {
 		window_settings.maximize()
 		window_settings.show()
@@ -616,7 +621,7 @@ ipc.on("hide0", () => {
 	}
 })
 
-ipc.on("hide1", () => {
+ipc.on("hide_import", () => {
 	if (import_shown == false) {
 		window_import.maximize()
 		window_import.show()
@@ -627,7 +632,7 @@ ipc.on("hide1", () => {
 	}
 })
 
-ipc.on("hide2", () => {
+ipc.on("hide_export", () => {
 	if (export_shown == false) {
 		window_export.maximize()
 		window_export.show()
@@ -638,16 +643,16 @@ ipc.on("hide2", () => {
 	}
 })
 
-ipc.on("after_startup0", () => {
+ipc.on("disable_startup", () => {
 	authme_launcher.disable()
 
-	console.log("Startup disabled")
+	console.log("Authme - Startup disabled")
 })
 
-ipc.on("after_startup1", () => {
+ipc.on("enable_startup", () => {
 	authme_launcher.enable()
 
-	console.log("Startup enabled")
+	console.log("Authme - Startup enabled")
 })
 
 ipc.on("after_tray0", () => {
@@ -682,10 +687,10 @@ ipc.on("abort", () => {
 			cancelId: 1,
 			noLink: true,
 			message: `
-		Failed to check the integrity of the files.
-		
-		You or someone messed with the settings file, shutting down for security reasons!
-		`,
+			Failed to check the integrity of the files.
+			
+			You or someone messed with the settings file, shutting down for security reasons!
+			`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -779,6 +784,7 @@ app.whenReady().then(() => {
 		resizable: false,
 		webPreferences: {
 			nodeIntegration: true,
+			enableRemoteModule: true,
 			contextIsolation: false,
 		},
 	})
@@ -787,23 +793,25 @@ app.whenReady().then(() => {
 
 	window_splash.show()
 
-	if (is.development === true) {
-		setTimeout(() => {
-			createWindow()
-		}, 1000)
+	window_splash.once("ready-to-show", () => {
+		if (is.development === true) {
+			setTimeout(() => {
+				createWindow()
+			}, 1000)
 
-		setTimeout(() => {
-			window_splash.hide()
-		}, 1500)
-	} else {
-		setTimeout(() => {
-			createWindow()
-		}, 2000)
+			setTimeout(() => {
+				window_splash.hide()
+			}, 1500)
+		} else {
+			setTimeout(() => {
+				createWindow()
+			}, 3000)
 
-		setTimeout(() => {
-			window_splash.hide()
-		}, 2500)
-	}
+			setTimeout(() => {
+				window_splash.hide()
+			}, 3500)
+		}
+	})
 
 	// make tray
 	const iconpath = path.join(__dirname, "img/iconb.png")

@@ -1,4 +1,4 @@
-const { ipcMain, shell, app, dialog } = require("electron").remote
+const { shell, app, dialog } = require("electron").remote
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -135,7 +135,7 @@ const startup = () => {
 		but0.textContent = "Off"
 		startup_state = false
 
-		ipc.send("after_startup0")
+		ipc.send("disable_startup")
 	} else {
 		file.settings.launch_on_startup = true
 
@@ -144,7 +144,7 @@ const startup = () => {
 		but0.textContent = "On"
 		startup_state = true
 
-		ipc.send("after_startup1")
+		ipc.send("enable_startup")
 	}
 }
 
@@ -214,25 +214,15 @@ const reset = () => {
 							})
 
 							// remove start shortcut
-							const file_path2 = path.join(process.env.APPDATA, "/Microsoft/Windows/Start Menu/Programs/Startup/Authme Launcher.lnk")
-
 							if (dev !== true) {
-								fs.unlink(file_path2, (err) => {
-									if (err && err.code === "ENOENT") {
-										return console.warn(`Authme - Error deleting shortcut - ${err}`)
-									} else {
-										console.warn("Authme - File shortcut deleted")
-									}
-								})
+								ipc.send("disable_startup")
 							}
 
-							// remove cache folder
-							const spawn = require("child_process").spawn
-							const src = "src/remove.py"
-							const py = spawn("python", [src])
-
 							// clear localstorage
-							localStorage.clear()
+							if (dev !== true) {
+								localStorage.clear()
+								sessionStorage.clear()
+							}
 
 							// restarting
 							but1.textContent = "Restarting app"
@@ -518,7 +508,7 @@ const link2 = () => {
 }
 
 const hide = () => {
-	ipc.send("hide0")
+	ipc.send("hide_settings")
 }
 
 document.querySelector(".settings").disabled = true

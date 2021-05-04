@@ -106,6 +106,22 @@ const ga_import = () => {
 								})
 						}
 					})
+
+					python.on("error", (err) => {
+						console.log(`Authme - Error executing Python script - ${err}`)
+
+						dialog.showMessageBox({
+							title: "Authme",
+							buttons: ["Close"],
+							type: "error",
+							defaultId: 0,
+							message: `
+							Error executing Python script!
+							
+							Please make sure you have Python installed!
+							`,
+						})
+					})
 				} else {
 					dialog.showMessageBox({
 						title: "Authme",

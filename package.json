@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.4.0",
+	"version": "2.4.1",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -16,7 +16,12 @@
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
 		"asar": true,
-		"asarUnpack": "app/import/src/py/*",
+		"asarUnpack": [
+			"app/import/src/py/*",
+			"src/install.py",
+			"src/remove.py",
+			"src/version.py"
+		],
 		"win": {
 			"target": [
 				"nsis"
@@ -34,8 +39,8 @@
 		},
 		"linux": {
 			"target": "deb",
-			"icon": "img/icon.png",
-			"maintainer": "levminer@levminer.com"
+			"maintainer": "levminer@levminer.com",
+			"icon": "img/icon.png"
 		},
 		"mac": {
 			"target": "dmg",
@@ -44,7 +49,7 @@
 		}
 	},
 	"dependencies": {
-		"@levminer/speakeasy": "^1.2.0",
+		"@levminer/speakeasy": "^1.3.1",
 		"auto-launch": "^5.0.5",
 		"bcryptjs": "^2.4.3",
 		"cryptr": "^6.0.2",
@@ -55,12 +60,12 @@
 		"qrcode-decoder": "0.1.2"
 	},
 	"devDependencies": {
-		"electron": "^12.0.5",
+		"electron": "^12.0.6",
 		"electron-builder": "^22.10.5",
 		"electron-packager": "^15.2.0",
-		"eslint": "^7.24.0",
+		"eslint": "^7.25.0",
 		"eslint-config-node": "^4.1.0",
-		"eslint-config-prettier": "^8.2.0",
+		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-promise": "^2.0.2",
 		"eslint-config-standard": "^16.0.2",
 		"eslint-plugin-node": "^11.1.0",
