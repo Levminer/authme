@@ -43,6 +43,10 @@ let update_start = false
 let dev
 
 if (is.development === true) {
+	debug({
+		showDevTools: false,
+	})
+
 	dev = true
 }
 
@@ -424,6 +428,8 @@ const createWindow = () => {
 	window_settings.loadFile("./app/settings/index.html")
 	window_import.loadFile("./app/import/index.html")
 	window_export.loadFile("./app/export/index.html")
+
+	window_application.webContents.openDevTools()
 
 	if (file.security.require_password == null) {
 		window_landing.maximize()
