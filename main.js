@@ -78,6 +78,7 @@ if (!fs.existsSync(file_path)) {
 logger.createFile(file_path, "main")
 
 logger.log(app.getPath("cache"))
+logger.log(app.getPath("userData"))
 
 // ? version
 const authme_version = "2.4.1"
