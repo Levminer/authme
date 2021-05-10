@@ -5,6 +5,7 @@ const { is } = require("electron-util")
 const debug = require("electron-debug")
 const electron = require("electron")
 const fetch = require("node-fetch")
+const logger = require("./src/log")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
@@ -50,6 +51,34 @@ if (is.development === true) {
 	dev = true
 }
 
+// ? folders
+let folder
+
+// choose platform
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
+}
+
+// init folders
+const full_path = path.join(folder, "Levminer")
+const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+
+// check if folders exists
+if (!fs.existsSync(full_path)) {
+	fs.mkdirSync(path.join(full_path))
+}
+
+if (!fs.existsSync(file_path)) {
+	fs.mkdirSync(file_path)
+}
+
+// ? logs
+logger.createFile(file_path, "main")
+
+logger.log(app.getPath("cache"))
+
 // ? version
 const authme_version = "2.4.1"
 const tag_name = "2.4.1"
@@ -84,32 +113,10 @@ version.stdout.on("data", (res) => {
 })
 
 version.on("error", (err) => {
-	console.log(`Authme - Error getting python version - ${err}`)
+	logger.error("Error getting python version", err)
 
 	python_version = "Not installed \n"
 })
-
-// ? folders
-let folder
-
-// choose platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-// init folders
-const full_path = path.join(folder, "Levminer")
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
-
-// check if folders exists
-if (!fs.existsSync(full_path)) {
-	fs.mkdirSync(path.join(full_path))
-}
-if (!fs.existsSync(file_path)) {
-	fs.mkdirSync(file_path)
-}
 
 // ? settings
 const settings = `{
@@ -161,9 +168,9 @@ const settings = `{
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 	fs.writeFileSync(path.join(file_path, "settings.json"), settings, (err) => {
 		if (err) {
-			return console.log(`Authme - Error creating settings.json - ${err}`)
+			return logger.error("Error creating settings.json", err)
 		} else {
-			return console.log("Authme - File settings.json created")
+			return logger.log("Authme - File settings.json created")
 		}
 	})
 }
@@ -172,9 +179,9 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Authme - Error reading settings.json - ${err}`)
+			return logger.error("Error reading settings.json", err)
 		} else {
-			return console.log("Authme - File settings.json readed")
+			return logger.log("Authme - File settings.json readed")
 		}
 	})
 )
@@ -191,7 +198,7 @@ if (dev === true) {
 const install = spawn("python", [install_src])
 
 install.on("error", (err) => {
-	console.log(`Authme - Error installing protobuff - ${err}`)
+	logger.log("Error installing protobuff", err)
 })
 
 // ? open tray
@@ -429,8 +436,6 @@ const createWindow = () => {
 	window_import.loadFile("./app/import/index.html")
 	window_export.loadFile("./app/export/index.html")
 
-	window_application.webContents.openDevTools()
-
 	if (file.security.require_password == null) {
 		window_landing.maximize()
 	}
@@ -537,11 +542,11 @@ const createWindow = () => {
 									})
 							}
 						} catch (error) {
-							return console.log(error)
+							return logger.error(error)
 						}
 					})
 			} catch (error) {
-				return console.log(error)
+				return logger.error(error)
 			}
 		}
 
@@ -652,13 +657,13 @@ ipc.on("hide_export", () => {
 ipc.on("disable_startup", () => {
 	authme_launcher.disable()
 
-	console.log("Authme - Startup disabled")
+	logger.log("Startup disabled")
 })
 
 ipc.on("enable_startup", () => {
 	authme_launcher.enable()
 
-	console.log("Authme - Startup enabled")
+	logger.log("Startup enabled")
 })
 
 ipc.on("after_tray0", () => {
@@ -712,7 +717,7 @@ ipc.on("abort", () => {
 	window_export.destroy()
 
 	process.on("uncaughtException", (error) => {
-		console.warn(`Authme - Execution aborted - ${error}`)
+		logger.error("Execution aborted", error)
 	})
 })
 
@@ -758,7 +763,7 @@ const about = () => {
 // ? start app
 app.whenReady().then(() => {
 	process.on("uncaughtException", (error) => {
-		console.log("Unknown error occurred", error.stack)
+		logger.error("Unknown error occurred", error.stack)
 
 		dialog
 			.showMessageBox({
@@ -1158,7 +1163,7 @@ app.whenReady().then(() => {
 													})
 												}
 											} catch (error) {
-												return console.log(error)
+												return logger.error(error)
 											}
 										})
 								} catch (error) {

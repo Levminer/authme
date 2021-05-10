@@ -19,7 +19,6 @@
 		"asarUnpack": [
 			"app/import/src/py/*",
 			"src/install.py",
-			"src/remove.py",
 			"src/version.py"
 		],
 		"win": {

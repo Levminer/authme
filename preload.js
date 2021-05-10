@@ -3,6 +3,7 @@ const electron = require("electron")
 const path = require("path")
 const ipc = electron.ipcRenderer
 const { is } = require("electron-util")
+const logger = require("./src/log")
 
 // ? if development
 let dev
@@ -10,7 +11,7 @@ let integrity = false
 
 if (is.development === true) {
 	dev = true
-	integrity = true
+	integrity = false
 }
 
 // ?platform
@@ -26,13 +27,16 @@ if (process.platform === "win32") {
 // ? settings
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
+// ? logs
+logger.createFile(file_path, "preload")
+
 // read settings
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Error reading settings.json ${err}`)
+			return logger.error(`Error reading settings.json ${err}`)
 		} else {
-			return console.log("settings.json readed")
+			return logger.log("settings.json readed")
 		}
 	})
 )
@@ -55,9 +59,9 @@ if (file.security.require_password === true && file.security.password !== null) 
 } else if (file.security.require_password === false && file.security.password === null) {
 	if (integrity === false) {
 		try {
-			console.log(storage)
+			logger.log("Local storage", storage)
 		} catch (error) {
-			console.warn("Authme - Local storage not found in controller")
+			logger.error("Local storage not found in controller")
 
 			ipc.send("abort")
 		}
@@ -65,7 +69,7 @@ if (file.security.require_password === true && file.security.password !== null) 
 		if (file.security.require_password === storage.require_password) {
 			ipc.send("to_application1")
 		} else {
-			console.warn("Authme - Local storage not found in controller")
+			logger.error("Local storage not found in controller")
 
 			ipc.send("abort")
 		}
@@ -73,7 +77,7 @@ if (file.security.require_password === true && file.security.password !== null) 
 		ipc.send("to_application1")
 	}
 } else if (file.security.require_password === null && file.security.password === null) {
-	return console.log("First restart")
+	return logger.log("First restart")
 } else {
 	ipc.send("to_confirm")
 }
