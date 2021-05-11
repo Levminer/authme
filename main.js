@@ -77,9 +77,6 @@ if (!fs.existsSync(file_path)) {
 // ? logs
 logger.createFile(file_path, "main")
 
-logger.log(app.getPath("cache"))
-logger.log(app.getPath("userData"))
-
 // ? version
 const authme_version = "2.4.1"
 const tag_name = "2.4.1"
@@ -199,7 +196,7 @@ if (dev === true) {
 const install = spawn("python", [install_src])
 
 install.on("error", (err) => {
-	logger.log("Error installing protobuff", err)
+	logger.error("Error installing protobuff", err)
 })
 
 // ? open tray

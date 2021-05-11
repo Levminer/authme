@@ -11,7 +11,7 @@ let integrity = false
 
 if (is.development === true) {
 	dev = true
-	integrity = false
+	integrity = true
 }
 
 // ?platform
