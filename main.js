@@ -5,7 +5,7 @@ const { is } = require("electron-util")
 const debug = require("electron-debug")
 const electron = require("electron")
 const fetch = require("node-fetch")
-const logger = require("./src/log")
+const logger = require("./lib/logger")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
@@ -76,10 +76,11 @@ if (!fs.existsSync(file_path)) {
 
 // ? logs
 logger.createFile(file_path, "main")
+logger.log("Create log file")
 
 // ? version
-const authme_version = "2.4.1"
-const tag_name = "2.4.1"
+const authme_version = "2.4.2"
+const tag_name = "2.4.2"
 const release_date = "2021. May 4."
 const update_type = "Standard update"
 
@@ -108,12 +109,12 @@ const version = spawn("python", [version_src])
 
 version.stdout.on("data", (res) => {
 	python_version = res.toString()
+	logger.log("Python version found")
 })
 
 version.on("error", (err) => {
-	logger.error("Error getting python version", err)
-
 	python_version = "Not installed \n"
+	logger.error("Error getting python version", err)
 })
 
 // ? settings
@@ -337,6 +338,8 @@ const tray_exit = () => {
 
 // ? create window
 const createWindow = () => {
+	logger.log("Started creating windows")
+
 	window_landing = new BrowserWindow({
 		width: 1900,
 		height: 1000,
@@ -538,6 +541,10 @@ const createWindow = () => {
 											shell.openExternal("https://github.com/Levminer/authme/releases/latest")
 										}
 									})
+
+								logger.log("Auto update found!")
+							} else {
+								logger.log("No auto update found!")
 							}
 						} catch (error) {
 							return logger.error(error)
@@ -760,6 +767,8 @@ const about = () => {
 
 // ? start app
 app.whenReady().then(() => {
+	logger.log("Starting app")
+
 	process.on("uncaughtException", (error) => {
 		logger.error("Unknown error occurred", error.stack)
 
