@@ -44,60 +44,13 @@ hr {
 	color: white;
 }
 
-/* tabs */
-.tab {
-	overflow: hidden;
-
-	text-align: center;
-}
-
-.tabcontent {
-	animation: fadeEffect 1s;
-}
-
-@keyframes fadeEffect {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-#shortcuts {
+#result {
 	display: none;
+	visibility: none;
 }
 
-/* grid */
-.grid {
-	display: grid;
-	width: 1500px;
-	position: relative;
-	left: -290px;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: 1fr;
-	grid-row-gap: 0px;
-	margin-bottom: 30px;
-}
-
-.div1 {
-	grid-area: 1 / 1 / 2 / 2;
-}
-.div2 {
-	grid-area: 1 / 2 / 2 / 3;
-}
-.div3 {
-	grid-area: 1 / 3 / 2 / 4;
-}
-
-.text {
-	position: relative;
-	left: 130px;
-}
-
-.button {
-	position: relative;
-	right: 130px;
+.afterLoad {
+	display: none;
 }
 
 .buttoni {
@@ -118,6 +71,28 @@ hr {
 	color: var(--df_primary_color);
 }
 
-#experimental {
-	display: none;
+.grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: repeat(3, 1fr);
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+
+	background-color: black;
+	margin-top: 0px;
+	border-radius: 30px;
+	margin: 0 auto;
+	margin-top: 20px;
+	width: 600px;
+	height: 550px;
+}
+
+.div1 {
+	grid-area: 1 / 1 / 2 / 2;
+}
+.div2 {
+	grid-area: 2 / 1 / 3 / 2;
+}
+.div3 {
+	grid-area: 3 / 1 / 4 / 2;
 }

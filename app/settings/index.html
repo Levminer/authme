@@ -31,8 +31,9 @@
 				<br />
 				<h3>Menu</h3>
 				<p class="text3">Choose a configuration menu.</p>
-				<button id="settings" class="button1 settings" onclick="menu(event, 'setting')">Settings</button>
+				<button id="setting " class="button1 settings" onclick="menu(event, 'setting')">Settings</button>
 				<button id="shortcuts " class="button1 shortcuts" onclick="menu(event, 'shortcuts')">Shortcuts</button>
+				<button id="experimental " class="button1 experimental" onclick="menu(event, 'experimental')">Experimental</button>
 				<button id="about" class="button1 about" onclick="about()">About</button>
 				<br />
 				<hr />
@@ -644,6 +645,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<!-- experimental -->
+			<div id="experimental" class="tabcontent">
+				<h3>Edit codes</h3>
+				<p class="text3">Edit your saved codes. You can edit, delete or add more codes.</p>
+				<button class="button1" id="but14" onclick="edit()">Open</button>
 			</div>
 		</div>
 	</body>

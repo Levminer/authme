@@ -458,10 +458,14 @@ const folder1 = () => {
 
 // ? folder 2
 const folder2 = () => {
+	let cache_path
+
 	if (process.platform === "win32") {
 		cache_path = path.join(process.env.APPDATA, "/authme")
-	} else {
-		cache_path = shell.openExternal("https://docs.authme.levminer.com/#/settings?id=folders")
+	} else if (process.platform === "linux") {
+		cache_path = path.joib(process.env.HOME, "/.config/authme")
+	} else if (process.platform === "darwin") {
+		cache_path = path.joib(process.env.HOME, "/Library/Application Support/authme")
 	}
 
 	shell.showItemInFolder(cache_path)
@@ -514,21 +518,42 @@ const hide = () => {
 document.querySelector(".settings").disabled = true
 
 // ? menu
+let shortcut = false
+
 const menu = (evt, name) => {
 	let i
 
 	if (name === "shortcuts") {
-		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts ").disabled = true
-
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".experimental").disabled = false
 		document.querySelector(".center").style.height = "2550px"
+
+		shortcut = true
+
 		ipc.send("shortcuts")
-	} else {
+	} else if (name === "setting") {
 		document.querySelector(".settings").disabled = true
 		document.querySelector(".shortcuts").disabled = false
-
+		document.querySelector(".experimental").disabled = false
 		document.querySelector(".center").style.height = "2950px"
-		ipc.send("shortcuts")
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
+	} else if (name === "experimental") {
+		document.querySelector(".experimental").disabled = true
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".center").style.height = "800px"
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")
@@ -556,6 +581,11 @@ const restart = () => {
 // ? about
 const about = () => {
 	ipc.send("about")
+}
+
+// ? edit
+const edit = () => {
+	ipc.send("hide_edit")
 }
 
 // ? offline mode

@@ -19,12 +19,14 @@ let window_application
 let window_settings
 let window_import
 let window_export
+let window_edit
 
 let confirm_shown = false
 let application_shown = false
 let settings_shown = false
 let import_shown = false
 let export_shown = false
+let edit_shown = false
 
 let ipc_to_confirm = false
 let ipc_to_application_0 = false
@@ -430,12 +432,28 @@ const createWindow = () => {
 		},
 	})
 
+	window_edit = new BrowserWindow({
+		width: 1900,
+		height: 1000,
+		minWidth: 1000,
+		minHeight: 600,
+		show: false,
+		backgroundColor: "#141414",
+		webPreferences: {
+			preload: path.join(__dirname, "preload.js"),
+			nodeIntegration: true,
+			enableRemoteModule: true,
+			contextIsolation: false,
+		},
+	})
+
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
 	window_settings.loadFile("./app/settings/index.html")
 	window_import.loadFile("./app/import/index.html")
 	window_export.loadFile("./app/export/index.html")
+	window_edit.loadFile("./app/edit/index.html")
 
 	if (file.security.require_password == null) {
 		window_landing.maximize()
@@ -507,6 +525,20 @@ const createWindow = () => {
 			show_tray = true
 
 			export_shown = false
+		}
+	})
+
+	window_edit.on("close", async (event) => {
+		if (dev === true) {
+			app.exit()
+		} else {
+			event.preventDefault()
+			setTimeout(() => {
+				window_edit.hide()
+			}, 100)
+			show_tray = true
+
+			edit_shown = false
 		}
 	})
 
@@ -656,6 +688,17 @@ ipc.on("hide_export", () => {
 	} else {
 		window_export.hide()
 		export_shown = false
+	}
+})
+
+ipc.on("hide_edit", () => {
+	if (edit_shown == false) {
+		window_edit.maximize()
+		window_edit.show()
+		edit_shown = true
+	} else {
+		window_edit.hide()
+		edit_shown = false
 	}
 })
 
