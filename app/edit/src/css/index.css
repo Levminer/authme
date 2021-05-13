@@ -1,7 +1,8 @@
 .center {
 	top: -50px;
 	width: 1000px;
-	height: 2950px;
+	height: auto;
+	padding-bottom: 50px !important;
 }
 
 .button1 {
@@ -25,6 +26,7 @@
 .input1:hover {
 	color: white;
 	border-color: white;
+	background-color: black;
 }
 
 #button1 {
@@ -67,7 +69,7 @@ hr {
 
 .buttoni:hover {
 	border: 1px solid var(--df_primary_color);
-	background: var(--df_primary_background);
+	background: black;
 	color: var(--df_primary_color);
 }
 
@@ -84,7 +86,7 @@ hr {
 	margin: 0 auto;
 	margin-top: 20px;
 	width: 600px;
-	height: 550px;
+	height: 300px;
 }
 
 .div1 {

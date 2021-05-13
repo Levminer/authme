@@ -42,21 +42,21 @@ const separation = () => {
 		if (i == c0) {
 			const name_before = data[i]
 			const name_after = name_before.slice(8)
-			name.push(name_after)
+			name.push(name_after.trim())
 			c0 = c0 + 4
 		}
 
 		if (i == c1) {
 			const secret_before = data[i]
 			const secret_after = secret_before.slice(8)
-			secret.push(secret_after)
+			secret.push(secret_after.trim())
 			c1 = c1 + 4
 		}
 
 		if (i == c2) {
 			const issuer_before = data[i]
 			const issuer_after = issuer_before.slice(8)
-			issuer.push(issuer_after)
+			issuer.push(issuer_after.trim())
 			c2 = c2 + 4
 		}
 
@@ -85,42 +85,111 @@ const go = () => {
 		const div = document.createElement("div")
 
 		div.innerHTML = `
-		<div class="grid">
+		<div class="grid" id="grid${[i]}">
 		<div class="div1">
-		<h3>Name</h3>
-		<p class="text2">${issuer[i]}</p>
+		<h2>${issuer[i]}</h2>
 		</div>
 		<div class="div2">
-		<h3>Content</h3>
-		<p class="text2">${name[i]}</p>
+		<input type="text" class="input1" id="edit_inp_${[i]}" value="${name[i]}" readonly/> 
 		</div>
 		<div class="div3">
-		<h3>Actions</h3>
-		<button class="buttoni button" id="hk9_button_edit" onclick="hk_edit(9)">
-		<svg id="hk9_svg_edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+		<button class="buttoni button" id="edit_but_${[i]}" onclick="edit(${[i]})">
+		<svg id="edit_svg_${[i]}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 		<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
 		</svg>
 		</button>
-		<button class="buttoni" id="hk11_button_delete" onclick="hk_delete(11)">
-		<svg id="hk11_svg_delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+		<button class="buttoni" id="del_but_${[i]}" onclick="del(${[i]})">
+		<svg id="del_svg_${[i]}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 		<polyline points="3 6 5 6 21 6"></polyline>
 		<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
 		</svg>
 		</button>
 		</div>
 		</div>
-
-
 		`
 
 		container.appendChild(div)
 	}
 }
 
+// ? edit
+let edit_mode = false
+const edit = (number) => {
+	const edit_but = document.querySelector(`#edit_but_${number}`)
+	const edit_inp = document.querySelector(`#edit_inp_${number}`)
+
+	if (edit_mode === false) {
+		edit_but.style.color = "green"
+		edit_but.style.borderColor = "green"
+
+		edit_inp.readOnly = false
+
+		edit_mode = true
+	} else {
+		edit_but.style.color = ""
+		edit_but.style.borderColor = "white"
+
+		edit_inp.readOnly = true
+
+		const inp_value = document.querySelector(`#edit_inp_${number}`)
+
+		name[number] = inp_value.value
+
+		console.log(name)
+
+		edit_mode = false
+	}
+}
+
+// ? delete
+const del = (number) => {
+	const del_but = document.querySelector(`#del_but_${number}`)
+
+	del_but.style.color = "red"
+	del_but.style.borderColor = "red"
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "Cancel"],
+			type: "warning",
+			message: `
+			Are you sure you want to delete this code?
+			
+			You can do a rollback to tha latest save if you changed your mind!
+			`,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				del_but.style.color = ""
+				del_but.style.borderColor = "white"
+
+				const input = document.querySelector(`#edit_inp_${number}`).value
+
+				const div = document.querySelector(`#grid${number}`)
+				div.remove()
+
+				const querry = (element) => element === input
+
+				const index = name.findIndex(querry)
+
+				name.splice(index, 1)
+				secret.splice(index, 1)
+				issuer.splice(index, 1)
+
+				console.log(name)
+				console.log(secret)
+				console.log(issuer)
+			} else {
+				del_but.style.color = ""
+				del_but.style.borderColor = "white"
+			}
+		})
+}
+
 // ? create save
 const createSave = () => {
 	const cache_path = path.join(file_path, "cache")
-	const name = new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)
 
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
 		if (err) {
@@ -130,9 +199,7 @@ const createSave = () => {
 				fs.mkdirSync(cache_path)
 			}
 
-			const buffer = Buffer.from(data).toString("base64")
-
-			fs.writeFile(path.join(cache_path, `${name}.authmecache`), buffer, (err) => {
+			fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
 				if (err) {
 					logger.error("Failed to create cache folder", err)
 				} else {
