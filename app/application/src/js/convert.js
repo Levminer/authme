@@ -1,5 +1,4 @@
 let data = []
-let save_text
 
 const processdata = (text) => {
 	// remove double qoutes

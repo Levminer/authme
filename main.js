@@ -83,7 +83,7 @@ logger.log("Create log file")
 // ? version
 const authme_version = "2.4.2"
 const tag_name = "2.4.2"
-const release_date = "2021. May 4."
+const release_date = "2021. May 18."
 const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {

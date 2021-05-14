@@ -1,4 +1,4 @@
-let exp = () => {
+let loadCodes = () => {
 	const Cryptr = require("cryptr")
 	const cryptr = new Cryptr("secret")
 
@@ -8,15 +8,9 @@ let exp = () => {
 		} else {
 			let decrypted = cryptr.decrypt(content)
 
-			file = decrypted
-
-			let result = document.querySelector("#result")
-			result.value = decrypted
-			result.style.display = "flex"
-
 			processdata(decrypted)
 		}
 	})
 
-	error()
+	loadError()
 }
