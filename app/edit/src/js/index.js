@@ -26,10 +26,10 @@ if (process.platform === "win32") {
 // ? settings folder
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
-const name = []
-const secret = []
-const issuer = []
-const type = []
+const names = []
+const secrets = []
+const issuers = []
+const types = []
 
 // ? separete value
 const separation = () => {
@@ -42,26 +42,26 @@ const separation = () => {
 		if (i == c0) {
 			const name_before = data[i]
 			const name_after = name_before.slice(8)
-			name.push(name_after.trim())
+			names.push(name_after.trim())
 			c0 = c0 + 4
 		}
 
 		if (i == c1) {
 			const secret_before = data[i]
 			const secret_after = secret_before.slice(8)
-			secret.push(secret_after.trim())
+			secrets.push(secret_after.trim())
 			c1 = c1 + 4
 		}
 
 		if (i == c2) {
 			const issuer_before = data[i]
 			const issuer_after = issuer_before.slice(8)
-			issuer.push(issuer_after.trim())
+			issuers.push(issuer_after.trim())
 			c2 = c2 + 4
 		}
 
 		if (i == c3) {
-			type.push(data[i])
+			types.push(data[i])
 			c3 = c3 + 4
 		}
 	}
@@ -70,16 +70,12 @@ const separation = () => {
 }
 
 const go = () => {
-	createSave()
+	createCache()
 
 	document.querySelector(".beforeLoad").style.display = "none"
 	document.querySelector(".afterLoad").style.display = "block"
 
-	console.log(name)
-	console.log(secret)
-	console.log(issuer)
-
-	for (let i = 0; i < name.length; i++) {
+	for (let i = 0; i < names.length; i++) {
 		const container = document.querySelector(".container")
 
 		const div = document.createElement("div")
@@ -87,10 +83,10 @@ const go = () => {
 		div.innerHTML = `
 		<div class="grid" id="grid${[i]}">
 		<div class="div1">
-		<h2>${issuer[i]}</h2>
+		<h2>${issuers[i]}</h2>
 		</div>
 		<div class="div2">
-		<input type="text" class="input1" id="edit_inp_${[i]}" value="${name[i]}" readonly/> 
+		<input type="text" class="input1" id="edit_inp_${[i]}" value="${names[i]}" readonly/> 
 		</div>
 		<div class="div3">
 		<button class="buttoni button" id="edit_but_${[i]}" onclick="edit(${[i]})">
@@ -133,9 +129,7 @@ const edit = (number) => {
 
 		const inp_value = document.querySelector(`#edit_inp_${number}`)
 
-		name[number] = inp_value.value
-
-		console.log(name)
+		names[number] = inp_value.value
 
 		edit_mode = false
 	}
@@ -171,15 +165,11 @@ const del = (number) => {
 
 				const querry = (element) => element === input
 
-				const index = name.findIndex(querry)
+				const index = names.findIndex(querry)
 
-				name.splice(index, 1)
-				secret.splice(index, 1)
-				issuer.splice(index, 1)
-
-				console.log(name)
-				console.log(secret)
-				console.log(issuer)
+				names.splice(index, 1)
+				secrets.splice(index, 1)
+				issuers.splice(index, 1)
 			} else {
 				del_but.style.color = ""
 				del_but.style.borderColor = "white"
@@ -188,7 +178,36 @@ const del = (number) => {
 }
 
 // ? create save
+let save_text = ""
+
 const createSave = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "Cancel"],
+			type: "warning",
+			message: `
+			Are you sure you want to save the modified code(s)?
+			
+			This requires a restart and will overwrite your saved codes!
+			`,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				for (let i = 0; i < names.length; i++) {
+					const substr = `\nName:   ${names[i]} \nSecret: ${secrets[i]} \nIssuer: ${issuers[i]} \nType:   OTP_TOTP\n`
+					save_text += substr
+				}
+
+				saveCodes()
+
+				restart()
+			}
+		})
+}
+
+// ? create cache
+const createCache = () => {
 	const cache_path = path.join(file_path, "cache")
 
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {

@@ -1,4 +1,34 @@
 let data = []
+let save_text
+
+const handlefiles = (files) => {
+	// read file
+	if (window.FileReader) {
+		getastext(files[0])
+		console.warn("Authme - File uploaded successfully")
+	} else {
+		console.warn("Authme - Can't upload file")
+	}
+}
+
+const getastext = (fileToRead) => {
+	const reader = new FileReader()
+	reader.onload = loadhandler
+	reader.onerror = errorhandler
+	reader.readAsText(fileToRead)
+}
+
+const loadhandler = (event) => {
+	const text = event.target.result
+	save_text = text
+	processdata(text)
+}
+
+const errorhandler = (evt) => {
+	if (evt.target.error.name == "NotReadableError") {
+		console.warn("Failed to upload the file! You uploaded a corrupted or not supported file")
+	}
+}
 
 const processdata = (text) => {
 	// remove double qoutes

@@ -130,7 +130,7 @@ const settings = `{
 			"close_to_tray": false,
 			"show_2fa_names": false,
 			"click_to_reveal": false,
-			"reset_after_copy": true,
+			"reset_after_copy": false,
 			"save_search_results": true
 		},
 
