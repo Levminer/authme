@@ -20,8 +20,14 @@
 			<h2>Edit (WIP - Some things don't work!)</h2>
 			<p class="text3">You can edit, delete or add more codes.</p>
 			<button class="button1" onclick="hide()">Close</button>
+			<div class="rollback">
+				<h3>Rollback</h3>
+				<p class="text3">You can rollback to the latest save. If you load your codes below it will overwrite the current save!</p>
+				<button id="rollbackBut" class="button1" onclick="rollback()">Rollback</button>
+			</div>
 			<div class="beforeLoad">
 				<h3>Load saved code</h3>
+				<p class="text3">You can load the codes you saved.</p>
 				<button class="button1" onclick="loadCodes()">Load codes</button>
 			</div>
 			<div class="afterLoad">
@@ -31,7 +37,6 @@
 
 				<div class="container"></div>
 			</div>
-			<h1 id="result"></h1>
 		</div>
 	</body>
 </html>

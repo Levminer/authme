@@ -98,3 +98,7 @@ hr {
 .div3 {
 	grid-area: 3 / 1 / 4 / 2;
 }
+
+.rollback {
+	display: none;
+}

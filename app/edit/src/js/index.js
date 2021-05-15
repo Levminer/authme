@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-const logger = require("../../lib/logger")
 const { shell, app, dialog } = require("electron").remote
 const fs = require("fs")
 const electron = require("electron")
@@ -26,13 +24,67 @@ if (process.platform === "win32") {
 // ? settings folder
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
+// ? rollback
+const cache_path = path.join(file_path, "cache")
+const rollback_con = document.querySelector(".rollback")
+const rollback_but = document.querySelector("#rollbackBut")
+
+fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
+	if (err) {
+		console.warn("Authme - Cache file don't exist")
+	} else {
+		console.log("Authme - Cache file exists")
+
+		rollback_con.style.display = "block"
+
+		const date = fs.statSync(cache_path).atime.toLocaleString().replaceAll(",", "")
+
+		rollback_but.textContent = `Rollback to: ${date}`
+	}
+})
+
+const rollback = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "Cancel"],
+			type: "warning",
+			message: `
+			Are you sure you want to rollback to the latest save?
+			
+			This requires a restart and will overwrite your saved codes!
+			`,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
+					if (err) {
+						console.error("Authme - Error reading hash file", err)
+					} else {
+						fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
+							if (err) {
+								console.error("Authme - Failed to create cache folder", err)
+							} else {
+								console.log("Authme - Hash file created")
+							}
+						})
+					}
+				})
+
+				restart()
+			}
+		})
+}
+
+// ? separete value
 const names = []
 const secrets = []
 const issuers = []
 const types = []
 
-// ? separete value
 const separation = () => {
+	rollback_con.style.display = "none"
+
 	let c0 = 0
 	let c1 = 1
 	let c2 = 2
@@ -150,7 +202,7 @@ const del = (number) => {
 			message: `
 			Are you sure you want to delete this code?
 			
-			You can do a rollback to tha latest save if you changed your mind!
+			If you want to revert this don't save and restart the app!
 			`,
 		})
 		.then((result) => {
@@ -208,11 +260,9 @@ const createSave = () => {
 
 // ? create cache
 const createCache = () => {
-	const cache_path = path.join(file_path, "cache")
-
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
 		if (err) {
-			logger.err("Error reading hash file", err)
+			console.error("Authme - Error reading hash file", err)
 		} else {
 			if (!fs.existsSync(cache_path)) {
 				fs.mkdirSync(cache_path)
@@ -220,9 +270,9 @@ const createCache = () => {
 
 			fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
 				if (err) {
-					logger.error("Failed to create cache folder", err)
+					console.error("Authme - Failed to create cache folder", err)
 				} else {
-					logger.log("Cache file created")
+					console.log("Authme - Cache file created")
 				}
 			})
 		}
