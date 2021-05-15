@@ -3,7 +3,6 @@ const electron = require("electron")
 const path = require("path")
 const ipc = electron.ipcRenderer
 const { is } = require("electron-util")
-const logger = require("./lib/logger")
 
 // ? if development
 let dev
@@ -27,17 +26,13 @@ if (process.platform === "win32") {
 // ? settings
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
-// ? logs
-logger.createFile(file_path, "preload")
-logger.log("Create log file")
-
 // read settings
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return logger.error(`Error reading settings.json ${err}`)
+			return console.error(`Authme - Error reading settings.json ${err}`)
 		} else {
-			return logger.log("settings.json readed")
+			return console.log("Authme - settings.json readed")
 		}
 	})
 )
@@ -62,25 +57,25 @@ if (file.security.require_password === true && file.security.password !== null) 
 		if (storage === undefined) {
 			ipc.send("abort")
 
-			logger.error("Local storage not found in controller")
+			console.error("Authme - Local storage not found in controller")
 		} else {
-			logger.log("Local storage found in controller")
+			console.log(Authme - "Local storage found in controller")
 		}
 
 		if (file.security.require_password === storage.require_password) {
-			logger.log("Passwords match")
+			console.log("Passwords match")
 
 			ipc.send("to_application1")
 		} else {
 			ipc.send("abort")
 
-			logger.error("Local storage not found in controller")
+			console.error("Authme - Local storage not found in controller")
 		}
 	} else {
 		ipc.send("to_application1")
 	}
 } else if (file.security.require_password === null && file.security.password === null) {
-	logger.log("First restart")
+	console.log("Authme - First restart")
 } else {
 	ipc.send("to_confirm")
 }

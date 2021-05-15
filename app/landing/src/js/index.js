@@ -84,7 +84,7 @@ const hash_password = async () => {
 
 	setInterval(() => {
 		ipc.send("to_confirm")
-	}, 3000)
+	}, 1000)
 }
 
 // ? no password
@@ -117,5 +117,5 @@ const no_password = () => {
 
 	setInterval(() => {
 		ipc.send("to_application1")
-	}, 3000)
+	}, 1000)
 }

@@ -213,12 +213,30 @@ const reset = () => {
 								}
 							})
 
+							// clear logs
+							fs.rmdir(path.join(file_path, "/logs"), { recursive: true }, (err) => {
+								if (err) {
+									return console.warn(`Authme - Error deleting logs - ${err}`)
+								} else {
+									console.warn("Authme - Logs deleted")
+								}
+							})
+
+							// clear cache files
+							fs.rmdir(path.join(file_path, "/cache"), { recursive: true }, (err) => {
+								if (err) {
+									return console.warn(`Authme - Error deleting caches - ${err}`)
+								} else {
+									console.warn("Authme - Caches deleted")
+								}
+							})
+
 							// remove start shortcut
 							if (dev !== true) {
 								ipc.send("disable_startup")
 							}
 
-							// clear localstorage
+							// clear storage
 							if (dev !== true) {
 								localStorage.clear()
 								sessionStorage.clear()

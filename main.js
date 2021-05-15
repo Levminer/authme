@@ -858,19 +858,19 @@ app.whenReady().then(() => {
 		if (is.development === true) {
 			setTimeout(() => {
 				createWindow()
-			}, 1000)
+			}, 500)
 
 			setTimeout(() => {
-				window_splash.hide()
-			}, 1500)
+				window_splash.destroy()
+			}, 1000)
 		} else {
 			setTimeout(() => {
 				createWindow()
-			}, 3000)
+			}, 2000)
 
 			setTimeout(() => {
-				window_splash.hide()
-			}, 3500)
+				window_splash.destroy()
+			}, 2500)
 		}
 	})
 
