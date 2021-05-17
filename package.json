@@ -39,14 +39,16 @@
 		"linux": {
 			"target": "deb",
 			"maintainer": "levminer@levminer.com",
-			"icon": "img/icon.png",
+			"icon": "img/icon.png"
+		},
+		"deb": {
 			"depends": [
 				"libnotify4",
 				"libxtst6",
 				"libnss3",
 				"libsecret-1-0",
 				"libxss1"
-			  ]
+			]
 		},
 		"mac": {
 			"target": "dmg",
