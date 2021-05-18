@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.4.1",
+	"version": "2.4.2",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -19,14 +19,15 @@
 		"asarUnpack": [
 			"app/import/src/py/*",
 			"src/install.py",
-			"src/remove.py",
 			"src/version.py"
 		],
 		"win": {
 			"target": [
-				"nsis"
+				"nsis",
+				"zip"
 			],
-			"icon": "img/icon.ico"
+			"icon": "img/icon.ico",
+			"artifactName": "authme-${version}-windows-x64-portable.zip"
 		},
 		"nsis": {
 			"installerIcon": "img/icon.ico",
@@ -35,17 +36,37 @@
 			"license": "LICENSE.md",
 			"oneClick": false,
 			"allowToChangeInstallationDirectory": true,
-			"createDesktopShortcut": "always"
+			"createDesktopShortcut": "always",
+			"artifactName": "authme-${version}-windows-x64-installer.exe"
 		},
 		"linux": {
-			"target": "deb",
+			"target": [
+				"deb",
+				"zip"
+			],
 			"maintainer": "levminer@levminer.com",
-			"icon": "img/icon.png"
+			"icon": "img/icon.png",
+			"category": "Utility",
+			"desktop": {
+				"Name": "Authme",
+				"Type": "Application"
+			},
+			"artifactName": "authme-${version}-linux-x64-portable.zip"
+		},
+		"deb": {
+			"artifactName": "authme-${version}-linux-x64-installer.deb"
 		},
 		"mac": {
-			"target": "dmg",
+			"target": [
+				"dmg",
+				"zip"
+			],
 			"icon": "img/icon.icns",
-			"category": "public.app-category.utilities"
+			"category": "public.app-category.utilities",
+			"artifactName": "authme-${version}-mac-x64-portable.zip"
+		},
+		"dmg": {
+			"artifactName": "authme-${version}-mac-x64-installer.dmg"
 		}
 	},
 	"dependencies": {
@@ -54,16 +75,16 @@
 		"bcryptjs": "^2.4.3",
 		"cryptr": "^6.0.2",
 		"electron-debug": "^3.2.0",
-		"electron-util": "^0.14.2",
+		"electron-util": "^0.16.0",
 		"node-fetch": "^2.6.1",
 		"qrcode": "^1.4.4",
 		"qrcode-decoder": "0.1.2"
 	},
 	"devDependencies": {
-		"electron": "^12.0.6",
+		"electron": "^12.0.7",
 		"electron-builder": "^22.10.5",
 		"electron-packager": "^15.2.0",
-		"eslint": "^7.25.0",
+		"eslint": "^7.26.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-promise": "^2.0.2",
@@ -72,6 +93,6 @@
 		"eslint-plugin-prettier": "^3.4.0",
 		"eslint-plugin-promise": "^4.3.1",
 		"eslint-plugin-standard": "^5.0.0",
-		"prettier": "^2.2.1"
+		"prettier": "^2.3.0"
 	}
 }

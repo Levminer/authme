@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Authme</title>
+		<meta charset="UTF-8" />
+		<!-- js -->
+		<script defer src="./src/js/convert.js"></script>
+		<script defer src="./src/js/export.js"></script>
+		<script defer src="./src/js/index.js"></script>
+		<script defer src="./src/js/save.js"></script>
+		<!-- css -->
+		<link rel="stylesheet" href="../.././src/dragonfly@1.4.0.css" />
+		<link rel="stylesheet" href="./src/css/index.css" />
+		<!-- favicon -->
+		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
+	</head>
+	<body>
+		<div class="center">
+			<h1>Authme</h1>
+			<h2>Edit</h2>
+			<p class="text3">You can edit, delete or add more codes.</p>
+			<button class="button1" onclick="hide()">Close</button>
+			<div class="rollback">
+				<h3>Rollback</h3>
+				<p class="text3">You can rollback to the latest save. If you load your codes below it will overwrite the current save!</p>
+				<button id="rollbackBut" class="button1" onclick="rollback()">Rollback</button>
+			</div>
+			<div class="beforeLoad">
+				<h3>Load saved code</h3>
+				<p class="text3">You can load the codes you saved.</p>
+				<button class="button1" onclick="loadCodes()">Load codes</button>
+				<p class="warning">This feature is WIP! Use it at your own risk!</p>
+			</div>
+			<div class="afterLoad">
+				<h3>Edit mode</h3>
+				<p class="text3">Now you can modify existing codes or add more.</p>
+				<button class="button1" onclick="createSave()">Save</button>
+				<!-- codes -->
+				<div class="container"></div>
+			</div>
+		</div>
+	</body>
+</html>

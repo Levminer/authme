@@ -12,7 +12,7 @@ h1 {
 #ver {
 	font-size: 1rem;
 	position: relative;
-	top: 35px;
+	top: 70px;
 }
 
 .center {
@@ -28,7 +28,7 @@ h1 {
 	position: relative;
 	width: 200%;
 	left: -30%;
-	top: -15px;
+	top: 35px;
 }
 
 .loader {

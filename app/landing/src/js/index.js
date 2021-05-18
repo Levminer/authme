@@ -35,18 +35,26 @@ const match_passwords = () => {
 	const password_input1 = document.querySelector("#password_input1").value
 	const password_input2 = document.querySelector("#password_input2").value
 
-	if (password_input1 == password_input2) {
-		console.warn("Authme - Passwords match!")
-
-		text.style.color = "green"
-		text.textContent = "Passwords match! Please wait!"
-
-		hash_password()
-	} else {
-		console.warn("Authme - Passwords dont match!")
-
+	if (password_input1.length > 64) {
 		text.style.color = "red"
-		text.textContent = "Passwords don't match! Try again!"
+		text.textContent = "Maximum password length is 64 charachters!"
+	} else if (password_input1.length < 8) {
+		text.style.color = "red"
+		text.textContent = "Minimum password length is 8 charachters!"
+	} else {
+		if (password_input1 == password_input2) {
+			console.warn("Authme - Passwords match!")
+
+			text.style.color = "green"
+			text.textContent = "Passwords match! Please wait!"
+
+			hash_password()
+		} else {
+			console.warn("Authme - Passwords dont match!")
+
+			text.style.color = "red"
+			text.textContent = "Passwords don't match! Try again!"
+		}
 	}
 }
 
@@ -84,7 +92,7 @@ const hash_password = async () => {
 
 	setInterval(() => {
 		ipc.send("to_confirm")
-	}, 3000)
+	}, 1000)
 }
 
 // ? no password
@@ -117,5 +125,5 @@ const no_password = () => {
 
 	setInterval(() => {
 		ipc.send("to_application1")
-	}, 3000)
+	}, 1000)
 }

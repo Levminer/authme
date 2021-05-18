@@ -32,7 +32,6 @@ if (process.platform === "win32") {
 
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
-// ? read file from settings folder
 const name = []
 const secret = []
 const issuer = []

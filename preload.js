@@ -30,9 +30,9 @@ const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(fol
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {
-			return console.log(`Error reading settings.json ${err}`)
+			return console.error(`Authme - Error reading settings.json ${err}`)
 		} else {
-			return console.log("settings.json readed")
+			return console.log("Authme - settings.json readed")
 		}
 	})
 )
@@ -54,26 +54,28 @@ if (file.security.require_password === true && file.security.password !== null) 
 	ipc.send("to_confirm")
 } else if (file.security.require_password === false && file.security.password === null) {
 	if (integrity === false) {
-		try {
-			console.log(storage)
-		} catch (error) {
-			console.warn("Authme - Local storage not found in controller")
-
+		if (storage === undefined) {
 			ipc.send("abort")
+
+			console.error("Authme - Local storage not found in controller")
+		} else {
+			console.log(Authme - "Local storage found in controller")
 		}
 
 		if (file.security.require_password === storage.require_password) {
+			console.log("Passwords match")
+
 			ipc.send("to_application1")
 		} else {
-			console.warn("Authme - Local storage not found in controller")
-
 			ipc.send("abort")
+
+			console.error("Authme - Local storage not found in controller")
 		}
 	} else {
 		ipc.send("to_application1")
 	}
 } else if (file.security.require_password === null && file.security.password === null) {
-	return console.log("First restart")
+	console.log("Authme - First restart")
 } else {
 	ipc.send("to_confirm")
 }
