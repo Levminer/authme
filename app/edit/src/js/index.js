@@ -258,6 +258,39 @@ const createSave = () => {
 		})
 }
 
+// ? load more
+const addMore = () => {
+	dialog
+		.showOpenDialog({
+			title: "Import from QR code(s)",
+			properties: ["openFile", "multiSelections"],
+			filters: [{ name: "Text file", extensions: ["txt"] }],
+		})
+		.then((result) => {
+			canceled = result.canceled
+			files = result.filePaths
+
+			console.log(files)
+
+			for (let i = 0; i < files.length; i++) {
+				fs.readFile(files[i], (err, input) => {
+					if (err) {
+						console.log("Authme - Error loading file")
+					} else {
+						data = []
+
+						const container = document.querySelector(".container")
+						container.innerHTML = ""
+
+						processdata(input.toString())
+					}
+				})
+
+				console.log(files[i])
+			}
+		})
+}
+
 // ? create cache
 const createCache = () => {
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
