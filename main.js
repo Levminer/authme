@@ -3,9 +3,9 @@ const { spawn } = require("child_process")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
 const debug = require("electron-debug")
+const logger = require("./lib/logger")
 const electron = require("electron")
 const fetch = require("node-fetch")
-const logger = require("./lib/logger")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
@@ -76,14 +76,10 @@ if (!fs.existsSync(file_path)) {
 	fs.mkdirSync(file_path)
 }
 
-// ? logs
-logger.createFile(file_path, "main")
-logger.log("Create log file")
-
-// ? version
-const authme_version = "2.4.2"
-const tag_name = "2.4.2"
-const release_date = "2021. May 18."
+// ? version and logs
+const authme_version = "2.5.0"
+const tag_name = "2.5.0"
+const release_date = "2021. June 1."
 const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
@@ -96,6 +92,11 @@ const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
+
+// logs
+logger.createFile(file_path, "main")
+logger.log("Create log file")
+logger.log(`Version ${authme_version} ${os_version}`)
 
 // python version
 let python_version
@@ -118,6 +119,20 @@ version.on("error", (err) => {
 	python_version = "Not installed \n"
 	logger.error("Error getting python version", err)
 })
+
+// ? single instance
+if (dev === false) {
+	const lock = app.requestSingleInstanceLock()
+
+	if (lock === false) {
+		app.quit()
+	} else {
+		app.on("second-instance", () => {
+			window_application.maximize()
+			window_application.show()
+		})
+	}
+}
 
 // ? settings
 const settings = `{
