@@ -22,13 +22,13 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	background: var(--df_gradiant_start);
+	background: rgb(10, 10, 10);
 }
 
 /* selection */
 ::selection {
 	color: var(--df_tertiary_color);
-	background: var(--df_secondary_color);
+	background: black;
 }
 
 /* all */
@@ -77,7 +77,7 @@ body {
 /* buttons */
 .button1 {
 	color: var(--df_secondary_color);
-	background: var(--df_primary_color);
+	background: rgb(20, 20, 20);
 	border: 1px solid var(--df_primary_color);
 	font-size: 1.25rem;
 	padding: 15px 30px;
@@ -89,7 +89,7 @@ body {
 
 .button1:hover {
 	border: 1px solid var(--df_primary_color);
-	background: var(--df_primary_background);
+	background: rgb(20, 20, 20);
 	color: var(--df_primary_color);
 }
 
@@ -188,7 +188,7 @@ h4 {
 
 .input1:hover {
 	color: var(--df_primary_color);
-	background-color: var(--df_primary_background);
+	background-color: rgb(20, 20, 20);
 	border: 1px solid var(--df_primary_color);
 }
 
@@ -220,7 +220,7 @@ h4 {
 
 /* divs*/
 .center {
-	background-color: var(--df_secondary_background);
+	background-color: rgb(20, 20, 20);
 	position: relative;
 	top: 200px;
 	text-align: center;
@@ -228,7 +228,7 @@ h4 {
 	margin: 130px auto;
 	height: 300px;
 	width: 600px;
-	border-radius: 1.8rem;
+	border-radius: 30px;
 }
 
 /* summary */
@@ -349,63 +349,21 @@ h4 {
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: #000000;
+	background-color: rgb(20, 20, 20);
 }
 
 ::-webkit-scrollbar-corner {
 	background: #292a2d;
 }
 
-/* popup */
-.popup {
-	padding: 15px;
-	background-color: red;
-	color: white;
-	text-align: center;
-	font-weight: bold;
+.online {
 	display: none;
 }
 
-.popup_close1 {
-	margin-left: 15px;
-	color: var(--df_secondary_color);
-	font-weight: bold;
-	float: right;
-	font-size: 20px;
-	line-height: 20px;
-	cursor: pointer;
-	transition: 0.2s ease-in;
-}
-
-.popup_close2 {
-	margin-right: 15px;
-	color: white;
-	font-weight: bold;
-	float: left;
-	font-size: 20px;
-	line-height: 20px;
-	cursor: pointer;
-	transition: 0.2s ease-in;
-}
-
-.popup_close1:hover {
-	color: var(--df_primary_background);
-}
-
-.popup_close2:hover {
-	color: var(--df_primary_background);
-}
-
-.popup_link {
-	text-decoration: underline !important;
-	cursor: pointer;
-	transition: 0.2s ease-in;
-}
-
-.online {
-	background-color: green;
-}
-
 .offline {
-	background-color: red;
+	display: none;
+}
+
+.update {
+	display: none;
 }

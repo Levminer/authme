@@ -114,7 +114,7 @@ hr {
 
 .buttoni:hover {
 	border: 1px solid var(--df_primary_color);
-	background: var(--df_primary_background);
+	background: rgb(20, 20, 20);
 	color: var(--df_primary_color);
 }
 
@@ -127,4 +127,24 @@ hr {
 	font-weight: bold;
 	margin-top: 30px;
 	font-size: 2rem;
+}
+
+.unstable {
+	color: orange;
+	font-weight: bold;
+	margin-top: 30px;
+	font-size: 2rem;
+}
+
+.offset {
+	text-align: center;
+	width: 80px;
+	padding: 17.5px;
+	height: 17.5px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }

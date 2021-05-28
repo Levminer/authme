@@ -2,7 +2,6 @@ body {
 	overflow-y: scroll;
 	margin: 0;
 	padding: 0;
-	background: rgb(20, 20, 20);
 }
 
 h4 {
@@ -39,8 +38,8 @@ h4 {
 }
 
 .button11:hover {
-	border: 1px solid wheat;
-	background: black;
+	border: 1px solid white;
+	background: rgb(10, 10, 10);
 	color: white;
 }
 
@@ -54,7 +53,7 @@ h4 {
 .input1:hover {
 	color: white;
 	border-color: white;
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 }
 
 #password_input2 {
@@ -90,7 +89,7 @@ h4 {
 	grid-row-gap: 0px;
 	justify-items: center;
 
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 	margin-top: 50px;
 	border-radius: 30px;
 	margin: 0 auto;
@@ -147,7 +146,7 @@ h4 {
 }
 
 .input2:hover {
-	background-color: var(--df_primary_background);
+	background-color: rgb(20, 20, 20);
 	color: white;
 	border-color: white;
 }

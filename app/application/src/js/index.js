@@ -508,6 +508,11 @@ const focus_search = () => {
 	document.getElementById("search").focus()
 }
 
+// ? show update
+const showUpdate = () => {
+	document.querySelector(".update").style.display = "block"
+}
+
 // ? offline mode
 let offline_mode = false
 let offline_closed = false

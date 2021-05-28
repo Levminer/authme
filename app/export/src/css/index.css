@@ -28,16 +28,6 @@
 	border-color: white;
 }
 
-#password_input2 {
-	position: relative;
-	top: 20px;
-}
-
-#password_label2 {
-	position: relative;
-	top: 20px;
-}
-
 #button1 {
 	position: relative;
 	top: 45px;
@@ -54,13 +44,13 @@
 	position: relative;
 	top: 50px;
 	margin: 0 auto;
-	border: 1px solid rgb(0, 0, 0);
+	border: 1px solid rgb(10, 10, 10);
 	padding: 1rem;
 	border-radius: 30px;
 	width: 570px;
 	height: 500px;
 	transition: 0.3s;
-	background-color: rgb(0, 0, 0);
+	background-color: rgb(10, 10, 10);
 	color: rgb(255, 255, 255);
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 20px;
@@ -76,7 +66,7 @@
 
 .qr {
 	padding-top: 250px;
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 	margin-top: 50px;
 	border-radius: 30px;
 	margin: 0 auto;

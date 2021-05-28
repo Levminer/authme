@@ -139,7 +139,6 @@ const settings = `{
 		"version":{
 			"tag": "${tag_name}"  
 		},
-
 		"settings": {
 			"launch_on_startup": false,
 			"close_to_tray": false,
@@ -148,12 +147,14 @@ const settings = `{
 			"reset_after_copy": false,
 			"save_search_results": true
 		},
-
+		"advanced_settings":{
+			"offset": null,
+			"language": "en",
+		},
 		"security": {
 			"require_password": null,
 			"password": null
 		},
-
 		"shortcuts": {
 			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
@@ -168,13 +169,11 @@ const settings = `{
 			"update": "CommandOrControl+u",
 			"info": "CommandOrControl+o"
 		},
-
 		"global_shortcuts": {
 			"show": "CommandOrControl+Shift+a",
 			"settings": "CommandOrControl+Shift+s",
 			"exit": "CommandOrControl+Shift+d"
 		},
-
 		"search_history": {
 			"latest": null
 		}
@@ -182,25 +181,11 @@ const settings = `{
 
 // create settings if not exists
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
-	fs.writeFileSync(path.join(file_path, "settings.json"), settings, (err) => {
-		if (err) {
-			return logger.error("Error creating settings.json", err)
-		} else {
-			return logger.log("Authme - File settings.json created")
-		}
-	})
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(settings, null, 4))
 }
 
 // read settings
-const file = JSON.parse(
-	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
-		if (err) {
-			return logger.error("Error reading settings.json", err)
-		} else {
-			return logger.log("Authme - File settings.json readed")
-		}
-	})
-)
+const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // ? install protobuf
 let install_src
@@ -462,6 +447,8 @@ const createWindow = () => {
 		},
 	})
 
+	/* 	window_application.setContentProtection("enable") */
+
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
@@ -475,7 +462,7 @@ const createWindow = () => {
 	}
 
 	window_application.on("show", () => {
-		window_application.webContents.executeJavaScript("focus_search()")
+		window_application.webContents.executeJavaScript("focusSearch()")
 	})
 
 	window_landing.on("close", () => {
@@ -487,6 +474,10 @@ const createWindow = () => {
 	})
 
 	window_application.on("close", async (event) => {
+		if (dev === true) {
+			app.exit()
+		}
+
 		if (to_tray == false) {
 			app.exit()
 		} else {
@@ -588,6 +579,12 @@ const createWindow = () => {
 											shell.openExternal("https://github.com/Levminer/authme/releases/latest")
 										}
 									})
+
+								window_application.webContents.executeJavaScript("showUpdate()")
+
+								window_settings.on("show", () => {
+									window_settings.webContents.executeJavaScript("showUpdate()")
+								})
 
 								logger.log("Auto update found!")
 							} else {
