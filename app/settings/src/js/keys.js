@@ -14,7 +14,6 @@ const default_shortcuts = {
 		update: "CommandOrControl+u",
 		info: "CommandOrControl+o",
 	},
-
 	global_shortcuts: {
 		show: "CommandOrControl+Shift+a",
 		settings: "CommandOrControl+Shift+s",

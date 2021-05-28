@@ -34,35 +34,12 @@ if (process.platform === "win32") {
 // ? settings
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
-const but0 = document.querySelector("#but0")
-const but1 = document.querySelector("#but1")
-const but2 = document.querySelector("#but2")
-const but5 = document.querySelector("#but5")
-const but10 = document.querySelector("#but10")
-const but11 = document.querySelector("#but11")
-const but13 = document.querySelector("#but13")
-
 // ? read settings
-let file = JSON.parse(
-	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
-		if (err) {
-			return console.warn(`Authme - Error reading settings.json - ${err}`)
-		} else {
-			return console.warn("Authme - File settings.json readed")
-		}
-	})
-)
+let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
+// ? refresh settings
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(
-		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
-			if (err) {
-				return console.warn(`Authme - Error reading settings.json - ${err}`)
-			} else {
-				return console.warn("Authme - File settings.json readed")
-			}
-		})
-	)
+	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
@@ -72,6 +49,16 @@ const settings_refresher = setInterval(() => {
 
 	console.warn("Authme - Settings refreshed")
 }, 100)
+
+// ? elements
+const but0 = document.querySelector("#but0")
+const but2 = document.querySelector("#but2")
+const but5 = document.querySelector("#but5")
+const but10 = document.querySelector("#but10")
+const but11 = document.querySelector("#but11")
+const but13 = document.querySelector("#but13")
+
+const inp0 = document.querySelector("#inp0")
 
 // close to tray
 let tray_state = file.settings.close_to_tray
@@ -125,12 +112,26 @@ if (search_state === true) {
 	but13.textContent = "Off"
 }
 
+// offset
+let offset_number
+try {
+	offset_number = file.advanced_settings.offset
+
+	if (offset_number === null) {
+		inp0.value = 0
+	} else {
+		inp0.value = offset_number
+	}
+} catch (error) {
+	console.error(`Auhtme - Error loading offset - ${error}`)
+}
+
 // ? startup
 const startup = () => {
 	if (startup_state == true) {
 		file.settings.launch_on_startup = false
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		save()
 
 		but0.textContent = "Off"
 		startup_state = false
@@ -139,7 +140,7 @@ const startup = () => {
 	} else {
 		file.settings.launch_on_startup = true
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		save()
 
 		but0.textContent = "On"
 		startup_state = true
@@ -153,7 +154,7 @@ const tray = () => {
 	if (tray_state == true) {
 		file.settings.close_to_tray = false
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		save()
 
 		but2.textContent = "Off"
 		tray_state = false
@@ -162,7 +163,7 @@ const tray = () => {
 	} else {
 		file.settings.close_to_tray = true
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		save()
 
 		but2.textContent = "On"
 		tray_state = true
@@ -242,9 +243,6 @@ const reset = () => {
 								sessionStorage.clear()
 							}
 
-							// restarting
-							but1.textContent = "Restarting app"
-
 							// restart
 							restart()
 						}
@@ -268,20 +266,18 @@ const names = () => {
 				if (names_state == true) {
 					file.settings.show_2fa_names = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but5.textContent = "Off"
 					names_state = false
 				} else {
 					file.settings.show_2fa_names = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but5.textContent = "On"
 					names_state = true
 				}
-
-				but5.textContent = "Restarting app"
 
 				restart()
 			}
@@ -290,14 +286,14 @@ const names = () => {
 				if (names_state == true) {
 					file.settings.show_2fa_names = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but5.textContent = "Off"
 					names_state = false
 				} else {
 					file.settings.show_2fa_names = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but5.textContent = "On"
 					names_state = true
@@ -321,20 +317,18 @@ const copy = () => {
 				if (copy_state == true) {
 					file.settings.reset_after_copy = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but10.textContent = "Off"
 					copy_state = false
 				} else {
 					file.settings.reset_after_copy = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but10.textContent = "On"
 					copy_state = true
 				}
-
-				but10.textContent = "Restarting app"
 
 				restart()
 			}
@@ -343,14 +337,14 @@ const copy = () => {
 				if (copy_state == true) {
 					file.settings.reset_after_copy = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but10.textContent = "Off"
 					copy_state = false
 				} else {
 					file.settings.reset_after_copy = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but10.textContent = "On"
 					copy_state = true
@@ -374,20 +368,18 @@ const search = () => {
 				if (search_state == true) {
 					file.settings.save_search_results = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but13.textContent = "Off"
 					search_state = false
 				} else {
 					file.settings.save_search_results = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but13.textContent = "On"
 					search_state = true
 				}
-
-				but13.textContent = "Restarting app"
 
 				restart()
 			}
@@ -396,14 +388,14 @@ const search = () => {
 				if (search_state == true) {
 					file.settings.save_search_results = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but13.textContent = "Off"
 					search_state = false
 				} else {
 					file.settings.save_search_results = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but13.textContent = "On"
 					search_state = true
@@ -427,20 +419,19 @@ const reveal = () => {
 				if (reveal_state == true) {
 					file.settings.click_to_reveal = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but11.textContent = "Off"
 					reveal_state = false
 				} else {
 					file.settings.click_to_reveal = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but11.textContent = "On"
 					reveal_state = true
 				}
 
-				but11.textContent = "Restarting app"
 				restart()
 			}
 
@@ -448,14 +439,14 @@ const reveal = () => {
 				if (reveal_state == true) {
 					file.settings.click_to_reveal = false
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but11.textContent = "Off"
 					reveal_state = false
 				} else {
 					file.settings.click_to_reveal = true
 
-					fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+					save()
 
 					but11.textContent = "On"
 					reveal_state = true
@@ -464,17 +455,60 @@ const reveal = () => {
 		})
 }
 
-// ? folder 0
+// ? offset
+inp0.addEventListener("keyup", (event) => {
+	if (event.key === "Enter") {
+		const offset_input = document.querySelector("#inp0").value
+
+		console.log(event)
+
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: ["Yes", "No", "Cancel"],
+				cancelId: 2,
+				type: "warning",
+				message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			})
+			.then((result) => {
+				if (result.response === 0) {
+					file.advanced_settings.offset = parseInt(offset_input)
+
+					save()
+
+					restart()
+				}
+
+				if (result.response === 1) {
+					file.advanced_settings.offset = parseInt(offset_input)
+
+					save()
+				}
+			})
+	}
+})
+
+// ? save settings
+const save = () => {
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
+// ? show update
+const showUpdate = () => {
+	document.querySelector(".update").style.display = "block"
+}
+
+// ? authme folder
 const folder0 = () => {
 	ipc.send("app_path")
 }
 
-// ? folder 1
+// ? settings folder
 const folder1 = () => {
 	shell.showItemInFolder(file_path)
 }
 
-// ? folder 2
+// ? cache folder
 const folder2 = () => {
 	let cache_path
 
@@ -565,7 +599,7 @@ const menu = (evt, name) => {
 		document.querySelector(".experimental").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".center").style.height = "850px"
+		document.querySelector(".center").style.height = "1200px"
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -593,7 +627,7 @@ const restart = () => {
 	setTimeout(() => {
 		app.relaunch()
 		app.exit()
-	}, 500)
+	}, 300)
 }
 
 // ? about
