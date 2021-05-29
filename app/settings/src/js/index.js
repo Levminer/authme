@@ -57,6 +57,7 @@ const but5 = document.querySelector("#but5")
 const but10 = document.querySelector("#but10")
 const but11 = document.querySelector("#but11")
 const but13 = document.querySelector("#but13")
+const but15 = document.querySelector("#but15")
 
 const inp0 = document.querySelector("#inp0")
 
@@ -65,11 +66,23 @@ let tray_state = file.settings.close_to_tray
 if (tray_state === true) {
 	but2.textContent = "On"
 
-	ipc.send("after_tray1")
+	ipc.send("enable_tray")
 } else {
 	but2.textContent = "Off"
 
-	ipc.send("after_tray0")
+	ipc.send("disable_tray")
+}
+
+// capture
+let capture_state = file.settings.disable_window_capture
+if (capture_state === true) {
+	but15.textContent = "On"
+
+	ipc.send("disable_capture")
+} else {
+	but15.textContent = "Off"
+
+	ipc.send("enable_capture")
 }
 
 // launch on startup
@@ -113,17 +126,10 @@ if (search_state === true) {
 }
 
 // offset
-let offset_number
-try {
-	offset_number = file.advanced_settings.offset
+const offset_number = file.advanced_settings.offset
 
-	if (offset_number === null) {
-		inp0.value = 0
-	} else {
-		inp0.value = offset_number
-	}
-} catch (error) {
-	console.error(`Auhtme - Error loading offset - ${error}`)
+if (offset_number === null) {
+	inp0.value = 0
 }
 
 // ? startup
@@ -159,7 +165,7 @@ const tray = () => {
 		but2.textContent = "Off"
 		tray_state = false
 
-		ipc.send("after_tray0")
+		ipc.send("disable_tray")
 	} else {
 		file.settings.close_to_tray = true
 
@@ -168,7 +174,30 @@ const tray = () => {
 		but2.textContent = "On"
 		tray_state = true
 
-		ipc.send("after_tray1")
+		ipc.send("enable_tray")
+	}
+}
+
+// ? capture
+const capture = () => {
+	if (capture_state == true) {
+		file.settings.disable_window_capture = false
+
+		save()
+
+		but15.textContent = "Off"
+		capture_state = false
+
+		ipc.send("enable_capture")
+	} else {
+		file.settings.disable_window_capture = true
+
+		save()
+
+		but15.textContent = "On"
+		capture_state = true
+
+		ipc.send("disable_capture")
 	}
 }
 
@@ -588,7 +617,7 @@ const menu = (evt, name) => {
 		document.querySelector(".settings").disabled = true
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".center").style.height = "2950px"
+		document.querySelector(".center").style.height = "3150px"
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")

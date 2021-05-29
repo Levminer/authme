@@ -47,12 +47,7 @@ const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
 const search_state = file.settings.save_search_results
 
-let offset
-try {
-	offset = file.advanced_settings.offset
-} catch (error) {
-	console.error(`Auhtme - Error loading offset - ${error}`)
-}
+const offset_number = file.advanced_settings.offset
 
 // ? separet values
 const separation = () => {
@@ -302,16 +297,16 @@ const go = () => {
 				const token = speakeasy.totp({
 					secret: secret[i],
 					encoding: "base32",
-					epoch: offset,
+					epoch: offset_number,
 				})
 
 				// time
 				let remaining
 
-				if (offset === undefined || null || 0) {
+				if (offset_number === undefined || null || 0) {
 					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 				} else {
-					remaining = 30 - Math.floor((new Date(Date.now() - offset * 1000).getTime() / 1000.0) % 30)
+					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
 				// settting elements
@@ -332,16 +327,16 @@ const go = () => {
 				const token = speakeasy.totp({
 					secret: secret[i],
 					encoding: "base32",
-					epoch: offset,
+					epoch: offset_number,
 				})
 
 				// time
 				let remaining
 
-				if (offset === undefined || null || 0) {
+				if (offset_number === undefined || null || 0) {
 					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 				} else {
-					remaining = 30 - Math.floor((new Date(Date.now() - offset * 1000).getTime() / 1000.0) % 30)
+					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
 				// settting elements

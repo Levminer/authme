@@ -145,7 +145,8 @@ const settings = `{
 			"show_2fa_names": false,
 			"click_to_reveal": false,
 			"reset_after_copy": false,
-			"save_search_results": true
+			"save_search_results": true,
+			"disable_window_capture": true
 		},
 		"advanced_settings":{
 			"offset": null,
@@ -186,6 +187,22 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 
 // read settings
 const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+// settings compatibility
+if (file.advanced_settings === undefined) {
+	file.advanced_settings = {
+		offset: null,
+		language: "en",
+	}
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
+if (file.settings.disable_window_capture === undefined) {
+	file.settings.disable_window_capture = true
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
 
 // ? install protobuf
 let install_src
@@ -446,8 +463,6 @@ const createWindow = () => {
 			contextIsolation: false,
 		},
 	})
-
-	/* 	window_application.setContentProtection("enable") */
 
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
@@ -726,11 +741,27 @@ ipc.on("enable_startup", () => {
 	logger.log("Startup enabled")
 })
 
-ipc.on("after_tray0", () => {
+ipc.on("disable_capture", () => {
+	window_settings.setContentProtection(true)
+	window_edit.setContentProtection(true)
+	window_application.setContentProtection(true)
+	window_import.setContentProtection(true)
+	window_export.setContentProtection(true)
+})
+
+ipc.on("enable_capture", () => {
+	window_settings.setContentProtection(false)
+	window_edit.setContentProtection(false)
+	window_application.setContentProtection(false)
+	window_import.setContentProtection(false)
+	window_export.setContentProtection(false)
+})
+
+ipc.on("disable_tray", () => {
 	to_tray = false
 })
 
-ipc.on("after_tray1", () => {
+ipc.on("enable_tray", () => {
 	to_tray = true
 })
 
