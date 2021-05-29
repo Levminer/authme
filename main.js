@@ -43,7 +43,7 @@ let pass_start = false
 let update_start = false
 
 // ? development
-let dev
+let dev = false
 
 if (is.development === true) {
 	debug({
@@ -95,8 +95,9 @@ const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 
 // logs
 logger.createFile(file_path, "main")
-logger.log("Create log file")
-logger.log(`Version ${authme_version} ${os_version}`)
+logger.log(`Authme ${authme_version} `)
+logger.log(`System ${os_version}`)
+logger.log(`Electron ${electron_version}`)
 
 // python version
 let python_version
@@ -117,7 +118,7 @@ version.stdout.on("data", (res) => {
 
 version.on("error", (err) => {
 	python_version = "Not installed \n"
-	logger.error("Error getting python version", err)
+	logger.warn("Error getting python version", err)
 })
 
 // ? single instance
@@ -125,9 +126,13 @@ if (dev === false) {
 	const lock = app.requestSingleInstanceLock()
 
 	if (lock === false) {
+		logger.log("Already running, shutting down")
+
 		app.quit()
 	} else {
 		app.on("second-instance", () => {
+			logger.log("Already running, focusing window")
+
 			window_application.maximize()
 			window_application.show()
 		})

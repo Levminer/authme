@@ -1,6 +1,6 @@
 {
 	"name": "authme",
-	"version": "2.4.3",
+	"version": "2.5.0",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -17,7 +17,7 @@
 	"build": {
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
-		"asar": false,
+		"asar": true,
 		"asarUnpack": [
 			"app/import/src/py/*",
 			"src/install.py",
