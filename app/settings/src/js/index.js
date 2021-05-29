@@ -244,7 +244,7 @@ const reset = () => {
 							})
 
 							// clear logs
-							fs.rmdir(path.join(file_path, "/logs"), { recursive: true }, (err) => {
+							fs.rmdir(path.join(file_path, "logs"), { recursive: true }, (err) => {
 								if (err) {
 									return console.warn(`Authme - Error deleting logs - ${err}`)
 								} else {
@@ -253,7 +253,7 @@ const reset = () => {
 							})
 
 							// clear cache files
-							fs.rmdir(path.join(file_path, "/cache"), { recursive: true }, (err) => {
+							fs.rmdir(path.join(file_path, "cache"), { recursive: true }, (err) => {
 								if (err) {
 									return console.warn(`Authme - Error deleting caches - ${err}`)
 								} else {

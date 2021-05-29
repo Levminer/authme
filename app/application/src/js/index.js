@@ -414,7 +414,7 @@ const search = () => {
 	// save result
 	if (search_state === true) {
 		file.search_history.latest = input
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 	}
 
 	// restart

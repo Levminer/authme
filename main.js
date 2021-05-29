@@ -154,8 +154,7 @@ const settings = `{
 			"disable_window_capture": true
 		},
 		"advanced_settings":{
-			"offset": null,
-			"language": "en",
+			"offset": null
 		},
 		"security": {
 			"require_password": null,
@@ -187,17 +186,16 @@ const settings = `{
 
 // create settings if not exists
 if (!fs.existsSync(path.join(file_path, "settings.json"))) {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(settings, null, 4))
+	fs.writeFileSync(path.join(file_path, "settings.json"), settings)
 }
 
 // read settings
-const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // settings compatibility
 if (file.advanced_settings === undefined) {
 	file.advanced_settings = {
 		offset: null,
-		language: "en",
 	}
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
@@ -221,7 +219,7 @@ if (dev === true) {
 const install = spawn("python", [install_src])
 
 install.on("error", (err) => {
-	logger.error("Error installing protobuff", err)
+	logger.warn("Error installing protobuff", err)
 })
 
 // ? open tray
