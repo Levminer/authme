@@ -120,7 +120,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}" >Copy code</button>
+					<button class="button11" id="copy${counter}" >Copy</button>
 					</div>
 					</div>
 					`
@@ -141,7 +141,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -163,7 +163,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -183,7 +183,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -206,7 +206,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}" >Copy code</button>
+					<button class="button11" id="copy${counter}" >Copy</button>
 					</div>
 					</div>
 					`
@@ -227,7 +227,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -249,7 +249,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -269,7 +269,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -357,7 +357,7 @@ const go = () => {
 				window.getSelection().removeAllRanges()
 
 				setTimeout(() => {
-					copy.textContent = "Copy code"
+					copy.textContent = "Copy"
 
 					setTimeout(() => {
 						if (copy_state === true) {

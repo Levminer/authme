@@ -35,6 +35,7 @@ h4 {
 	cursor: pointer;
 	text-decoration: none;
 	transition: 0.2s ease-in;
+	width: 132px;
 }
 
 .button11:hover {
@@ -47,7 +48,7 @@ h4 {
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 250px;
+	width: 70px !important;
 }
 
 .input1:hover {
@@ -69,15 +70,6 @@ h4 {
 #button1 {
 	position: relative;
 	top: 30px;
-}
-
-.file {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
 }
 
 /* grid */
