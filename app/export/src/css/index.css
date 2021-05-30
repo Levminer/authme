@@ -101,3 +101,21 @@
 	right: 5px;
 	top: 10px;
 }
+
+img {
+	filter: blur(6px);
+	transition: 0.4s ease-in;
+}
+
+img:hover {
+	filter: none;
+}
+
+textarea {
+	filter: blur(4px);
+	transition: 0.4s ease-in;
+}
+
+textarea:hover {
+	filter: none;
+}

@@ -174,8 +174,12 @@ input:active::placeholder {
 }
 
 .blur {
-	color: transparent;
-	text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+	filter: blur(4px);
+	transition: 0.2s ease-in;
+}
+
+.blur:hover {
+	filter: none;
 }
 
 a {

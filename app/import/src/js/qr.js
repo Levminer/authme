@@ -66,10 +66,6 @@ const qr_import = () => {
 					issuers.push(issuer)
 
 					if (images.length === i + 1) {
-						console.log(names)
-						console.log(secrets)
-						console.log(issuers)
-
 						let str = ""
 						for (let j = 0; j < names.length; j++) {
 							const substr = `\nName:   ${names[j]} \nSecret: ${secrets[j]} \nIssuer: ${issuers[j]} \nType:   OTP_TOTP\n`
