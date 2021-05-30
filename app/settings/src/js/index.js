@@ -578,18 +578,18 @@ const api = async () => {
 api()
 
 // ? open status
-const link0 = () => {
+const statusLink = () => {
 	shell.openExternal("https://status.levminer.com")
 }
 
 // ? open releases
-const link1 = () => {
+const releasesLink = () => {
 	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
 
-// ? open docs
-const link2 = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=settings")
+// ? shortcuts docs
+const shortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
 }
 
 const hide = () => {

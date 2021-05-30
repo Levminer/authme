@@ -190,7 +190,7 @@ const hk_edit = (value) => {
 				break
 		}
 
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 
 		modify = true
 	} else {
@@ -305,7 +305,7 @@ const hk_delete = (value) => {
 			break
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
 
 // ? reset shortcut
@@ -408,5 +408,5 @@ const hk_reset = (value) => {
 			break
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }

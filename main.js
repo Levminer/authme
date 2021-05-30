@@ -223,7 +223,7 @@ install.on("error", (err) => {
 })
 
 // ? open tray
-const tray_show = () => {
+const showTray = () => {
 	const toggle = () => {
 		if (confirmed == false) {
 			if (pass_start == true) {
@@ -305,7 +305,7 @@ const tray_show = () => {
 }
 
 // ? tray settings
-const tray_settings = () => {
+const settingsTray = () => {
 	const toggle = () => {
 		if (settings_shown == false) {
 			if (if_pass == true && confirmed == true) {
@@ -353,7 +353,7 @@ const tray_settings = () => {
 }
 
 // tray exit
-const tray_exit = () => {
+const exitTray = () => {
 	to_tray = false
 	app.exit()
 }
@@ -368,7 +368,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -383,7 +383,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -398,7 +398,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -413,7 +413,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -428,7 +428,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -443,7 +443,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -458,7 +458,7 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
-		backgroundColor: "#141414",
+		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
@@ -627,19 +627,19 @@ const createWindow = () => {
 	// ? global shortcuts
 	if (file.global_shortcuts.show !== "None") {
 		globalShortcut.register(file.global_shortcuts.show, () => {
-			tray_show()
+			showTray()
 		})
 	}
 
 	if (file.global_shortcuts.settings !== "None") {
 		globalShortcut.register(file.global_shortcuts.settings, () => {
-			tray_settings()
+			settingsTray()
 		})
 	}
 
 	if (file.global_shortcuts.exit !== "None") {
 		globalShortcut.register(file.global_shortcuts.exit, () => {
-			tray_exit()
+			exitTray()
 		})
 	}
 }
@@ -920,55 +920,59 @@ app.whenReady().then(() => {
 		}
 	})
 
-	// make tray
-	const iconpath = path.join(__dirname, "img/iconb.png")
-
+	// ? create tray
+	const iconpath = path.join(__dirname, "img/tray.png")
 	tray = new Tray(iconpath)
 
 	tray.on("click", () => {
-		tray_show()
+		showTray()
 	})
 
-	const contextmenu = Menu.buildFromTemplate([
-		{
-			label: `Authme ${authme_version}`,
-			enabled: false,
-			icon: path.join(__dirname, "img/iconwsmall.png"),
-		},
-		{
-			label: `(${release_date})`,
-			enabled: false,
-		},
-		{ type: "separator" },
-		{
-			label: "Show app",
-			accelerator: file.global_shortcuts.show,
-			click: () => {
-				tray_show()
+	// generate tray
+	const createTray = () => {
+		const contextmenu = Menu.buildFromTemplate([
+			{
+				label: `Authme ${authme_version}`,
+				enabled: false,
+				icon: path.join(__dirname, "img/traymenu.png"),
 			},
-		},
-		{ type: "separator" },
-		{
-			label: "Settings",
-			accelerator: file.global_shortcuts.settings,
-			click: () => {
-				tray_settings()
+			{
+				label: `(${release_date})`,
+				enabled: false,
 			},
-		},
-		{ type: "separator" },
-		{
-			label: "Exit app",
-			accelerator: file.global_shortcuts.exit,
-			click: () => {
-				tray_exit()
+			{ type: "separator" },
+			{
+				label: "Show app",
+				accelerator: shortcuts ? "" : file.global_shortcuts.show,
+				click: () => {
+					showTray()
+				},
 			},
-		},
-	])
-	tray.setToolTip("Authme")
-	tray.setContextMenu(contextmenu)
+			{ type: "separator" },
+			{
+				label: "Settings",
+				accelerator: shortcuts ? "" : file.global_shortcuts.settings,
+				click: () => {
+					settingsTray()
+				},
+			},
+			{ type: "separator" },
+			{
+				label: "Exit app",
+				accelerator: shortcuts ? "" : file.global_shortcuts.exit,
+				click: () => {
+					exitTray()
+				},
+			},
+		])
+		tray.setToolTip("Authme")
+		tray.setContextMenu(contextmenu)
+	}
 
-	const create_menu = () => {
-		// menubar
+	createTray()
+
+	// ? cerate menu
+	const createMenu = () => {
 		const template = [
 			{
 				label: "File",
@@ -977,7 +981,7 @@ app.whenReady().then(() => {
 						label: "Show app",
 						accelerator: shortcuts ? "" : file.shortcuts.show,
 						click: () => {
-							tray_show()
+							showTray()
 						},
 					},
 					{
@@ -1301,7 +1305,7 @@ app.whenReady().then(() => {
 		Menu.setApplicationMenu(menu)
 	}
 
-	create_menu()
+	createMenu()
 
 	ipc.on("shortcuts", () => {
 		if (shortcuts === false) {
@@ -1309,29 +1313,35 @@ app.whenReady().then(() => {
 
 			globalShortcut.unregisterAll()
 
-			create_menu()
+			createTray()
+
+			createMenu()
 		} else {
 			shortcuts = false
 
+			file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
 			if (file.global_shortcuts.show !== "None") {
 				globalShortcut.register(file.global_shortcuts.show, () => {
-					tray_show()
+					showTray()
 				})
 			}
 
 			if (file.global_shortcuts.settings !== "None") {
 				globalShortcut.register(file.global_shortcuts.settings, () => {
-					tray_settings()
+					settingsTray()
 				})
 			}
 
 			if (file.global_shortcuts.exit !== "None") {
 				globalShortcut.register(file.global_shortcuts.exit, () => {
-					tray_exit()
+					exitTray()
 				})
 			}
 
-			create_menu()
+			createTray()
+
+			createMenu()
 		}
 	})
 })
