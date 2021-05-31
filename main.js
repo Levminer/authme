@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
 const contextmenu = require("electron-context-menu")
 const { spawn } = require("child_process")
+const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
 const debug = require("electron-debug")
@@ -576,29 +577,6 @@ const createWindow = () => {
 					.then((data) => {
 						try {
 							if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
-								dialog
-									.showMessageBox({
-										title: "Authme",
-										buttons: ["Yes", "No"],
-										defaultId: 0,
-										cancelId: 1,
-										type: "info",
-										message: `
-										Update available: Authme ${data.tag_name}
-										
-										Do you want to download it?
-					
-										You currently running: Authme ${tag_name}
-										`,
-									})
-									.then((result) => {
-										update = true
-
-										if (result.response === 0) {
-											shell.openExternal("https://github.com/Levminer/authme/releases/latest")
-										}
-									})
-
 								window_application.webContents.executeJavaScript("showUpdate()")
 
 								window_settings.on("show", () => {
@@ -884,6 +862,43 @@ ipc.on("offline", () => {
 	}
 })
 
+ipc.on("release_notes", () => {
+	const api = async () => {
+		try {
+			await fetch("https://api.levminer.com/api/v1/authme/releases")
+				.then((res) => res.json())
+				.then((data) => {
+					try {
+						dialog.showMessageBox({
+							title: "Authme",
+							buttons: ["Close"],
+							defaultId: 0,
+							cancelId: 1,
+							type: "info",
+							message: markdown.convert(data.body),
+						})
+					} catch (error) {
+						return logger.error(error)
+					}
+				})
+		} catch (error) {
+			return logger.error(error)
+		}
+	}
+
+	api()
+})
+
+ipc.on("download_update", () => {
+	if (process.platform === "win32") {
+		shell.openExternal("https://api.levminer.com/api/v1/authme/release/windows")
+	} else if (process.platform === "linux") {
+		shell.openExternal("https://api.levminer.com/api/v1/authme/release/linux")
+	} else {
+		shell.openExternal("https://authme.levminer.com/#downloads")
+	}
+})
+
 // ? about
 const about = () => {
 	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Levminer\n`
@@ -899,8 +914,6 @@ const about = () => {
 			message: message,
 		})
 		.then((result) => {
-			update = true
-
 			if (result.response === 0) {
 				clipboard.writeText(message)
 			}
@@ -925,8 +938,6 @@ app.whenReady().then(() => {
 				message: `Unknown error occurred! \n\n ${error.stack}`,
 			})
 			.then((result) => {
-				update = true
-
 				if (result.response === 0) {
 					shell.openExternal("https://github.com/Levminer/authme/issues/")
 				} else if (result.response === 1) {
@@ -1285,18 +1296,18 @@ app.whenReady().then(() => {
 															cancelId: 1,
 															type: "info",
 															message: `
-														Update available: Authme ${data.tag_name}
-														
-														Do you want to download it?
-									
-														You currently running: Authme ${tag_name}
-														`,
+															Update available: Authme ${data.tag_name}
+															
+															Do you want to download it?
+										
+															You currently running: Authme ${tag_name}
+															`,
 														})
 														.then((result) => {
 															update = true
 
 															if (result.response === 0) {
-																shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+																shell.openExternal("https://authme.levminer.com#downloads")
 															}
 														})
 												} else {
@@ -1307,12 +1318,12 @@ app.whenReady().then(() => {
 														cancelId: 1,
 														type: "info",
 														message: `
-													No update available:
-													
-													You are running the latest version!
-								
-													You are currently running: Authme ${tag_name}
-													`,
+														No update available:
+														
+														You are running the latest version!
+									
+														You are currently running: Authme ${tag_name}
+														`,
 													})
 												}
 											} catch (error) {

@@ -98,7 +98,11 @@
 						<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
 					</svg>
 
-					<p class="mx-3 relative top-1">New Authme version available. Please update your app!</p>
+					<p class="mx-3 flex flex-row relative top-1">
+						New Authme version available. Please update your app!
+						<a class="mx-3 link" onclick="downloadUpdate()">Download Update</a>
+						<a class="link" onclick="releaseNotes()">Release Notes</a>
+					</p>
 				</div>
 				<a
 					onclick="this.parentElement.style.display='none'"

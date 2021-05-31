@@ -196,3 +196,7 @@ a {
 	position: relative;
 	left: 20px;
 }
+
+.link {
+	cursor: pointer;
+}

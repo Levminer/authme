@@ -522,6 +522,16 @@ const save = () => {
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
 
+// ? release notes
+const releaseNotes = () => {
+	ipc.send("release_notes")
+}
+
+// ? download update
+const downloadUpdate = () => {
+	ipc.send("download_update")
+}
+
 // ? show update
 const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"

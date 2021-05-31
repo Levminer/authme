@@ -564,6 +564,16 @@ setInterval(() => {
 	check_for_internet()
 }, 5000)
 
+// ? release notes
+const releaseNotes = () => {
+	ipc.send("release_notes")
+}
+
+// ? download update
+const downloadUpdate = () => {
+	ipc.send("download_update")
+}
+
 // ? links
 const link0 = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/web")

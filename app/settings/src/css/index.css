@@ -148,3 +148,8 @@ input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
+
+.link {
+	cursor: pointer;
+	text-decoration: underline;
+}
