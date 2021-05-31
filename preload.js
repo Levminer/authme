@@ -79,3 +79,21 @@ if (file.security.require_password === true && file.security.password !== null) 
 } else {
 	ipc.send("to_confirm")
 }
+
+// ? prevent default shortcuts
+document.addEventListener("keydown", (event) => {
+	if (
+		event.ctrlKey &&
+		event.code === "KeyA" &&
+		event.target.type !== "text" &&
+		event.target.type !== "number" &&
+		event.target.type !== "textarea"
+	) {
+		console.log(event)
+		event.preventDefault()
+	}
+
+	if (event.altKey && event.code === "F4") {
+		event.preventDefault()
+	}
+})

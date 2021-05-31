@@ -76,6 +76,7 @@
 		"auto-launch": "^5.0.5",
 		"bcryptjs": "^2.4.3",
 		"cryptr": "^6.0.2",
+		"electron-context-menu": "^3.1.0",
 		"electron-debug": "^3.2.0",
 		"electron-util": "^0.16.0",
 		"node-fetch": "^2.6.1",

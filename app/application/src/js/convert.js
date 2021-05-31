@@ -4,7 +4,7 @@ let save_text
 const loadFile = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Google Authenticator QR code(s)",
+			title: "Import from Authme Import Text file",
 			properties: ["openFile"],
 			filters: [{ name: "Text file", extensions: ["txt"] }],
 		})

@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
+const contextmenu = require("electron-context-menu")
 const { spawn } = require("child_process")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
@@ -650,6 +651,49 @@ const authme_launcher = new AutoLaunch({
 	path: app.getPath("exe"),
 })
 
+// ? context menu
+contextmenu({
+	menu: (actions) => [
+		actions.separator(),
+		{
+			label: "Dev Tools",
+			click: () => {
+				const window = BrowserWindow.getFocusedWindow()
+
+				window.webContents.toggleDevTools()
+			},
+			visible: dev === true,
+		},
+		actions.separator(),
+		{
+			label: "Reload",
+			click: () => {
+				const window = BrowserWindow.getFocusedWindow()
+
+				window.webContents.reload()
+			},
+			visible: dev === true,
+		},
+		actions.separator(),
+		actions.copyImage({
+			transform: (content) => content,
+		}),
+		actions.separator(),
+		actions.copy({
+			transform: (content) => content,
+		}),
+		actions.separator(),
+		actions.paste({
+			transform: (content) => content,
+		}),
+		actions.separator(),
+		actions.copyLink({
+			transform: (content) => `${content}`,
+		}),
+		actions.separator(),
+	],
+})
+
 // ? ipcs
 ipc.on("to_confirm", () => {
 	if (ipc_to_confirm == false) {
@@ -669,6 +713,11 @@ ipc.on("to_application0", () => {
 			window_application.show()
 		}, 300)
 
+		setTimeout(() => {
+			window_confirm.destroy()
+			window_landing.destroy()
+		}, 500)
+
 		ipc_to_application_0 = true
 
 		confirmed = true
@@ -683,6 +732,10 @@ ipc.on("to_application1", () => {
 			window_application.maximize()
 			window_application.show()
 		}, 300)
+
+		setTimeout(() => {
+			window_landing.destroy()
+		}, 500)
 
 		ipc_to_application_1 = true
 	}

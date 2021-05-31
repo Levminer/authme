@@ -262,7 +262,7 @@ const createSave = () => {
 const addMore = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from QR code(s)",
+			title: "Import from Authme Import Text file",
 			properties: ["openFile", "multiSelections"],
 			filters: [{ name: "Text file", extensions: ["txt"] }],
 		})
