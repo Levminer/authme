@@ -6,7 +6,6 @@
 	"license": "GPL-3.0",
 	"scripts": {
 		"start": "electron .",
-		"package": "electron-packager . Authme --platform=win32,linux,darwin --arch=x64 --icon=img/icon.icns --out=build --overwrite",
 		"build": "electron-builder --publish=never --x64",
 		"build:df": "sass src/dragonfly@1.4.0.scss src/dragonfly@1.4.0.css --no-source-map",
 		"build:tw": "tailwindcss build src/tailwind@2.1.2.scss -o src/tailwind@2.1.2.css -c .tailwindrc.js --no-autoprefixer",
@@ -87,7 +86,6 @@
 		"autoprefixer": "^10.2.6",
 		"electron": "^13.0.1",
 		"electron-builder": "^22.10.5",
-		"electron-packager": "^15.2.0",
 		"eslint": "^7.27.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.3.0",

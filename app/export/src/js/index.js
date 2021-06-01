@@ -109,7 +109,7 @@ const go = () => {
 const save_file = () => {
 	dialog
 		.showSaveDialog({
-			title: "Save exported file",
+			title: "Save as Text file",
 			filters: [{ name: "Text file", extensions: ["txt"] }],
 			defaultPath: "~/authme_export.txt",
 		})
@@ -136,7 +136,7 @@ const save_file = () => {
 const save_qr_codes = () => {
 	dialog
 		.showSaveDialog({
-			title: "Save QR codes",
+			title: "Save as HTML file",
 			filters: [{ name: "HTML file", extensions: ["html"] }],
 			defaultPath: "~/authme_export.html",
 		})
@@ -164,11 +164,6 @@ const save_qr_codes = () => {
 // ? hide
 const hide = () => {
 	ipc.send("hide_export")
-}
-
-// ? authme web
-const aw = () => {
-	shell.openExternal("https://web.authme.levminer.com")
 }
 
 // ? error handeling

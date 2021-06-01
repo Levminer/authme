@@ -863,30 +863,7 @@ ipc.on("offline", () => {
 })
 
 ipc.on("release_notes", () => {
-	const api = async () => {
-		try {
-			await fetch("https://api.levminer.com/api/v1/authme/releases")
-				.then((res) => res.json())
-				.then((data) => {
-					try {
-						dialog.showMessageBox({
-							title: "Authme",
-							buttons: ["Close"],
-							defaultId: 0,
-							cancelId: 1,
-							type: "info",
-							message: markdown.convert(data.body),
-						})
-					} catch (error) {
-						return logger.error(error)
-					}
-				})
-		} catch (error) {
-			return logger.error(error)
-		}
-	}
-
-	api()
+	releaseNotes()
 })
 
 ipc.on("download_update", () => {
@@ -901,7 +878,7 @@ ipc.on("download_update", () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Levminer\n`
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Lőrik Levente\n`
 
 	dialog
 		.showMessageBox({
@@ -918,6 +895,41 @@ const about = () => {
 				clipboard.writeText(message)
 			}
 		})
+}
+
+// ? release notes
+const releaseNotes = () => {
+	const api = async () => {
+		try {
+			await fetch("https://api.levminer.com/api/v1/authme/releases")
+				.then((res) => res.json())
+				.then((data) => {
+					try {
+						dialog
+							.showMessageBox({
+								title: "Authme",
+								buttons: ["More", "Close"],
+								defaultId: 1,
+								cancelId: 1,
+								noLink: true,
+								type: "info",
+								message: markdown.convert(data.body),
+							})
+							.then((result) => {
+								if (result.response === 0) {
+									shell.openExternal("https://github.com/Levminer/authme/releases")
+								}
+							})
+					} catch (error) {
+						return logger.error(error)
+					}
+				})
+		} catch (error) {
+			return logger.error(error)
+		}
+	}
+
+	api()
 }
 
 // ? start app
@@ -1239,7 +1251,7 @@ app.whenReady().then(() => {
 						label: "Release notes",
 						accelerator: shortcuts ? "" : file.shortcuts.release,
 						click: () => {
-							shell.openExternal("https://github.com/Levminer/authme/releases")
+							releaseNotes()
 						},
 					},
 					{
@@ -1271,7 +1283,25 @@ app.whenReady().then(() => {
 						label: "Show licenses",
 						accelerator: shortcuts ? "" : file.shortcuts.licenses,
 						click: () => {
-							shell.openExternal("https://authme.levminer.com/licenses.html")
+							dialog
+								.showMessageBox({
+									title: "Authme",
+									buttons: ["More", "Close"],
+									defaultId: 1,
+									cancelId: 1,
+									noLink: true,
+									type: "info",
+									message: `
+									This software is licensed under GPL-3.0
+
+									Copyright © 2020 Lőrik Levente
+									`,
+								})
+								.then((result) => {
+									if (result.response === 0) {
+										shell.openExternal("https://authme.levminer.com/licenses.html")
+									}
+								})
 						},
 					},
 					{
@@ -1338,12 +1368,12 @@ app.whenReady().then(() => {
 										cancelId: 1,
 										type: "info",
 										message: `
-									No update available:
-									
-									Can't connect to API, check your internet connection or the API status in the settings!
-				
-									You currently running: Authme ${tag_name}
-									`,
+										No update available:
+										
+										Can't connect to API, check your internet connection or the API status in the settings!
+					
+										You currently running: Authme ${tag_name}
+										`,
 									})
 								}
 							}
