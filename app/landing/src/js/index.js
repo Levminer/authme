@@ -66,15 +66,7 @@ const hash_password = async () => {
 
 	const hashed = await bcrypt.hash(password_input1, salt).then(console.warn("Hash completed!"))
 
-	const file = JSON.parse(
-		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
-			if (err) {
-				return console.warn(`Authme - Error reading settings.json - ${err}`)
-			} else {
-				return console.warn("Authme - File settings.json readed")
-			}
-		})
-	)
+	const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 	if (integrity === false) {
 		const storage = {
@@ -88,7 +80,7 @@ const hash_password = async () => {
 	file.security.require_password = true
 	file.security.password = hashed
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 
 	setInterval(() => {
 		ipc.send("to_confirm")

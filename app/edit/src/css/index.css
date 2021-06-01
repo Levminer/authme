@@ -102,10 +102,3 @@ hr {
 .rollback {
 	display: none;
 }
-
-.warning {
-	color: red;
-	font-weight: bold;
-	margin-top: 30px;
-	font-size: 2rem;
-}

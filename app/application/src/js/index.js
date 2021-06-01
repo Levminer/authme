@@ -1,5 +1,5 @@
 const speakeasy = require("@levminer/speakeasy")
-const { app, shell } = require("electron").remote
+const { app, shell, dialog } = require("electron").remote
 const fs = require("fs")
 const path = require("path")
 const { is } = require("electron-util")
@@ -40,20 +40,14 @@ let clear
 
 // ? read settings
 // read settings
-file = JSON.parse(
-	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
-		if (err) {
-			return console.warn(`Authme - Error reading settings.json - ${err}`)
-		} else {
-			return console.warn("Authme - Succefully readed settings.json ")
-		}
-	})
-)
+file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 const name_state = file.settings.show_2fa_names
 const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
 const search_state = file.settings.save_search_results
+
+const offset_number = file.advanced_settings.offset
 
 // ? separet values
 const separation = () => {
@@ -126,7 +120,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}" >Copy code</button>
+					<button class="button11" id="copy${counter}" >Copy</button>
 					</div>
 					</div>
 					`
@@ -147,7 +141,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -169,7 +163,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -189,7 +183,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -212,7 +206,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}" >Copy code</button>
+					<button class="button11" id="copy${counter}" >Copy</button>
 					</div>
 					</div>
 					`
@@ -233,7 +227,7 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -255,7 +249,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -275,7 +269,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy code</button>
+					<button class="button11" id="copy${counter}">Copy</button>
 					</div>
 					</div>
 					`
@@ -303,10 +297,17 @@ const go = () => {
 				const token = speakeasy.totp({
 					secret: secret[i],
 					encoding: "base32",
+					epoch: offset_number,
 				})
 
 				// time
-				const remaining = 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
+				let remaining
+
+				if (offset_number === undefined || null || 0) {
+					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+				} else {
+					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
+				}
 
 				// settting elements
 				try {
@@ -326,10 +327,17 @@ const go = () => {
 				const token = speakeasy.totp({
 					secret: secret[i],
 					encoding: "base32",
+					epoch: offset_number,
 				})
 
 				// time
-				const remaining = 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
+				let remaining
+
+				if (offset_number === undefined || null || 0) {
+					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+				} else {
+					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
+				}
 
 				// settting elements
 				name.textContent = issuer[i]
@@ -349,7 +357,7 @@ const go = () => {
 				window.getSelection().removeAllRanges()
 
 				setTimeout(() => {
-					copy.textContent = "Copy code"
+					copy.textContent = "Copy"
 
 					setTimeout(() => {
 						if (copy_state === true) {
@@ -357,9 +365,9 @@ const go = () => {
 								const div = document.querySelector(`#grid${[i]}`)
 								div.style.display = "grid"
 							}
-						}
 
-						document.querySelector("#search").value = ""
+							document.querySelector("#search").value = ""
+						}
 					}, 1200)
 
 					document.getElementById("search").focus()
@@ -406,7 +414,7 @@ const search = () => {
 	// save result
 	if (search_state === true) {
 		file.search_history.latest = input
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 	}
 
 	// restart
@@ -504,8 +512,13 @@ app.on("browser-window-focus", () => {
 })
 
 // ? focus search bar
-const focus_search = () => {
+const focusSearch = () => {
 	document.getElementById("search").focus()
+}
+
+// ? show update
+const showUpdate = () => {
+	document.querySelector(".update").style.display = "block"
 }
 
 // ? offline mode
@@ -550,6 +563,16 @@ check_for_internet()
 setInterval(() => {
 	check_for_internet()
 }, 5000)
+
+// ? release notes
+const releaseNotes = () => {
+	ipc.send("release_notes")
+}
+
+// ? download update
+const downloadUpdate = () => {
+	ipc.send("download_update")
+}
 
 // ? links
 const link0 = () => {

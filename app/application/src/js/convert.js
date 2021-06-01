@@ -1,33 +1,24 @@
 let data = []
 let save_text
 
-const handlefiles = (files) => {
-	// read file
-	if (window.FileReader) {
-		getastext(files[0])
-		console.warn("Authme - File uploaded successfully")
-	} else {
-		console.warn("Authme - Can't upload file")
-	}
-}
+const loadFile = () => {
+	dialog
+		.showOpenDialog({
+			title: "Import from Authme Import Text file",
+			properties: ["openFile"],
+			filters: [{ name: "Text file", extensions: ["txt"] }],
+		})
+		.then((result) => {
+			canceled = result.canceled
+			filepath = result.filePaths
 
-const getastext = (fileToRead) => {
-	const reader = new FileReader()
-	reader.onload = loadhandler
-	reader.onerror = errorhandler
-	reader.readAsText(fileToRead)
-}
+			if (canceled === false) {
+				const text = fs.readFileSync(filepath.toString(), "utf-8")
+				save_text = text
 
-const loadhandler = (event) => {
-	const text = event.target.result
-	save_text = text
-	processdata(text)
-}
-
-const errorhandler = (evt) => {
-	if (evt.target.error.name == "NotReadableError") {
-		console.warn("Failed to upload the file! You uploaded a corrupted or not supported file")
-	}
+				processdata(text)
+			}
+		})
 }
 
 const processdata = (text) => {

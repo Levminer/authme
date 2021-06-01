@@ -2,7 +2,6 @@ body {
 	overflow-y: scroll;
 	margin: 0;
 	padding: 0;
-	background: rgb(20, 20, 20);
 }
 
 h4 {
@@ -36,11 +35,12 @@ h4 {
 	cursor: pointer;
 	text-decoration: none;
 	transition: 0.2s ease-in;
+	width: 132px;
 }
 
 .button11:hover {
-	border: 1px solid wheat;
-	background: black;
+	border: 1px solid white;
+	background: rgb(10, 10, 10);
 	color: white;
 }
 
@@ -48,13 +48,13 @@ h4 {
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 250px;
+	width: 70px !important;
 }
 
 .input1:hover {
 	color: white;
 	border-color: white;
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 }
 
 #password_input2 {
@@ -72,15 +72,6 @@ h4 {
 	top: 30px;
 }
 
-.file {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-
 /* grid */
 .grid {
 	display: grid;
@@ -90,7 +81,7 @@ h4 {
 	grid-row-gap: 0px;
 	justify-items: center;
 
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 	margin-top: 50px;
 	border-radius: 30px;
 	margin: 0 auto;
@@ -147,7 +138,7 @@ h4 {
 }
 
 .input2:hover {
-	background-color: var(--df_primary_background);
+	background-color: rgb(20, 20, 20);
 	color: white;
 	border-color: white;
 }
@@ -183,8 +174,12 @@ input:active::placeholder {
 }
 
 .blur {
-	color: transparent;
-	text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+	filter: blur(4px);
+	transition: 0.2s ease-in;
+}
+
+.blur:hover {
+	filter: none;
 }
 
 a {
@@ -200,4 +195,8 @@ a {
 #sample {
 	position: relative;
 	left: 20px;
+}
+
+.link {
+	cursor: pointer;
 }

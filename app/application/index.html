@@ -6,6 +6,7 @@
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly@1.4.0.css" />
 		<link rel="stylesheet" href="../.././src/animate@2.4.1.css" />
+		<link rel="stylesheet" href="../../src/tailwind@2.1.2.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 		<!-- js -->
 		<script defer src="../.././src/scroll-out@2.2.12.js"></script>
@@ -16,21 +17,111 @@
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
-		<div class="popup offline">
-			Authme runs in offline mode. The app will work fine, but the app can't look for new updates!
-			<a class="popup_link" onclick="this.parentElement.style.display='none';">Close</a>
+		<div class="w-full text-white bg-popup-red font-bold offline">
+			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+				<div class="flex">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 512 512">
+						<path
+							d="M256 80c-8.66 0-16.58 7.36-16 16l8 216a8 8 0 008 8h0a8 8 0 008-8l8-216c.58-8.64-7.34-16-16-16z"
+							fill="none"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="40"
+						/>
+						<circle
+							cx="256"
+							cy="416"
+							r="16"
+							fill="none"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="40"
+						/>
+					</svg>
+
+					<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but can't look for new updates!</p>
+				</div>
+				<a
+					onclick="this.parentElement.style.display='none'"
+					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
+				>
+					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</div>
 		</div>
-		<div class="popup online">
-			Authme runs in online mode. The app reconnected to the internet, you can look for new updates!
-			<a class="popup_link" onclick="this.parentElement.style.display='none';">Close</a>
+
+		<div class="w-full text-white bg-popup-green font-bold online">
+			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+				<div class="flex">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 512 512">
+						<path
+							fill="none"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="45"
+							d="M416 128L192 384l-96-96"
+						/>
+					</svg>
+
+					<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
+				</div>
+				<a
+					onclick="this.parentElement.style.display='none'"
+					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
+				>
+					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</div>
 		</div>
+
+		<div class="w-full text-white bg-popup-blue font-bold update">
+			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+				<div class="flex">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="3"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="w-6 h-6"
+					>
+						<polyline points="23 4 23 10 17 10"></polyline>
+						<polyline points="1 20 1 14 7 14"></polyline>
+						<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+					</svg>
+
+					<p class="mx-3 flex flex-row relative top-1">
+						New Authme version available. Please update your app!
+						<a class="mx-3 link" onclick="downloadUpdate()">Download update</a>
+						<a class="link" onclick="releaseNotes()">Release notes</a>
+					</p>
+				</div>
+				<a
+					onclick="this.parentElement.style.display='none'"
+					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
+				>
+					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</div>
+		</div>
+
 		<div class="center">
 			<h1 class="h1">Authme</h1>
 			<h2 class="h2" id="title">Here are your 2FA codes:</h2>
-			<input type="file" class="file" id="file" onchange="handlefiles(this.files)" accept=".txt" />
-			<button type="button" class="button1 button" class="input" id="input" onclick="document.getElementById('file').click()">
-				Choose a file
-			</button>
+			<button type="button" class="button1 button" class="input" id="input" onclick="loadFile()">Choose a file</button>
 			<br />
 			<p class="text3" id="information">
 				<span id="docs">More information: <a href="#" onclick="link0()">Docs</a> </span>

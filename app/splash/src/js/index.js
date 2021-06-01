@@ -1,5 +1,4 @@
 const { ipcRenderer } = require("electron")
-const dns = require("dns")
 
 // ? get version and release date
 const res = ipcRenderer.sendSync("ver")
