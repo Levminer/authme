@@ -54,12 +54,12 @@ if (file.security.require_password === true && file.security.password !== null) 
 	ipc.send("to_confirm")
 } else if (file.security.require_password === false && file.security.password === null) {
 	if (integrity === false) {
-		if (storage === undefined) {
+		if (storage === null) {
 			ipc.send("abort")
 
 			console.error("Authme - Local storage not found in controller")
 		} else {
-			console.log(Authme - "Local storage found in controller")
+			console.log("Authme - Local storage found in controller")
 		}
 
 		if (file.security.require_password === storage.require_password) {
@@ -89,7 +89,6 @@ document.addEventListener("keydown", (event) => {
 		event.target.type !== "number" &&
 		event.target.type !== "textarea"
 	) {
-		console.log(event)
 		event.preventDefault()
 	}
 
