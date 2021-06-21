@@ -82,7 +82,7 @@
 		"auto-launch": "^5.0.5",
 		"bcryptjs": "^2.4.3",
 		"cryptr": "^6.0.2",
-		"electron-context-menu": "^3.1.0",
+		"electron-context-menu": "^3.1.1",
 		"electron-debug": "^3.2.0",
 		"electron-util": "^0.16.0",
 		"node-fetch": "^2.6.1",
@@ -93,7 +93,7 @@
 		"autoprefixer": "^10.2.6",
 		"electron": "^13.1.2",
 		"electron-builder": "^22.11.7",
-		"eslint": "^7.28.0",
+		"eslint": "^7.29.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-promise": "^2.0.2",
@@ -104,8 +104,8 @@
 		"eslint-plugin-standard": "^5.0.0",
 		"gnomon": "^1.4.6",
 		"prettier": "^2.3.1",
-		"sass": "^1.34.1",
-		"tailwindcss": "^2.0.4"
+		"sass": "^1.35.1",
+		"tailwindcss": "^2.2.2"
 	},
 	"engines": {
 		"node": ">=14.0.0",
