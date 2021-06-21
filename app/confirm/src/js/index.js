@@ -27,7 +27,7 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // ? init
 const text = document.querySelector("#text")

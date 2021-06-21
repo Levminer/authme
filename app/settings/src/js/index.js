@@ -16,7 +16,7 @@ const res = ipc.sendSync("ver")
 document.querySelector("#but7").textContent = `Authme ${res.authme_version}`
 
 // ? if development
-let dev
+let dev = false
 
 if (is.development === true) {
 	dev = true
@@ -32,7 +32,7 @@ if (process.platform === "win32") {
 }
 
 // ? settings
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // ? read settings
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))

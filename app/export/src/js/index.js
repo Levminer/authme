@@ -4,16 +4,14 @@ const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
 const { is } = require("electron-util")
+const ipc = electron.ipcRenderer
 
 // ? if development
-let dev
+let dev = false
 
 if (is.development === true) {
 	dev = true
 }
-
-// ? init ipc
-const ipc = electron.ipcRenderer
 
 // ? init file for save to file
 let file
@@ -30,7 +28,7 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 const name = []
 const secret = []

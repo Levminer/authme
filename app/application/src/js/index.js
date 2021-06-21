@@ -8,7 +8,7 @@ const ipc = electron.ipcRenderer
 const dns = require("dns")
 
 // ? if development
-let dev
+let dev = false
 
 if (is.development === true) {
 	dev = true
@@ -24,7 +24,7 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // eslint-disable-next-line
 let prev = false

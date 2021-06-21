@@ -6,7 +6,7 @@ const path = require("path")
 const { is } = require("electron-util")
 
 // ? if development
-let dev
+let dev = false
 
 if (is.development === true) {
 	dev = true
@@ -22,7 +22,7 @@ if (process.platform === "win32") {
 }
 
 // ? settings folder
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // ? rollback
 const cache_path = path.join(file_path, "cache")
