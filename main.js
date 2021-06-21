@@ -79,9 +79,9 @@ if (!fs.existsSync(file_path)) {
 }
 
 // ? version and logs
-const authme_version = "2.5.0"
-const tag_name = "2.5.0"
-const release_date = "2021. June 1."
+const authme_version = "2.6.0"
+const tag_name = "2.6.0"
+const release_date = "2021. July 6."
 const update_type = "Standard update"
 
 ipc.on("ver", (event, data) => {
@@ -166,7 +166,7 @@ const settings = `{
 			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
 			"exit": "CommandOrControl+w",
-			"web": "CommandOrControl+b",
+			"edit": "CommandOrControl+t",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
 			"release": "CommandOrControl+n",
@@ -199,6 +199,12 @@ if (file.advanced_settings === undefined) {
 	file.advanced_settings = {
 		offset: null,
 	}
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
+if (file.shortcuts.edit === undefined) {
+	file.shortcuts.edit = "CommandOrControl+t"
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
@@ -1130,10 +1136,53 @@ app.whenReady().then(() => {
 				label: "Advanced",
 				submenu: [
 					{
-						label: "Authme Web",
-						accelerator: shortcuts ? "" : file.shortcuts.web,
+						label: "Edit codes",
+						accelerator: shortcuts ? "" : file.shortcuts.edit,
 						click: () => {
-							shell.openExternal("https://web.authme.levminer.com")
+							const toggle = () => {
+								if (edit_shown == false) {
+									if (if_pass == true && confirmed == true) {
+										window_edit.maximize()
+										window_edit.show()
+
+										edit_shown = true
+									}
+
+									if (if_nopass == true) {
+										window_edit.maximize()
+										window_edit.show()
+
+										edit_shown = true
+									}
+								} else {
+									if (if_pass == true && confirmed == true) {
+										window_edit.hide()
+
+										edit_shown = false
+									}
+
+									if (if_nopass == true) {
+										window_edit.hide()
+
+										edit_shown = false
+									}
+								}
+							}
+
+							let if_pass = false
+							let if_nopass = false
+
+							// check if require password
+							if (file.security.require_password == true) {
+								if_pass = true
+								pass_start = true
+
+								toggle()
+							} else {
+								if_nopass = true
+
+								toggle()
+							}
 						},
 					},
 					{
