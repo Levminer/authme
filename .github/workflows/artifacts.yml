@@ -1,0 +1,35 @@
+name: Artifacts
+
+on:
+    push:
+        branches: [dev]
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                include:
+                    - os: macos-latest
+                      NAME: mac
+
+                    - os: ubuntu-latest
+                      NAME: linux
+
+                    - os: windows-latest
+                      NAME: windows
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install modules
+              run: npm i
+
+            - name: Run Build
+              run: npm run build
+
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: authme-latest-${{matrix.NAME}}-x64-installer-portable
+                  path: dist
