@@ -11,9 +11,8 @@ const build = new Date()
 	.replaceAll(".", "")
 	.replace("X", ".")
 
-let file = JSON.parse(fs.readFileSync("package.json", "utf-8"))
+const file = JSON.parse(fs.readFileSync("package.json", "utf-8"))
 
 file.number = `alpha-${build}`
-file += os.EOL
 
 fs.writeFileSync("package.json", JSON.stringify(file, null, "\t"))

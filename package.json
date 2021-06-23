@@ -1,6 +1,9 @@
 {
 	"name": "authme",
 	"version": "2.6.0",
+	"tag": "2.6.0",
+	"release": "2010. July 6.",
+	"number": "alpha-210623.145239",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
