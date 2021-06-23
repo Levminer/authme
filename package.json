@@ -3,7 +3,7 @@
 	"version": "2.6.0",
 	"tag": "2.6.0",
 	"release": "2010. July 6.",
-	"number": "release-210623.145736",
+	"number": "alpha.210623.221731",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
