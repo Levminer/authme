@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme } = require("electron")
+const { version, tag, release, number } = require("./package.json")
 const contextmenu = require("electron-context-menu")
 const { spawn } = require("child_process")
 const markdown = require("./lib/markdown")
@@ -79,10 +80,10 @@ if (!fs.existsSync(file_path)) {
 }
 
 // ? version and logs
-const authme_version = "2.6.0"
-const tag_name = "2.6.0"
-const release_date = "2021. July 6."
-const update_type = "Standard update"
+const authme_version = version
+const tag_name = tag
+const release_date = release
+const build_number = number
 
 ipc.on("ver", (event, data) => {
 	event.returnValue = { authme_version, release_date }
@@ -111,14 +112,14 @@ if (dev === true) {
 	version_src = path.join(__dirname, "../app.asar.unpacked/src/version.py")
 }
 
-const version = spawn("python", [version_src])
+const py_version = spawn("python", [version_src])
 
-version.stdout.on("data", (res) => {
+py_version.stdout.on("data", (res) => {
 	python_version = res.toString()
 	logger.log("Python version found")
 })
 
-version.on("error", (err) => {
+py_version.on("error", (err) => {
 	python_version = "Not installed \n"
 	logger.warn("Error getting python version", err)
 })
@@ -881,7 +882,7 @@ ipc.on("download_update", () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
 
 	dialog
 		.showMessageBox({
@@ -1380,8 +1381,6 @@ app.whenReady().then(() => {
 															`,
 														})
 														.then((result) => {
-															update = true
-
 															if (result.response === 0) {
 																shell.openExternal("https://authme.levminer.com#downloads")
 															}

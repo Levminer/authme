@@ -6,5 +6,5 @@ document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${re
 
 // ? platform
 if (process.platform !== "win32" && process.platform !== "darwin") {
-	document.querySelector(".mask").style.backgroundColor = "rgb(10, 10, 10)"
+	document.querySelector(".mask").style.backgroundColor = "rgb(20, 20, 20)"
 }
