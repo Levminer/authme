@@ -1,5 +1,4 @@
 const fs = require("fs")
-const os = require("os")
 
 const build = new Date()
 	.toISOString()
@@ -13,6 +12,7 @@ const build = new Date()
 
 const file = JSON.parse(fs.readFileSync("package.json", "utf-8"))
 
-file.number = `alpha-${build}`
+file.number = `release.${build}`
 
 fs.writeFileSync("package.json", JSON.stringify(file, null, "\t"))
+fs.appendFileSync("package.json", "\n")

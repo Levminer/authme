@@ -1,10 +1,10 @@
-name: Artifacts
+name: Alpha Artifacts
 on:
     push:
         branches: [dev]
 jobs:
     build:
-        runs-on: ${{ matrix.os }}
+        runs-on: ${{matrix.os}}
         strategy:
             matrix:
                 include:
@@ -18,10 +18,16 @@ jobs:
             - uses: actions/checkout@v2
             - name: Install modules
               run: npm ci
-            - name: Run Build
-              run: npm run build
+            - name: Run build
+              run: npm run build:alpha
+            - name: Get build number
+              id: number
+              uses: notiz-dev/github-action-json-property@release
+              with: 
+                   path: 'package.json'
+                   prop_path: 'number'
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-latest-${{matrix.NAME}}-x64-installer-portable
+                  name: authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable
                   path: dist
