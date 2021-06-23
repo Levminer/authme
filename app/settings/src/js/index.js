@@ -638,7 +638,7 @@ const menu = (evt, name) => {
 		document.querySelector(".experimental").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".center").style.height = "1200px"
+		document.querySelector(".center").style.height = "900px"
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")

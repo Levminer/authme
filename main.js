@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme } = require("electron")
 const contextmenu = require("electron-context-menu")
 const { spawn } = require("child_process")
 const markdown = require("./lib/markdown")
@@ -140,6 +140,9 @@ if (dev === false) {
 		})
 	}
 }
+
+// ? force dark mode
+nativeTheme.themeSource = "dark"
 
 // ? settings
 const settings = `{
@@ -873,13 +876,7 @@ ipc.on("release_notes", () => {
 })
 
 ipc.on("download_update", () => {
-	if (process.platform === "win32") {
-		shell.openExternal("https://api.levminer.com/api/v1/authme/release/windows")
-	} else if (process.platform === "linux") {
-		shell.openExternal("https://api.levminer.com/api/v1/authme/release/linux")
-	} else {
-		shell.openExternal("https://authme.levminer.com/#downloads")
-	}
+	shell.openExternal("https://authme.levminer.com/#downloads")
 })
 
 // ? about

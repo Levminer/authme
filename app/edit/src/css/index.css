@@ -80,7 +80,7 @@ hr {
 	grid-column-gap: 0px;
 	grid-row-gap: 0px;
 
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 	margin-top: 0px;
 	border-radius: 30px;
 	margin: 0 auto;

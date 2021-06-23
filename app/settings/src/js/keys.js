@@ -4,7 +4,7 @@ const default_shortcuts = {
 		show: "CommandOrControl+q",
 		settings: "CommandOrControl+s",
 		exit: "CommandOrControl+w",
-		web: "CommandOrControl+b",
+		edit: "CommandOrControl+t",
 		import: "CommandOrControl+i",
 		export: "CommandOrControl+e",
 		release: "CommandOrControl+n",
@@ -47,7 +47,7 @@ const hk102 = document.querySelector("#hk102_input")
 hk0.value = file.shortcuts.show
 hk1.value = file.shortcuts.settings
 hk2.value = file.shortcuts.exit
-hk3.value = file.shortcuts.web
+hk3.value = file.shortcuts.edit
 hk4.value = file.shortcuts.import
 hk5.value = file.shortcuts.export
 hk6.value = file.shortcuts.release
@@ -124,7 +124,7 @@ const hk_edit = (value) => {
 			case 3:
 				const hk3 = document.querySelector("#hk3_input").value
 
-				file.shortcuts.web = hk3
+				file.shortcuts.edit = hk3
 				break
 			case 4:
 				const hk4 = document.querySelector("#hk4_input").value
@@ -239,7 +239,7 @@ const hk_delete = (value) => {
 		case 3:
 			const hk3 = document.querySelector("#hk3_input").value
 
-			file.shortcuts.web = hk3
+			file.shortcuts.edit = hk3
 			break
 		case 4:
 			const hk4 = document.querySelector("#hk4_input").value
@@ -340,9 +340,9 @@ const hk_reset = (value) => {
 			file.shortcuts.exit = default_shortcuts.shortcuts.exit
 			break
 		case 3:
-			document.querySelector("#hk3_input").value = default_shortcuts.shortcuts.web
+			document.querySelector("#hk3_input").value = default_shortcuts.shortcuts.edit
 
-			file.shortcuts.web = default_shortcuts.shortcuts.web
+			file.shortcuts.edit = default_shortcuts.shortcuts.edit
 			break
 		case 4:
 			document.querySelector("#hk4_input").value = default_shortcuts.shortcuts.import
