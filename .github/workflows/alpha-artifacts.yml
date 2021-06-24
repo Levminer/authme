@@ -27,14 +27,14 @@ jobs:
               id: number
               uses: notiz-dev/github-action-json-property@release
               with: 
-                   path: 'build.json'
+                   path: 'build/build.json'
                    prop_path: 'number'
             - name: Upload build file
               uses: actions/upload-artifact@v2
               with:
                   name: authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}
                   path: build
-            - name: Upload Artifacts
+            - name: Upload artifacts
               uses: actions/upload-artifact@v2
               with:
                   name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
