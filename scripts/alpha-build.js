@@ -18,5 +18,12 @@ if (!fs.existsSync("dist")) {
 	fs.mkdirSync("dist")
 }
 
+if (fs.existsSync("build")) {
+	fs.rmdirSync("build", { recursive: true })
+} else {
+	fs.mkdirSync("build")
+}
+
 fs.writeFileSync("build.json", JSON.stringify(file, null, "\t"))
 fs.writeFileSync(`dist/${file.number}.json`, JSON.stringify(file, null, "\t"))
+fs.writeFileSync(`build/${file.number}.json`, JSON.stringify(file, null, "\t"))
