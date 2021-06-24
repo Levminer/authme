@@ -23,14 +23,8 @@ jobs:
               run: npm ci
             - name: Run build
               run: npm run build:alpha
-            - name: Get build number
-              id: number
-              uses: notiz-dev/github-action-json-property@release
-              with: 
-                   path: 'build.json'
-                   prop_path: 'number'
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable
+                  name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
                   path: dist

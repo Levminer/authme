@@ -555,9 +555,9 @@ const folder2 = () => {
 	if (process.platform === "win32") {
 		cache_path = path.join(process.env.APPDATA, "/authme")
 	} else if (process.platform === "linux") {
-		cache_path = path.joib(process.env.HOME, "/.config/authme")
+		cache_path = path.join(process.env.HOME, "/.config/authme")
 	} else if (process.platform === "darwin") {
-		cache_path = path.joib(process.env.HOME, "/Library/Application Support/authme")
+		cache_path = path.join(process.env.HOME, "/Library/Application Support/authme")
 	}
 
 	shell.showItemInFolder(cache_path)
