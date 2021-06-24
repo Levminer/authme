@@ -14,5 +14,9 @@ const file = {
 	number: `alpha.${build}`,
 }
 
+if (!fs.existsSync("dist")) {
+	fs.mkdirSync("dist")
+}
+
 fs.writeFileSync("build.json", JSON.stringify(file, null, "\t"))
 fs.writeFileSync(`dist/${file.number}.json`, JSON.stringify(file, null, "\t"))
