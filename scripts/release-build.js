@@ -1,7 +1,14 @@
 const fs = require("fs")
 
-// prettier-ignore
-const build = new Date().toISOString().replace("T", "X").replaceAll(":", ".").substring(0, 19).replaceAll("-", ".").slice(2).replaceAll(".", "").replace("X", ".")
+const build = new Date()
+	.toISOString()
+	.replace("T", "X")
+	.replaceAll(":", ".")
+	.substring(0, 19)
+	.replaceAll("-", ".")
+	.slice(2)
+	.replaceAll(".", "")
+	.replace("X", ".")
 
 const file = JSON.parse(fs.readFileSync("package.json", "utf-8"))
 
