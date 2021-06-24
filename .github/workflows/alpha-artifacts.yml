@@ -35,6 +35,7 @@ jobs:
               uses: actions/upload-artifact@v2
               with:
                   name: authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json
+                  path: /
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
