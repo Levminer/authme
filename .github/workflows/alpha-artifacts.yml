@@ -23,17 +23,6 @@ jobs:
               run: npm ci
             - name: Run build
               run: npm run build:alpha
-            - name: Get build number
-              id: number
-              uses: notiz-dev/github-action-json-property@release
-              with: 
-                   path: 'build.json'
-                   prop_path: 'number'
-            - name: Create and copy build file
-              run: |
-                    mkdir ~/build
-                    cp build.json authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json
-                    cp authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json ~/build
             - name: Upload build file
               uses: actions/upload-artifact@v2
               with:
@@ -43,6 +32,4 @@ jobs:
               uses: actions/upload-artifact@v2
               with:
                   name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
-                  path: |
-                        dist
-                        ~/build
+                  path: dist

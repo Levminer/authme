@@ -15,3 +15,4 @@ const file = {
 }
 
 fs.writeFileSync("build.json", JSON.stringify(file, null, "\t"))
+fs.writeFileSync(`dist/${file.number}.json`, JSON.stringify(file, null, "\t"))
