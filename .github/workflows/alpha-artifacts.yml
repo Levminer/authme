@@ -30,14 +30,11 @@ jobs:
                    path: 'build.json'
                    prop_path: 'number'
             - name: Create and copy build file
-              run: |
-                sudo cp build.json authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json
-                sudo cp authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json /dist
+              run: cp build.json authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json
             - name: Upload build file
               uses: actions/upload-artifact@v2
               with:
                   name: authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable.json
-                  path: dist
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
