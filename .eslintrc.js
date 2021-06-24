@@ -27,5 +27,6 @@ module.exports = {
 		"no-unused-vars": ["off"],
 		"no-undef": ["off"],
 		"no-case-declarations": ["off"],
+		"node/no-missing-require": ["warn"],
 	},
 }

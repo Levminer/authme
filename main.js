@@ -99,7 +99,7 @@ const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 
 // logs
 logger.createFile(file_path, "main")
-logger.log(`Authme ${authme_version} `)
+logger.log(`Authme ${authme_version} ${build_number}`)
 logger.log(`System ${os_version}`)
 logger.log(`Electron ${electron_version}`)
 
