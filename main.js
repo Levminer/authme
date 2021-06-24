@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme } = require("electron")
-const { version, tag, release, number } = require("./package.json")
+const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
+const { number } = require("./build.json")
 const { spawn } = require("child_process")
 const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
@@ -85,8 +86,8 @@ const tag_name = tag
 const release_date = release
 const build_number = number
 
-ipc.on("ver", (event, data) => {
-	event.returnValue = { authme_version, release_date }
+ipc.on("info", (event) => {
+	event.returnValue = { authme_version, release_date, tag_name, build_number }
 })
 
 const v8_version = process.versions.v8

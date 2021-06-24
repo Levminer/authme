@@ -10,9 +10,8 @@ const build = new Date()
 	.replaceAll(".", "")
 	.replace("X", ".")
 
-const file = JSON.parse(fs.readFileSync("package.json", "utf-8"))
+const file = {
+	number: `alpha.${build}`,
+}
 
-file.number = `alpha.${build}`
-
-fs.writeFileSync("package.json", JSON.stringify(file, null, "\t"))
-fs.appendFileSync("package.json", "\n")
+fs.writeFileSync("build.json", JSON.stringify(file, null, "\t"))

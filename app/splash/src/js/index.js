@@ -1,7 +1,7 @@
 const { ipcRenderer } = require("electron")
 
 // ? get version and release date
-const res = ipcRenderer.sendSync("ver")
+const res = ipcRenderer.sendSync("info")
 document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${res.release_date})`
 
 // ? platform

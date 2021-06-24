@@ -1,0 +1,36 @@
+name: Release Artifacts
+on:
+    push:
+        branches: [main]
+jobs:
+    build:
+        runs-on: ${{matrix.os}}
+        strategy:
+            matrix:
+                include:
+                    - os: macos-latest
+                      NAME: mac
+                    - os: ubuntu-latest
+                      NAME: linux
+                    - os: windows-latest
+                      NAME: windows
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+              with:
+                node-version: '15'
+            - name: Install modules
+              run: npm ci
+            - name: Run build
+              run: npm run build:release
+            - name: Get build number
+              id: number
+              uses: notiz-dev/github-action-json-property@release
+              with: 
+                   path: 'build.json'
+                   prop_path: 'number'
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: authme-${{steps.number.outputs.prop}}-${{matrix.NAME}}-x64-installer-portable
+                  path: dist

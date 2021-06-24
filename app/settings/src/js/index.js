@@ -10,9 +10,10 @@ const dns = require("dns")
 // ? choose settings
 document.querySelector("#setting").click()
 
-// ? version
-const res = ipc.sendSync("ver")
+// ? get app infos
+const res = ipc.sendSync("info")
 
+// set app version
 document.querySelector("#but7").textContent = `Authme ${res.authme_version}`
 
 // ? if development
@@ -677,6 +678,14 @@ const about = () => {
 // ? edit
 const edit = () => {
 	ipc.send("hide_edit")
+}
+
+// ? build
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(
+		".build-content"
+	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
 }
 
 // ? offline mode

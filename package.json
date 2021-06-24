@@ -3,18 +3,17 @@
 	"version": "2.6.0",
 	"tag": "2.6.0",
 	"release": "2010. July 6.",
-	"number": "alpha.210623.221731",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
 	"scripts": {
-		"start": "electron .",
+		"start": "node scripts/alpha-build.js && electron .",
 		"build": "electron-builder --publish=never --x64 | gnomon --type=elapsed-total --quiet",
 		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64 | gnomon --type=elapsed-total --quiet",
 		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64 | gnomon --type=elapsed-total --quiet",
 		"build:test": "electron-builder --publish=never --x64 --dir -c scripts/test-build.json | gnomon --type=elapsed-total --quiet",
 		"build:df": "sass src/dragonfly@1.4.0.scss src/dragonfly@1.4.0.css --no-source-map --style compressed",
-		"build:tw": "tailwindcss build -i src/tailwind@2.1.2.scss -o src/tailwind@2.1.2.css -c .tailwindrc.js --no-autoprefixer --minify",
+		"build:tw": "tailwindcss build -i src/tailwind@2.2.2.scss -o src/tailwind@2.2.2.css -c .tailwindrc.js --no-autoprefixer --minify",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
 	},
@@ -110,10 +109,10 @@
 		"gnomon": "^1.4.6",
 		"prettier": "^2.3.1",
 		"sass": "^1.35.1",
-		"tailwindcss": "^2.2.2"
+		"tailwindcss": "2.2.2"
 	},
 	"engines": {
-		"node": ">=14.0.0",
+		"node": ">=15.0.0",
 		"npm": ">=7.0.0"
 	}
 }
