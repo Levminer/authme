@@ -1,3 +1,7 @@
+body {
+	overflow: hidden;
+}
+
 .center {
 	top: -50px;
 	width: 1000px;
@@ -13,6 +17,7 @@
 .button1:hover {
 	color: white;
 	border-color: white;
+	background-color: transparent;
 }
 
 .input1 {
@@ -25,6 +30,7 @@
 .input1:hover {
 	color: white;
 	border-color: white;
+	background-color: transparent;
 }
 
 #button1 {
@@ -71,9 +77,7 @@ hr {
 /* grid */
 .grid {
 	display: grid;
-	width: 1500px;
 	position: relative;
-	left: -290px;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: 1fr;
 	grid-row-gap: 0px;
@@ -102,7 +106,7 @@ hr {
 
 .buttoni {
 	color: black;
-	background: var(--df_primary_color);
+	background: white;
 	border: 1px solid var(--df_primary_color);
 	font-size: 1.25rem;
 	padding: 13px 30px;
@@ -114,8 +118,39 @@ hr {
 
 .buttoni:hover {
 	border: 1px solid var(--df_primary_color);
-	background: rgb(20, 20, 20);
+	background: transparent;
 	color: var(--df_primary_color);
+}
+
+.buttonm {
+	color: white;
+	background: black;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 15px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: left;
+	width: 15rem;
+}
+
+.buttonm:hover {
+	border: 1px solid rgb(10, 10, 10);
+	background: rgb(20, 20, 20);
+	color: white;
+}
+
+.buttonmselected {
+	border: 1px solid rgb(10, 10, 10);
+	background: rgb(20, 20, 20);
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
 }
 
 #experimental {
@@ -152,4 +187,10 @@ input::-webkit-inner-spin-button {
 .link {
 	cursor: pointer;
 	text-decoration: underline;
+}
+
+.part {
+	padding-bottom: 100px;
+	text-align: center;
+	background-color: rgb(10, 10, 10);
 }

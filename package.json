@@ -15,6 +15,7 @@
 		"build:test": "electron-builder --publish=never --x64 --dir -c scripts/test-build.json | gnomon --type=elapsed-total --quiet",
 		"build:df": "sass src/dragonfly@1.4.0.scss src/dragonfly@1.4.0.css --no-source-map --style compressed",
 		"build:tw": "tailwindcss build -i src/tailwind@2.2.2.scss -o src/tailwind@2.2.2.css -c .tailwindrc.js --no-autoprefixer --minify",
+		"watch:tw": "tailwindcss build -i src/tailwind@2.2.2.scss -o src/tailwind@2.2.2.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
 	},

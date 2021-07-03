@@ -608,6 +608,13 @@ const hide = () => {
 }
 
 document.querySelector(".settings").disabled = true
+document.querySelector(".settings").classList.add("buttonmselected")
+
+const removeButtonStyles = () => {
+	document.querySelector(".shortcuts").classList.remove("buttonmselected")
+	document.querySelector(".settings").classList.remove("buttonmselected")
+	document.querySelector(".experimental").classList.remove("buttonmselected")
+}
 
 // ? menu
 let shortcut = false
@@ -616,19 +623,25 @@ const menu = (evt, name) => {
 	let i
 
 	if (name === "shortcuts") {
-		document.querySelector(".shortcuts ").disabled = true
+		removeButtonStyles()
+
+		document.querySelector(".shortcuts").classList.add("buttonmselected")
+
+		document.querySelector(".shortcuts").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".center").style.height = "2550px"
 
 		shortcut = true
 
 		ipc.send("shortcuts")
 	} else if (name === "setting") {
+		removeButtonStyles()
+
+		document.querySelector(".settings").classList.add("buttonmselected")
+
 		document.querySelector(".settings").disabled = true
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".center").style.height = "3150px"
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -636,10 +649,13 @@ const menu = (evt, name) => {
 			shortcut = false
 		}
 	} else if (name === "experimental") {
+		removeButtonStyles()
+
+		document.querySelector(".experimental").classList.add("buttonmselected")
+
 		document.querySelector(".experimental").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".center").style.height = "900px"
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
