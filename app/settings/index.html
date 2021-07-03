@@ -126,7 +126,7 @@
 		<!-- content -->
 		<div class="h-screen flex">
 			<div class="h-screen bg-gray-900 flex flex-col">
-				<div class="m-4">
+				<div class="mb-1 mt-1 mr-4 ml-4">
 					<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -140,7 +140,20 @@
 						Settings
 					</button>
 				</div>
-				<div class="m-4">
+				<div class="mb-1 mt-1 mr-4 ml-4">
+					<button id="codes " class="buttonm codes" onclick="menu(event, 'codes')">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+							/>
+						</svg>
+						Codes
+					</button>
+				</div>
+				<div class="mb-1 mt-1 mr-4 ml-4">
 					<button id="shortcuts " class="buttonm shortcuts" onclick="menu(event, 'shortcuts')">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -153,7 +166,7 @@
 						Shortcuts
 					</button>
 				</div>
-				<div class="m-4">
+				<div class="mb-1 mt-1 mr-4 ml-4">
 					<button id="experimental " class="buttonm experimental" onclick="menu(event, 'experimental')">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -166,7 +179,7 @@
 						Experimental
 					</button>
 				</div>
-				<div class="m-4">
+				<div class="mb-1 mt-1 mr-4 ml-4">
 					<button id="about" class="buttonm about" onclick="about()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -209,26 +222,6 @@
 						<button class="button1" id="but15" onclick="capture()">-</button>
 						<br />
 						<hr />
-						<h3>Show 2FA names</h3>
-						<p class="text3">The saved 2FA names will show up. Needs restart.</p>
-						<button class="button1" id="but5" onclick="names()">-</button>
-						<br />
-						<hr />
-						<h3>Reveal code</h3>
-						<p class="text3">Blurs the code, but you can still copy it. Needs restart.</p>
-						<button class="button1" id="but11" onclick="reveal()">-</button>
-						<br />
-						<hr />
-						<h3>Reset search after copy</h3>
-						<p class="text3">Reset the search bar after you copied your code. Needs restart.</p>
-						<button class="button1" id="but10" onclick="copy()">-</button>
-						<br />
-						<hr />
-						<h3>Save search history</h3>
-						<p class="text3">Keep your search history. Needs restart.</p>
-						<button class="button1" id="but13" onclick="search()">-</button>
-						<br />
-						<hr />
 						<h3>Clear data</h3>
 						<p class="text3">Clear password, 2FA codes and all other settings. Be careful.</p>
 						<button class="button1" id="but1" onclick="reset()">Clear data</button>
@@ -249,6 +242,28 @@
 						<h3>Version</h3>
 						<p class="text3">Your current Authme version. Click for release notes.</p>
 						<button class="button1" id="but7" onclick="releasesLink()">-</button>
+					</div>
+
+					<!-- codes -->
+					<div id="codes" class="tabcontent part">
+						<h3>Show 2FA names</h3>
+						<p class="text3">The saved 2FA names will show up. Needs restart.</p>
+						<button class="button1" id="but5" onclick="names()">-</button>
+						<br />
+						<hr />
+						<h3>Reveal code</h3>
+						<p class="text3">Blurs the code, but you can still copy it. Needs restart.</p>
+						<button class="button1" id="but11" onclick="reveal()">-</button>
+						<br />
+						<hr />
+						<h3>Reset search after copy</h3>
+						<p class="text3">Reset the search bar after you copied your code. Needs restart.</p>
+						<button class="button1" id="but10" onclick="copy()">-</button>
+						<br />
+						<hr />
+						<h3>Save search history</h3>
+						<p class="text3">Keep your search history. Needs restart.</p>
+						<button class="button1" id="but13" onclick="search()">-</button>
 					</div>
 
 					<!-- shortcuts -->
@@ -1095,7 +1110,7 @@
 					<div id="experimental" class="tabcontent part">
 						<h3>Codes time offset</h3>
 						<p class="text3">
-							You can set a time offset for the codes, submit with enter. Specify the time in seconds, it can be a positive or a
+							You can set a time offset for the codes, confirm by pressing enter. Specify the time in seconds, it can be a positive or a
 							negative number.
 						</p>
 						<input type="number" id="inp0" class="input1 offset" max="1000" min="-1000" maxlength="5" step="5" value="0" />

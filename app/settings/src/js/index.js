@@ -545,7 +545,7 @@ const folder0 = () => {
 
 // ? settings folder
 const folder1 = () => {
-	shell.showItemInFolder(file_path)
+	shell.openPath(file_path)
 }
 
 // ? cache folder
@@ -560,7 +560,7 @@ const folder2 = () => {
 		cache_path = path.join(process.env.HOME, "/Library/Application Support/authme")
 	}
 
-	shell.showItemInFolder(cache_path)
+	shell.openPath(cache_path)
 }
 
 // ? status api
@@ -614,6 +614,7 @@ const removeButtonStyles = () => {
 	document.querySelector(".shortcuts").classList.remove("buttonmselected")
 	document.querySelector(".settings").classList.remove("buttonmselected")
 	document.querySelector(".experimental").classList.remove("buttonmselected")
+	document.querySelector(".codes").classList.remove("buttonmselected")
 }
 
 // ? menu
@@ -630,6 +631,7 @@ const menu = (evt, name) => {
 		document.querySelector(".shortcuts").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".experimental").disabled = false
+		document.querySelector(".codes").disabled = false
 
 		shortcut = true
 
@@ -642,6 +644,7 @@ const menu = (evt, name) => {
 		document.querySelector(".settings").disabled = true
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
+		document.querySelector(".codes").disabled = false
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -656,6 +659,22 @@ const menu = (evt, name) => {
 		document.querySelector(".experimental").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".codes").disabled = false
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
+	} else if (name === "codes") {
+		removeButtonStyles()
+
+		document.querySelector(".codes").classList.add("buttonmselected")
+
+		document.querySelector(".experimental").disabled = false
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".codes").disabled = true
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
