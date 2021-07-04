@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
 const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
 const { number } = require("./build.json")
@@ -175,7 +175,7 @@ const settings = `{
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
 			"release": "CommandOrControl+n",
-			"issues": "CommandOrControl+p",
+			"support": "CommandOrControl+p",
 			"docs": "CommandOrControl+d",
 			"licenses": "CommandOrControl+l",
 			"update": "CommandOrControl+u",
@@ -210,6 +210,12 @@ if (file.advanced_settings === undefined) {
 
 if (file.shortcuts.edit === undefined) {
 	file.shortcuts.edit = "CommandOrControl+t"
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
+if (file.shortcuts.support === undefined) {
+	file.shortcuts.support = "CommandOrControl+p"
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
@@ -594,6 +600,11 @@ const createWindow = () => {
 									window_settings.webContents.executeJavaScript("showUpdate()")
 								})
 
+								new Notification({
+									title: "Authme Update",
+									body: `Update available: Authme ${data.tag_name}`,
+								}).show()
+
 								logger.log("Auto update found!")
 							} else {
 								logger.log("No auto update found!")
@@ -937,9 +948,32 @@ const releaseNotes = () => {
 	api()
 }
 
+// ? support
+const support = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["PayPal", "OpenColletive", "Close"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "info",
+			message: "Authme is a free, open source software. \n\n If you like the app, please consider supporting!",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				shell.openExternal("https://paypal.me/levminer")
+			} else if (result.response === 1) {
+				shell.openExternal("https://opencollective.com/authme")
+			}
+		})
+}
+
 // ? start app
 app.whenReady().then(() => {
 	logger.log("Starting app")
+
+	app.setAppUserModelId("Authme")
 
 	process.on("uncaughtException", (error) => {
 		logger.error("Unknown error occurred", error.stack)
@@ -1306,10 +1340,10 @@ app.whenReady().then(() => {
 						type: "separator",
 					},
 					{
-						label: "Issues",
+						label: "Support",
 						accelerator: shortcuts ? "" : file.shortcuts.issues,
 						click: () => {
-							shell.openExternal("https://github.com/Levminer/authme/issues")
+							support()
 						},
 					},
 					{
@@ -1319,7 +1353,21 @@ app.whenReady().then(() => {
 						label: "Docs",
 						accelerator: shortcuts ? "" : file.shortcuts.docs,
 						click: () => {
-							shell.openExternal("https://docs.authme.levminer.com")
+							dialog
+								.showMessageBox({
+									title: "Authme",
+									buttons: ["Open", "Close"],
+									defaultId: 1,
+									cancelId: 1,
+									noLink: true,
+									type: "info",
+									message: "You can view the Authme Docs in the browser. \n\n Click open to view it in your browser!",
+								})
+								.then((result) => {
+									if (result.response === 0) {
+										shell.openExternal("https://docs.authme.levminer.com")
+									}
+								})
 						},
 					},
 				],

@@ -208,8 +208,9 @@ const reset = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No"],
-			defaultId: 0,
+			defaultId: 1,
 			cancelId: 1,
+			noLink: true,
 			type: "warning",
 			message: "Are you sure you want to clear all data? This cannot be undone!",
 		})
@@ -219,8 +220,9 @@ const reset = () => {
 					.showMessageBox({
 						title: "Authme",
 						buttons: ["Yes", "No"],
-						defaultId: 0,
+						defaultId: 1,
 						cancelId: 1,
+						noLink: true,
 						type: "warning",
 						message: "Are you absolutely sure? There is no way back!",
 					})
@@ -287,7 +289,9 @@ const names = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
 			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
 		})
@@ -338,7 +342,9 @@ const copy = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
 			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
 		})
@@ -389,7 +395,9 @@ const search = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
 			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
 		})
@@ -440,7 +448,9 @@ const reveal = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
 			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
 		})
@@ -496,7 +506,9 @@ inp0.addEventListener("keyup", (event) => {
 			.showMessageBox({
 				title: "Authme",
 				buttons: ["Yes", "No", "Cancel"],
+				defaultId: 2,
 				cancelId: 2,
+				noLink: true,
 				type: "warning",
 				message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
 			})

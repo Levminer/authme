@@ -104,7 +104,7 @@
 
 img {
 	filter: blur(6px);
-	transition: 0.4s ease-in;
+	transition: 0.2s ease-in;
 	padding: 30px;
 	background-color: white;
 	border-radius: 30px;
@@ -116,7 +116,7 @@ img:hover {
 
 textarea {
 	filter: blur(4px);
-	transition: 0.4s ease-in;
+	transition: 0.2s ease-in;
 }
 
 textarea:hover {

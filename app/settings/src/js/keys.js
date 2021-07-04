@@ -8,7 +8,7 @@ const default_shortcuts = {
 		import: "CommandOrControl+i",
 		export: "CommandOrControl+e",
 		release: "CommandOrControl+n",
-		issues: "CommandOrControl+p",
+		support: "CommandOrControl+p",
 		docs: "CommandOrControl+d",
 		licenses: "CommandOrControl+l",
 		update: "CommandOrControl+u",
@@ -51,7 +51,7 @@ hk3.value = file.shortcuts.edit
 hk4.value = file.shortcuts.import
 hk5.value = file.shortcuts.export
 hk6.value = file.shortcuts.release
-hk7.value = file.shortcuts.issues
+hk7.value = file.shortcuts.support
 hk8.value = file.shortcuts.docs
 hk9.value = file.shortcuts.licenses
 hk10.value = file.shortcuts.update
@@ -145,7 +145,7 @@ const hk_edit = (value) => {
 			case 7:
 				const hk7 = document.querySelector("#hk7_input").value
 
-				file.shortcuts.issues = hk7
+				file.shortcuts.support = hk7
 				break
 			case 8:
 				const hk8 = document.querySelector("#hk8_input").value
@@ -260,7 +260,7 @@ const hk_delete = (value) => {
 		case 7:
 			const hk7 = document.querySelector("#hk7_input").value
 
-			file.shortcuts.issues = hk7
+			file.shortcuts.support = hk7
 			break
 		case 8:
 			const hk8 = document.querySelector("#hk8_input").value
@@ -361,9 +361,9 @@ const hk_reset = (value) => {
 			file.shortcuts.release = default_shortcuts.shortcuts.release
 			break
 		case 7:
-			document.querySelector("#hk7_input").value = default_shortcuts.shortcuts.issues
+			document.querySelector("#hk7_input").value = default_shortcuts.shortcuts.support
 
-			file.shortcuts.issues = default_shortcuts.shortcuts.issues
+			file.shortcuts.support = default_shortcuts.shortcuts.support
 			break
 		case 8:
 			document.querySelector("#hk8_input").value = default_shortcuts.shortcuts.docs
