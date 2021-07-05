@@ -88,10 +88,11 @@ const separation = () => {
 }
 
 const go = () => {
-	document.querySelector("#title").style.display = "none"
 	document.querySelector("#search").style.display = "grid"
 	document.querySelector(".h1").style.marginBottom = "0px"
-	document.querySelector("#information").style.display = "none"
+	document.querySelector(".center").style.top = "80px"
+	document.querySelector("#choose").style.display = "none"
+	document.querySelector("#starting").style.display = "none"
 
 	const generate = () => {
 		// counter
@@ -397,7 +398,7 @@ const go = () => {
 	// prev
 	if (prev == false) {
 		document.querySelector("#input").style.display = "none"
-		document.querySelector("#save").style.visibility = "visible"
+		document.querySelector("#save").style.display = "block"
 	} else {
 		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "none"
@@ -478,11 +479,14 @@ app.on("browser-window-focus", () => {
 			const h1 = document.querySelector(".h1")
 			h1.classList.add("animate__animated", "animate__slideInDown")
 
-			const h2 = document.querySelector(".h2")
-			h2.classList.add("animate__animated", "animate__slideInDown")
+			const choose = document.querySelector("#choose")
+			choose.classList.add("animate__animated", "animate__slideInDown")
 
-			const input = document.querySelector(".input")
-			input.classList.add("animate__animated", "animate__slideInDown")
+			const starting = document.querySelector("#starting")
+			starting.classList.add("animate__animated", "animate__slideInDown")
+
+			const search = document.querySelector("#search")
+			search.classList.add("animate__animated", "animate__slideInDown")
 
 			const button = document.querySelector(".button")
 			button.classList.add("animate__animated", "animate__slideInDown")
@@ -584,11 +588,23 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? links
-const link0 = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/web")
+// ? buttons
+const createFile = () => {
+	ipc.send("hide_import")
 }
 
-const link1 = () => {
+const configureSettings = () => {
+	ipc.send("hide_settings")
+}
+
+const supportDevelopment = () => {
+	ipc.send("support")
+}
+
+const readDocs = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/import")
+}
+
+const sampleImport = () => {
 	shell.openExternal("https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true")
 }

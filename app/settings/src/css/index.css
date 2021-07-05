@@ -120,7 +120,7 @@ hr {
 	border: 1px solid black;
 	font-size: 1.25rem;
 	padding: 15px 30px;
-	border-radius: 15px;
+	border-radius: 30px;
 	cursor: pointer;
 	text-decoration: none;
 	transition: 0.2s ease-in;

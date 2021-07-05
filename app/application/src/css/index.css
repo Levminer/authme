@@ -9,7 +9,7 @@ h4 {
 }
 
 .center {
-	top: 80px;
+	top: -70px;
 	width: 1000px;
 	height: auto;
 }
@@ -148,8 +148,7 @@ h4 {
 }
 
 #save {
-	display: unset;
-	visibility: hidden;
+	display: none;
 	margin-bottom: 20px;
 }
 
@@ -199,4 +198,29 @@ a {
 
 .link {
 	cursor: pointer;
+}
+
+.buttonm {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm:hover {
+	border-color: wheat;
+	background: transparent;
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
 }

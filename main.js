@@ -892,6 +892,10 @@ ipc.on("download_update", () => {
 	shell.openExternal("https://authme.levminer.com/#downloads")
 })
 
+ipc.on("support", () => {
+	support()
+})
+
 // ? about
 const about = () => {
 	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
@@ -1341,7 +1345,7 @@ app.whenReady().then(() => {
 					},
 					{
 						label: "Support",
-						accelerator: shortcuts ? "" : file.shortcuts.issues,
+						accelerator: shortcuts ? "" : file.shortcuts.support,
 						click: () => {
 							support()
 						},
