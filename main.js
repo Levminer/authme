@@ -957,7 +957,7 @@ const support = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["PayPal", "OpenColletive", "Close"],
+			buttons: ["PayPal", /* "OpenColletive", */ "Close"],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
@@ -967,9 +967,9 @@ const support = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				shell.openExternal("https://paypal.me/levminer")
-			} else if (result.response === 1) {
+			} /* else if (result.response === 1) {
 				shell.openExternal("https://opencollective.com/authme")
-			}
+			} */
 		})
 }
 
