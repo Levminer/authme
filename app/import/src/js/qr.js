@@ -22,12 +22,10 @@ const qr_import = () => {
 		})
 
 	const qr_import_resume = () => {
-		const qr = new QrcodeDecoder()
-
 		for (let i = 0; i < images.length; i++) {
 			const element = images[i]
 
-			qr.decodeFromImage(element).then((res) => {
+			QrcodeDecoder.default.prototype.decodeFromImage(element).then((res) => {
 				if (res === false) {
 					dialog.showMessageBox({
 						title: "Authme",

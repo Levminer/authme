@@ -96,34 +96,13 @@ const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
+const os_info = `${os.cpus()[0].model.split("@")[0]}${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
 
 // logs
 logger.createFile(file_path, "main")
 logger.log(`Authme ${authme_version} ${build_number}`)
 logger.log(`System ${os_version}`)
-logger.log(`Electron ${electron_version}`)
-
-// python version
-let python_version
-let version_src
-
-if (dev === true) {
-	version_src = path.join(__dirname, "src/version.py")
-} else {
-	version_src = path.join(__dirname, "../app.asar.unpacked/src/version.py")
-}
-
-const py_version = spawn("python", [version_src])
-
-py_version.stdout.on("data", (res) => {
-	python_version = res.toString()
-	logger.log("Python version found")
-})
-
-py_version.on("error", (err) => {
-	python_version = "Not installed \n"
-	logger.warn("Error getting python version", err)
-})
+logger.log(`Hardware ${os_info}`)
 
 // ? single instance
 if (dev === false) {
@@ -225,21 +204,6 @@ if (file.settings.disable_window_capture === undefined) {
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
-
-// ? install protobuf
-let install_src
-
-if (dev === true) {
-	install_src = path.join(__dirname, "src/install.py")
-} else {
-	install_src = path.join(__dirname, "../app.asar.unpacked/src/install.py")
-}
-
-const install = spawn("python", [install_src])
-
-install.on("error", (err) => {
-	logger.warn("Error installing protobuff", err)
-})
 
 // ? open tray
 const showTray = () => {
@@ -898,17 +862,20 @@ ipc.on("support", () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+
+	shell.beep()
 
 	dialog
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Copy", "Close"],
-			defaultId: 0,
+			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
 			type: "info",
 			message: message,
+			icon: path.join(__dirname, "img/tray.png"),
 		})
 		.then((result) => {
 			if (result.response === 0) {
