@@ -33,11 +33,20 @@
 	top: 30px;
 }
 
-.link1 {
-	font-size: 1rem !important;
-	position: relative;
-	top: 50px;
-	color: white !important;
+a:link {
+	color: var(--df_primary_color);
+	font-size: 24px;
+	transition: 0.2s ease-in;
+}
+
+a:hover {
+	color: gray;
+	text-decoration: underline dashed !important;
+}
+
+a:visited {
+	color: var(--df_primary_color);
+	text-decoration: dashed !important;
 }
 
 .grid {
@@ -68,17 +77,13 @@ input:hover::placeholder {
 	margin-top: 30px;
 }
 
-#but2 {
-	margin-top: 15px;
+#but0,
+#but1 {
 	margin-bottom: 30px;
 }
 
 .details1 {
 	width: 98%;
-}
-
-a {
-	color: white;
 }
 
 .summary1 {
@@ -89,4 +94,29 @@ a {
 
 #dt {
 	margin-bottom: 30px;
+}
+
+.buttonm {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm:hover {
+	border-color: white;
+	background: transparent;
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
 }

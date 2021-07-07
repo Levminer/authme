@@ -2,7 +2,6 @@ const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut
 const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
 const { number } = require("./build.json")
-const { spawn } = require("child_process")
 const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
@@ -548,6 +547,15 @@ const createWindow = () => {
 			edit_shown = false
 		}
 	})
+
+	// ? disable scren capture
+	if (file.settings.disable_window_capture === true) {
+		window_settings.setContentProtection(true)
+		window_edit.setContentProtection(true)
+		window_application.setContentProtection(true)
+		window_import.setContentProtection(true)
+		window_export.setContentProtection(true)
+	}
 
 	// ? check for auto update
 	window_application.on("show", () => {

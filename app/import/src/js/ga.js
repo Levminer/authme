@@ -24,7 +24,7 @@ const ga_import = () => {
 		for (i = 0; i < images.length; i++) {
 			const element = images[i]
 
-			QrcodeDecoder.default.prototype.decodeFromImage(element).then((res) => {
+			qrcodedecoder.default.prototype.decodeFromImage(element).then((res) => {
 				if (res === false) {
 					dialog.showMessageBox({
 						title: "Authme",
