@@ -96,6 +96,7 @@ const hk_edit = (value) => {
 		document.addEventListener("keydown", call, true)
 
 		inp_name.value = "Press any key combiantion"
+		inp_name.style.border = "green 1px solid"
 		btn_name.style.border = "green 1px solid"
 		svg_name.style.color = "green"
 
@@ -197,6 +198,7 @@ const hk_edit = (value) => {
 		document.removeEventListener("keydown", call, true)
 		svg_name.style.color = ""
 		btn_name.style.border = ""
+		inp_name.style.border = ""
 
 		document.querySelector(`#hk${value}_input`).value = "None"
 		modify = true

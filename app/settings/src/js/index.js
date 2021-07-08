@@ -212,7 +212,7 @@ const reset = () => {
 			cancelId: 1,
 			noLink: true,
 			type: "warning",
-			message: "Are you sure you want to clear all data? This cannot be undone!",
+			message: "Are you sure you want to clear all data? \n\nThis cannot be undone!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -224,7 +224,7 @@ const reset = () => {
 						cancelId: 1,
 						noLink: true,
 						type: "warning",
-						message: "Are you absolutely sure? There is no way back!",
+						message: "Are you absolutely sure? \n\nThere is no way back!",
 					})
 					.then((result) => {
 						if (result.response === 0) {
@@ -293,7 +293,7 @@ const names = () => {
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -346,7 +346,7 @@ const copy = () => {
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -399,7 +399,7 @@ const search = () => {
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -452,7 +452,7 @@ const reveal = () => {
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -510,7 +510,7 @@ inp0.addEventListener("keyup", (event) => {
 				cancelId: 2,
 				noLink: true,
 				type: "warning",
-				message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+				message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 			})
 			.then((result) => {
 				if (result.response === 0) {

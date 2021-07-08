@@ -31,11 +31,9 @@ const qrImport = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `
-						No QR code found on the picture: ${element}.
+						message: `No QR code found on the picture: ${element}.
 						
-						Try to take a better picture and try again!
-						`,
+						Try to take a better picture and try again!`,
 					})
 
 					return console.warn("Authme - No QR code found (QR)")
@@ -85,11 +83,9 @@ const qrImport = () => {
 								buttons: ["Close"],
 								type: "info",
 								defaultId: 0,
-								message: `
-								QR codes found on these pictures: ${corrects_str}
+								message: `QR codes found on these pictures: ${corrects_str}
 								
-								Now select where do you want to save the file!
-								`,
+								Now select where do you want to save the file!`,
 							})
 							.then(() => {
 								dialog
@@ -121,11 +117,9 @@ const qrImport = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `
-						Wrong QR code found on the picture: ${element}.
+						message: `Wrong QR code found on the picture: ${element}.
 						
-						Make sure this is a correct QR code and try again!
-						`,
+						Make sure this is a correct QR code and try again!`,
 					})
 
 					return console.warn("Authme - Wrong QR code found (QR)")

@@ -816,11 +816,9 @@ ipc.on("abort", () => {
 			defaultId: 0,
 			cancelId: 1,
 			noLink: true,
-			message: `
-			Failed to check the integrity of the files.
+			message: `Failed to check the integrity of the files.
 			
-			You or someone messed with the settings file, shutting down for security reasons!
-			`,
+			You or someone messed with the settings file, shutting down for security reasons!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -937,7 +935,7 @@ const support = () => {
 			cancelId: 2,
 			noLink: true,
 			type: "info",
-			message: "Authme is a free, open source software. \n\n If you like the app, please consider supporting!",
+			message: "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -965,7 +963,7 @@ app.whenReady().then(() => {
 				cancelId: 1,
 				noLink: true,
 				type: "error",
-				message: `Unknown error occurred! \n\n ${error.stack}`,
+				message: `Unknown error occurred! \n\n${error.stack}`,
 			})
 			.then((result) => {
 				if (result.response === 0) {
@@ -1340,7 +1338,7 @@ app.whenReady().then(() => {
 									cancelId: 1,
 									noLink: true,
 									type: "info",
-									message: "You can view the Authme Docs in the browser. \n\n Click open to view it in your browser!",
+									message: "You can view the Authme Docs in the browser. \n\nClick open to view it in your browser!",
 								})
 								.then((result) => {
 									if (result.response === 0) {
@@ -1366,11 +1364,7 @@ app.whenReady().then(() => {
 									cancelId: 1,
 									noLink: true,
 									type: "info",
-									message: `
-									This software is licensed under GPL-3.0
-
-									Copyright © 2020 Lőrik Levente
-									`,
+									message: "This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente",
 								})
 								.then((result) => {
 									if (result.response === 0) {
@@ -1400,13 +1394,11 @@ app.whenReady().then(() => {
 															defaultId: 0,
 															cancelId: 1,
 															type: "info",
-															message: `
-															Update available: Authme ${data.tag_name}
+															message: `Update available: Authme ${data.tag_name}
 															
 															Do you want to download it?
 										
-															You currently running: Authme ${tag_name}
-															`,
+															You currently running: Authme ${tag_name}`,
 														})
 														.then((result) => {
 															if (result.response === 0) {
@@ -1420,13 +1412,11 @@ app.whenReady().then(() => {
 														defaultId: 0,
 														cancelId: 1,
 														type: "info",
-														message: `
-														No update available:
+														message: `No update available:
 														
 														You are running the latest version!
 									
-														You are currently running: Authme ${tag_name}
-														`,
+														You are currently running: Authme ${tag_name}`,
 													})
 												}
 											} catch (error) {
@@ -1440,13 +1430,11 @@ app.whenReady().then(() => {
 										defaultId: 0,
 										cancelId: 1,
 										type: "info",
-										message: `
-										No update available:
+										message: `No update available:
 										
 										Can't connect to API, check your internet connection or the API status in the settings!
 					
-										You currently running: Authme ${tag_name}
-										`,
+										You currently running: Authme ${tag_name}`,
 									})
 								}
 							}

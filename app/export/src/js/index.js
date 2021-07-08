@@ -172,11 +172,9 @@ const error = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `
-				No save file found.
+				message: `No save file found.
 				
-				Go back to the main page and save your codes!
-				`,
+				Go back to the main page and save your codes!`,
 			})
 		}
 	})
