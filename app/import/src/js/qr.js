@@ -1,4 +1,4 @@
-const qr_import = () => {
+const qrImport = () => {
 	let images = []
 	const corrects = []
 	const names = []
@@ -17,11 +17,11 @@ const qr_import = () => {
 			images = result.filePaths
 
 			if (canceled === false) {
-				qr_import_resume()
+				qrImportResume()
 			}
 		})
 
-	const qr_import_resume = () => {
+	const qrImportResume = () => {
 		for (let i = 0; i < images.length; i++) {
 			const element = images[i]
 
@@ -110,6 +110,8 @@ const qr_import = () => {
 													console.warn("Authme - File created")
 												}
 											})
+										} else {
+											return console.warn("Authme - Saveing cancled")
 										}
 									})
 							})

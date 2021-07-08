@@ -27,7 +27,7 @@ const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(
 // ? rollback
 const cache_path = path.join(file_path, "cache")
 const rollback_con = document.querySelector(".rollback")
-const rollback_but = document.querySelector("#rollbackBut")
+const rollback_text = document.querySelector("#rollbackBut")
 
 fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
 	if (err) {
@@ -39,7 +39,7 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 
 		const date = fs.statSync(cache_path).atime.toLocaleString().replaceAll(",", "")
 
-		rollback_but.textContent = `Rollback to: ${date}`
+		rollback_text.textContent = `Latest rollback: ${date}`
 	}
 })
 
@@ -48,12 +48,13 @@ const rollback = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
 			type: "warning",
-			message: `
-			Are you sure you want to rollback to the latest save?
+			noLink: true,
+			message: `Are you sure you want to rollback to the latest save?
 			
-			This requires a restart and will overwrite your saved codes!
-			`,
+			This requires a restart and will overwrite your saved codes!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -170,6 +171,7 @@ const edit = (number) => {
 		edit_but.style.color = "green"
 		edit_but.style.borderColor = "green"
 
+		edit_inp.style.borderColor = "green"
 		edit_inp.readOnly = false
 
 		edit_mode = true
@@ -177,6 +179,7 @@ const edit = (number) => {
 		edit_but.style.color = ""
 		edit_but.style.borderColor = "white"
 
+		edit_inp.style.borderColor = "white"
 		edit_inp.readOnly = true
 
 		const inp_value = document.querySelector(`#edit_inp_${number}`)
@@ -199,11 +202,9 @@ const del = (number) => {
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
 			type: "warning",
-			message: `
-			Are you sure you want to delete this code?
+			message: `Are you sure you want to delete this code?
 			
-			If you want to revert this don't save and restart the app!
-			`,
+			If you want to revert this don't save and restart the app!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -237,12 +238,13 @@ const createSave = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
 			type: "warning",
-			message: `
-			Are you sure you want to save the modified code(s)?
+			noLink: true,
+			message: `Are you sure you want to save the modified code(s)?
 			
-			This requires a restart and will overwrite your saved codes!
-			`,
+			This requires a restart and will overwrite your saved codes!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -270,23 +272,35 @@ const addMore = () => {
 			canceled = result.canceled
 			files = result.filePaths
 
-			console.log(files)
-
-			for (let i = 0; i < files.length; i++) {
-				fs.readFile(files[i], (err, input) => {
-					if (err) {
-						console.log("Authme - Error loading file")
-					} else {
-						data = []
-
-						const container = document.querySelector(".container")
-						container.innerHTML = ""
-
-						processdata(input.toString())
-					}
+			if (canceled === false) {
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					defaultId: 0,
+					cancelId: 0,
+					type: "info",
+					noLink: true,
+					message: `Code(s) added!
+	
+					Scroll down to view them!`,
 				})
 
-				console.log(files[i])
+				for (let i = 0; i < files.length; i++) {
+					fs.readFile(files[i], (err, input) => {
+						if (err) {
+							console.log("Authme - Error loading file")
+						} else {
+							data = []
+
+							const container = document.querySelector(".container")
+							container.innerHTML = ""
+
+							processdata(input.toString())
+						}
+					})
+
+					console.log(files[i])
+				}
 			}
 		})
 }
@@ -320,11 +334,9 @@ const loadError = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `
-				No save file found.
+				message: `No save file found.
 				
-				Go back to the main page and save your codes!
-				`,
+				Go back to the main page and save your codes!`,
 			})
 		}
 	})

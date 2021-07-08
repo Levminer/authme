@@ -10,31 +10,73 @@
 		<script defer src="./src/js/save.js"></script>
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly.css" />
+		<link rel="stylesheet" href="../.././src/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 		<!-- favicon -->
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
 		<div class="center">
+			<!-- header -->
 			<h1>Authme</h1>
 			<h2>Edit</h2>
 			<p class="text3">You can edit, delete or add more codes.</p>
 			<button class="button1" onclick="hide()">Close</button>
-			<div class="rollback">
-				<h3>Rollback</h3>
-				<p class="text3">You can rollback to the latest save. If you load your codes below it will overwrite the current save!</p>
-				<button id="rollbackBut" class="button1" onclick="rollback()">Rollback</button>
+			<!-- rollback -->
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 rollback">
+				<h2 id="rollbackBut" class="pt-3">Rollback</h2>
+				<h3>You can rollback to the latest save. If you load your codes below it will overwrite the current rollback save!</h3>
+				<button class="buttonm mb-4" onclick="rollback()">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+					</svg>
+					Rollback
+				</button>
 			</div>
-			<div class="beforeLoad">
-				<h3>Load saved code</h3>
-				<p class="text3">You can load the codes you saved.</p>
-				<button class="button1" onclick="loadCodes()">Load codes</button>
+			<!-- load codes -->
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 beforeLoad">
+				<h2 id="rollbackBut" class="pt-3">Load saved code(s)</h2>
+				<h3>You can load the code(s) you saved. After that you can edit them or add more.</h3>
+				<button class="buttonm mb-4" onclick="loadCodes()">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+						/>
+					</svg>
+					Load code(s)
+				</button>
 			</div>
+			<!-- save codes and add codes -->
 			<div class="afterLoad">
-				<h3>Edit mode</h3>
-				<p class="text3">Now you can modify existing codes or add more.</p>
-				<button class="button1" onclick="createSave()">Save</button>
-				<button class="button1" onclick="addMore()">Add</button>
+				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3">
+					<h2 id="rollbackBut" class="pt-3">Edit mode</h2>
+					<h3>Now you can modify existing codes or add more.</h3>
+					<button class="buttonm mb-4" onclick="createSave()">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+							/>
+						</svg>
+						Save code(s)
+					</button>
+					<button class="buttonm mb-4" onclick="addMore()">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+							/>
+						</svg>
+						Add code(s)
+					</button>
+				</div>
 				<!-- codes -->
 				<div class="container"></div>
 			</div>
