@@ -14,6 +14,7 @@
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
+		<!-- build number -->
 		<div class="w-full text-white bg-black font-bold build">
 			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
 				<div class="flex">
@@ -22,55 +23,33 @@
 			</div>
 		</div>
 
+		<!-- offline mode -->
 		<div class="w-full text-white bg-popup-red font-bold offline">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 512 512">
-						<path
-							d="M256 80c-8.66 0-16.58 7.36-16 16l8 216a8 8 0 008 8h0a8 8 0 008-8l8-216c.58-8.64-7.34-16-16-16z"
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="40"
-						/>
-						<circle
-							cx="256"
-							cy="416"
-							r="16"
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="40"
-						/>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
 
-					<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but can't look for new updates!</p>
+					<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but you can't look for new updates!</p>
 				</div>
 				<a
 					onclick="this.parentElement.style.display='none'"
 					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
 				>
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</a>
 			</div>
 		</div>
 
+		<!-- online mode -->
 		<div class="w-full text-white bg-popup-green font-bold online">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 512 512">
-						<path
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="45"
-							d="M416 128L192 384l-96-96"
-						/>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
 
 					<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
@@ -79,31 +58,24 @@
 					onclick="this.parentElement.style.display='none'"
 					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
 				>
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</a>
 			</div>
 		</div>
 
+		<!-- update -->
 		<div class="w-full text-white bg-popup-blue font-bold update">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="3"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="w-6 h-6"
-					>
-						<polyline points="23 4 23 10 17 10"></polyline>
-						<polyline points="1 20 1 14 7 14"></polyline>
-						<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+						/>
 					</svg>
 
 					<p class="mx-3 flex flex-row relative top-1">
@@ -116,8 +88,8 @@
 					onclick="this.parentElement.style.display='none'"
 					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
 				>
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</a>
 			</div>
@@ -126,7 +98,7 @@
 		<!-- content -->
 		<div class="h-screen flex">
 			<div class="h-screen bg-gray-900 flex flex-col">
-				<div class="mb-1 mt-1 mr-4 ml-4">
+				<div class="mb-1 mt-2 mr-4 ml-4">
 					<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -200,7 +172,17 @@
 						<h1>Authme</h1>
 						<h2>Settings</h2>
 						<p class="text3">You can configure the app setting here.</p>
-						<button class="button1" onclick="hide()">Close</button>
+						<button class="buttonm2" onclick="hide()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+							Close window
+						</button>
 						<br />
 						<hr />
 					</div>
@@ -224,24 +206,64 @@
 						<hr />
 						<h3>Clear data</h3>
 						<p class="text3">Clear password, 2FA codes and all other settings. Be careful.</p>
-						<button class="button1" id="but1" onclick="reset()">Clear data</button>
+						<button class="buttonm2" id="but1" onclick="reset()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+								/>
+							</svg>
+							Clear data
+						</button>
 						<br />
 						<hr />
 						<h3>Open folders</h3>
 						<p class="text3">You can open the folders Authme uses to function. Editing or deleting files might cause a crash.</p>
-						<button class="button1" id="but3" onclick="folder0()">Authme folder</button>
-						<button class="button1" id="but4" onclick="folder1()">Settings folder</button>
-						<button class="button1" id="but12" onclick="folder2()">Cache folder</button>
+						<button class="buttonm2" id="but3" onclick="folder0()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+								/>
+							</svg>
+							Authme folder
+						</button>
+						<button class="buttonm2" id="but4" onclick="folder1()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+								/>
+							</svg>
+							Settings folder
+						</button>
+						<button class="buttonm2" id="but12" onclick="folder2()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+								/>
+							</svg>
+							Cache folder
+						</button>
 						<br />
 						<hr />
 						<h3>Status</h3>
-						<p class="text3">Current status of the API. Click for all the status informations.</p>
-						<button class="button1" id="but6" onclick="statusLink()">-</button>
+						<p class="text3">Current status of the API, used for updates only. Click for all the status informations.</p>
+						<button class="buttonm2" id="but6" onclick="statusLink()">-</button>
 						<br />
 						<hr />
 						<h3>Version</h3>
 						<p class="text3">Your current Authme version. Click for release notes.</p>
-						<button class="button1" id="but7" onclick="releasesLink()">-</button>
+						<button class="buttonm2" id="but7" onclick="releasesLink()">-</button>
 					</div>
 
 					<!-- codes -->
@@ -273,7 +295,17 @@
 							You can modify the shortcuts here, if you don't understand something just read the docs. Shortcuts not work on this page,
 							go back to the settings tab to reactivate them!
 						</p>
-						<button class="button1" id="but9" onclick="shortcutsLink()">Docs</button>
+						<button class="buttonm2" onclick="shortcutsLink()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+								/>
+							</svg>
+							Read docs
+						</button>
 						<br />
 						<br />
 						<br />
@@ -286,47 +318,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk0_button_edit" onclick="hk_edit(0)">
-									<svg
-										id="hk0_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk0_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk0_button_reset" onclick="hk_reset(0)">
-									<svg
-										id="hk0_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk0_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk0_button_delete" onclick="hk_delete(0)">
-									<svg
-										id="hk0_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk0_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -340,47 +360,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk1_button_edit" onclick="hk_edit(1)">
-									<svg
-										id="hk1_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk1_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk1_button_reset" onclick="hk_reset(1)">
-									<svg
-										id="hk1_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk1_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk1_button_delete" onclick="hk_delete(1)">
-									<svg
-										id="hk1_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk1_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -394,47 +402,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk2_button_edit" onclick="hk_edit(2)">
-									<svg
-										id="hk2_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk2_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk2_button_reset" onclick="hk_reset(2)">
-									<svg
-										id="hk2_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk2_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk2_button_delete" onclick="hk_delete(2)">
-									<svg
-										id="hk2_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk2_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -448,47 +444,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk3_button_edit" onclick="hk_edit(3)">
-									<svg
-										id="hk3_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk3_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk3_button_reset" onclick="hk_reset(3)">
-									<svg
-										id="hk3_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk3_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk3_button_delete" onclick="hk_delete(3)">
-									<svg
-										id="hk3_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk3_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -502,47 +486,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk4_button_edit" onclick="hk_edit(4)">
-									<svg
-										id="hk4_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk4_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk4_button_reset" onclick="hk_reset(4)">
-									<svg
-										id="hk4_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk4_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk4_button_delete" onclick="hk_delete(4)">
-									<svg
-										id="hk4_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk4_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -556,47 +528,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk5_button_edit" onclick="hk_edit(5)">
-									<svg
-										id="hk5_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk5_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk5_button_reset" onclick="hk_reset(5)">
-									<svg
-										id="hk5_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk5_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk5_button_delete" onclick="hk_delete(5)">
-									<svg
-										id="hk5_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk5_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -610,47 +570,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk6_button_edit" onclick="hk_edit(6)">
-									<svg
-										id="hk6_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk6_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk6_button_reset" onclick="hk_reset(6)">
-									<svg
-										id="hk6_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk6_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk6_button_delete" onclick="hk_delete(6)">
-									<svg
-										id="hk6_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk6_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -664,47 +612,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk7_button_edit" onclick="hk_edit(7)">
-									<svg
-										id="hk7_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk7_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk7_button_reset" onclick="hk_reset(7)">
-									<svg
-										id="hk7_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk7_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk7_button_delete" onclick="hk_delete(7)">
-									<svg
-										id="hk7_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk7_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -718,47 +654,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk8_button_edit" onclick="hk_edit(8)">
-									<svg
-										id="hk8_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk8_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk8_button_reset" onclick="hk_reset(8)">
-									<svg
-										id="hk8_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk8_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk8_button_delete" onclick="hk_delete(8)">
-									<svg
-										id="hk8_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk8_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -772,47 +696,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk9_button_edit" onclick="hk_edit(9)">
-									<svg
-										id="hk9_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk9_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk9_button_reset" onclick="hk_reset(9)">
-									<svg
-										id="hk9_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk9_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk9_button_delete" onclick="hk_delete(9)">
-									<svg
-										id="hk9_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk9_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -826,47 +738,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk10_button_edit" onclick="hk_edit(10)">
-									<svg
-										id="hk10_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk10_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk10_button_reset" onclick="hk_reset(10)">
-									<svg
-										id="hk10_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk10_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk10_button_delete" onclick="hk_delete(10)">
-									<svg
-										id="hk10_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk10_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -880,47 +780,35 @@
 							</div>
 							<div class="div3">
 								<button class="buttoni button" id="hk11_button_edit" onclick="hk_edit(11)">
-									<svg
-										id="hk11_svg_edit"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+									<svg id="hk11_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk11_button_reset" onclick="hk_reset(11)">
-									<svg
-										id="hk11_svg_reset"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="23 4 23 10 17 10"></polyline>
-										<polyline points="1 20 1 14 7 14"></polyline>
-										<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+									<svg id="hk11_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+										/>
 									</svg>
 								</button>
 
 								<button class="buttoni button" id="hk11_button_delete" onclick="hk_delete(11)">
-									<svg
-										id="hk11_svg_delete"
-										width="20"
-										height="20"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-									>
-										<polyline points="3 6 5 6 21 6"></polyline>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+									<svg id="hk11_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+										/>
 									</svg>
 								</button>
 							</div>
@@ -932,7 +820,17 @@
 							You can modify the global shortcuts here, if you don't understand something just read the docs. Shortcuts not work on this
 							page, go back to the settings tab to reactivate them!
 						</p>
-						<button class="button1" id="but9" onclick="shortcutsLink()">Docs</button>
+						<button class="buttonm2" onclick="globalShortcutsLink()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+								/>
+							</svg>
+							Read docs
+						</button>
 						<br />
 						<br />
 						<br />
@@ -946,47 +844,35 @@
 							<div class="div3">
 								<div class="div3">
 									<button class="buttoni button" id="hk100_button_edit" onclick="hk_edit(100)">
-										<svg
-											id="hk100_svg_edit"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+										<svg id="hk100_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+											/>
 										</svg>
 									</button>
 
 									<button class="buttoni button" id="hk100_button_reset" onclick="hk_reset(100)">
-										<svg
-											id="hk100_svg_reset"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<polyline points="23 4 23 10 17 10"></polyline>
-											<polyline points="1 20 1 14 7 14"></polyline>
-											<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+										<svg id="hk100_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+											/>
 										</svg>
 									</button>
 
 									<button class="buttoni button" id="hk100_button_delete" onclick="hk_delete(100)">
-										<svg
-											id="hk100_svg_delete"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<polyline points="3 6 5 6 21 6"></polyline>
-											<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+										<svg id="hk100_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+											/>
 										</svg>
 									</button>
 								</div>
@@ -1002,47 +888,35 @@
 							<div class="div3">
 								<div class="div3">
 									<button class="buttoni button" id="hk101_button_edit" onclick="hk_edit(101)">
-										<svg
-											id="hk101_svg_edit"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+										<svg id="hk101_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+											/>
 										</svg>
 									</button>
 
 									<button class="buttoni button" id="hk101_button_reset" onclick="hk_reset(101)">
-										<svg
-											id="hk101_svg_reset"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<polyline points="23 4 23 10 17 10"></polyline>
-											<polyline points="1 20 1 14 7 14"></polyline>
-											<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+										<svg id="hk101_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+											/>
 										</svg>
 									</button>
 
 									<button class="buttoni button" id="hk101_button_delete" onclick="hk_delete(101)">
-										<svg
-											id="hk101_svg_delete"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<polyline points="3 6 5 6 21 6"></polyline>
-											<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+										<svg id="hk101_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+											/>
 										</svg>
 									</button>
 								</div>
@@ -1058,47 +932,35 @@
 							<div class="div3">
 								<div class="div3">
 									<button class="buttoni button" id="hk102_button_edit" onclick="hk_edit(102)">
-										<svg
-											id="hk102_svg_edit"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+										<svg id="hk102_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+											/>
 										</svg>
 									</button>
 
 									<button class="buttoni button" id="hk102_button_reset" onclick="hk_reset(102)">
-										<svg
-											id="hk102_svg_reset"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<polyline points="23 4 23 10 17 10"></polyline>
-											<polyline points="1 20 1 14 7 14"></polyline>
-											<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+										<svg id="hk102_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+											/>
 										</svg>
 									</button>
 
 									<button class="buttoni button" id="hk102_button_delete" onclick="hk_delete(102)">
-										<svg
-											id="hk102_svg_delete"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<polyline points="3 6 5 6 21 6"></polyline>
-											<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+										<svg id="hk102_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+											/>
 										</svg>
 									</button>
 								</div>

@@ -14,7 +14,11 @@ document.querySelector("#setting").click()
 const res = ipc.sendSync("info")
 
 // set app version
-document.querySelector("#but7").textContent = `Authme ${res.authme_version}`
+document.querySelector(
+	"#but7"
+).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+</svg> Authme ${res.authme_version}`
 
 // ? if development
 let dev = false
@@ -585,16 +589,22 @@ const api = async () => {
 			.then((data) => {
 				try {
 					if (data.state === "up") {
-						status.textContent = "All systems online"
+						status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+					  </svg> \n All systems online`
 					} else {
-						status.textContent = "Some systems offline"
+						status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
+					  </svg> \n Some systems offline`
 					}
 				} catch (error) {
 					return console.warn(`Authme - Error loading API - ${error}`)
 				}
 			})
 	} catch (error) {
-		status.textContent = "Can't connect to API"
+		status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
+	  </svg> \n Can't connet to API`
 	}
 }
 
@@ -613,6 +623,11 @@ const releasesLink = () => {
 // ? shortcuts docs
 const shortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
+}
+
+// ? shortcuts docs
+const globalShortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
 }
 
 const hide = () => {
