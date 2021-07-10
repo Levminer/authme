@@ -26,6 +26,12 @@ if (process.platform === "win32") {
 
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
+// ? show quick start
+if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
+	document.querySelector("#starting").style.display = "block"
+	document.querySelector("#choose").style.display = "block"
+}
+
 // eslint-disable-next-line
 let prev = false
 
@@ -121,7 +127,12 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}" >Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -142,7 +153,12 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -164,7 +180,12 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -184,7 +205,12 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -207,7 +233,12 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}" >Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -228,7 +259,12 @@ const go = () => {
 					</div>
 					<div class="div4">
 					<p class="text3" id="text${counter}">Text</p>
-					<button class="button11" id="copy${counter}">Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -250,7 +286,12 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -270,7 +311,12 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}">Copy</button>
+					<button class="button11" id="copy${counter}" >
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					</button>
 					</div>
 					</div>
 					`
@@ -353,12 +399,22 @@ const go = () => {
 				code.select()
 				code.setSelectionRange(0, 9999)
 				document.execCommand("copy")
-				copy.textContent = "Copied"
+				copy.innerHTML = `
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+				</svg>
+				Copied
+				`
 
 				window.getSelection().removeAllRanges()
 
 				setTimeout(() => {
-					copy.textContent = "Copy"
+					copy.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					`
 
 					setTimeout(() => {
 						if (copy_state === true) {
@@ -401,7 +457,6 @@ const go = () => {
 		document.querySelector("#save").style.display = "block"
 	} else {
 		document.querySelector("#input").style.display = "none"
-		document.querySelector("#save").style.display = "none"
 		document.querySelector("#search").style.display = "grid"
 	}
 }

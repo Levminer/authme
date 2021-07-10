@@ -20,10 +20,17 @@ let save = () => {
 			console.warn("Authme - Hash not created!")
 		} else {
 			console.warn("Authme - Hash created")
-			document.querySelector("#save").textContent = "Config saved"
-			setTimeout(() => {
-				document.querySelector("#save").style.display = "none"
-			}, 1000)
+
+			document.querySelector("#save").style.display = "none"
+
+			dialog.showMessageBox({
+				title: "Authme",
+				buttons: ["Close"],
+				defaultId: 0,
+				cancelId: 1,
+				type: "info",
+				message: "Code(s) saved! \n\nIf you want to add more code(s) or delete code(s) go to Edit codes!",
+			})
 		}
 	})
 }
