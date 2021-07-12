@@ -25,6 +25,7 @@ body {
 	background-color: white;
 	border-color: white;
 	width: 14rem;
+	height: 25px !important;
 }
 
 .input1:hover {
@@ -182,7 +183,12 @@ input::-webkit-inner-spin-button {
 
 .link {
 	cursor: pointer;
-	text-decoration: underline;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+}
+
+.link:hover {
+	color: gray;
 }
 
 .part {

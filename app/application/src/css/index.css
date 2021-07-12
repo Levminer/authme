@@ -206,6 +206,12 @@ a {
 
 .link {
 	cursor: pointer;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+}
+
+.link:hover {
+	color: gray;
 }
 
 .buttonm {

@@ -34,19 +34,21 @@
 }
 
 a:link {
-	color: var(--df_primary_color);
+	color: white;
 	font-size: 24px;
+	font-weight: bold;
 	transition: 0.2s ease-in;
+	text-decoration: underline !important;
 }
 
 a:hover {
 	color: gray;
-	text-decoration: underline dashed !important;
+	text-decoration: underline !important;
 }
 
 a:visited {
-	color: var(--df_primary_color);
-	text-decoration: dashed !important;
+	color: white;
+	text-decoration: none !important;
 }
 
 .grid {
