@@ -3,7 +3,7 @@
 -   Simple cross platform two-factor authentication app for desktop.
 -   Download for: [Windows](https://api.levminer.com/api/v1/authme/release/windows), [Linux](https://api.levminer.com/api/v1/authme/release/linux), [Mac (Alpha)](https://api.levminer.com/api/v1/authme/alpha/mac)
 
-<img src="https://raw.githubusercontent.com/Levminer/authme/main/img/screenshot.png?raw=true">
+<img src="https://raw.githubusercontent.com/Levminer/authme/main/screenshots/screenshot.png?raw=true">
 
 ## How to use
 

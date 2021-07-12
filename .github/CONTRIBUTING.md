@@ -8,7 +8,7 @@
 
 ## Building
 
--   Install Node.js and Git
+-   Install Node.js 15+ and Git
 -   Clone the repository `git clone https://github.com/Levminer/authme`
 -   Install node modules `npm i`
 -   Run build command: `npm run build`
@@ -32,6 +32,3 @@
 
 1. Lint the code: `npm run lint`
 
-## Summary
-
--   Fell free to make that PR!

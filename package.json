@@ -25,15 +25,13 @@
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
 		"files": [
+			"!screenshots",
 			"!extract",
 			"!sample",
 			"!scripts",
+			"!**/*.scss",
+			"!**/*.ts",
 			"!.*"
-		],
-		"asarUnpack": [
-			"app/import/src/py/*",
-			"src/install.py",
-			"src/version.py"
 		],
 		"win": {
 			"target": [
