@@ -548,7 +548,7 @@ const createWindow = () => {
 		}
 	})
 
-	// ? disable scren capture
+	// ? - TEMPORARY - disable scren capture
 	if (file.settings.disable_window_capture === true) {
 		window_settings.setContentProtection(true)
 		window_edit.setContentProtection(true)
@@ -950,7 +950,11 @@ const support = () => {
 app.whenReady().then(() => {
 	logger.log("Starting app")
 
-	app.setAppUserModelId("Authme")
+	if (dev === true) {
+		app.setAppUserModelId("Authme Dev")
+	} else {
+		app.setAppUserModelId("Authme")
+	}
 
 	process.on("uncaughtException", (error) => {
 		logger.error("Unknown error occurred", error.stack)
