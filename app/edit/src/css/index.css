@@ -20,7 +20,8 @@
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 250px;
+	width: 14rem;
+	height: 25px !important;
 }
 
 .input1:hover {

@@ -15,25 +15,24 @@
 -   From QR codes: You screenshot all the QR codes from your favourite websites, and import all of them to Authme
 -   From Google Authenticator: Import all of your saved QR codes from your Google Authenticator app.
 
-## Authme Web
+## Contributing and development
 
--   Authme is now available as a web app. It's a PWA app to, so you can install it on your Android or IOS phone.
--   Try it out and give feedback: [Authme Web](https://github.com/levminer/authme-web)
+-   Read: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
+-   Read: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
 
 ## Release cycle
 
 -   Standard updates coming on Tuesdays if there is something to update and hotfix updates can come on Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
 -   More information at: [Security](https://github.com/Levminer/authme/security/policy)
-
 ## Project board
 
 -   You can check out all the issues in progress at the project board!
 -   Check out at: [Projects](https://github.com/Levminer/authme/projects/1)
 
-## Contributing and development
+## Authme Web
 
--   Read: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
--   Read: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
+-   Authme is now available as a web app. It's a PWA app to, so you can install it on your Android or IOS phone.
+-   Try it out and give feedback: [Authme Web](https://github.com/levminer/authme-web)
 
 ## License
 

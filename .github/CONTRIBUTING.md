@@ -6,11 +6,15 @@
 1.  Use VS Code
 1.  Use ESLint and prettier extension
 
-## Building
-
+## Developing
 -   Install Node.js 15+ and Git
 -   Clone the repository `git clone https://github.com/Levminer/authme`
 -   Install node modules `npm i`
+-   Run build command: `npm run start`
+
+## Building
+
+-   Follow Developing instructions.
 -   Run build command: `npm run build`
 
 ## NPM commands

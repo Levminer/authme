@@ -42,8 +42,6 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 		const temp_date = `${edited_date.toLocaleDateString().split("/").reverse().join(".")}.`
 		const temp_time = edited_date.toLocaleTimeString()
 
-		console.log(temp_time)
-
 		rollback_text.textContent = `Latest rollback: ${temp_date} ${temp_time}`
 	}
 })
