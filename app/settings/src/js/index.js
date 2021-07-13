@@ -10,13 +10,18 @@ const dns = require("dns")
 // ? choose settings
 document.querySelector("#setting").click()
 
-// ? version
-const res = ipc.sendSync("ver")
+// ? get app infos
+const res = ipc.sendSync("info")
 
-document.querySelector("#but7").textContent = `Authme ${res.authme_version}`
+// set app version
+document.querySelector(
+	"#but7"
+).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+</svg> Authme ${res.authme_version}`
 
 // ? if development
-let dev
+let dev = false
 
 if (is.development === true) {
 	dev = true
@@ -32,7 +37,7 @@ if (process.platform === "win32") {
 }
 
 // ? settings
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // ? read settings
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
@@ -207,10 +212,11 @@ const reset = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No"],
-			defaultId: 0,
+			defaultId: 1,
 			cancelId: 1,
+			noLink: true,
 			type: "warning",
-			message: "Are you sure you want to clear all data? This cannot be undone!",
+			message: "Are you sure you want to clear all data? \n\nThis cannot be undone!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -218,10 +224,11 @@ const reset = () => {
 					.showMessageBox({
 						title: "Authme",
 						buttons: ["Yes", "No"],
-						defaultId: 0,
+						defaultId: 1,
 						cancelId: 1,
+						noLink: true,
 						type: "warning",
-						message: "Are you absolutely sure? There is no way back!",
+						message: "Are you absolutely sure? \n\nThere is no way back!",
 					})
 					.then((result) => {
 						if (result.response === 0) {
@@ -286,9 +293,11 @@ const names = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -337,9 +346,11 @@ const copy = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -388,9 +399,11 @@ const search = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -439,9 +452,11 @@ const reveal = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
 			cancelId: 2,
+			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -495,9 +510,11 @@ inp0.addEventListener("keyup", (event) => {
 			.showMessageBox({
 				title: "Authme",
 				buttons: ["Yes", "No", "Cancel"],
+				defaultId: 2,
 				cancelId: 2,
+				noLink: true,
 				type: "warning",
-				message: "If you want to change this setting you have to restart the app! Do you want to restart it now?",
+				message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
 			})
 			.then((result) => {
 				if (result.response === 0) {
@@ -544,7 +561,7 @@ const folder0 = () => {
 
 // ? settings folder
 const folder1 = () => {
-	shell.showItemInFolder(file_path)
+	shell.openPath(file_path)
 }
 
 // ? cache folder
@@ -554,12 +571,12 @@ const folder2 = () => {
 	if (process.platform === "win32") {
 		cache_path = path.join(process.env.APPDATA, "/authme")
 	} else if (process.platform === "linux") {
-		cache_path = path.joib(process.env.HOME, "/.config/authme")
+		cache_path = path.join(process.env.HOME, "/.config/authme")
 	} else if (process.platform === "darwin") {
-		cache_path = path.joib(process.env.HOME, "/Library/Application Support/authme")
+		cache_path = path.join(process.env.HOME, "/Library/Application Support/authme")
 	}
 
-	shell.showItemInFolder(cache_path)
+	shell.openPath(cache_path)
 }
 
 // ? status api
@@ -572,16 +589,22 @@ const api = async () => {
 			.then((data) => {
 				try {
 					if (data.state === "up") {
-						status.textContent = "All systems online"
+						status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+					  </svg> \n All systems online`
 					} else {
-						status.textContent = "Some systems offline"
+						status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
+					  </svg> \n Some systems offline`
 					}
 				} catch (error) {
 					return console.warn(`Authme - Error loading API - ${error}`)
 				}
 			})
 	} catch (error) {
-		status.textContent = "Can't connect to API"
+		status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
+	  </svg> \n Can't connect to API`
 	}
 }
 
@@ -602,11 +625,24 @@ const shortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
 }
 
+// ? shortcuts docs
+const globalShortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
+}
+
 const hide = () => {
 	ipc.send("hide_settings")
 }
 
 document.querySelector(".settings").disabled = true
+document.querySelector(".settings").classList.add("buttonmselected")
+
+const removeButtonStyles = () => {
+	document.querySelector(".shortcuts").classList.remove("buttonmselected")
+	document.querySelector(".settings").classList.remove("buttonmselected")
+	document.querySelector(".experimental").classList.remove("buttonmselected")
+	document.querySelector(".codes").classList.remove("buttonmselected")
+}
 
 // ? menu
 let shortcut = false
@@ -615,19 +651,27 @@ const menu = (evt, name) => {
 	let i
 
 	if (name === "shortcuts") {
-		document.querySelector(".shortcuts ").disabled = true
+		removeButtonStyles()
+
+		document.querySelector(".shortcuts").classList.add("buttonmselected")
+
+		document.querySelector(".shortcuts").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".center").style.height = "2550px"
+		document.querySelector(".codes").disabled = false
 
 		shortcut = true
 
 		ipc.send("shortcuts")
 	} else if (name === "setting") {
+		removeButtonStyles()
+
+		document.querySelector(".settings").classList.add("buttonmselected")
+
 		document.querySelector(".settings").disabled = true
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".center").style.height = "3150px"
+		document.querySelector(".codes").disabled = false
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -635,10 +679,29 @@ const menu = (evt, name) => {
 			shortcut = false
 		}
 	} else if (name === "experimental") {
+		removeButtonStyles()
+
+		document.querySelector(".experimental").classList.add("buttonmselected")
+
 		document.querySelector(".experimental").disabled = true
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".center").style.height = "1200px"
+		document.querySelector(".codes").disabled = false
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
+	} else if (name === "codes") {
+		removeButtonStyles()
+
+		document.querySelector(".codes").classList.add("buttonmselected")
+
+		document.querySelector(".experimental").disabled = false
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".codes").disabled = true
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -677,6 +740,14 @@ const about = () => {
 // ? edit
 const edit = () => {
 	ipc.send("hide_edit")
+}
+
+// ? build
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(
+		".build-content"
+	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
 }
 
 // ? offline mode

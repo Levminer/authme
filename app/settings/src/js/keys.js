@@ -4,11 +4,11 @@ const default_shortcuts = {
 		show: "CommandOrControl+q",
 		settings: "CommandOrControl+s",
 		exit: "CommandOrControl+w",
-		web: "CommandOrControl+b",
+		edit: "CommandOrControl+t",
 		import: "CommandOrControl+i",
 		export: "CommandOrControl+e",
 		release: "CommandOrControl+n",
-		issues: "CommandOrControl+p",
+		support: "CommandOrControl+p",
 		docs: "CommandOrControl+d",
 		licenses: "CommandOrControl+l",
 		update: "CommandOrControl+u",
@@ -47,11 +47,11 @@ const hk102 = document.querySelector("#hk102_input")
 hk0.value = file.shortcuts.show
 hk1.value = file.shortcuts.settings
 hk2.value = file.shortcuts.exit
-hk3.value = file.shortcuts.web
+hk3.value = file.shortcuts.edit
 hk4.value = file.shortcuts.import
 hk5.value = file.shortcuts.export
 hk6.value = file.shortcuts.release
-hk7.value = file.shortcuts.issues
+hk7.value = file.shortcuts.support
 hk8.value = file.shortcuts.docs
 hk9.value = file.shortcuts.licenses
 hk10.value = file.shortcuts.update
@@ -96,6 +96,7 @@ const hk_edit = (value) => {
 		document.addEventListener("keydown", call, true)
 
 		inp_name.value = "Press any key combiantion"
+		inp_name.style.border = "green 1px solid"
 		btn_name.style.border = "green 1px solid"
 		svg_name.style.color = "green"
 
@@ -124,7 +125,7 @@ const hk_edit = (value) => {
 			case 3:
 				const hk3 = document.querySelector("#hk3_input").value
 
-				file.shortcuts.web = hk3
+				file.shortcuts.edit = hk3
 				break
 			case 4:
 				const hk4 = document.querySelector("#hk4_input").value
@@ -145,7 +146,7 @@ const hk_edit = (value) => {
 			case 7:
 				const hk7 = document.querySelector("#hk7_input").value
 
-				file.shortcuts.issues = hk7
+				file.shortcuts.support = hk7
 				break
 			case 8:
 				const hk8 = document.querySelector("#hk8_input").value
@@ -197,6 +198,7 @@ const hk_edit = (value) => {
 		document.removeEventListener("keydown", call, true)
 		svg_name.style.color = ""
 		btn_name.style.border = ""
+		inp_name.style.border = ""
 
 		document.querySelector(`#hk${value}_input`).value = "None"
 		modify = true
@@ -239,7 +241,7 @@ const hk_delete = (value) => {
 		case 3:
 			const hk3 = document.querySelector("#hk3_input").value
 
-			file.shortcuts.web = hk3
+			file.shortcuts.edit = hk3
 			break
 		case 4:
 			const hk4 = document.querySelector("#hk4_input").value
@@ -260,7 +262,7 @@ const hk_delete = (value) => {
 		case 7:
 			const hk7 = document.querySelector("#hk7_input").value
 
-			file.shortcuts.issues = hk7
+			file.shortcuts.support = hk7
 			break
 		case 8:
 			const hk8 = document.querySelector("#hk8_input").value
@@ -340,9 +342,9 @@ const hk_reset = (value) => {
 			file.shortcuts.exit = default_shortcuts.shortcuts.exit
 			break
 		case 3:
-			document.querySelector("#hk3_input").value = default_shortcuts.shortcuts.web
+			document.querySelector("#hk3_input").value = default_shortcuts.shortcuts.edit
 
-			file.shortcuts.web = default_shortcuts.shortcuts.web
+			file.shortcuts.edit = default_shortcuts.shortcuts.edit
 			break
 		case 4:
 			document.querySelector("#hk4_input").value = default_shortcuts.shortcuts.import
@@ -361,9 +363,9 @@ const hk_reset = (value) => {
 			file.shortcuts.release = default_shortcuts.shortcuts.release
 			break
 		case 7:
-			document.querySelector("#hk7_input").value = default_shortcuts.shortcuts.issues
+			document.querySelector("#hk7_input").value = default_shortcuts.shortcuts.support
 
-			file.shortcuts.issues = default_shortcuts.shortcuts.issues
+			file.shortcuts.support = default_shortcuts.shortcuts.support
 			break
 		case 8:
 			document.querySelector("#hk8_input").value = default_shortcuts.shortcuts.docs

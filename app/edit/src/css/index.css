@@ -20,13 +20,14 @@
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 250px;
+	width: 14rem;
+	height: 25px !important;
 }
 
 .input1:hover {
 	color: white;
 	border-color: white;
-	background-color: black;
+	background-color: transparent;
 }
 
 #button1 {
@@ -69,7 +70,7 @@ hr {
 
 .buttoni:hover {
 	border: 1px solid var(--df_primary_color);
-	background: black;
+	background: transparent;
 	color: var(--df_primary_color);
 }
 
@@ -80,12 +81,12 @@ hr {
 	grid-column-gap: 0px;
 	grid-row-gap: 0px;
 
-	background-color: black;
+	background-color: rgb(10, 10, 10);
 	margin-top: 0px;
 	border-radius: 30px;
 	margin: 0 auto;
 	margin-top: 20px;
-	width: 600px;
+	width: 66.666667%;
 	height: 300px;
 }
 
@@ -101,4 +102,29 @@ hr {
 
 .rollback {
 	display: none;
+}
+
+.buttonm {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm:hover {
+	border-color: white;
+	background: transparent;
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
 }

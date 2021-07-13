@@ -9,7 +9,7 @@ h4 {
 }
 
 .center {
-	top: 80px;
+	top: -70px;
 	width: 1000px;
 	height: auto;
 }
@@ -28,27 +28,34 @@ h4 {
 .button11 {
 	color: black;
 	background: white;
-	border: 1px solid white;
+	border: 1px solid black;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
 	cursor: pointer;
 	text-decoration: none;
 	transition: 0.2s ease-in;
-	width: 132px;
+	text-align: center;
+	width: 12rem;
 }
 
 .button11:hover {
-	border: 1px solid white;
-	background: rgb(10, 10, 10);
+	border-color: white;
+	background: transparent;
 	color: white;
+}
+
+.button11 > svg {
+	position: relative;
+	top: 4px;
 }
 
 .input1 {
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 70px !important;
+	width: 130px !important;
+	height: 29px !important;
 }
 
 .input1:hover {
@@ -86,8 +93,8 @@ h4 {
 	border-radius: 30px;
 	margin: 0 auto;
 	margin-top: 20px;
-	width: 600px;
-	height: 250px;
+	width: 66.666667%;
+	height: 270px;
 }
 
 .grid:last-child {
@@ -148,9 +155,9 @@ h4 {
 }
 
 #save {
-	display: unset;
-	visibility: hidden;
+	display: none;
 	margin-bottom: 20px;
+	margin: 0 auto;
 }
 
 input:focus::placeholder {
@@ -199,4 +206,40 @@ a {
 
 .link {
 	cursor: pointer;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+}
+
+.link:hover {
+	color: gray;
+}
+
+.buttonm {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm:hover {
+	border-color: white;
+	background: transparent;
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
+}
+
+#starting,
+#choose {
+	display: none;
 }

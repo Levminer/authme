@@ -1,25 +1,23 @@
-const fs = require("fs")
-const electron = require("electron")
 const { dialog, shell } = require("electron").remote
-const ipc = electron.ipcRenderer
-const path = require("path")
-const QrcodeDecoder = require("qrcode-decoder")
-const { spawn } = require("child_process")
+const qrcodedecoder = require("qrcode-decoder")
 const { is } = require("electron-util")
-
-let python_path
-
-// ? if development
-if (is.development === true) {
-	python_path = path.join(__dirname, "src/py/extract_2fa_secret.py")
-} else {
-	python_path = path.join(__dirname, "../../../app.asar.unpacked/app/import/src/py/extract_2fa_secret.py")
-	console.log(python_path)
-}
+const electron = require("electron")
+const path = require("path")
+const fs = require("fs")
+const qr = require(path.join(__dirname, "../../lib/qrcode-converter.js"))
+const ipc = electron.ipcRenderer
 
 // ? link
-const link0 = () => {
+const onlineDocs = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")
+}
+
+const qrLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/import?id=qr-codes")
+}
+
+const gaLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/import?id=google-authenticator")
 }
 
 // ? hide

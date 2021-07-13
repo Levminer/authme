@@ -1,3 +1,7 @@
+body {
+	overflow: hidden;
+}
+
 .center {
 	top: -50px;
 	width: 1000px;
@@ -13,18 +17,21 @@
 .button1:hover {
 	color: white;
 	border-color: white;
+	background-color: transparent;
 }
 
 .input1 {
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 250px;
+	width: 14rem;
+	height: 25px !important;
 }
 
 .input1:hover {
 	color: white;
 	border-color: white;
+	background-color: transparent;
 }
 
 #button1 {
@@ -71,23 +78,12 @@ hr {
 /* grid */
 .grid {
 	display: grid;
-	width: 1500px;
 	position: relative;
-	left: -290px;
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: 1fr;
 	grid-row-gap: 0px;
 	margin-bottom: 30px;
-}
-
-.div1 {
-	grid-area: 1 / 1 / 2 / 2;
-}
-.div2 {
-	grid-area: 1 / 2 / 2 / 3;
-}
-.div3 {
-	grid-area: 1 / 3 / 2 / 4;
+	column-gap: 150px;
 }
 
 .text {
@@ -101,8 +97,9 @@ hr {
 }
 
 .buttoni {
+	margin: 3px;
 	color: black;
-	background: var(--df_primary_color);
+	background: white;
 	border: 1px solid var(--df_primary_color);
 	font-size: 1.25rem;
 	padding: 13px 30px;
@@ -114,11 +111,46 @@ hr {
 
 .buttoni:hover {
 	border: 1px solid var(--df_primary_color);
-	background: rgb(20, 20, 20);
+	background: transparent;
 	color: var(--df_primary_color);
 }
 
+.buttonm {
+	color: white;
+	background: black;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: left;
+	width: 15rem;
+}
+
+.buttonm:hover {
+	border: 1px solid rgb(10, 10, 10);
+	background: rgb(20, 20, 20);
+	color: white;
+}
+
+.buttonmselected {
+	border: 1px solid rgb(10, 10, 10);
+	background: rgb(20, 20, 20);
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
+}
+
 #experimental {
+	display: none;
+}
+
+#codes {
 	display: none;
 }
 
@@ -151,5 +183,41 @@ input::-webkit-inner-spin-button {
 
 .link {
 	cursor: pointer;
-	text-decoration: underline;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+}
+
+.link:hover {
+	color: gray;
+}
+
+.part {
+	padding-bottom: 100px;
+	text-align: center;
+	background-color: rgb(10, 10, 10);
+}
+
+.buttonm2 {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm2:hover {
+	border-color: white;
+	background: transparent;
+	color: white;
+}
+
+.buttonm2 > svg {
+	position: relative;
+	top: 4px;
 }

@@ -1,14 +1,22 @@
 {
 	"name": "authme",
-	"version": "2.5.0",
+	"version": "2.6.0",
+	"tag": "2.6.0",
+	"release": "2020. July 13.",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
 	"scripts": {
-		"start": "electron .",
-		"build": "electron-builder --publish=never --x64",
-		"build:df": "sass src/dragonfly@1.4.0.scss src/dragonfly@1.4.0.css --no-source-map",
-		"build:tw": "tailwindcss build src/tailwind@2.1.2.scss -o src/tailwind@2.1.2.css -c .tailwindrc.js --no-autoprefixer",
+		"start": "node scripts/alpha-build.js && electron .",
+		"dev": "electron .",
+		"build": "electron-builder --publish=never --x64 | gnomon --type=elapsed-total --quiet",
+		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64 | gnomon --type=elapsed-total --quiet",
+		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64 | gnomon --type=elapsed-total --quiet",
+		"build:test": "node scripts/alpha-build.js && electron-builder --publish=never --x64 --dir -c scripts/test-build.json | gnomon --type=elapsed-total --quiet",
+		"build:df": "sass src/dragonfly.scss src/dragonfly.css --no-source-map --style compressed",
+		"build:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify",
+		"watch:df": "sass src/dragonfly.scss src/dragonfly.css --no-source-map --style compressed --watch",
+		"watch:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
 	},
@@ -16,11 +24,14 @@
 	"build": {
 		"productName": "Authme",
 		"appId": "com.levminer.authme",
-		"asar": true,
-		"asarUnpack": [
-			"app/import/src/py/*",
-			"src/install.py",
-			"src/version.py"
+		"files": [
+			"!screenshots",
+			"!extract",
+			"!sample",
+			"!scripts",
+			"!**/*.scss",
+			"!**/*.ts",
+			"!.*"
 		],
 		"win": {
 			"target": [
@@ -75,18 +86,19 @@
 		"auto-launch": "^5.0.5",
 		"bcryptjs": "^2.4.3",
 		"cryptr": "^6.0.2",
-		"electron-context-menu": "^3.1.0",
+		"electron-context-menu": "^3.1.1",
 		"electron-debug": "^3.2.0",
-		"electron-util": "^0.16.0",
+		"electron-util": "^0.17.0",
 		"node-fetch": "^2.6.1",
+		"protons": "^2.0.1",
 		"qrcode": "^1.4.4",
-		"qrcode-decoder": "0.1.2"
+		"qrcode-decoder": "^0.2.2"
 	},
 	"devDependencies": {
-		"autoprefixer": "^10.2.6",
-		"electron": "^13.0.1",
-		"electron-builder": "^22.10.5",
-		"eslint": "^7.27.0",
+		"autoprefixer": "^10.3.0",
+		"electron": "^13.1.6",
+		"electron-builder": "^22.11.7",
+		"eslint": "^7.30.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-promise": "^2.0.2",
@@ -95,12 +107,13 @@
 		"eslint-plugin-prettier": "^3.4.0",
 		"eslint-plugin-promise": "^5.1.0",
 		"eslint-plugin-standard": "^5.0.0",
-		"prettier": "^2.3.0",
-		"sass": "^1.34.0",
-		"tailwindcss": "2.1.2"
+		"gnomon": "1.4.6",
+		"prettier": "^2.3.1",
+		"sass": "^1.35.2",
+		"tailwindcss": "^2.2.4"
 	},
 	"engines": {
-		"node": ">=14.0.0",
+		"node": ">=15.0.0",
 		"npm": ">=7.0.0"
 	}
 }

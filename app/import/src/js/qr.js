@@ -1,4 +1,4 @@
-const qr_import = () => {
+const qrImport = () => {
 	let images = []
 	const corrects = []
 	const names = []
@@ -17,27 +17,23 @@ const qr_import = () => {
 			images = result.filePaths
 
 			if (canceled === false) {
-				qr_import_resume()
+				qrImportResume()
 			}
 		})
 
-	const qr_import_resume = () => {
-		const qr = new QrcodeDecoder()
-
+	const qrImportResume = () => {
 		for (let i = 0; i < images.length; i++) {
 			const element = images[i]
 
-			qr.decodeFromImage(element).then((res) => {
+			qrcodedecoder.default.prototype.decodeFromImage(element).then((res) => {
 				if (res === false) {
 					dialog.showMessageBox({
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `
-						No QR code found on the picture: ${element}.
+						message: `No QR code found on the picture: ${element}.
 						
-						Try to take a better picture and try again!
-						`,
+						Try to take a better picture and try again!`,
 					})
 
 					return console.warn("Authme - No QR code found (QR)")
@@ -87,11 +83,9 @@ const qr_import = () => {
 								buttons: ["Close"],
 								type: "info",
 								defaultId: 0,
-								message: `
-								QR codes found on these pictures: ${corrects_str}
+								message: `QR codes found on these pictures: ${corrects_str}
 								
-								Now select where do you want to save the file!
-								`,
+								Now select where do you want to save the file!`,
 							})
 							.then(() => {
 								dialog
@@ -112,6 +106,8 @@ const qr_import = () => {
 													console.warn("Authme - File created")
 												}
 											})
+										} else {
+											return console.warn("Authme - Saveing cancled")
 										}
 									})
 							})
@@ -121,11 +117,9 @@ const qr_import = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `
-						Wrong QR code found on the picture: ${element}.
+						message: `Wrong QR code found on the picture: ${element}.
 						
-						Make sure this is a correct QR code and try again!
-						`,
+						Make sure this is a correct QR code and try again!`,
 					})
 
 					return console.warn("Authme - Wrong QR code found (QR)")

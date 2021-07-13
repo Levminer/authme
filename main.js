@@ -1,6 +1,7 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
+const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
-const { spawn } = require("child_process")
+const { number } = require("./build.json")
 const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
 const { is } = require("electron-util")
@@ -79,13 +80,13 @@ if (!fs.existsSync(file_path)) {
 }
 
 // ? version and logs
-const authme_version = "2.5.0"
-const tag_name = "2.5.0"
-const release_date = "2021. June 1."
-const update_type = "Standard update"
+const authme_version = version
+const tag_name = tag
+const release_date = release
+const build_number = number
 
-ipc.on("ver", (event, data) => {
-	event.returnValue = { authme_version, release_date }
+ipc.on("info", (event) => {
+	event.returnValue = { authme_version, release_date, tag_name, build_number }
 })
 
 const v8_version = process.versions.v8
@@ -94,34 +95,13 @@ const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
+const os_info = `${os.cpus()[0].model.split("@")[0]}${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`.replaceAll("(R)", "").replaceAll("(TM)", "")
 
 // logs
-logger.createFile(file_path, "main")
-logger.log(`Authme ${authme_version} `)
+logger.createFile(file_path, "authme")
+logger.log(`Authme ${authme_version} ${build_number}`)
 logger.log(`System ${os_version}`)
-logger.log(`Electron ${electron_version}`)
-
-// python version
-let python_version
-let version_src
-
-if (dev === true) {
-	version_src = path.join(__dirname, "src/version.py")
-} else {
-	version_src = path.join(__dirname, "../app.asar.unpacked/src/version.py")
-}
-
-const version = spawn("python", [version_src])
-
-version.stdout.on("data", (res) => {
-	python_version = res.toString()
-	logger.log("Python version found")
-})
-
-version.on("error", (err) => {
-	python_version = "Not installed \n"
-	logger.warn("Error getting python version", err)
-})
+logger.log(`Hardware ${os_info}`)
 
 // ? single instance
 if (dev === false) {
@@ -140,6 +120,9 @@ if (dev === false) {
 		})
 	}
 }
+
+// ? force dark mode
+nativeTheme.themeSource = "dark"
 
 // ? settings
 const settings = `{
@@ -166,11 +149,11 @@ const settings = `{
 			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
 			"exit": "CommandOrControl+w",
-			"web": "CommandOrControl+b",
+			"edit": "CommandOrControl+t",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
 			"release": "CommandOrControl+n",
-			"issues": "CommandOrControl+p",
+			"support": "CommandOrControl+p",
 			"docs": "CommandOrControl+d",
 			"licenses": "CommandOrControl+l",
 			"update": "CommandOrControl+u",
@@ -203,26 +186,23 @@ if (file.advanced_settings === undefined) {
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
 
+if (file.shortcuts.edit === undefined) {
+	file.shortcuts.edit = "CommandOrControl+t"
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
+if (file.shortcuts.support === undefined) {
+	file.shortcuts.support = "CommandOrControl+p"
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
 if (file.settings.disable_window_capture === undefined) {
 	file.settings.disable_window_capture = true
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 }
-
-// ? install protobuf
-let install_src
-
-if (dev === true) {
-	install_src = path.join(__dirname, "src/install.py")
-} else {
-	install_src = path.join(__dirname, "../app.asar.unpacked/src/install.py")
-}
-
-const install = spawn("python", [install_src])
-
-install.on("error", (err) => {
-	logger.warn("Error installing protobuff", err)
-})
 
 // ? open tray
 const showTray = () => {
@@ -568,6 +548,15 @@ const createWindow = () => {
 		}
 	})
 
+	// ? - TEMPORARY - disable scren capture
+	if (file.settings.disable_window_capture === true) {
+		window_settings.setContentProtection(true)
+		window_edit.setContentProtection(true)
+		window_application.setContentProtection(true)
+		window_import.setContentProtection(true)
+		window_export.setContentProtection(true)
+	}
+
 	// ? check for auto update
 	window_application.on("show", () => {
 		const api = async () => {
@@ -582,6 +571,11 @@ const createWindow = () => {
 								window_settings.on("show", () => {
 									window_settings.webContents.executeJavaScript("showUpdate()")
 								})
+
+								new Notification({
+									title: "Authme Update",
+									body: `Update available: Authme ${data.tag_name}`,
+								}).show()
 
 								logger.log("Auto update found!")
 							} else {
@@ -822,11 +816,9 @@ ipc.on("abort", () => {
 			defaultId: 0,
 			cancelId: 1,
 			noLink: true,
-			message: `
-			Failed to check the integrity of the files.
+			message: `Failed to check the integrity of the files.
 			
-			You or someone messed with the settings file, shutting down for security reasons!
-			`,
+			You or someone messed with the settings file, shutting down for security reasons!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -867,28 +859,29 @@ ipc.on("release_notes", () => {
 })
 
 ipc.on("download_update", () => {
-	if (process.platform === "win32") {
-		shell.openExternal("https://api.levminer.com/api/v1/authme/release/windows")
-	} else if (process.platform === "linux") {
-		shell.openExternal("https://api.levminer.com/api/v1/authme/release/linux")
-	} else {
-		shell.openExternal("https://authme.levminer.com/#downloads")
-	}
+	shell.openExternal("https://authme.levminer.com/#downloads")
+})
+
+ipc.on("support", () => {
+	support()
 })
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nPython version: ${python_version}\nRelease date: ${release_date}\nUpdate type: ${update_type}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+
+	shell.beep()
 
 	dialog
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Copy", "Close"],
-			defaultId: 0,
+			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
 			type: "info",
 			message: message,
+			icon: path.join(__dirname, "img/tray.png"),
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -932,9 +925,36 @@ const releaseNotes = () => {
 	api()
 }
 
+// ? support
+const support = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["PayPal", /* "OpenColletive", */ "Close"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "info",
+			message: "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				shell.openExternal("https://paypal.me/levminer")
+			} /* else if (result.response === 1) {
+				shell.openExternal("https://opencollective.com/authme")
+			} */
+		})
+}
+
 // ? start app
 app.whenReady().then(() => {
 	logger.log("Starting app")
+
+	if (dev === true) {
+		app.setAppUserModelId("Authme Dev")
+	} else {
+		app.setAppUserModelId("Authme")
+	}
 
 	process.on("uncaughtException", (error) => {
 		logger.error("Unknown error occurred", error.stack)
@@ -947,7 +967,7 @@ app.whenReady().then(() => {
 				cancelId: 1,
 				noLink: true,
 				type: "error",
-				message: `Unknown error occurred! \n\n ${error.stack}`,
+				message: `Unknown error occurred! \n\n${error.stack}`,
 			})
 			.then((result) => {
 				if (result.response === 0) {
@@ -1130,10 +1150,53 @@ app.whenReady().then(() => {
 				label: "Advanced",
 				submenu: [
 					{
-						label: "Authme Web",
-						accelerator: shortcuts ? "" : file.shortcuts.web,
+						label: "Edit codes",
+						accelerator: shortcuts ? "" : file.shortcuts.edit,
 						click: () => {
-							shell.openExternal("https://web.authme.levminer.com")
+							const toggle = () => {
+								if (edit_shown == false) {
+									if (if_pass == true && confirmed == true) {
+										window_edit.maximize()
+										window_edit.show()
+
+										edit_shown = true
+									}
+
+									if (if_nopass == true) {
+										window_edit.maximize()
+										window_edit.show()
+
+										edit_shown = true
+									}
+								} else {
+									if (if_pass == true && confirmed == true) {
+										window_edit.hide()
+
+										edit_shown = false
+									}
+
+									if (if_nopass == true) {
+										window_edit.hide()
+
+										edit_shown = false
+									}
+								}
+							}
+
+							let if_pass = false
+							let if_nopass = false
+
+							// check if require password
+							if (file.security.require_password == true) {
+								if_pass = true
+								pass_start = true
+
+								toggle()
+							} else {
+								if_nopass = true
+
+								toggle()
+							}
 						},
 					},
 					{
@@ -1258,10 +1321,10 @@ app.whenReady().then(() => {
 						type: "separator",
 					},
 					{
-						label: "Issues",
-						accelerator: shortcuts ? "" : file.shortcuts.issues,
+						label: "Support",
+						accelerator: shortcuts ? "" : file.shortcuts.support,
 						click: () => {
-							shell.openExternal("https://github.com/Levminer/authme/issues")
+							support()
 						},
 					},
 					{
@@ -1271,7 +1334,21 @@ app.whenReady().then(() => {
 						label: "Docs",
 						accelerator: shortcuts ? "" : file.shortcuts.docs,
 						click: () => {
-							shell.openExternal("https://docs.authme.levminer.com")
+							dialog
+								.showMessageBox({
+									title: "Authme",
+									buttons: ["Open", "Close"],
+									defaultId: 1,
+									cancelId: 1,
+									noLink: true,
+									type: "info",
+									message: "You can view the Authme Docs in the browser. \n\nClick open to view it in your browser!",
+								})
+								.then((result) => {
+									if (result.response === 0) {
+										shell.openExternal("https://docs.authme.levminer.com")
+									}
+								})
 						},
 					},
 				],
@@ -1291,11 +1368,7 @@ app.whenReady().then(() => {
 									cancelId: 1,
 									noLink: true,
 									type: "info",
-									message: `
-									This software is licensed under GPL-3.0
-
-									Copyright © 2020 Lőrik Levente
-									`,
+									message: "This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente",
 								})
 								.then((result) => {
 									if (result.response === 0) {
@@ -1325,17 +1398,13 @@ app.whenReady().then(() => {
 															defaultId: 0,
 															cancelId: 1,
 															type: "info",
-															message: `
-															Update available: Authme ${data.tag_name}
+															message: `Update available: Authme ${data.tag_name}
 															
 															Do you want to download it?
 										
-															You currently running: Authme ${tag_name}
-															`,
+															You currently running: Authme ${tag_name}`,
 														})
 														.then((result) => {
-															update = true
-
 															if (result.response === 0) {
 																shell.openExternal("https://authme.levminer.com#downloads")
 															}
@@ -1347,13 +1416,11 @@ app.whenReady().then(() => {
 														defaultId: 0,
 														cancelId: 1,
 														type: "info",
-														message: `
-														No update available:
+														message: `No update available:
 														
 														You are running the latest version!
 									
-														You are currently running: Authme ${tag_name}
-														`,
+														You are currently running: Authme ${tag_name}`,
 													})
 												}
 											} catch (error) {
@@ -1367,13 +1434,11 @@ app.whenReady().then(() => {
 										defaultId: 0,
 										cancelId: 1,
 										type: "info",
-										message: `
-										No update available:
+										message: `No update available:
 										
 										Can't connect to API, check your internet connection or the API status in the settings!
 					
-										You currently running: Authme ${tag_name}
-										`,
+										You currently running: Authme ${tag_name}`,
 									})
 								}
 							}

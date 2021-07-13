@@ -6,7 +6,7 @@ const path = require("path")
 const { is } = require("electron-util")
 
 // ? if development
-let dev
+let dev = false
 
 if (is.development === true) {
 	dev = true
@@ -22,12 +22,12 @@ if (process.platform === "win32") {
 }
 
 // ? settings folder
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // ? rollback
 const cache_path = path.join(file_path, "cache")
 const rollback_con = document.querySelector(".rollback")
-const rollback_but = document.querySelector("#rollbackBut")
+const rollback_text = document.querySelector("#rollbackBut")
 
 fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
 	if (err) {
@@ -37,9 +37,12 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 
 		rollback_con.style.display = "block"
 
-		const date = fs.statSync(cache_path).atime.toLocaleString().replaceAll(",", "")
+		const edited_date = fs.statSync(cache_path).atime
 
-		rollback_but.textContent = `Rollback to: ${date}`
+		const temp_date = `${edited_date.toLocaleDateString().split("/").reverse().join(".")}.`
+		const temp_time = edited_date.toLocaleTimeString()
+
+		rollback_text.textContent = `Latest rollback: ${temp_date} ${temp_time}`
 	}
 })
 
@@ -48,12 +51,13 @@ const rollback = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
 			type: "warning",
-			message: `
-			Are you sure you want to rollback to the latest save?
+			noLink: true,
+			message: `Are you sure you want to rollback to the latest save?
 			
-			This requires a restart and will overwrite your saved codes!
-			`,
+			This requires a restart and will overwrite your saved codes!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -142,14 +146,13 @@ const go = () => {
 		</div>
 		<div class="div3">
 		<button class="buttoni button" id="edit_but_${[i]}" onclick="edit(${[i]})">
-		<svg id="edit_svg_${[i]}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-		<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+		<svg id="edit_svg_${[i]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
 		<button class="buttoni" id="del_but_${[i]}" onclick="del(${[i]})">
-		<svg id="del_svg_${[i]}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-		<polyline points="3 6 5 6 21 6"></polyline>
-		<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+		<svg id="del_svg_${[i]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
 		</button>
 		</div>
@@ -170,6 +173,7 @@ const edit = (number) => {
 		edit_but.style.color = "green"
 		edit_but.style.borderColor = "green"
 
+		edit_inp.style.borderColor = "green"
 		edit_inp.readOnly = false
 
 		edit_mode = true
@@ -177,6 +181,7 @@ const edit = (number) => {
 		edit_but.style.color = ""
 		edit_but.style.borderColor = "white"
 
+		edit_inp.style.borderColor = "white"
 		edit_inp.readOnly = true
 
 		const inp_value = document.querySelector(`#edit_inp_${number}`)
@@ -199,11 +204,9 @@ const del = (number) => {
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
 			type: "warning",
-			message: `
-			Are you sure you want to delete this code?
+			message: `Are you sure you want to delete this code?
 			
-			If you want to revert this don't save and restart the app!
-			`,
+			If you want to revert this don't save and restart the app!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -237,12 +240,13 @@ const createSave = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
 			type: "warning",
-			message: `
-			Are you sure you want to save the modified code(s)?
+			noLink: true,
+			message: `Are you sure you want to save the modified code(s)?
 			
-			This requires a restart and will overwrite your saved codes!
-			`,
+			This requires a restart and will overwrite your saved codes!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -270,23 +274,35 @@ const addMore = () => {
 			canceled = result.canceled
 			files = result.filePaths
 
-			console.log(files)
-
-			for (let i = 0; i < files.length; i++) {
-				fs.readFile(files[i], (err, input) => {
-					if (err) {
-						console.log("Authme - Error loading file")
-					} else {
-						data = []
-
-						const container = document.querySelector(".container")
-						container.innerHTML = ""
-
-						processdata(input.toString())
-					}
+			if (canceled === false) {
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					defaultId: 0,
+					cancelId: 0,
+					type: "info",
+					noLink: true,
+					message: `Code(s) added!
+	
+					Scroll down to view them!`,
 				})
 
-				console.log(files[i])
+				for (let i = 0; i < files.length; i++) {
+					fs.readFile(files[i], (err, input) => {
+						if (err) {
+							console.log("Authme - Error loading file")
+						} else {
+							data = []
+
+							const container = document.querySelector(".container")
+							container.innerHTML = ""
+
+							processdata(input.toString())
+						}
+					})
+
+					console.log(files[i])
+				}
 			}
 		})
 }
@@ -320,11 +336,9 @@ const loadError = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `
-				No save file found.
+				message: `No save file found.
 				
-				Go back to the main page and save your codes!
-				`,
+				Go back to the main page and save your codes!`,
 			})
 		}
 	})

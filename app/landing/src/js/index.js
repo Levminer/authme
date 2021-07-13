@@ -1,4 +1,3 @@
-const { ipcMain } = require("electron")
 const bcrypt = require("bcryptjs")
 const fs = require("fs")
 const electron = require("electron")
@@ -28,7 +27,7 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
 // ? match passwords
 const match_passwords = () => {
@@ -113,7 +112,7 @@ const no_password = () => {
 
 	file.security.require_password = false
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file))
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
 
 	setInterval(() => {
 		ipc.send("to_application1")

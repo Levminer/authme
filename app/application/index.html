@@ -4,12 +4,12 @@
 		<meta charset="UTF-8" />
 		<title>Authme</title>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/dragonfly@1.4.0.css" />
-		<link rel="stylesheet" href="../.././src/animate@2.4.1.css" />
-		<link rel="stylesheet" href="../../src/tailwind@2.1.2.css" />
+		<link rel="stylesheet" href="../.././src/dragonfly.css" />
+		<link rel="stylesheet" href="../.././src/animate.css" />
+		<link rel="stylesheet" href="../../src/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 		<!-- js -->
-		<script defer src="../.././src/scroll-out@2.2.12.js"></script>
+		<script defer src="../.././src/scrollout.js"></script>
 		<script defer src="./src/js/convert.js"></script>
 		<script defer src="./src/js/index.js"></script>
 		<script defer src="./src/js/save.js"></script>
@@ -17,55 +17,42 @@
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
+		<!-- build number -->
+		<div class="w-full text-white bg-black font-bold build">
+			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
+				<div class="flex">
+					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- offline mode -->
 		<div class="w-full text-white bg-popup-red font-bold offline">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 512 512">
-						<path
-							d="M256 80c-8.66 0-16.58 7.36-16 16l8 216a8 8 0 008 8h0a8 8 0 008-8l8-216c.58-8.64-7.34-16-16-16z"
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="40"
-						/>
-						<circle
-							cx="256"
-							cy="416"
-							r="16"
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="40"
-						/>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
 
-					<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but can't look for new updates!</p>
+					<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but you can't look for new updates!</p>
 				</div>
 				<a
 					onclick="this.parentElement.style.display='none'"
 					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
 				>
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</a>
 			</div>
 		</div>
 
+		<!-- online mode -->
 		<div class="w-full text-white bg-popup-green font-bold online">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 512 512">
-						<path
-							fill="none"
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="45"
-							d="M416 128L192 384l-96-96"
-						/>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
 
 					<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
@@ -74,31 +61,24 @@
 					onclick="this.parentElement.style.display='none'"
 					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
 				>
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</a>
 			</div>
 		</div>
 
+		<!-- update -->
 		<div class="w-full text-white bg-popup-blue font-bold update">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="3"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="w-6 h-6"
-					>
-						<polyline points="23 4 23 10 17 10"></polyline>
-						<polyline points="1 20 1 14 7 14"></polyline>
-						<path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+						/>
 					</svg>
 
 					<p class="mx-3 flex flex-row relative top-1">
@@ -111,35 +91,142 @@
 					onclick="this.parentElement.style.display='none'"
 					class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer"
 				>
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</a>
 			</div>
 		</div>
 
+		<!-- content -->
 		<div class="center">
 			<h1 class="h1">Authme</h1>
-			<h2 class="h2" id="title">Here are your 2FA codes:</h2>
-			<button type="button" class="button1 button" class="input" id="input" onclick="loadFile()">Choose a file</button>
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
+				<h3 class="pt-3">Please choose your import file!</h3>
+				<h4>If you don't have an import file please create one!</h4>
+				<div class="flex flex-row items-center justify-center">
+					<div class="gap-3">
+						<button class="buttonm input" id="input" onclick="loadFile()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z"
+								/>
+							</svg>
+							Choose import file
+						</button>
+						<button class="buttonm" onclick="createFile()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+								/>
+							</svg>
+							Create import file
+						</button>
+					</div>
+				</div>
+				<br />
+			</div>
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="starting">
+				<h3 class="pt-3">Getting started</h3>
+				<h4>Usefull options</h4>
+				<div class="flex flex-row items-center justify-center">
+					<div class="gap-3">
+						<button class="buttonm" onclick="configureSettings()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+								/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+							</svg>
+							Configure settings
+						</button>
+						<button class="buttonm" onclick="supportDevelopment()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+								/>
+							</svg>
+							Support development
+						</button>
+					</div>
+				</div>
+				<h4>Importing files</h4>
+				<div class="flex flex-row items-center justify-center">
+					<div class="gap-3">
+						<button class="buttonm" onclick="readDocs()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+								/>
+							</svg>
+							Read online docs
+						</button>
+						<button class="buttonm" onclick="sampleImport()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+								/>
+							</svg>
+							Sample import file
+						</button>
+					</div>
+				</div>
+				<br />
+			</div>
 			<br />
-			<p class="text3" id="information">
-				<span id="docs">More information: <a href="#" onclick="link0()">Docs</a> </span>
-				<span id="sample">For testing: <a href="#" onclick="link1()">Sample import file</a></span>
-			</p>
+			<div class="save_container flex justify-center" id="save">
+				<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
+					<h3 class="pt-3">Save code(s)</h3>
+					<h4>Save your code(s) to your computer for future use.</h4>
+					<div class="flex flex-row items-center justify-center">
+						<div class="gap-3">
+							<button class="buttonm" onclick="save()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+									/>
+								</svg>
+								Save code(s)
+							</button>
+						</div>
+					</div>
+					<br />
+				</div>
+			</div>
 			<br />
-			<button class="button1 button" id="save" onclick="save()">Save codes</button>
-			<br />
-			<input
-				name="search"
-				spellcheck="false"
-				id="search"
-				class="input2 input"
-				onkeyup="search()"
-				onkeydown="search()"
-				placeholder="Search for names..."
-				autofocus
-			/>
+			<div class="search_container">
+				<input
+					name="search"
+					spellcheck="false"
+					id="search"
+					class="input2 input"
+					onkeyup="search()"
+					onkeydown="search()"
+					placeholder="Search for names..."
+					autofocus
+				/>
+			</div>
 			<!-- grid -->
 		</div>
 	</body>
