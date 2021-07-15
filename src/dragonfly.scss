@@ -352,6 +352,10 @@ h4 {
 	background-color: rgb(20, 20, 20);
 }
 
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(30, 30, 30);
+}
+
 ::-webkit-scrollbar-corner {
 	background: #292a2d;
 }
@@ -373,4 +377,29 @@ h4 {
 	top: 0;
 	position: sticky;
 	z-index: 999999;
+}
+
+.buttonm {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm:hover {
+	border-color: white;
+	background: transparent;
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
 }

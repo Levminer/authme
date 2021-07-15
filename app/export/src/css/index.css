@@ -47,7 +47,7 @@
 	border: 1px solid rgb(10, 10, 10);
 	padding: 1rem;
 	border-radius: 30px;
-	width: 570px;
+	width: 63.666667%;
 	height: 500px;
 	transition: 0.3s;
 	background-color: rgb(10, 10, 10);
@@ -71,7 +71,7 @@
 	border-radius: 30px;
 	margin: 0 auto;
 	margin-top: 20px;
-	width: 600px;
+	width: 66.666667%;
 	height: 500px;
 }
 
@@ -121,4 +121,8 @@ textarea {
 
 textarea:hover {
 	filter: none;
+}
+
+p {
+	font-size: 18px;
 }
