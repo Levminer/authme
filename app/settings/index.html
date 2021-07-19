@@ -256,6 +256,21 @@
 						</button>
 						<br />
 						<hr />
+						<h3>Logs</h3>
+						<p class="text3">You can view the logs for debugging. You can view all the logs in the settings folder.</p>
+						<button class="buttonm2" id="but14" onclick="logs()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+								/>
+							</svg>
+							Latest log
+						</button>
+						<br />
+						<hr />
 						<h3>Status</h3>
 						<p class="text3">Current status of the API, used for updates only. Click for all the status informations.</p>
 						<button class="buttonm2" id="but6" onclick="statusLink()">-</button>
@@ -263,7 +278,7 @@
 						<hr />
 						<h3>Version</h3>
 						<p class="text3">Your current Authme version. Click for release notes.</p>
-						<button class="buttonm2" id="but7" onclick="releasesLink()">-</button>
+						<button class="buttonm2" id="but7" onclick="releaseNotes()">-</button>
 					</div>
 
 					<!-- codes -->
@@ -292,8 +307,8 @@
 					<div id="shortcuts" class="tabcontent part">
 						<h3>Shortcuts</h3>
 						<p class="text3">
-							You can modify the shortcuts here, if you don't understand something just read the docs. Shortcuts not work on this page,
-							go back to the settings tab to reactivate them!
+							You can modify the shortcuts here, if you don't understand something just read the docs. Shortcuts not work on this page, go back to
+							the settings tab to reactivate them!
 						</p>
 						<button class="buttonm2" onclick="shortcutsLink()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -817,8 +832,8 @@
 						<hr />
 						<h3>Global shortcuts</h3>
 						<p class="text3">
-							You can modify the global shortcuts here, if you don't understand something just read the docs. Shortcuts not work on this
-							page, go back to the settings tab to reactivate them!
+							You can modify the global shortcuts here, if you don't understand something just read the docs. Shortcuts not work on this page, go
+							back to the settings tab to reactivate them!
 						</p>
 						<button class="buttonm2" onclick="globalShortcutsLink()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -972,8 +987,8 @@
 					<div id="experimental" class="tabcontent part">
 						<h3>Codes time offset</h3>
 						<p class="text3">
-							You can set a time offset for the codes, confirm by pressing enter. Specify the time in seconds, it can be a positive or a
-							negative number.
+							You can set a time offset for the codes, confirm by pressing enter. Specify the time in seconds, it can be a positive or a negative
+							number.
 						</p>
 						<input type="number" id="inp0" class="input1 offset" max="1000" min="-1000" maxlength="5" step="5" value="0" />
 						<p class="warning">This feature is WIP! Use it at your own risk!</p>

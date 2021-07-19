@@ -82,7 +82,14 @@ if (file.security.require_password === true && file.security.password !== null) 
 
 // ? prevent default shortcuts
 document.addEventListener("keydown", (event) => {
-	if (event.ctrlKey && event.code === "KeyA" && event.target.type !== "text" && event.target.type !== "number" && event.target.type !== "textarea") {
+	if (
+		event.ctrlKey &&
+		event.code === "KeyA" &&
+		event.target.type !== "text" &&
+		event.target.type !== "number" &&
+		event.target.type !== "textarea" &&
+		event.target.type !== "password"
+	) {
 		event.preventDefault()
 	}
 

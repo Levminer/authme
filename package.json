@@ -1,8 +1,9 @@
 {
 	"name": "authme",
-	"version": "2.6.0",
-	"tag": "2.6.0",
-	"release": "2020. July 13.",
+	"productName": "Authme",
+	"version": "2.6.1",
+	"tag": "2.6.1",
+	"release": "2020. August 10.",
 	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -22,7 +23,6 @@
 	},
 	"main": "main.js",
 	"build": {
-		"productName": "Authme",
 		"appId": "com.levminer.authme",
 		"files": [
 			"!screenshots",

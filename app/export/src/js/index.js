@@ -104,7 +104,7 @@ const go = () => {
 }
 
 // ? save file
-const save_file = () => {
+const saveFile = () => {
 	dialog
 		.showSaveDialog({
 			title: "Save as Text file",
@@ -131,7 +131,7 @@ const save_file = () => {
 }
 
 // ? save qr codes
-const save_qr_codes = () => {
+const saveQrCodes = () => {
 	dialog
 		.showSaveDialog({
 			title: "Save as HTML file",

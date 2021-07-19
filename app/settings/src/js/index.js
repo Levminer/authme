@@ -613,10 +613,6 @@ const statusLink = () => {
 	shell.openExternal("https://status.levminer.com")
 }
 
-// ? open releases
-const releasesLink = () => {
-	shell.openExternal("https://github.com/Levminer/authme/releases")
-}
 
 // ? shortcuts docs
 const shortcutsLink = () => {
@@ -738,6 +734,10 @@ const about = () => {
 // ? edit
 const edit = () => {
 	ipc.send("hide_edit")
+}
+// ? logs
+const logs = () => {
+	ipc.send("logs")
 }
 
 // ? build

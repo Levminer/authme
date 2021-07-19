@@ -15,6 +15,15 @@
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
+		<!-- build number -->
+		<div class="w-full text-white bg-black font-bold build">
+			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
+				<div class="flex">
+					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
+				</div>
+			</div>
+		</div>
+
 		<!-- content -->
 		<div class="center">
 			<h1 class="h1">Authme</h1>
@@ -49,7 +58,7 @@
 					<h3>Save your exported data as a file to use it elsewhere.</h3>
 					<div class="flex flex-row">
 						<div>
-							<button class="buttonm" id="but1" onclick="save_file()">
+							<button class="buttonm" id="but1" onclick="saveFile()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path
 										stroke-linecap="round"
@@ -63,7 +72,7 @@
 							<p class="mt-3 pb-3">Ideal to import for Authme or for Authme Web.</p>
 						</div>
 						<div>
-							<button class="buttonm" id="but2" onclick="save_qr_codes()">
+							<button class="buttonm" id="but2" onclick="saveQrCodes()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path
 										stroke-linecap="round"
@@ -74,7 +83,7 @@
 								</svg>
 								Save as .html
 							</button>
-							<p class="mt-3 pb-3">Ideal for scanning QR codes or for security backup.</p>
+							<p class="mt-3 pb-3 relative right-3">Ideal for scanning QR codes or for security backup.</p>
 						</div>
 					</div>
 				</div>
