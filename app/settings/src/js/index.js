@@ -748,14 +748,6 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? build
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-}
-
 // ? offline mode
 let offline_mode = false
 let offline_closed = false
