@@ -21,6 +21,16 @@ if (process.platform === "win32") {
 	folder = process.env.HOME
 }
 
+// ? build
+const res = ipc.sendSync("info")
+
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(
+		".build-content"
+	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
 // ? settings folder
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 

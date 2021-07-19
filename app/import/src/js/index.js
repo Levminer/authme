@@ -24,3 +24,13 @@ const gaLink = () => {
 const hide = () => {
 	ipc.send("hide_import")
 }
+
+// ? build
+const res = ipc.sendSync("info")
+
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(
+		".build-content"
+	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
