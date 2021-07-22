@@ -221,3 +221,93 @@ input::-webkit-inner-spin-button {
 	position: relative;
 	top: 4px;
 }
+
+/* Dropdown Button */
+.dropdown-button {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+	height: 3.8rem;
+}
+
+.dropdown-button:hover {
+	color: white;
+	background-color: transparent;
+	border-color: white;
+}
+
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	top: 65px;
+	display: none;
+	position: absolute;
+	background-color: white;
+	width: 18rem;
+	z-index: 1;
+	border-radius: 30px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	color: black;
+	padding: 10px 10px;
+	text-decoration: none;
+	display: block;
+	border: 1px solid white;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content :first-child {
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+}
+
+.dropdown-content a:hover:first-child {
+	background-color: rgb(20, 20, 20);
+	color: white;
+}
+
+.dropdown-content a:hover {
+	background-color: rgb(20, 20, 20);
+	color: white;
+}
+
+.dropdown-content :last-child {
+	border-bottom-left-radius: 30px;
+	border-bottom-right-radius: 30px;
+}
+
+.dropdown-content a:hover:last-child {
+	background-color: rgb(20, 20, 20);
+}
+
+.dropdown-link > svg {
+	height: 1em;
+	width: 1em;
+	margin: 0 0.05em 0 0.1em;
+	vertical-align: -0.1em;
+}
+
+.dropdown-link:link {
+	text-decoration: none !important;
+	font-weight: normal;
+	font-size: 20px;
+}
+
+.dropdown-button > svg {
+	position: relative;
+	top: 4px;
+}

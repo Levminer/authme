@@ -63,6 +63,7 @@ const but13 = document.querySelector("#but13")
 const but15 = document.querySelector("#but15")
 
 const inp0 = document.querySelector("#inp0")
+const drp0 = document.querySelector("#drp0")
 
 // close to tray
 let tray_state = file.settings.close_to_tray
@@ -129,10 +130,23 @@ if (search_state === true) {
 }
 
 // offset
-const offset_number = file.advanced_settings.offset
+const offset_number = file.experimental.offset
 
 if (offset_number === null) {
 	inp0.value = 0
+}
+
+// sort
+const sort_number = file.experimental.sort
+
+if (sort_number === 1) {
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+	</svg> A-Z`
+} else if (sort_number === 2) {
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+	</svg> Z-A`
 }
 
 // ? startup
@@ -516,7 +530,7 @@ inp0.addEventListener("keyup", (event) => {
 			})
 			.then((result) => {
 				if (result.response === 0) {
-					file.advanced_settings.offset = parseInt(offset_input)
+					file.experimental.offset = parseInt(offset_input)
 
 					save()
 
@@ -524,13 +538,86 @@ inp0.addEventListener("keyup", (event) => {
 				}
 
 				if (result.response === 1) {
-					file.advanced_settings.offset = parseInt(offset_input)
+					file.experimental.offset = parseInt(offset_input)
 
 					save()
 				}
 			})
 	}
 })
+
+let dropdown_state = false
+// ? dropdown
+const dropdown = (id) => {
+	const dropdown_content = document.querySelector(".dropdown-content")
+
+	if (dropdown_state === false) {
+		dropdown_content.style.display = "block"
+
+		dropdown_state = true
+	} else {
+		dropdown_content.style.display = ""
+
+		dropdown_state = false
+	}
+}
+
+const dropdownChoose = (id) => {
+	const dropdown_button = document.querySelector(".dropdown-button")
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				dropdown()
+				sort()
+				save()
+				restart()
+			}
+
+			if (result.response === 1) {
+				dropdown()
+				sort()
+				save()
+			}
+		})
+
+	const sort = () => {
+		switch (id) {
+			case 0:
+				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+					 </svg> Default`
+
+				file.experimental.sort = null
+				break
+
+			case 1:
+				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+					 </svg> A-Z`
+
+				file.experimental.sort = 1
+				break
+
+			case 2:
+				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+					</svg> Z-A`
+
+				file.experimental.sort = 2
+				break
+		}
+	}
+}
 
 // ? save settings
 const save = () => {
@@ -612,7 +699,6 @@ api()
 const statusLink = () => {
 	shell.openExternal("https://status.levminer.com")
 }
-
 
 // ? shortcuts docs
 const shortcutsLink = () => {

@@ -985,6 +985,52 @@
 
 					<!-- experimental -->
 					<div id="experimental" class="tabcontent part">
+						<h3>Sort codes</h3>
+						<p class="text3">
+							You can set a time offset for the codes, confirm by pressing enter. Specify the time in seconds, it can be a positive or a negative
+							number.
+						</p>
+						<div class="dropdown">
+							<button class="dropdown-button" id="drp0" onclick="dropdown()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+								</svg>
+								Default
+							</button>
+							<div class="dropdown-content">
+								<a class="dropdown-link" href="#" onclick="dropdownChoose(0)">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+									</svg>
+									Default
+								</a>
+								<a class="dropdown-link" href="#" onclick="dropdownChoose(1)">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+										/>
+									</svg>
+									A-Z
+								</a>
+								<a class="dropdown-link" href="#" onclick="dropdownChoose(2)">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+										/>
+									</svg>
+									Z-A
+								</a>
+							</div>
+						</div>
+						<p class="unstable">This feature is WIP! It might be unstable or buggy!</p>
+						<br />
+						<hr />
 						<h3>Codes time offset</h3>
 						<p class="text3">
 							You can set a time offset for the codes, confirm by pressing enter. Specify the time in seconds, it can be a positive or a negative

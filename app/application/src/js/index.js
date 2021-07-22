@@ -35,8 +35,8 @@ if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
 // eslint-disable-next-line
 let prev = false
 
-const names = []
-const secret = []
+let names = []
+let secret = []
 const issuer = []
 const type = []
 
@@ -53,7 +53,8 @@ const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
 const search_state = file.settings.save_search_results
 
-const offset_number = file.advanced_settings.offset
+const offset_number = file.experimental.offset
+const sort_number = file.experimental.sort
 
 // ? separet values
 const separation = () => {
@@ -65,21 +66,21 @@ const separation = () => {
 	for (let i = 0; i < data.length; i++) {
 		if (i == c0) {
 			const names_before = data[i]
-			const names_after = names_before.slice(8)
+			const names_after = names_before.slice(8).trim()
 			names.push(names_after)
 			c0 = c0 + 4
 		}
 
 		if (i == c1) {
 			const secret_before = data[i]
-			const secret_after = secret_before.slice(8)
+			const secret_after = secret_before.slice(8).trim()
 			secret.push(secret_after)
 			c1 = c1 + 4
 		}
 
 		if (i == c2) {
 			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8)
+			const issuer_after = issuer_before.slice(8).trim()
 			issuer.push(issuer_after)
 			c2 = c2 + 4
 		}
@@ -88,6 +89,39 @@ const separation = () => {
 			type.push(data[i])
 			c3 = c3 + 4
 		}
+	}
+
+	const issuer_original = [...issuer]
+
+	const sort = () => {
+		const names_new = []
+		const secret_new = []
+
+		issuer.forEach((element) => {
+			for (let i = 0; i < issuer_original.length; i++) {
+				if (element === issuer_original[i]) {
+					names_new.push(names[i])
+					secret_new.push(secret[i])
+				}
+			}
+		})
+
+		names = names_new
+		secret = secret_new
+	}
+
+	if (sort_number === 1) {
+		issuer.sort((a, b) => {
+			return a.localeCompare(b)
+		})
+
+		sort()
+	} else if (sort_number === 2) {
+		issuer.sort((a, b) => {
+			return b.localeCompare(a)
+		})
+
+		sort()
 	}
 
 	go()

@@ -138,8 +138,9 @@ const settings = `{
 			"save_search_results": true,
 			"disable_window_capture": true
 		},
-		"advanced_settings":{
-			"offset": null
+		"experimental":{
+			"offset": null,
+			"sort": null
 		},
 		"security": {
 			"require_password": null,
@@ -178,9 +179,10 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // settings compatibility
-if (file.advanced_settings === undefined) {
-	file.advanced_settings = {
+if (file.experimental === undefined) {
+	file.experimental = {
 		offset: null,
+		sort: null,
 	}
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
