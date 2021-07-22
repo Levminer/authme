@@ -29,6 +29,16 @@ if (process.platform === "win32") {
 
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
+// ? build
+const res = ipc.sendSync("info")
+
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(
+		".build-content"
+	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
 // ? init
 const text = document.querySelector("#text")
 
@@ -39,7 +49,7 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 		}
 
 		setTimeout(() => {
-			unhash_password()
+			unhashPassword()
 		}, 100)
 	}
 })
@@ -105,7 +115,7 @@ const check_inegrity = () => {
 }
 
 // ? compare
-const unhash_password = async () => {
+const unhashPassword = async () => {
 	if (integrity === false) {
 		check_inegrity()
 	}
@@ -141,3 +151,18 @@ const unhash_password = async () => {
 		text.textContent = "Passwords don't match! Try again!"
 	}
 }
+
+// ? show password
+document.querySelector("#show_pass_0").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "text")
+
+	document.querySelector("#show_pass_0").style.display = "none"
+	document.querySelector("#show_pass_01").style.display = "flex"
+})
+
+document.querySelector("#show_pass_01").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "password")
+
+	document.querySelector("#show_pass_0").style.display = "flex"
+	document.querySelector("#show_pass_01").style.display = "none"
+})
