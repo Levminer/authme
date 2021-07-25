@@ -1,10 +1,9 @@
-const { dialog } = require("electron").remote
+const { app, dialog } = require("@electron/remote")
 const bcrypt = require("bcryptjs")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const { api, is } = require("electron-util")
 
 // ? error in window
 window.onerror = (error) => {
@@ -15,7 +14,7 @@ window.onerror = (error) => {
 let dev = false
 let integrity = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 
 	// check for integrity
@@ -38,9 +37,7 @@ const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(
 const res = ipc.sendSync("info")
 
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 
@@ -94,7 +91,7 @@ const check_inegrity = () => {
 						`,
 					})
 					.then((result) => {
-						api.app.exit()
+						app.exit()
 					})
 			}
 		} catch (error) {
@@ -113,7 +110,7 @@ const check_inegrity = () => {
 						`,
 				})
 				.then((result) => {
-					api.app.exit()
+					app.exit()
 				})
 		}
 	}

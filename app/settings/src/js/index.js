@@ -1,10 +1,9 @@
-const { shell, app, dialog } = require("electron").remote
+const { shell, app, dialog } = require("@electron/remote")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 const fetch = require("node-fetch")
-const { is } = require("electron-util")
 const dns = require("dns")
 
 // ? error in window
@@ -26,7 +25,7 @@ document.querySelector("#but7").innerHTML = `<svg xmlns="http://www.w3.org/2000/
 // ? if development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 }
 
@@ -833,9 +832,7 @@ const logs = () => {
 
 // ? build
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 

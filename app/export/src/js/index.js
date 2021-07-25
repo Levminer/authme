@@ -1,9 +1,8 @@
 const electron = require("electron")
-const { app, dialog, shell } = require("electron").remote
+const { app, dialog, shell } = require("@electron/remote")
 const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
-const { is } = require("electron-util")
 const ipc = electron.ipcRenderer
 
 // ? error in window
@@ -14,7 +13,7 @@ window.onerror = (error) => {
 // ? if development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 }
 
@@ -22,9 +21,7 @@ if (is.development === true) {
 const res = ipc.sendSync("info")
 
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 
