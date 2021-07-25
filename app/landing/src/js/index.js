@@ -6,6 +6,11 @@ const ipc = electron.ipcRenderer
 const path = require("path")
 const { is } = require("electron-util")
 
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "landing", error: error })
+}
+
 // ? init
 const text = document.querySelector("#text")
 

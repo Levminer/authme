@@ -7,6 +7,11 @@ const fetch = require("node-fetch")
 const { is } = require("electron-util")
 const dns = require("dns")
 
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "settings", error: error })
+}
+
 // ? choose settings
 document.querySelector("#setting").click()
 

@@ -1,5 +1,10 @@
 const { ipcRenderer } = require("electron")
 
+// ? error in window
+window.onerror = (error) => {
+	ipcRenderer.send("rendererError", { renderer: "splash", error: error })
+}
+
 // ? get version and release date
 const res = ipcRenderer.sendSync("info")
 if (res.build_number.startsWith("alpha")) {

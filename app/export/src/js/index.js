@@ -6,6 +6,11 @@ const qrcode = require("qrcode")
 const { is } = require("electron-util")
 const ipc = electron.ipcRenderer
 
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "export", error: error })
+}
+
 // ? if development
 let dev = false
 

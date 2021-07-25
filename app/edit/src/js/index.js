@@ -5,6 +5,11 @@ const ipc = electron.ipcRenderer
 const path = require("path")
 const { is } = require("electron-util")
 
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "edit", error: error })
+}
+
 // ? if development
 let dev = false
 

@@ -7,6 +7,11 @@ const fs = require("fs")
 const qr = require(path.join(__dirname, "../../lib/qrcode-converter.js"))
 const ipc = electron.ipcRenderer
 
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "import", error: error })
+}
+
 // ? link
 const onlineDocs = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")

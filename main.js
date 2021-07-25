@@ -818,6 +818,11 @@ ipc.on("support", () => {
 	support()
 })
 
+// ? error in window
+ipc.on("rendererError", (event, data) => {
+	logger.error(`Error in ${data.renderer}`, data.error)
+})
+
 // ? logs
 const logs = () => {
 	const log_path = logger.fileName()

@@ -7,6 +7,12 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const dns = require("dns")
 
+// ? error in window
+window.onerror = (error) => {
+	console.log(error)
+	ipc.send("rendererError", { renderer: "application", error: error })
+}
+
 // ? if development
 let dev = false
 
