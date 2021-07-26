@@ -216,10 +216,14 @@ const showAppFromTray = () => {
 			window_application.show()
 
 			application_shown = true
+
+			logger.log("App shown from tray")
 		} else {
 			window_application.hide()
 
 			application_shown = false
+
+			logger.log("App hidden from tray")
 		}
 	}
 
@@ -249,10 +253,14 @@ const settingsFromTray = () => {
 			window_settings.show()
 
 			settings_shown = true
+
+			logger.log("Settings shown from tray")
 		} else {
 			window_settings.hide()
 
 			settings_shown = false
+
+			logger.log("Settings hidden from tray")
 		}
 	}
 
@@ -267,6 +275,8 @@ const settingsFromTray = () => {
 const exitFromTray = () => {
 	tray_mimized = false
 	app.exit()
+
+	logger.log("Exited from tray")
 }
 
 // ? create window
@@ -644,7 +654,6 @@ ipc.on("to_application1", () => {
 		}, 300)
 
 		setTimeout(() => {
-			window_confirm.destroy()
 			window_landing.destroy()
 		}, 500)
 
@@ -659,9 +668,13 @@ ipc.on("hide_settings", () => {
 		window_settings.maximize()
 		window_settings.show()
 		settings_shown = true
+
+		logger.log("Settings shown")
 	} else {
 		window_settings.hide()
 		settings_shown = false
+
+		logger.log("Settings hidden")
 	}
 })
 
@@ -670,9 +683,13 @@ ipc.on("hide_import", () => {
 		window_import.maximize()
 		window_import.show()
 		import_shown = true
+
+		logger.log("Import shown")
 	} else {
 		window_import.hide()
 		import_shown = false
+
+		logger.log("Import hidden")
 	}
 })
 
@@ -681,9 +698,13 @@ ipc.on("hide_export", () => {
 		window_export.maximize()
 		window_export.show()
 		export_shown = true
+
+		logger.log("Export shown")
 	} else {
 		window_export.hide()
 		export_shown = false
+
+		logger.log("Export hidden")
 	}
 })
 
@@ -692,9 +713,13 @@ ipc.on("hide_edit", () => {
 		window_edit.maximize()
 		window_edit.show()
 		edit_shown = true
+
+		logger.log("Edit shown")
 	} else {
 		window_edit.hide()
 		edit_shown = false
+
+		logger.log("Edit hidden")
 	}
 })
 
@@ -732,10 +757,14 @@ ipc.on("enable_capture", () => {
 
 ipc.on("disable_tray", () => {
 	tray_mimized = false
+
+	logger.log("Close to tray disabled")
 })
 
 ipc.on("enable_tray", () => {
 	tray_mimized = true
+
+	logger.log("Close to tray enabled")
 })
 
 ipc.on("startup", () => {
@@ -840,8 +869,8 @@ const about = () => {
 		.showMessageBox({
 			title: "Authme",
 			buttons: ["Copy", "Close"],
-			defaultId: 2,
-			cancelId: 2,
+			defaultId: 1,
+			cancelId: 1,
 			noLink: true,
 			type: "info",
 			message: message,
@@ -961,7 +990,7 @@ app.whenReady().then(() => {
 	window_splash.show()
 
 	window_splash.once("ready-to-show", () => {
-		if (is.development === true) {
+		if (dev === true) {
 			setTimeout(() => {
 				createWindow()
 			}, 500)
@@ -1057,10 +1086,14 @@ app.whenReady().then(() => {
 									window_settings.show()
 
 									settings_shown = true
+
+									logger.log("Settings shown")
 								} else {
 									window_settings.hide()
 
 									settings_shown = false
+
+									logger.log("Settings hidden")
 								}
 							}
 
@@ -1080,6 +1113,8 @@ app.whenReady().then(() => {
 						click: () => {
 							tray_mimized = false
 							app.exit()
+
+							logger.log("App exited from menu")
 						},
 					},
 				],
@@ -1097,10 +1132,14 @@ app.whenReady().then(() => {
 									window_edit.show()
 
 									edit_shown = true
+
+									logger.log("Edit shown")
 								} else {
 									window_edit.hide()
 
 									edit_shown = false
+
+									logger.log("Edit hidden")
 								}
 							}
 
@@ -1124,10 +1163,14 @@ app.whenReady().then(() => {
 									window_import.show()
 
 									import_shown = true
+
+									logger.log("Import shown")
 								} else {
 									window_import.hide()
 
 									import_shown = false
+
+									logger.log("Import hidden")
 								}
 							}
 
@@ -1151,10 +1194,14 @@ app.whenReady().then(() => {
 									window_export.show()
 
 									export_shown = true
+
+									logger.log("Export shown")
 								} else {
 									window_export.hide()
 
 									export_shown = false
+
+									logger.log("Export hidden")
 								}
 							}
 

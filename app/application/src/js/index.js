@@ -1,8 +1,7 @@
 const speakeasy = require("@levminer/speakeasy")
-const { app, shell, dialog } = require("electron").remote
+const { app, shell, dialog } = require("@electron/remote")
 const fs = require("fs")
 const path = require("path")
-const { is } = require("electron-util")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const dns = require("dns")
@@ -16,7 +15,7 @@ window.onerror = (error) => {
 // ? if development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 }
 
@@ -51,7 +50,6 @@ const querry = []
 let clear
 
 // ? read settings
-// read settings
 file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 const name_state = file.settings.show_2fa_names
@@ -485,6 +483,17 @@ const go = () => {
 
 	generate()
 
+	// search history
+	const search_history = file.search_history.latest
+
+	if (search_history !== null && search_history !== "" && search_state === true) {
+		document.querySelector("#search").value = file.search_history.latest
+
+		setTimeout(() => {
+			search()
+		}, 100)
+	}
+
 	// set block count
 	for (let i = 0; i < names.length; i++) {
 		const block = document.querySelector(`#grid${i}`)
@@ -539,25 +548,18 @@ const search = () => {
 	}
 }
 
-// ? seach history
-const search_history = file.search_history.latest
-
-if (search_history !== null && search_history !== "" && search_state === true) {
-	document.querySelector("#search").value = file.search_history.latest
-
-	setTimeout(() => {
-		search()
-	}, 300)
-}
-
 // ? block animations
-setTimeout(() => {
-	ScrollOut({
-		onShown(el) {
-			el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
-		},
-	})
-}, 500)
+try {
+	setTimeout(() => {
+		ScrollOut({
+			onShown(el) {
+				el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
+			},
+		})
+	}, 500)
+} catch (error) {
+	console.error("Authme - Block animations failed")
+}
 
 let focus = true
 
@@ -594,7 +596,7 @@ app.on("browser-window-focus", () => {
 				diva1.classList.add("animate__animated", "animate__zoomIn")
 			}
 		} catch (error) {
-			return
+			console.error("Authme - Animations failed")
 		}
 
 		setTimeout(() => {
@@ -603,7 +605,9 @@ app.on("browser-window-focus", () => {
 					diva0.classList.remove("animate__animated", "animate__zoomIn")
 					diva1.classList.remove("animate__animated", "animate__zoomIn")
 				}
-			} catch (error) {}
+			} catch (error) {
+				console.error("Authme - Code animations failed")
+			}
 		}, 1500)
 
 		focus = false
@@ -677,9 +681,7 @@ const downloadUpdate = () => {
 const res = ipc.sendSync("info")
 
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 

@@ -4,7 +4,7 @@
 	"version": "2.6.1",
 	"tag": "2.6.1",
 	"release": "2020. August 10.",
-	"description": "A simple 2FA app for desktop built with Electron and Node.js.",
+	"description": "Simple cross platform two-factor authentication app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
 	"scripts": {
