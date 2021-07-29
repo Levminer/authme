@@ -1,10 +1,10 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
 const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
+const remote = require("@electron/remote/main")
 const { number } = require("./build.json")
 const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
-const { is } = require("electron-util")
 const debug = require("electron-debug")
 const logger = require("./lib/logger")
 const electron = require("electron")
@@ -44,7 +44,7 @@ let update_seen = false
 // ? development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	debug({
 		showDevTools: false,
 	})
@@ -57,6 +57,15 @@ if (is.development === true) {
 
 	dev = true
 }
+
+// pre prelease
+let pre_release = false
+if (number.startsWith("alpha")) {
+	pre_release = true
+}
+
+// ? remote module
+remote.initialize()
 
 // ? folders
 let folder
@@ -97,7 +106,10 @@ const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
-const os_info = `${os.cpus()[0].model.split("@")[0]}${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`.replaceAll("(R)", "").replaceAll("(TM)", "")
+const os_info = `${os.cpus()[0].model.split("@")[0]}${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
+	.replaceAll("(R)", "")
+	.replaceAll("(TM)", "")
+	.replace(/ +(?= )/g, "")
 
 // logs
 logger.createFile(file_path, "authme")
@@ -980,7 +992,6 @@ app.whenReady().then(() => {
 		resizable: false,
 		webPreferences: {
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
 		},
 	})
@@ -1026,7 +1037,7 @@ app.whenReady().then(() => {
 				icon: path.join(__dirname, "img/traymenu.png"),
 			},
 			{
-				label: `(${release_date})`,
+				label: pre_release ? `(${build_number})` : `(${release_date})`,
 				enabled: false,
 			},
 			{ type: "separator" },
