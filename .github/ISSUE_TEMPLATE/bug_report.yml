@@ -1,0 +1,55 @@
+name: Bug Report
+description: Use this template for reporting a bug.
+labels: "Type: Bug"
+assignees:
+  - Levminer
+body:
+- type: checkboxes
+  attributes:
+    label: Before the report.
+    description: Please ensure you've completed all of the following.
+    options:
+      - label: I have searched the [Github Issues](https://www.github.com/electron/levminer/issues) for a bug that matches the one I want to file, without success.
+        required: true
+- type: dropdown
+  attributes:
+    label: What operating system are you using?
+    options:
+      - Windows
+      - Mac
+      - Linux
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Operating system version
+    description: On Windows, click Start button > Settings > System > About. On macOS, click the Apple Menu > About This Mac. On Linux, use lsb_release or uname -a.
+    placeholder: "Windows 10 21H1"
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Authme version info
+    description: Paste version informations here (Top menu > Info > About Dialog > Copy).
+    placeholder: "Authme: 2.6.0 ..."
+- type: textarea
+  attributes:
+    label: Authme log
+    description: Paste the latest log here (Top menu > Settings > Settings Window > Logs > Latest log).
+    placeholder: "[AUTHME LOG] {2021. 07. 31. 10:00:00} Authme 2.6.0 release.210713.092658  ..."
+- type: textarea
+  attributes:
+    label: Describe the bug
+    description: A clear and concise description of what the bug is.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: To reproduce
+    description: Steps to reproduce the behavior.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Additional information
+    description: If your problem needs further explanation, please add more information here.

@@ -844,7 +844,7 @@ ipc.on("offline", () => {
 		}, 1000)
 		offline = false
 
-		logger.info("Running in online mode")
+		logger.log("Running in online mode")
 	}
 })
 
