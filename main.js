@@ -141,7 +141,8 @@ nativeTheme.themeSource = "dark"
 // ? settings
 const settings = `{
 		"version":{
-			"tag": "${tag_name}"  
+			"tag": "${tag_name}",
+			"build": "${build_number}"
 		},
 		"settings": {
 			"launch_on_startup": false,
@@ -997,6 +998,8 @@ app.whenReady().then(() => {
 	})
 
 	window_splash.loadFile("./app/splash/index.html")
+
+	window_splash.setProgressBar(10)
 
 	window_splash.show()
 
