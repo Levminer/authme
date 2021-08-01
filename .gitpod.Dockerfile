@@ -20,8 +20,7 @@ USER gitpod
 # Apply user-specific settings
 RUN bash -c ". .nvm/nvm.sh \
     && nvm install 16 \
-    && nvm use 16 \
-    && npm install -g yarn"
+    && nvm use 16"
 
 # Give back control
 USER root

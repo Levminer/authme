@@ -106,7 +106,7 @@ const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
-const os_info = `${os.cpus()[0].model.split("@")[0]}${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
+const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
 	.replaceAll("(R)", "")
 	.replaceAll("(TM)", "")
 	.replace(/ +(?= )/g, "")
