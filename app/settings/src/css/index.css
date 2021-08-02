@@ -255,7 +255,6 @@ input::-webkit-inner-spin-button {
 	top: 65px;
 	display: none;
 	position: absolute;
-	background-color: white;
 	width: 18rem;
 	z-index: 1;
 	border-radius: 30px;
@@ -267,32 +266,22 @@ input::-webkit-inner-spin-button {
 	padding: 10px 10px;
 	text-decoration: none;
 	display: block;
-	border: 1px solid white;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content :first-child {
-	border-top-left-radius: 30px;
-	border-top-right-radius: 30px;
-}
-
-.dropdown-content a:hover:first-child {
-	background-color: rgb(20, 20, 20);
-	color: white;
+	background-color: white;
 }
 
 .dropdown-content a:hover {
-	background-color: rgb(20, 20, 20);
+	background-color: rgb(20,20,20);
 	color: white;
+}
+
+.dropdown-content a:first-child {
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
 }
 
 .dropdown-content :last-child {
 	border-bottom-left-radius: 30px;
 	border-bottom-right-radius: 30px;
-}
-
-.dropdown-content a:hover:last-child {
-	background-color: rgb(20, 20, 20);
 }
 
 .dropdown-link > svg {
