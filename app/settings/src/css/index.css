@@ -1,5 +1,6 @@
 body {
 	overflow: hidden;
+	display: block;
 }
 
 .center {
@@ -24,8 +25,8 @@ body {
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 14rem;
-	height: 25px !important;
+	width: 226px;
+	height: 29px !important;
 }
 
 .input1:hover {
@@ -108,6 +109,7 @@ hr {
 	cursor: pointer;
 	text-decoration: none;
 	transition: 0.2s ease-in;
+	height: 61px;
 }
 
 .buttoni:hover {
@@ -131,13 +133,13 @@ hr {
 }
 
 .buttonm:hover {
-	border: 1px solid rgb(10, 10, 10);
+	border: 1px solid rgb(20, 20, 20);
 	background: rgb(20, 20, 20);
 	color: white;
 }
 
 .buttonmselected {
-	border: 1px solid rgb(10, 10, 10);
+	border: 1px solid rgb(20, 20, 20);
 	background: rgb(20, 20, 20);
 	color: white;
 }
@@ -167,13 +169,6 @@ hr {
 	font-weight: bold;
 	margin-top: 30px;
 	font-size: 2rem;
-}
-
-.offset {
-	text-align: center;
-	width: 80px;
-	padding: 17.5px;
-	height: 17.5px;
 }
 
 input::-webkit-outer-spin-button,
@@ -300,4 +295,17 @@ input::-webkit-inner-spin-button {
 .dropdown-button > svg {
 	position: relative;
 	top: 4px;
+}
+
+.toggle:checked ~ .toggle-bg{
+	background-color: black !important;
+	transition: 0.2s ease-in;
+  }
+  
+  .toggle:checked{
+	right: 4px !important;
+  }
+
+  .noclick {
+    pointer-events: none;
 }
