@@ -38,7 +38,7 @@ let edit_shown = false
 let authenticated = false
 let offline = false
 let shortcuts = false
-let tray_mimized = false
+let tray_minimized = false
 let update_seen = false
 
 // ? development
@@ -286,7 +286,7 @@ const settingsFromTray = () => {
 
 // ? exit app from tray
 const exitFromTray = () => {
-	tray_mimized = false
+	tray_minimized = false
 	app.exit()
 
 	logger.log("Exited from tray")
@@ -424,10 +424,14 @@ const createWindow = () => {
 
 	window_landing.on("close", () => {
 		app.exit()
+
+		logger.log("Landing closed")
 	})
 
 	window_confirm.on("close", () => {
 		app.exit()
+
+		logger.log("Confirm closed")
 	})
 
 	// window closings
@@ -436,7 +440,7 @@ const createWindow = () => {
 			app.exit()
 		}
 
-		if (tray_mimized == false) {
+		if (tray_minimized === false) {
 			app.exit()
 		} else {
 			event.preventDefault()
@@ -448,6 +452,8 @@ const createWindow = () => {
 
 			application_shown = false
 		}
+
+		logger.log("Application closed")
 	})
 
 	window_settings.on("close", async (event) => {
@@ -462,6 +468,8 @@ const createWindow = () => {
 
 			settings_shown = false
 		}
+
+		logger.log("Settings closed")
 	})
 
 	window_import.on("close", async (event) => {
@@ -476,6 +484,8 @@ const createWindow = () => {
 
 			import_shown = false
 		}
+
+		logger.log("Import closed")
 	})
 
 	window_export.on("close", async (event) => {
@@ -490,6 +500,8 @@ const createWindow = () => {
 
 			export_shown = false
 		}
+
+		logger.log("Export closed")
 	})
 
 	window_edit.on("close", async (event) => {
@@ -504,6 +516,8 @@ const createWindow = () => {
 
 			edit_shown = false
 		}
+
+		logger.log("Edit closed")
 	})
 
 	// ? - TEMPORARY - disable scren capture
@@ -618,7 +632,7 @@ contextmenu({
 		}),
 		actions.separator(),
 		actions.copyLink({
-			transform: (content) => `${content}`,
+			transform: (content) => content,
 		}),
 		actions.separator(),
 	],
@@ -769,13 +783,13 @@ ipc.on("enable_capture", () => {
 })
 
 ipc.on("disable_tray", () => {
-	tray_mimized = false
+	tray_minimized = false
 
 	logger.log("Close to tray disabled")
 })
 
 ipc.on("enable_tray", () => {
-	tray_mimized = true
+	tray_minimized = true
 
 	logger.log("Close to tray enabled")
 })
@@ -1125,7 +1139,7 @@ app.whenReady().then(() => {
 						label: "Exit",
 						accelerator: shortcuts ? "" : file.shortcuts.exit,
 						click: () => {
-							tray_mimized = false
+							tray_minimized = false
 							app.exit()
 
 							logger.log("App exited from menu")
