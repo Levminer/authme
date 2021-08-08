@@ -144,7 +144,7 @@ const go = () => {
 	document.querySelector(".afterLoad").style.display = "block"
 
 	for (let i = 0; i < names.length; i++) {
-		const container = document.querySelector(".container")
+		const codes_container = document.querySelector(".codes_container")
 
 		const div = document.createElement("div")
 
@@ -171,7 +171,7 @@ const go = () => {
 		</div>
 		`
 
-		container.appendChild(div)
+		codes_container.appendChild(div)
 	}
 }
 
