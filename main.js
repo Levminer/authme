@@ -686,11 +686,13 @@ contextmenu({
 
 // ? ipcs
 ipc.on("to_confirm", () => {
-	window_confirm.maximize()
-	window_confirm.show()
-	window_landing.hide()
+	if (authenticated === false) {
+		window_confirm.maximize()
+		window_confirm.show()
+		window_landing.hide()
 
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	}
 })
 
 ipc.on("to_application0", () => {
