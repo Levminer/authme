@@ -186,6 +186,11 @@ const settings = `{
 		},
 		"search_history": {
 			"latest": null
+		},
+		"statistics": {
+			"opens": 0,
+			"rated": null,
+			"feedback": null
 		}
 	}`
 
@@ -221,6 +226,16 @@ if (file.shortcuts.support === undefined) {
 
 if (file.settings.disable_window_capture === undefined) {
 	file.settings.disable_window_capture = true
+
+	saveSettings()
+}
+
+if (file.statistics === undefined) {
+	file.statistics = {
+		opens: 0,
+		rated: null,
+		feedback: null,
+	}
 
 	saveSettings()
 }
@@ -591,6 +606,33 @@ const createWindow = () => {
 			exitFromTray()
 		})
 	}
+
+	// ? statistics
+	let opens = file.statistics.opens
+	opens++
+	file.statistics.opens = opens
+
+	saveSettings()
+
+	const openInfo = () => {
+		window_application.on("show", () => {
+			window_application.webContents.executeJavaScript("showInfo()")
+		})
+	}
+
+	if (file.statistics.rate === true || file.statistics.feedback === true) {
+		if (opens % 100 === 0) {
+			openInfo()
+		}
+	} else if (file.statistics.rate === true && file.statistics.feedback === true) {
+		if (opens % 1000 === 0) {
+			openInfo()
+		}
+	} else {
+		if (opens % 50 === 0) {
+			openInfo()
+		}
+	}
 }
 
 // ? init auto launch
@@ -644,15 +686,11 @@ contextmenu({
 
 // ? ipcs
 ipc.on("to_confirm", () => {
-	if (authenticated === false) {
-		window_confirm.maximize()
-		window_confirm.show()
-		window_landing.hide()
+	window_confirm.maximize()
+	window_confirm.show()
+	window_landing.hide()
 
-		authenticated = true
-
-		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
-	}
+	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 })
 
 ipc.on("to_application0", () => {
@@ -673,6 +711,8 @@ ipc.on("to_application0", () => {
 
 		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
+
+	console.log(authenticated)
 })
 
 ipc.on("to_application1", () => {
@@ -876,6 +916,22 @@ ipc.on("download_update", () => {
 
 ipc.on("support", () => {
 	support()
+})
+
+ipc.on("rate_authme", () => {
+	shell.openExternal("https://github.com/Levminer/authme/")
+
+	file.statistics.rated = true
+
+	saveSettings()
+})
+
+ipc.on("provide_feedback", () => {
+	shell.openExternal("https://github.com/Levminer/authme/issues")
+
+	file.statistics.feedback = true
+
+	saveSettings()
 })
 
 // ? error in window
