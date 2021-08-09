@@ -625,7 +625,7 @@ const dropdownChoose = (id) => {
 
 // ? save settings
 const save = () => {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
 }
 
 // ? release notes
@@ -658,11 +658,11 @@ const folder2 = () => {
 	let cache_path
 
 	if (process.platform === "win32") {
-		cache_path = path.join(process.env.APPDATA, "/authme")
+		cache_path = path.join(process.env.APPDATA, "/Authme")
 	} else if (process.platform === "linux") {
-		cache_path = path.join(process.env.HOME, "/.config/authme")
+		cache_path = path.join(process.env.HOME, "/.config/Authme")
 	} else if (process.platform === "darwin") {
-		cache_path = path.join(process.env.HOME, "/Library/Application Support/authme")
+		cache_path = path.join(process.env.HOME, "/Library/Application Support/Authme")
 	}
 
 	shell.openPath(cache_path)

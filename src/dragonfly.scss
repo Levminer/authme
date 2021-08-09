@@ -379,18 +379,6 @@ h4 {
 	background: #292a2d;
 }
 
-.online {
-	display: none;
-}
-
-.offline {
-	display: none;
-}
-
-.update {
-	display: none;
-}
-
 .build {
 	display: none;
 	top: 0;
@@ -421,4 +409,20 @@ h4 {
 .buttonm > svg {
 	position: relative;
 	top: 4px;
+}
+
+.online {
+	display: none;
+}
+
+.offline {
+	display: none;
+}
+
+.update {
+	display: none;
+}
+
+.info {
+	display: none;
 }

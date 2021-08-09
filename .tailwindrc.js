@@ -19,9 +19,10 @@ module.exports = {
 					900: "#000000",
 				},
 				popup: {
-					red: "#FF0000",
-					green: "#008000",
-					blue: "#0000FF",
+					red: "#A30015",
+					green: "#28A443",
+					blue: "#16A3DF",
+					yellow: "#F5AB00",
 				},
 				html: {
 					gray: "#808080",

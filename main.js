@@ -1,8 +1,8 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
-const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
+const { version, tag } = require("./package.json")
+const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
-const { number } = require("./build.json")
 const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
@@ -93,7 +93,7 @@ if (!fs.existsSync(file_path)) {
 // ? version and logs
 const authme_version = version
 const tag_name = tag
-const release_date = release
+const release_date = date
 const build_number = number
 
 ipc.on("info", (event) => {
@@ -139,6 +139,10 @@ if (dev === false) {
 nativeTheme.themeSource = "dark"
 
 // ? settings
+const saveSettings = () => {
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
+}
+
 const settings = `{
 		"version":{
 			"tag": "${tag_name}",
@@ -200,25 +204,25 @@ if (file.experimental === undefined) {
 		sort: null,
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 if (file.shortcuts.edit === undefined) {
 	file.shortcuts.edit = "CommandOrControl+t"
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 if (file.shortcuts.support === undefined) {
 	file.shortcuts.support = "CommandOrControl+p"
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 if (file.settings.disable_window_capture === undefined) {
 	file.settings.disable_window_capture = true
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 // ? open app from tray
