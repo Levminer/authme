@@ -618,6 +618,10 @@ const createWindow = () => {
 		window_application.on("show", () => {
 			window_application.webContents.executeJavaScript("showInfo()")
 		})
+
+		window_settings.on("show", () => {
+			window_settings.webContents.executeJavaScript("showInfo()")
+		})
 	}
 
 	if (file.statistics.rate === true || file.statistics.feedback === true) {

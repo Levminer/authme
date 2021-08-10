@@ -650,6 +650,21 @@ const downloadUpdate = () => {
 	ipc.send("download_update")
 }
 
+// ? rate
+const rateAuthme = () => {
+	ipc.send("rate_authme")
+}
+
+// ? feedback
+const provideFeedback = () => {
+	ipc.send("provide_feedback")
+}
+
+// ? show ifno
+const showInfo = () => {
+	document.querySelector(".info").style.display = "block"
+}
+
 // ? show update
 const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"

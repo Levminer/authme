@@ -153,7 +153,7 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -161,10 +161,10 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -179,7 +179,7 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -190,7 +190,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -207,7 +207,7 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -215,7 +215,7 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -232,7 +232,7 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -240,7 +240,7 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -259,7 +259,7 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -267,10 +267,10 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -285,7 +285,7 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -293,10 +293,10 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -313,7 +313,7 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -321,7 +321,7 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -338,7 +338,7 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -346,7 +346,7 @@ const go = () => {
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -462,10 +462,9 @@ const go = () => {
 							}
 
 							document.querySelector("#search").value = ""
+							document.getElementById("search").focus()
 						}
 					}, 1200)
-
-					document.getElementById("search").focus()
 				}, 1000)
 			})
 
@@ -624,6 +623,11 @@ const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
+// ? show ifno
+const showInfo = () => {
+	document.querySelector(".info").style.display = "block"
+}
+
 // ? offline mode
 let offline_mode = false
 let offline_closed = false
@@ -675,6 +679,16 @@ const releaseNotes = () => {
 // ? download update
 const downloadUpdate = () => {
 	ipc.send("download_update")
+}
+
+// ? rate
+const rateAuthme = () => {
+	ipc.send("rate_authme")
+}
+
+// ? feedback
+const provideFeedback = () => {
+	ipc.send("provide_feedback")
 }
 
 // ? build
