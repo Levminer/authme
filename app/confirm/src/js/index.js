@@ -140,7 +140,7 @@ const unhashPassword = async () => {
 	const compare = await bcrypt.compare(password_input, file.security.password).then(console.warn("Authme - Passwords compared!"))
 
 	if (compare == true) {
-		text.style.color = "green"
+		text.style.color = "#28A443"
 		text.textContent = "Passwords match! Please wait!"
 
 		setInterval(() => {
@@ -149,7 +149,7 @@ const unhashPassword = async () => {
 	} else {
 		console.warn("Authme - Passwords dont match!")
 
-		text.style.color = "red"
+		text.style.color = "#A30015"
 		text.textContent = "Passwords don't match! Try again!"
 	}
 }

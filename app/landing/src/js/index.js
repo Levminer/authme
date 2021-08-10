@@ -48,23 +48,23 @@ const comparePasswords = () => {
 	const password_input2 = document.querySelector("#password_input2").value
 
 	if (password_input1.length > 64) {
-		text.style.color = "red"
+		text.style.color = "#A30015"
 		text.textContent = "Maximum password length is 64 charachters!"
 	} else if (password_input1.length < 8) {
-		text.style.color = "red"
+		text.style.color = "#A30015"
 		text.textContent = "Minimum password length is 8 charachters!"
 	} else {
 		if (password_input1 == password_input2) {
 			console.warn("Authme - Passwords match!")
 
-			text.style.color = "green"
+			text.style.color = "#28A443"
 			text.textContent = "Passwords match! Please wait!"
 
 			hashPasswords()
 		} else {
 			console.warn("Authme - Passwords dont match!")
 
-			text.style.color = "red"
+			text.style.color = "#A30015"
 			text.textContent = "Passwords don't match! Try again!"
 		}
 	}
@@ -113,7 +113,7 @@ const noPassword = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				text.style.color = "green"
+				text.style.color = "#28A443"
 				text.textContent = "Please wait!"
 
 				const file = JSON.parse(
