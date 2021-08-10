@@ -1,16 +1,20 @@
-const { dialog } = require("electron").remote
+const { app, dialog } = require("@electron/remote")
 const bcrypt = require("bcryptjs")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const { api, is } = require("electron-util")
+
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "confirm", error: error })
+}
 
 // ? if development
 let dev = false
 let integrity = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 
 	// check for integrity
@@ -29,6 +33,14 @@ if (process.platform === "win32") {
 
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
+// ? build
+const res = ipc.sendSync("info")
+
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
 // ? init
 const text = document.querySelector("#text")
 
@@ -39,7 +51,7 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 		}
 
 		setTimeout(() => {
-			unhash_password()
+			unhashPassword()
 		}, 100)
 	}
 })
@@ -79,7 +91,7 @@ const check_inegrity = () => {
 						`,
 					})
 					.then((result) => {
-						api.app.exit()
+						app.exit()
 					})
 			}
 		} catch (error) {
@@ -98,14 +110,14 @@ const check_inegrity = () => {
 						`,
 				})
 				.then((result) => {
-					api.app.exit()
+					app.exit()
 				})
 		}
 	}
 }
 
 // ? compare
-const unhash_password = async () => {
+const unhashPassword = async () => {
 	if (integrity === false) {
 		check_inegrity()
 	}
@@ -128,7 +140,7 @@ const unhash_password = async () => {
 	const compare = await bcrypt.compare(password_input, file.security.password).then(console.warn("Authme - Passwords compared!"))
 
 	if (compare == true) {
-		text.style.color = "green"
+		text.style.color = "#28A443"
 		text.textContent = "Passwords match! Please wait!"
 
 		setInterval(() => {
@@ -137,7 +149,22 @@ const unhash_password = async () => {
 	} else {
 		console.warn("Authme - Passwords dont match!")
 
-		text.style.color = "red"
+		text.style.color = "#A30015"
 		text.textContent = "Passwords don't match! Try again!"
 	}
 }
+
+// ? show password
+document.querySelector("#show_pass_0").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "text")
+
+	document.querySelector("#show_pass_0").style.display = "none"
+	document.querySelector("#show_pass_01").style.display = "flex"
+})
+
+document.querySelector("#show_pass_01").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "password")
+
+	document.querySelector("#show_pass_0").style.display = "flex"
+	document.querySelector("#show_pass_01").style.display = "none"
+})

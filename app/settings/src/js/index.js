@@ -1,11 +1,15 @@
-const { shell, app, dialog } = require("electron").remote
+const { shell, app, dialog } = require("@electron/remote")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 const fetch = require("node-fetch")
-const { is } = require("electron-util")
 const dns = require("dns")
+
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "settings", error: error })
+}
 
 // ? choose settings
 document.querySelector("#setting").click()
@@ -14,16 +18,14 @@ document.querySelector("#setting").click()
 const res = ipc.sendSync("info")
 
 // set app version
-document.querySelector(
-	"#but7"
-).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+document.querySelector("#but7").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
 </svg> Authme ${res.authme_version}`
 
 // ? if development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 }
 
@@ -65,6 +67,7 @@ const but13 = document.querySelector("#but13")
 const but15 = document.querySelector("#but15")
 
 const inp0 = document.querySelector("#inp0")
+const drp0 = document.querySelector("#drp0")
 
 // close to tray
 let tray_state = file.settings.close_to_tray
@@ -131,10 +134,23 @@ if (search_state === true) {
 }
 
 // offset
-const offset_number = file.advanced_settings.offset
+const offset_number = file.experimental.offset
 
 if (offset_number === null) {
 	inp0.value = 0
+}
+
+// sort
+const sort_number = file.experimental.sort
+
+if (sort_number === 1) {
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+	</svg> A-Z`
+} else if (sort_number === 2) {
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+	</svg> Z-A`
 }
 
 // ? startup
@@ -518,7 +534,7 @@ inp0.addEventListener("keyup", (event) => {
 			})
 			.then((result) => {
 				if (result.response === 0) {
-					file.advanced_settings.offset = parseInt(offset_input)
+					file.experimental.offset = parseInt(offset_input)
 
 					save()
 
@@ -526,7 +542,7 @@ inp0.addEventListener("keyup", (event) => {
 				}
 
 				if (result.response === 1) {
-					file.advanced_settings.offset = parseInt(offset_input)
+					file.experimental.offset = parseInt(offset_input)
 
 					save()
 				}
@@ -534,9 +550,82 @@ inp0.addEventListener("keyup", (event) => {
 	}
 })
 
+let dropdown_state = false
+// ? dropdown
+const dropdown = (id) => {
+	const dropdown_content = document.querySelector(".dropdown-content")
+
+	if (dropdown_state === false) {
+		dropdown_content.style.display = "block"
+
+		dropdown_state = true
+	} else {
+		dropdown_content.style.display = ""
+
+		dropdown_state = false
+	}
+}
+
+const dropdownChoose = (id) => {
+	const dropdown_button = document.querySelector(".dropdown-button")
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				dropdown()
+				sort()
+				save()
+				restart()
+			}
+
+			if (result.response === 1) {
+				dropdown()
+				sort()
+				save()
+			}
+		})
+
+	const sort = () => {
+		switch (id) {
+			case 0:
+				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+					 </svg> Default`
+
+				file.experimental.sort = null
+				break
+
+			case 1:
+				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+					 </svg> A-Z`
+
+				file.experimental.sort = 1
+				break
+
+			case 2:
+				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+					</svg> Z-A`
+
+				file.experimental.sort = 2
+				break
+		}
+	}
+}
+
 // ? save settings
 const save = () => {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
 }
 
 // ? release notes
@@ -569,11 +658,11 @@ const folder2 = () => {
 	let cache_path
 
 	if (process.platform === "win32") {
-		cache_path = path.join(process.env.APPDATA, "/authme")
+		cache_path = path.join(process.env.APPDATA, "/Authme")
 	} else if (process.platform === "linux") {
-		cache_path = path.join(process.env.HOME, "/.config/authme")
+		cache_path = path.join(process.env.HOME, "/.config/Authme")
 	} else if (process.platform === "darwin") {
-		cache_path = path.join(process.env.HOME, "/Library/Application Support/authme")
+		cache_path = path.join(process.env.HOME, "/Library/Application Support/Authme")
 	}
 
 	shell.openPath(cache_path)
@@ -613,11 +702,6 @@ api()
 // ? open status
 const statusLink = () => {
 	shell.openExternal("https://status.levminer.com")
-}
-
-// ? open releases
-const releasesLink = () => {
-	shell.openExternal("https://github.com/Levminer/authme/releases")
 }
 
 // ? shortcuts docs
@@ -741,12 +825,14 @@ const about = () => {
 const edit = () => {
 	ipc.send("hide_edit")
 }
+// ? logs
+const logs = () => {
+	ipc.send("logs")
+}
 
 // ? build
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 

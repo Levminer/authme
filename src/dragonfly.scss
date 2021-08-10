@@ -23,6 +23,7 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 	background: rgb(10, 10, 10);
+	user-select: none;
 }
 
 /* selection */
@@ -40,8 +41,26 @@ body {
 }
 
 /* links */
+a:link {
+	color: white;
+	font-size: 24px;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+	text-decoration: underline !important;
+}
+
+a:hover {
+	color: gray;
+	text-decoration: underline !important;
+}
+
+a:visited {
+	color: white;
+	text-decoration: none !important;
+}
+
 .link1:link {
-	color: var(--df_primary_color);
+	color: white;
 	font-size: 2rem;
 	text-decoration: none;
 	transition: 0.2s ease-in;
@@ -76,9 +95,9 @@ body {
 
 /* buttons */
 .button1 {
-	color: var(--df_secondary_color);
-	background: rgb(20, 20, 20);
-	border: 1px solid var(--df_primary_color);
+	color: black;
+	background: white;
+	border: 1px solid white;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
@@ -88,9 +107,9 @@ body {
 }
 
 .button1:hover {
-	border: 1px solid var(--df_primary_color);
-	background: rgb(20, 20, 20);
-	color: var(--df_primary_color);
+	border: 1px solid white;
+	background: transparent;
+	color: white;
 }
 
 .button2 {
@@ -122,19 +141,19 @@ h4 {
 }
 
 h1 {
-	font-size: 4rem;
+	font-size: 64px;
 }
 
 h2 {
-	font-size: 3rem;
+	font-size: 48px;
 }
 
 h3 {
-	font-size: 2rem;
+	font-size: 32px;
 }
 
 h4 {
-	font-size: 1rem;
+	font-size: 24px;
 }
 
 /* text */
@@ -175,9 +194,9 @@ h4 {
 }
 
 .input1 {
-	color: var(--df_secondary_color);
-	background: var(--df_primary_color);
-	border: 1px solid var(--df_primary_color);
+	color: black;
+	background: white;
+	border: 1px solid white;
 	font-size: 1rem;
 	padding: 15px 30px;
 	border-radius: 1.8rem;
@@ -187,9 +206,9 @@ h4 {
 }
 
 .input1:hover {
-	color: var(--df_primary_color);
-	background-color: rgb(20, 20, 20);
-	border: 1px solid var(--df_primary_color);
+	color: white;
+	background-color: transparent;
+	border: 1px solid white;
 }
 
 .input1::placeholder {
@@ -352,8 +371,44 @@ h4 {
 	background-color: rgb(20, 20, 20);
 }
 
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(30, 30, 30);
+}
+
 ::-webkit-scrollbar-corner {
 	background: #292a2d;
+}
+
+.build {
+	display: none;
+	top: 0;
+	position: sticky;
+	z-index: 999999;
+}
+
+.buttonm {
+	color: black;
+	background: white;
+	border: 1px solid black;
+	font-size: 1.25rem;
+	padding: 15px 30px;
+	border-radius: 30px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: 0.2s ease-in;
+	text-align: center;
+	width: 18rem;
+}
+
+.buttonm:hover {
+	border-color: white;
+	background: transparent;
+	color: white;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
 }
 
 .online {
@@ -368,9 +423,6 @@ h4 {
 	display: none;
 }
 
-.build {
+.info {
 	display: none;
-	top: 0;
-	position: sticky;
-	z-index: 999999;
 }

@@ -1,10 +1,10 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
-const { version, tag, release } = require("./package.json")
 const contextmenu = require("electron-context-menu")
-const { number } = require("./build.json")
+const { version, tag } = require("./package.json")
+const { number, date } = require("./build.json")
+const remote = require("@electron/remote/main")
 const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
-const { is } = require("electron-util")
 const debug = require("electron-debug")
 const logger = require("./lib/logger")
 const electron = require("electron")
@@ -15,6 +15,8 @@ const os = require("os")
 const ipc = electron.ipcMain
 
 // ?  init
+
+// windows
 let window_splash
 let window_landing
 let window_confirm
@@ -24,6 +26,7 @@ let window_import
 let window_export
 let window_edit
 
+// window states
 let confirm_shown = false
 let application_shown = false
 let settings_shown = false
@@ -31,30 +34,38 @@ let import_shown = false
 let export_shown = false
 let edit_shown = false
 
-let ipc_to_confirm = false
-let ipc_to_application_0 = false
-let ipc_to_application_1 = false
-
-let confirmed = false
-let startup = false
+// other states
+let authenticated = false
 let offline = false
 let shortcuts = false
-
-let to_tray = false
-let show_tray = false
-let pass_start = false
-let update_start = false
+let tray_minimized = false
+let update_seen = false
 
 // ? development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	debug({
 		showDevTools: false,
 	})
 
+	if (process.platform === "darwin") {
+		debug({
+			showDevTools: true,
+		})
+	}
+
 	dev = true
 }
+
+// pre prelease
+let pre_release = false
+if (number.startsWith("alpha")) {
+	pre_release = true
+}
+
+// ? remote module
+remote.initialize()
 
 // ? folders
 let folder
@@ -82,7 +93,7 @@ if (!fs.existsSync(file_path)) {
 // ? version and logs
 const authme_version = version
 const tag_name = tag
-const release_date = release
+const release_date = date
 const build_number = number
 
 ipc.on("info", (event) => {
@@ -95,7 +106,10 @@ const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
-const os_info = `${os.cpus()[0].model.split("@")[0]}${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`.replaceAll("(R)", "").replaceAll("(TM)", "")
+const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
+	.replaceAll("(R)", "")
+	.replaceAll("(TM)", "")
+	.replace(/ +(?= )/g, "")
 
 // logs
 logger.createFile(file_path, "authme")
@@ -110,7 +124,7 @@ if (dev === false) {
 	if (lock === false) {
 		logger.log("Already running, shutting down")
 
-		app.quit()
+		app.exit()
 	} else {
 		app.on("second-instance", () => {
 			logger.log("Already running, focusing window")
@@ -125,9 +139,14 @@ if (dev === false) {
 nativeTheme.themeSource = "dark"
 
 // ? settings
+const saveSettings = () => {
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
+}
+
 const settings = `{
 		"version":{
-			"tag": "${tag_name}"  
+			"tag": "${tag_name}",
+			"build": "${build_number}"
 		},
 		"settings": {
 			"launch_on_startup": false,
@@ -138,8 +157,9 @@ const settings = `{
 			"save_search_results": true,
 			"disable_window_capture": true
 		},
-		"advanced_settings":{
-			"offset": null
+		"experimental":{
+			"offset": null,
+			"sort": null
 		},
 		"security": {
 			"require_password": null,
@@ -166,6 +186,11 @@ const settings = `{
 		},
 		"search_history": {
 			"latest": null
+		},
+		"statistics": {
+			"opens": 0,
+			"rated": null,
+			"feedback": null
 		}
 	}`
 
@@ -178,172 +203,119 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // settings compatibility
-if (file.advanced_settings === undefined) {
-	file.advanced_settings = {
+if (file.experimental === undefined) {
+	file.experimental = {
 		offset: null,
+		sort: null,
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 if (file.shortcuts.edit === undefined) {
 	file.shortcuts.edit = "CommandOrControl+t"
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 if (file.shortcuts.support === undefined) {
 	file.shortcuts.support = "CommandOrControl+p"
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
 if (file.settings.disable_window_capture === undefined) {
 	file.settings.disable_window_capture = true
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	saveSettings()
 }
 
-// ? open tray
-const showTray = () => {
+if (file.statistics === undefined) {
+	file.statistics = {
+		opens: 0,
+		rated: null,
+		feedback: null,
+	}
+
+	saveSettings()
+}
+
+// ? open app from tray
+const showAppFromTray = () => {
 	const toggle = () => {
-		if (confirmed == false) {
-			if (pass_start == true) {
-				if (confirm_shown == false) {
-					window_confirm.maximize()
-					window_confirm.show()
+		if (application_shown === false) {
+			window_application.maximize()
+			window_application.show()
 
-					confirm_shown = true
-				} else {
-					window_confirm.hide()
+			application_shown = true
 
-					confirm_shown = false
-				}
-			}
-		}
-
-		if (application_shown == false) {
-			// if password and password confirmed
-			if (if_pass == true && confirmed == true) {
-				window_application.maximize()
-				window_application.show()
-
-				application_shown = true
-			}
-
-			// if no password
-			if (if_nopass == true) {
-				window_application.maximize()
-				window_application.show()
-
-				application_shown = true
-			}
-
-			// if exit to tray on
-			if (show_tray == true) {
-				window_application.maximize()
-				window_application.show()
-
-				application_shown = true
-			}
+			logger.log("App shown from tray")
 		} else {
-			// if password and password confirmed
-			if (if_pass == true && confirmed == true) {
-				window_application.hide()
+			window_application.hide()
 
-				application_shown = false
-			}
+			application_shown = false
 
-			// if no password
-			if (if_nopass == true) {
-				window_application.hide()
-
-				application_shown = false
-			}
-
-			// if exit to tray on
-			if (show_tray == true) {
-				window_application.hide()
-
-				application_shown = false
-			}
+			logger.log("App hidden from tray")
 		}
 	}
 
-	// ? check for required password
-	let if_pass = false
-	let if_nopass = false
-
-	if (file.security.require_password == true) {
-		if_pass = true
-		pass_start = true
-
+	if (file.security.require_password === true && authenticated === true) {
 		toggle()
-	} else {
-		if_nopass = true
-
+	} else if (file.security.require_password === false) {
 		toggle()
+	} else if (file.security.require_password === true) {
+		if (confirm_shown === false) {
+			window_confirm.maximize()
+			window_confirm.show()
+
+			confirm_shown = true
+		} else {
+			window_confirm.hide()
+
+			confirm_shown = false
+		}
 	}
 }
 
-// ? tray settings
-const settingsTray = () => {
+// ? open settings from tray
+const settingsFromTray = () => {
 	const toggle = () => {
-		if (settings_shown == false) {
-			if (if_pass == true && confirmed == true) {
-				window_settings.maximize()
-				window_settings.show()
+		if (settings_shown === false) {
+			window_settings.maximize()
+			window_settings.show()
 
-				settings_shown = true
-			}
+			settings_shown = true
 
-			if (if_nopass == true) {
-				window_settings.maximize()
-				window_settings.show()
-
-				settings_shown = true
-			}
+			logger.log("Settings shown from tray")
 		} else {
-			if (if_pass == true && confirmed == true) {
-				window_settings.hide()
+			window_settings.hide()
 
-				settings_shown = false
-			}
+			settings_shown = false
 
-			if (if_nopass == true) {
-				window_settings.hide()
-
-				settings_shown = false
-			}
+			logger.log("Settings hidden from tray")
 		}
 	}
 
-	let if_pass = false
-	let if_nopass = false
-
-	// check if require password
-	if (file.security.require_password == true) {
-		if_pass = true
-		pass_start = true
-
+	if (file.security.require_password === true && authenticated === true) {
 		toggle()
-	} else {
-		if_nopass = true
-
+	} else if (file.security.require_password === false) {
 		toggle()
 	}
 }
 
-// tray exit
-const exitTray = () => {
-	to_tray = false
+// ? exit app from tray
+const exitFromTray = () => {
+	tray_minimized = false
 	app.exit()
+
+	logger.log("Exited from tray")
 }
 
 // ? create window
 const createWindow = () => {
 	logger.log("Started creating windows")
 
+	// ? create windows
 	window_landing = new BrowserWindow({
 		width: 1900,
 		height: 1000,
@@ -449,6 +421,7 @@ const createWindow = () => {
 		},
 	})
 
+	// load window files
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
@@ -457,8 +430,11 @@ const createWindow = () => {
 	window_export.loadFile("./app/export/index.html")
 	window_edit.loadFile("./app/edit/index.html")
 
-	if (file.security.require_password == null) {
+	// window states
+	if (file.security.require_password === null) {
 		window_landing.maximize()
+
+		logger.warn("First start")
 	}
 
 	window_application.on("show", () => {
@@ -466,19 +442,24 @@ const createWindow = () => {
 	})
 
 	window_landing.on("close", () => {
-		app.quit()
+		app.exit()
+
+		logger.log("Landing closed")
 	})
 
 	window_confirm.on("close", () => {
-		app.quit()
+		app.exit()
+
+		logger.log("Confirm closed")
 	})
 
+	// window closings
 	window_application.on("close", async (event) => {
 		if (dev === true) {
 			app.exit()
 		}
 
-		if (to_tray == false) {
+		if (tray_minimized === false) {
 			app.exit()
 		} else {
 			event.preventDefault()
@@ -490,6 +471,8 @@ const createWindow = () => {
 
 			application_shown = false
 		}
+
+		logger.log("Application closed")
 	})
 
 	window_settings.on("close", async (event) => {
@@ -504,6 +487,8 @@ const createWindow = () => {
 
 			settings_shown = false
 		}
+
+		logger.log("Settings closed")
 	})
 
 	window_import.on("close", async (event) => {
@@ -518,6 +503,8 @@ const createWindow = () => {
 
 			import_shown = false
 		}
+
+		logger.log("Import closed")
 	})
 
 	window_export.on("close", async (event) => {
@@ -532,6 +519,8 @@ const createWindow = () => {
 
 			export_shown = false
 		}
+
+		logger.log("Export closed")
 	})
 
 	window_edit.on("close", async (event) => {
@@ -546,6 +535,8 @@ const createWindow = () => {
 
 			edit_shown = false
 		}
+
+		logger.log("Edit closed")
 	})
 
 	// ? - TEMPORARY - disable scren capture
@@ -582,38 +573,65 @@ const createWindow = () => {
 								logger.log("No auto update found!")
 							}
 						} catch (error) {
-							return logger.error(error)
+							return logger.error("Error during auto update", error.stack)
 						}
 					})
 			} catch (error) {
-				return logger.error(error)
+				return logger.error("Error during auto update", error.stack)
 			}
 		}
 
-		if (update_start == false) {
+		if (update_seen == false) {
 			api()
 
-			update_start = true
+			update_seen = true
 		}
 	})
 
 	// ? global shortcuts
 	if (file.global_shortcuts.show !== "None") {
 		globalShortcut.register(file.global_shortcuts.show, () => {
-			showTray()
+			showAppFromTray()
 		})
 	}
 
 	if (file.global_shortcuts.settings !== "None") {
 		globalShortcut.register(file.global_shortcuts.settings, () => {
-			settingsTray()
+			settingsFromTray()
 		})
 	}
 
 	if (file.global_shortcuts.exit !== "None") {
 		globalShortcut.register(file.global_shortcuts.exit, () => {
-			exitTray()
+			exitFromTray()
 		})
+	}
+
+	// ? statistics
+	let opens = file.statistics.opens
+	opens++
+	file.statistics.opens = opens
+
+	saveSettings()
+
+	const openInfo = () => {
+		window_application.on("show", () => {
+			window_application.webContents.executeJavaScript("showInfo()")
+		})
+	}
+
+	if (file.statistics.rate === true || file.statistics.feedback === true) {
+		if (opens % 100 === 0) {
+			openInfo()
+		}
+	} else if (file.statistics.rate === true && file.statistics.feedback === true) {
+		if (opens % 1000 === 0) {
+			openInfo()
+		}
+	} else {
+		if (opens % 50 === 0) {
+			openInfo()
+		}
 	}
 }
 
@@ -660,7 +678,7 @@ contextmenu({
 		}),
 		actions.separator(),
 		actions.copyLink({
-			transform: (content) => `${content}`,
+			transform: (content) => content,
 		}),
 		actions.separator(),
 	],
@@ -668,16 +686,17 @@ contextmenu({
 
 // ? ipcs
 ipc.on("to_confirm", () => {
-	if (ipc_to_confirm == false) {
+	if (authenticated === false) {
 		window_confirm.maximize()
 		window_confirm.show()
 		window_landing.hide()
-		ipc_to_confirm = true
+
+		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
 })
 
 ipc.on("to_application0", () => {
-	if (ipc_to_application_0 == false && startup == false) {
+	if (authenticated === false) {
 		window_confirm.hide()
 
 		setTimeout(() => {
@@ -690,14 +709,16 @@ ipc.on("to_application0", () => {
 			window_landing.destroy()
 		}, 500)
 
-		ipc_to_application_0 = true
+		authenticated = true
 
-		confirmed = true
+		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
+
+	console.log(authenticated)
 })
 
 ipc.on("to_application1", () => {
-	if (ipc_to_application_1 == false && startup == false) {
+	if (authenticated === false) {
 		window_landing.hide()
 
 		setTimeout(() => {
@@ -709,7 +730,9 @@ ipc.on("to_application1", () => {
 			window_landing.destroy()
 		}, 500)
 
-		ipc_to_application_1 = true
+		authenticated = true
+
+		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
 })
 
@@ -718,9 +741,13 @@ ipc.on("hide_settings", () => {
 		window_settings.maximize()
 		window_settings.show()
 		settings_shown = true
+
+		logger.log("Settings shown")
 	} else {
 		window_settings.hide()
 		settings_shown = false
+
+		logger.log("Settings hidden")
 	}
 })
 
@@ -729,9 +756,13 @@ ipc.on("hide_import", () => {
 		window_import.maximize()
 		window_import.show()
 		import_shown = true
+
+		logger.log("Import shown")
 	} else {
 		window_import.hide()
 		import_shown = false
+
+		logger.log("Import hidden")
 	}
 })
 
@@ -740,9 +771,13 @@ ipc.on("hide_export", () => {
 		window_export.maximize()
 		window_export.show()
 		export_shown = true
+
+		logger.log("Export shown")
 	} else {
 		window_export.hide()
 		export_shown = false
+
+		logger.log("Export hidden")
 	}
 })
 
@@ -751,9 +786,13 @@ ipc.on("hide_edit", () => {
 		window_edit.maximize()
 		window_edit.show()
 		edit_shown = true
+
+		logger.log("Edit shown")
 	} else {
 		window_edit.hide()
 		edit_shown = false
+
+		logger.log("Edit hidden")
 	}
 })
 
@@ -775,6 +814,8 @@ ipc.on("disable_capture", () => {
 	window_application.setContentProtection(true)
 	window_import.setContentProtection(true)
 	window_export.setContentProtection(true)
+
+	logger.log("Screen capture disabled")
 })
 
 ipc.on("enable_capture", () => {
@@ -783,24 +824,33 @@ ipc.on("enable_capture", () => {
 	window_application.setContentProtection(false)
 	window_import.setContentProtection(false)
 	window_export.setContentProtection(false)
+
+	logger.log("Screen capture enabled")
 })
 
 ipc.on("disable_tray", () => {
-	to_tray = false
+	tray_minimized = false
+
+	logger.log("Close to tray disabled")
 })
 
 ipc.on("enable_tray", () => {
-	to_tray = true
+	tray_minimized = true
+
+	logger.log("Close to tray enabled")
 })
 
 ipc.on("startup", () => {
 	window_application.hide()
 	window_confirm.hide()
-	startup = true
 })
 
 ipc.on("app_path", () => {
 	shell.showItemInFolder(app.getPath("exe"))
+})
+
+ipc.on("logs", () => {
+	logs()
 })
 
 ipc.on("about", () => {
@@ -845,12 +895,16 @@ ipc.on("offline", () => {
 			window_settings.setTitle("Authme (Offline)")
 		}, 1000)
 		offline = true
+
+		logger.warn("Running in offline mode")
 	} else {
 		setTimeout(() => {
 			window_application.setTitle("Authme")
 			window_settings.setTitle("Authme ")
 		}, 1000)
 		offline = false
+
+		logger.log("Running in online mode")
 	}
 })
 
@@ -865,6 +919,34 @@ ipc.on("download_update", () => {
 ipc.on("support", () => {
 	support()
 })
+
+ipc.on("rate_authme", () => {
+	shell.openExternal("https://github.com/Levminer/authme/")
+
+	file.statistics.rated = true
+
+	saveSettings()
+})
+
+ipc.on("provide_feedback", () => {
+	shell.openExternal("https://github.com/Levminer/authme/issues")
+
+	file.statistics.feedback = true
+
+	saveSettings()
+})
+
+// ? error in window
+ipc.on("rendererError", (event, data) => {
+	logger.error(`Error in ${data.renderer}`, data.error)
+})
+
+// ? logs
+const logs = () => {
+	const log_path = logger.fileName()
+
+	shell.openPath(path.join(file_path, "logs", log_path))
+}
 
 // ? about
 const about = () => {
@@ -987,17 +1069,18 @@ app.whenReady().then(() => {
 		resizable: false,
 		webPreferences: {
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
 		},
 	})
 
 	window_splash.loadFile("./app/splash/index.html")
 
+	window_splash.setProgressBar(10)
+
 	window_splash.show()
 
 	window_splash.once("ready-to-show", () => {
-		if (is.development === true) {
+		if (dev === true) {
 			setTimeout(() => {
 				createWindow()
 			}, 500)
@@ -1021,7 +1104,7 @@ app.whenReady().then(() => {
 	tray = new Tray(iconpath)
 
 	tray.on("click", () => {
-		showTray()
+		showAppFromTray()
 	})
 
 	// generate tray
@@ -1033,7 +1116,7 @@ app.whenReady().then(() => {
 				icon: path.join(__dirname, "img/traymenu.png"),
 			},
 			{
-				label: `(${release_date})`,
+				label: pre_release ? `(${build_number})` : `(${release_date})`,
 				enabled: false,
 			},
 			{ type: "separator" },
@@ -1041,7 +1124,7 @@ app.whenReady().then(() => {
 				label: "Show app",
 				accelerator: shortcuts ? "" : file.global_shortcuts.show,
 				click: () => {
-					showTray()
+					showAppFromTray()
 				},
 			},
 			{ type: "separator" },
@@ -1049,7 +1132,7 @@ app.whenReady().then(() => {
 				label: "Settings",
 				accelerator: shortcuts ? "" : file.global_shortcuts.settings,
 				click: () => {
-					settingsTray()
+					settingsFromTray()
 				},
 			},
 			{ type: "separator" },
@@ -1057,7 +1140,7 @@ app.whenReady().then(() => {
 				label: "Exit app",
 				accelerator: shortcuts ? "" : file.global_shortcuts.exit,
 				click: () => {
-					exitTray()
+					exitFromTray()
 				},
 			},
 		])
@@ -1067,7 +1150,7 @@ app.whenReady().then(() => {
 
 	createTray()
 
-	// ? cerate menu
+	// ? create menu
 	const createMenu = () => {
 		const template = [
 			{
@@ -1077,7 +1160,7 @@ app.whenReady().then(() => {
 						label: "Show app",
 						accelerator: shortcuts ? "" : file.shortcuts.show,
 						click: () => {
-							showTray()
+							showAppFromTray()
 						},
 					},
 					{
@@ -1088,47 +1171,25 @@ app.whenReady().then(() => {
 						accelerator: shortcuts ? "" : file.shortcuts.settings,
 						click: () => {
 							const toggle = () => {
-								if (settings_shown == false) {
-									if (if_pass == true && confirmed == true) {
-										window_settings.maximize()
-										window_settings.show()
+								if (settings_shown === false) {
+									window_settings.maximize()
+									window_settings.show()
 
-										settings_shown = true
-									}
+									settings_shown = true
 
-									if (if_nopass == true) {
-										window_settings.maximize()
-										window_settings.show()
-
-										settings_shown = true
-									}
+									logger.log("Settings shown")
 								} else {
-									if (if_pass == true && confirmed == true) {
-										window_settings.hide()
+									window_settings.hide()
 
-										settings_shown = false
-									}
+									settings_shown = false
 
-									if (if_nopass == true) {
-										window_settings.hide()
-
-										settings_shown = false
-									}
+									logger.log("Settings hidden")
 								}
 							}
 
-							let if_pass = false
-							let if_nopass = false
-
-							// check if require password
-							if (file.security.require_password == true) {
-								if_pass = true
-								pass_start = true
-
+							if (file.security.require_password === true && authenticated === true) {
 								toggle()
-							} else {
-								if_nopass = true
-
+							} else if (file.security.require_password === false) {
 								toggle()
 							}
 						},
@@ -1140,8 +1201,10 @@ app.whenReady().then(() => {
 						label: "Exit",
 						accelerator: shortcuts ? "" : file.shortcuts.exit,
 						click: () => {
-							to_tray = false
+							tray_minimized = false
 							app.exit()
+
+							logger.log("App exited from menu")
 						},
 					},
 				],
@@ -1154,47 +1217,25 @@ app.whenReady().then(() => {
 						accelerator: shortcuts ? "" : file.shortcuts.edit,
 						click: () => {
 							const toggle = () => {
-								if (edit_shown == false) {
-									if (if_pass == true && confirmed == true) {
-										window_edit.maximize()
-										window_edit.show()
+								if (edit_shown === false) {
+									window_edit.maximize()
+									window_edit.show()
 
-										edit_shown = true
-									}
+									edit_shown = true
 
-									if (if_nopass == true) {
-										window_edit.maximize()
-										window_edit.show()
-
-										edit_shown = true
-									}
+									logger.log("Edit shown")
 								} else {
-									if (if_pass == true && confirmed == true) {
-										window_edit.hide()
+									window_edit.hide()
 
-										edit_shown = false
-									}
+									edit_shown = false
 
-									if (if_nopass == true) {
-										window_edit.hide()
-
-										edit_shown = false
-									}
+									logger.log("Edit hidden")
 								}
 							}
 
-							let if_pass = false
-							let if_nopass = false
-
-							// check if require password
-							if (file.security.require_password == true) {
-								if_pass = true
-								pass_start = true
-
+							if (file.security.require_password === true && authenticated === true) {
 								toggle()
-							} else {
-								if_nopass = true
-
+							} else if (file.security.require_password === false) {
 								toggle()
 							}
 						},
@@ -1207,47 +1248,25 @@ app.whenReady().then(() => {
 						accelerator: shortcuts ? "" : file.shortcuts.import,
 						click: () => {
 							const toggle = () => {
-								if (import_shown == false) {
-									if (if_pass == true && confirmed == true) {
-										window_import.maximize()
-										window_import.show()
+								if (import_shown === false) {
+									window_import.maximize()
+									window_import.show()
 
-										import_shown = true
-									}
+									import_shown = true
 
-									if (if_nopass == true) {
-										window_import.maximize()
-										window_import.show()
-
-										import_shown = true
-									}
+									logger.log("Import shown")
 								} else {
-									if (if_pass == true && confirmed == true) {
-										window_import.hide()
+									window_import.hide()
 
-										import_shown = false
-									}
+									import_shown = false
 
-									if (if_nopass == true) {
-										window_import.hide()
-
-										import_shown = false
-									}
+									logger.log("Import hidden")
 								}
 							}
 
-							let if_pass = false
-							let if_nopass = false
-
-							// check if require password
-							if (file.security.require_password == true) {
-								if_pass = true
-								pass_start = true
-
+							if (file.security.require_password === true && authenticated === true) {
 								toggle()
-							} else {
-								if_nopass = true
-
+							} else if (file.security.require_password === false) {
 								toggle()
 							}
 						},
@@ -1260,47 +1279,25 @@ app.whenReady().then(() => {
 						accelerator: shortcuts ? "" : file.shortcuts.export,
 						click: () => {
 							const toggle = () => {
-								if (export_shown == false) {
-									if (if_pass == true && confirmed == true) {
-										window_export.maximize()
-										window_export.show()
+								if (export_shown === false) {
+									window_export.maximize()
+									window_export.show()
 
-										export_shown = true
-									}
+									export_shown = true
 
-									if (if_nopass == true) {
-										window_export.maximize()
-										window_export.show()
-
-										export_shown = true
-									}
+									logger.log("Export shown")
 								} else {
-									if (if_pass == true && confirmed == true) {
-										window_export.hide()
+									window_export.hide()
 
-										export_shown = false
-									}
+									export_shown = false
 
-									if (if_nopass == true) {
-										window_export.hide()
-
-										export_shown = false
-									}
+									logger.log("Export hidden")
 								}
 							}
 
-							let if_pass = false
-							let if_nopass = false
-
-							// check if require password
-							if (file.security.require_password == true) {
-								if_pass = true
-								pass_start = true
-
+							if (file.security.require_password === true && authenticated === true) {
 								toggle()
-							} else {
-								if_nopass = true
-
+							} else if (file.security.require_password === false) {
 								toggle()
 							}
 						},
@@ -1424,7 +1421,7 @@ app.whenReady().then(() => {
 													})
 												}
 											} catch (error) {
-												return logger.error(error)
+												return logger.error("Error during manual update", error.stack)
 											}
 										})
 								} catch (error) {
@@ -1440,6 +1437,8 @@ app.whenReady().then(() => {
 					
 										You currently running: Authme ${tag_name}`,
 									})
+
+									return logger.error("Error during manual update", error.stack)
 								}
 							}
 
@@ -1475,6 +1474,8 @@ app.whenReady().then(() => {
 			createTray()
 
 			createMenu()
+
+			logger.log("Shortcuts disabled")
 		} else {
 			shortcuts = false
 
@@ -1482,25 +1483,27 @@ app.whenReady().then(() => {
 
 			if (file.global_shortcuts.show !== "None") {
 				globalShortcut.register(file.global_shortcuts.show, () => {
-					showTray()
+					showAppFromTray()
 				})
 			}
 
 			if (file.global_shortcuts.settings !== "None") {
 				globalShortcut.register(file.global_shortcuts.settings, () => {
-					settingsTray()
+					settingsFromTray()
 				})
 			}
 
 			if (file.global_shortcuts.exit !== "None") {
 				globalShortcut.register(file.global_shortcuts.exit, () => {
-					exitTray()
+					exitFromTray()
 				})
 			}
 
 			createTray()
 
 			createMenu()
+
+			logger.log("Shortcuts enabled")
 		}
 	})
 })

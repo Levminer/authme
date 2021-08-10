@@ -1,4 +1,5 @@
 module.exports = {
+	mode: "jit",
 	purge: {
 		enabled: true,
 		content: ["./app/**/*.html"],
@@ -11,14 +12,20 @@ module.exports = {
 
 			colors: {
 				gray: {
+					500: "#282828",
+					600: "#1E1E1E",
 					700: "#141414",
 					800: "#0a0a0a",
 					900: "#000000",
 				},
 				popup: {
-					red: "#FF0000",
-					green: "#008000",
-					blue: "#0000FF",
+					red: "#A30015",
+					green: "#28A443",
+					blue: "#16A3DF",
+					yellow: "#F5AB00",
+				},
+				html: {
+					gray: "#808080",
 				},
 			},
 

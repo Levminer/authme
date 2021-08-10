@@ -1,7 +1,6 @@
 {
-	"productName": "Authme",
-	"appId": "com.levminer.authme",
+	"productName": "Authme Test",
+	"appId": "com.levminer.authmetest",
 	"asar": false,
-	"files": ["!extract", "!sample", "!scripts", "!.*"],
-	"asarUnpack": ["app/import/src/py/*", "src/install.py", "src/version.py"]
+	"files": ["!screenshots", "!extract", "!sample", "!scripts", "!**/*.scss", "!**/*.ts", "!.*"]
 }

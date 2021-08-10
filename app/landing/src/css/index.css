@@ -4,52 +4,22 @@
 	height: 600px;
 }
 
-.button1 {
-	color: black;
-	background-color: white;
-	border-color: white;
+#password_input1:hover ~ #show_pass_0 {
+	transition: 0.2s ease-in;
+	stroke: white;
 }
 
-.button1:hover {
-	color: white;
-	border-color: white;
+#password_input1:hover ~ #show_pass_01 {
+	transition: 0.2s ease-in;
+	stroke: white;
 }
 
-.input1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-	width: 250px;
+#password_input2:hover ~ #show_pass_1 {
+	transition: 0.2s ease-in;
+	stroke: white;
 }
 
-.input1:hover {
-	color: white;
-	border-color: white;
-}
-
-#password_input2 {
-	position: relative;
-	top: 20px;
-}
-
-#password_label2 {
-	position: relative;
-	top: 20px;
-}
-
-#button1 {
-	position: relative;
-	top: 45px;
-}
-
-#version {
-	position: relative;
-	top: 30px;
-}
-
-.link1 {
-	font-size: 1rem !important;
-	position: relative;
-	top: 55px;
-	color: white !important;
+#password_input2:hover ~ #show_pass_11 {
+	transition: 0.2s ease-in;
+	stroke: white;
 }

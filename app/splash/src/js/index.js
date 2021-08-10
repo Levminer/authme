@@ -1,9 +1,14 @@
 const { ipcRenderer } = require("electron")
 
+// ? error in window
+window.onerror = (error) => {
+	ipcRenderer.send("rendererError", { renderer: "splash", error: error })
+}
+
 // ? get version and release date
 const res = ipcRenderer.sendSync("info")
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector("#ver").textContent = `Authme ${res.authme_version} ${res.build_number} (${res.release_date})`
+	document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${res.build_number})`
 } else {
 	document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${res.release_date})`
 }

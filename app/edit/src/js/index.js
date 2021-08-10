@@ -1,14 +1,18 @@
-const { shell, app, dialog } = require("electron").remote
+const { shell, app, dialog } = require("@electron/remote")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const { is } = require("electron-util")
+
+// ? error in window
+window.onerror = (error) => {
+	ipc.send("rendererError", { renderer: "edit", error: error })
+}
 
 // ? if development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 }
 
@@ -19,6 +23,14 @@ if (process.platform === "win32") {
 	folder = process.env.APPDATA
 } else {
 	folder = process.env.HOME
+}
+
+// ? build
+const res = ipc.sendSync("info")
+
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
 }
 
 // ? settings folder
@@ -132,7 +144,7 @@ const go = () => {
 	document.querySelector(".afterLoad").style.display = "block"
 
 	for (let i = 0; i < names.length; i++) {
-		const container = document.querySelector(".container")
+		const codes_container = document.querySelector(".codes_container")
 
 		const div = document.createElement("div")
 
@@ -159,7 +171,7 @@ const go = () => {
 		</div>
 		`
 
-		container.appendChild(div)
+		codes_container.appendChild(div)
 	}
 }
 

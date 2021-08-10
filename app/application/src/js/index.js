@@ -1,16 +1,21 @@
 const speakeasy = require("@levminer/speakeasy")
-const { app, shell, dialog } = require("electron").remote
+const { app, shell, dialog } = require("@electron/remote")
 const fs = require("fs")
 const path = require("path")
-const { is } = require("electron-util")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const dns = require("dns")
 
+// ? error in window
+window.onerror = (error) => {
+	console.log(error)
+	ipc.send("rendererError", { renderer: "application", error: error })
+}
+
 // ? if development
 let dev = false
 
-if (is.development === true) {
+if (app.isPackaged === false) {
 	dev = true
 }
 
@@ -35,8 +40,8 @@ if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
 // eslint-disable-next-line
 let prev = false
 
-const names = []
-const secret = []
+let names = []
+let secret = []
 const issuer = []
 const type = []
 
@@ -45,7 +50,6 @@ const querry = []
 let clear
 
 // ? read settings
-// read settings
 file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 const name_state = file.settings.show_2fa_names
@@ -53,7 +57,8 @@ const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
 const search_state = file.settings.save_search_results
 
-const offset_number = file.advanced_settings.offset
+const offset_number = file.experimental.offset
+const sort_number = file.experimental.sort
 
 // ? separet values
 const separation = () => {
@@ -65,21 +70,21 @@ const separation = () => {
 	for (let i = 0; i < data.length; i++) {
 		if (i == c0) {
 			const names_before = data[i]
-			const names_after = names_before.slice(8)
+			const names_after = names_before.slice(8).trim()
 			names.push(names_after)
 			c0 = c0 + 4
 		}
 
 		if (i == c1) {
 			const secret_before = data[i]
-			const secret_after = secret_before.slice(8)
+			const secret_after = secret_before.slice(8).trim()
 			secret.push(secret_after)
 			c1 = c1 + 4
 		}
 
 		if (i == c2) {
 			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8)
+			const issuer_after = issuer_before.slice(8).trim()
 			issuer.push(issuer_after)
 			c2 = c2 + 4
 		}
@@ -88,6 +93,39 @@ const separation = () => {
 			type.push(data[i])
 			c3 = c3 + 4
 		}
+	}
+
+	const issuer_original = [...issuer]
+
+	const sort = () => {
+		const names_new = []
+		const secret_new = []
+
+		issuer.forEach((element) => {
+			for (let i = 0; i < issuer_original.length; i++) {
+				if (element === issuer_original[i]) {
+					names_new.push(names[i])
+					secret_new.push(secret[i])
+				}
+			}
+		})
+
+		names = names_new
+		secret = secret_new
+	}
+
+	if (sort_number === 1) {
+		issuer.sort((a, b) => {
+			return a.localeCompare(b)
+		})
+
+		sort()
+	} else if (sort_number === 2) {
+		issuer.sort((a, b) => {
+			return b.localeCompare(a)
+		})
+
+		sort()
 	}
 
 	go()
@@ -126,7 +164,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3" id="text${counter}">Text</p>
+					<p class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -152,7 +190,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3" id="text${counter}">Text</p>
+					<p class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -232,7 +270,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3" id="text${counter}">Text</p>
+					<p class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -258,7 +296,7 @@ const go = () => {
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3" id="text${counter}">Text</p>
+					<p class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -401,8 +439,8 @@ const go = () => {
 				document.execCommand("copy")
 				copy.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-				</svg>
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+			 	 </svg>
 				Copied
 				`
 
@@ -444,6 +482,17 @@ const go = () => {
 	}
 
 	generate()
+
+	// search history
+	const search_history = file.search_history.latest
+
+	if (search_history !== null && search_history !== "" && search_state === true) {
+		document.querySelector("#search").value = file.search_history.latest
+
+		setTimeout(() => {
+			search()
+		}, 100)
+	}
 
 	// set block count
 	for (let i = 0; i < names.length; i++) {
@@ -499,25 +548,18 @@ const search = () => {
 	}
 }
 
-// ? seach history
-const search_history = file.search_history.latest
-
-if (search_history !== null && search_history !== "" && search_state === true) {
-	document.querySelector("#search").value = file.search_history.latest
-
-	setTimeout(() => {
-		search()
-	}, 300)
-}
-
 // ? block animations
-setTimeout(() => {
-	ScrollOut({
-		onShown(el) {
-			el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
-		},
-	})
-}, 500)
+try {
+	setTimeout(() => {
+		ScrollOut({
+			onShown(el) {
+				el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
+			},
+		})
+	}, 500)
+} catch (error) {
+	console.error("Authme - Block animations failed")
+}
 
 let focus = true
 
@@ -554,7 +596,7 @@ app.on("browser-window-focus", () => {
 				diva1.classList.add("animate__animated", "animate__zoomIn")
 			}
 		} catch (error) {
-			return
+			console.error("Authme - Animations failed")
 		}
 
 		setTimeout(() => {
@@ -563,7 +605,9 @@ app.on("browser-window-focus", () => {
 					diva0.classList.remove("animate__animated", "animate__zoomIn")
 					diva1.classList.remove("animate__animated", "animate__zoomIn")
 				}
-			} catch (error) {}
+			} catch (error) {
+				console.error("Authme - Code animations failed")
+			}
 		}, 1500)
 
 		focus = false
@@ -637,9 +681,7 @@ const downloadUpdate = () => {
 const res = ipc.sendSync("info")
 
 if (res.build_number.startsWith("alpha")) {
-	document.querySelector(
-		".build-content"
-	).textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 
