@@ -139,8 +139,8 @@ hr {
 }
 
 .buttonmselected {
-	border: 1px solid rgb(20, 20, 20);
-	background: rgb(20, 20, 20);
+	border: 1px solid rgb(30, 30, 30);
+	background: rgb(30, 30, 30);
 	color: white;
 }
 
@@ -265,7 +265,7 @@ input::-webkit-inner-spin-button {
 }
 
 .dropdown-content a:hover {
-	background-color: rgb(20,20,20);
+	background-color: rgb(20, 20, 20);
 	color: white;
 }
 
@@ -297,15 +297,15 @@ input::-webkit-inner-spin-button {
 	top: 4px;
 }
 
-.toggle:checked ~ .toggle-bg{
+.toggle:checked ~ .toggle-bg {
 	background-color: black !important;
 	transition: 0.2s ease-in;
-  }
-  
-  .toggle:checked{
-	right: 4px !important;
-  }
+}
 
-  .noclick {
-    pointer-events: none;
+.toggle:checked {
+	right: 4px !important;
+}
+
+.noclick {
+	pointer-events: none;
 }

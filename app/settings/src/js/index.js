@@ -657,7 +657,7 @@ const rateAuthme = () => {
 
 // ? feedback
 const provideFeedback = () => {
-	ipc.send("provide_feedback")
+	shell.openExternal("https://github.com/levminer/authme/issues")
 }
 
 // ? show ifno
@@ -678,6 +678,11 @@ const folder0 = () => {
 // ? settings folder
 const folder1 = () => {
 	shell.openPath(file_path)
+}
+
+// ? support
+const support = () => {
+	ipc.send("support")
 }
 
 // ? cache folder
