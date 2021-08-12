@@ -28,5 +28,6 @@ module.exports = {
 		"no-undef": ["off"],
 		"no-case-declarations": ["off"],
 		"node/no-missing-require": ["warn"],
+		"node/no-extraneous-require": ["off"],
 	},
 }

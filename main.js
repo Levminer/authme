@@ -1,12 +1,11 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
+const { typedef, logger, markdown } = require("@levminer/lib")
 const contextmenu = require("electron-context-menu")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
-const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
-const logger = require("./lib/logger")
 const electron = require("electron")
 const fetch = require("node-fetch")
 const path = require("path")
@@ -199,7 +198,10 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 	fs.writeFileSync(path.join(file_path, "settings.json"), settings)
 }
 
-// read settings
+/**
+ * Read settings
+ * @type {Settings}
+ */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // settings compatibility
