@@ -1,7 +1,7 @@
 .center {
 	top: 50px;
 	width: 1000px;
-	height: 600px;
+	height: auto;
 }
 
 #password_input1:hover ~ #show_pass_0 {
@@ -22,4 +22,17 @@
 #password_input2:hover ~ #show_pass_11 {
 	transition: 0.2s ease-in;
 	stroke: white;
+}
+
+details {
+	font-size: 24px;
+}
+
+.toggle:checked ~ .toggle-bg {
+	background-color: black !important;
+	transition: 0.2s ease-in;
+}
+
+.toggle:checked {
+	right: 4px !important;
 }

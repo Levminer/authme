@@ -3,7 +3,7 @@ const qrcodedecoder = require("qrcode-decoder")
 const electron = require("electron")
 const path = require("path")
 const fs = require("fs")
-const qr = require(path.join(__dirname, "../../lib/qrcode-converter.js"))
+const qr = require(path.join(__dirname, "../../lib/qrcodeConverter.js"))
 const ipc = electron.ipcRenderer
 
 // ? error in window

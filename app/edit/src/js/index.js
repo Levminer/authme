@@ -1,4 +1,5 @@
 const { shell, app, dialog } = require("@electron/remote")
+const { aes } = require("@levminer/lib")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -33,8 +34,27 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? settings folder
+/**
+ * Read settings
+ * @type{Settings}
+ */
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+
+// ? read settings
+let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+// ? refresh settings
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		console.warn("Authme - Settings refresh completed")
+	}
+
+	console.warn("Authme - Settings refreshed")
+}, 100)
 
 // ? rollback
 const cache_path = path.join(file_path, "cache")
@@ -352,6 +372,59 @@ const loadError = () => {
 				
 				Go back to the main page and save your codes!`,
 			})
+		}
+	})
+}
+
+// ? new encryption method
+const loadChooser = () => {
+	if (file.security.new_encryption === true) {
+		newLoad()
+	} else {
+		loadCodes()
+	}
+}
+
+const newLoad = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {Storage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+		if (err) {
+			console.warn("Authme - The file codes.authme don't exists")
+
+			password.fill(0)
+			key.fill(0)
+		} else {
+			const codes_file = JSON.parse(content)
+
+			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+			processdata(decrypted.toString())
+
+			decrypted.fill(0)
+			password.fill(0)
+			key.fill(0)
 		}
 	})
 }

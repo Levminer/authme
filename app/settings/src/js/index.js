@@ -5,6 +5,7 @@ const ipc = electron.ipcRenderer
 const path = require("path")
 const fetch = require("node-fetch")
 const dns = require("dns")
+const { typedef } = require("@levminer/lib")
 
 // ? error in window
 window.onerror = (error) => {
@@ -44,7 +45,10 @@ if (process.platform === "win32") {
 // ? settings
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
-// ? read settings
+/**
+ * Read settings
+ * @type{Settings}
+ */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // ? refresh settings
@@ -303,6 +307,15 @@ const reset = () => {
 									return console.warn(`Authme - Error deleting hash.authme - ${err}`)
 								} else {
 									console.warn("Authme - File hash.authme deleted")
+								}
+							})
+
+							// clear logs
+							fs.rmdir(path.join(file_path, "codes"), { recursive: true }, (err) => {
+								if (err) {
+									return console.warn(`Authme - Error deleting logs - ${err}`)
+								} else {
+									console.warn("Authme - Logs deleted")
 								}
 							})
 

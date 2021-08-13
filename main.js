@@ -162,7 +162,9 @@ const settings = `{
 		},
 		"security": {
 			"require_password": null,
-			"password": null
+			"password": null,
+			"new_encryption": null,
+			"key": null
 		},
 		"shortcuts": {
 			"show": "CommandOrControl+q",
@@ -458,11 +460,21 @@ const createWindow = () => {
 	// window closings
 	window_application.on("close", async (event) => {
 		if (dev === true) {
+			try {
+				password_buffer.fill(0)
+			} catch (error) {}
+
 			app.exit()
 		}
 
 		if (tray_minimized === false) {
+			try {
+				password_buffer.fill(0)
+			} catch (error) {}
+
 			app.exit()
+
+			logger.log("Application exited")
 		} else {
 			event.preventDefault()
 			setTimeout(() => {
@@ -719,8 +731,6 @@ ipc.on("to_application0", () => {
 
 		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
-
-	console.log(authenticated)
 })
 
 ipc.on("to_application1", () => {
@@ -942,6 +952,24 @@ ipc.on("provide_feedback", () => {
 	saveSettings()
 })
 
+// ? new encrypton method
+let password_buffer
+ipc.on("send_password", (event, data) => {
+	password_buffer = Buffer.from(data)
+
+	window_application.webContents.executeJavaScript("loadSave()")
+})
+
+ipc.on("request_password", (event) => {
+	event.returnValue = password_buffer
+})
+
+ipc.on("window_reload", () => {
+	if (file.security.new_encryption === true) {
+		window_application.webContents.executeJavaScript("loadSave()")
+	}
+})
+
 // ? error in window
 ipc.on("rendererError", (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
@@ -1107,7 +1135,7 @@ app.whenReady().then(() => {
 
 	// ? create tray
 	const iconpath = path.join(__dirname, "img/tray.png")
-	tray = new Tray(iconpath)
+	const tray = new Tray(iconpath)
 
 	tray.on("click", () => {
 		showAppFromTray()

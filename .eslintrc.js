@@ -29,5 +29,6 @@ module.exports = {
 		"no-case-declarations": ["off"],
 		"node/no-missing-require": ["warn"],
 		"node/no-extraneous-require": ["off"],
+		"node/no-unsupported-features/node-builtins": ["off"],
 	},
 }

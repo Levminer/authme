@@ -1,5 +1,6 @@
 const speakeasy = require("@levminer/speakeasy")
 const { app, shell, dialog } = require("@electron/remote")
+const { typedef, aes } = require("@levminer/lib")
 const fs = require("fs")
 const path = require("path")
 const electron = require("electron")
@@ -49,8 +50,24 @@ const querry = []
 
 let clear
 
-// ? read settings
-file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+/**
+ * Read settings
+ * @type{Settings}
+ */
+let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+// ? refresh settings
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		console.warn("Authme - Settings refresh completed")
+	}
+
+	console.warn("Authme - Settings refreshed")
+}, 100)
 
 const name_state = file.settings.show_2fa_names
 const copy_state = file.settings.reset_after_copy
@@ -372,6 +389,7 @@ const go = () => {
 			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
+
 			const item = issuer[i].toLowerCase().trim()
 
 			querry.push(item)
@@ -500,7 +518,7 @@ const go = () => {
 	}
 
 	// prev
-	if (prev == false) {
+	if (prev === false) {
 		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "block"
 	} else {
@@ -670,6 +688,127 @@ check_for_internet()
 setInterval(() => {
 	check_for_internet()
 }, 5000)
+
+// ? save chooser
+const saveChooser = () => {
+	if (file.security.new_encryption === true) {
+		newSave()
+	} else {
+		save()
+	}
+}
+
+// new save method
+const newSave = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {Storage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	const encrypted = aes.encrypt(save_text, key)
+
+	if (!fs.existsSync(path.join(file_path, "codes"))) {
+		fs.mkdirSync(path.join(file_path, "codes"))
+	}
+
+	const codes = {
+		codes: encrypted.toString("base64"),
+		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		version: "2",
+	}
+
+	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+
+	document.querySelector("#save").style.display = "none"
+
+	dialog.showMessageBox({
+		title: "Authme",
+		buttons: ["Close"],
+		defaultId: 0,
+		cancelId: 1,
+		type: "info",
+		message: "Code(s) saved! \n\nIf you want to add more code(s) or delete code(s) go to Edit codes!",
+	})
+
+	password.fill(0)
+	key.fill(0)
+}
+
+// load save
+const loadSave = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {Storage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+		if (err) {
+			console.warn("Authme - The file codes.authme don't exists")
+
+			password.fill(0)
+			key.fill(0)
+		} else {
+			const codes_file = JSON.parse(content)
+
+			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+			prev = true
+
+			processdata(decrypted.toString())
+
+			decrypted.fill(0)
+			password.fill(0)
+			key.fill(0)
+		}
+	})
+}
+
+if (file.security.require_password === false && file.security.new_encryption === true) {
+	console.log("FASZ")
+	loadSave()
+}
+
+document.addEventListener("keydown", (event) => {
+	if (event.ctrlKey && event.code === "KeyR" && file.security.require_password === true) {
+		ipc.send("window_reload")
+	}
+})
 
 // ? release notes
 const releaseNotes = () => {

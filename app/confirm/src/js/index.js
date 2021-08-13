@@ -135,16 +135,24 @@ const unhashPassword = async () => {
 	)
 
 	// compare
-	const password_input = document.querySelector("#password_input").value
+	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input, file.security.password).then(console.warn("Authme - Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), file.security.password).then(console.warn("Authme - Passwords compared!"))
 
 	if (compare == true) {
+		if (file.security.new_encryption === true) {
+			ipc.send("send_password", password_input)
+		}
+
 		text.style.color = "#28A443"
 		text.textContent = "Passwords match! Please wait!"
 
 		setInterval(() => {
+			password_input.fill(0)
+
 			ipc.send("to_application0")
+
+			location.reload()
 		}, 1000)
 	} else {
 		console.warn("Authme - Passwords dont match!")

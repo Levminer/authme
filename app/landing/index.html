@@ -25,7 +25,7 @@
 		<!-- content -->
 		<div class="center">
 			<h1>Authme</h1>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-16" id="choose">
 				<h3 class="pt-3">Welcome to Authme!</h3>
 				<h4 id="text">Please create a password to encryt your 2FA codes!</h4>
 				<div class="flex flex-row justify-center gap-3 pb-5 select-none">
@@ -58,8 +58,30 @@
 					</svg>
 					Confirm
 				</button>
-				<div class="pb-3">
-					<a onclick="noPassword()" href="#">Don't require password</a>
+
+				<div class="mx-auto pb-3">
+					<details class="mb-5 transform ease-in duration-200">
+						<summary class="font-bold mb-3 cursor-pointer">More options</summary>
+						<div>
+							<h3>Don't require password</h3>
+							<h4>If you don't want to type in your password every time you launch Authme.</h4>
+							<button onclick="noPassword()" class="buttonm">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+								</svg>
+								Confirm
+							</button>
+							<h3>Use new encrypton method</h3>
+							<h4>A new more secure encryption method for your codes (Default after 2.7.0).</h4>
+							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<input onclick="encryptionMethodToggle()" id="tgl0" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+									<label for="tgl0" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+								</div>
+								<span id="tgt0" class="text-black text-xl">Off</span>
+							</div>
+						</div>
+					</details>
 				</div>
 			</div>
 		</div>

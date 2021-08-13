@@ -1,8 +1,8 @@
 {
 	"name": "authme",
 	"productName": "Authme",
-	"version": "2.6.1",
-	"tag": "2.6.1",
+	"version": "2.6.2",
+	"tag": "2.6.2",
 	"description": "Simple cross platform two-factor authentication app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
