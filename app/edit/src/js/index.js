@@ -34,13 +34,13 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-/**
- * Read settings
- * @type{Settings}
- */
+// ? file path
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
 
-// ? read settings
+/**
+ * Read settings
+ * @type{libSettings}
+ */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // ? refresh settings
@@ -341,23 +341,43 @@ const addMore = () => {
 
 // ? create cache
 const createCache = () => {
-	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
-		if (err) {
-			console.error("Authme - Error reading hash file", err)
-		} else {
-			if (!fs.existsSync(cache_path)) {
-				fs.mkdirSync(cache_path)
-			}
-
-			fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
-				if (err) {
-					console.error("Authme - Failed to create cache folder", err)
-				} else {
-					console.log("Authme - Cache file created")
+	if (file.security.new_encryption === true) {
+		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+			if (err) {
+				console.error("Authme - Error reading hash file", err)
+			} else {
+				if (!fs.existsSync(cache_path)) {
+					fs.mkdirSync(cache_path)
 				}
-			})
-		}
-	})
+
+				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
+					if (err) {
+						console.error("Authme - Failed to create cache folder", err)
+					} else {
+						console.log("Authme - Cache file created")
+					}
+				})
+			}
+		})
+	} else {
+		fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
+			if (err) {
+				console.error("Authme - Error reading hash file", err)
+			} else {
+				if (!fs.existsSync(cache_path)) {
+					fs.mkdirSync(cache_path)
+				}
+
+				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
+					if (err) {
+						console.error("Authme - Failed to create cache folder", err)
+					} else {
+						console.log("Authme - Cache file created")
+					}
+				})
+			}
+		})
+	}
 }
 
 // ? error handeling
@@ -395,7 +415,7 @@ const newLoad = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {Storage}
+		 * @type {libStorage}
 		 */
 		let storage
 

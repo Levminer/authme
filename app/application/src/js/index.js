@@ -52,7 +52,7 @@ let clear
 
 /**
  * Read settings
- * @type{Settings}
+ * @type{libSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -709,7 +709,7 @@ const newSave = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {Storage}
+		 * @type {libStorage}
 		 */
 		let storage
 
@@ -763,7 +763,7 @@ const loadSave = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {Storage}
+		 * @type {libStorage}
 		 */
 		let storage
 
@@ -800,7 +800,6 @@ const loadSave = () => {
 }
 
 if (file.security.require_password === false && file.security.new_encryption === true) {
-	console.log("FASZ")
 	loadSave()
 }
 
