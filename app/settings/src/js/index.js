@@ -338,14 +338,15 @@ const reset = () => {
 							})
 
 							// remove start shortcut
-							if (dev !== true) {
+							if (dev === false) {
 								ipc.send("disable_startup")
 							}
 
 							// clear storage
-							if (dev !== true) {
-								localStorage.clear()
-								sessionStorage.clear()
+							if (dev === false) {
+								localStorage.removeItem("storage")
+							} else {
+								localStorage.removeItem("dev_storage")
 							}
 
 							// restart

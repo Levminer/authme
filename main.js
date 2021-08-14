@@ -89,6 +89,11 @@ if (!fs.existsSync(file_path)) {
 	fs.mkdirSync(file_path)
 }
 
+// codes folder
+if (!fs.existsSync(path.join(file_path, "codes"))) {
+	fs.mkdirSync(path.join(file_path, "codes"))
+}
+
 // ? version and logs
 const authme_version = version
 const tag_name = tag
