@@ -725,10 +725,6 @@ const newSave = () => {
 
 	const encrypted = aes.encrypt(save_text, key)
 
-	if (!fs.existsSync(path.join(file_path, "codes"))) {
-		fs.mkdirSync(path.join(file_path, "codes"))
-	}
-
 	const codes = {
 		codes: encrypted.toString("base64"),
 		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),

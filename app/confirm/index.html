@@ -25,9 +25,9 @@
 		<!-- content -->
 		<div class="center">
 			<h1>Authme</h1>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
+			<div class="mx-auto rounded-2xl mb-12 bg-gray-800 w-2/3" id="choose">
 				<h3 class="pt-3">Welcome back!</h3>
-				<h4 id="text">Please enter your password to countine!</h4>
+				<h4 id="text">Please enter your password to countinue!</h4>
 				<div class="flex flex-col justify-center items-center">
 					<label class="mb-1" id="password_label1">Password</label>
 					<input class="input1" type="password" id="password_input" spellcheck="false" />
@@ -45,6 +45,21 @@
 							</svg>
 							Confirm
 						</button>
+					</div>
+					<div class="mx-auto pb-3">
+						<details class="mb-5 transform ease-in duration-200">
+							<summary class="font-bold mb-3 cursor-pointer">More options</summary>
+							<div>
+								<h3>Forgot password?</h3>
+								<h4>If you have a backup code you can recover your password. If you don't have one then try to think harder.</h4>
+								<button onclick="forgotPassword()" class="buttonm">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+									</svg>
+									Confirm
+								</button>
+							</div>
+						</details>
 					</div>
 				</div>
 			</div>

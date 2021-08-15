@@ -1,7 +1,7 @@
 .center {
 	top: 50px;
 	width: 1000px;
-	height: 530px;
+	height: auto;
 }
 
 .input1 {
@@ -16,4 +16,8 @@
 #password_input:hover ~ #show_pass_01 {
 	transition: 0.2s ease-in;
 	stroke: white;
+}
+
+details {
+	font-size: 24px;
 }

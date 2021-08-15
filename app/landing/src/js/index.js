@@ -4,7 +4,7 @@ const { app, dialog } = require("@electron/remote")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const { typedef, aes } = require("@levminer/lib")
+const { aes, rsa, sha } = require("@levminer/lib")
 
 // ? error in window
 window.onerror = (error) => {
@@ -37,6 +37,23 @@ const res = ipc.sendSync("info")
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
+}
+
+// ? create storage
+const storage = {}
+
+if (dev === false) {
+	temp_storage = localStorage.getItem("storage")
+
+	if (temp_storage === null) {
+		localStorage.setItem("storage", JSON.stringify(storage))
+	}
+} else {
+	temp_storage = localStorage.getItem("dev_storage")
+
+	if (temp_storage === null) {
+		localStorage.setItem("dev_storage", JSON.stringify(storage))
+	}
 }
 
 // ? match passwords
@@ -81,7 +98,7 @@ const hashPasswords = async () => {
 
 	/**
 	 * Read settings
-	 * @type{Settings}
+	 * @type{libSettings}
 	 */
 	const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -93,11 +110,27 @@ const hashPasswords = async () => {
 		file.security.key = aes.generateSalt().toString("base64")
 	}
 
-	const storage = {
-		require_password: file.security.require_password,
-		password: hashed,
-		new_encryption: file.security.new_encryption,
-		key: file.security.key,
+	/**
+	 * Load storage
+	 * @type {libStorage}
+	 */
+	let storage
+
+	if (dev === true) {
+		storage = JSON.parse(localStorage.getItem("dev_storage"))
+	} else {
+		stroage = JSON.parse(localStorage.getItem("storage"))
+	}
+
+	storage.require_password = file.security.require_password
+	storage.password = hashed
+	storage.new_encryption = file.security.new_encryption
+	storage.key = file.security.key
+
+	if (storage.backup_key !== undefined) {
+		const encrypted = rsa.encrypt(Buffer.from(storage.backup_key, "base64").toString(), password_input.toString("base64"))
+
+		storage.backup_string = encrypted
 	}
 
 	if (dev === true) {
@@ -138,7 +171,7 @@ const noPassword = () => {
 
 				/**
 				 * Read settings
-				 * @type{Settings}
+				 * @type{libSettings}
 				 */
 				const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -153,11 +186,27 @@ const noPassword = () => {
 					file.security.new_encryption = false
 				}
 
-				const storage = {
-					require_password: file.security.require_password,
-					password: password.toString("base64"),
-					new_encryption: file.security.new_encryption,
-					key: salt.toString("base64"),
+				/**
+				 * Load storage
+				 * @type {libStorage}
+				 */
+				let storage
+
+				if (dev === true) {
+					storage = JSON.parse(localStorage.getItem("dev_storage"))
+				} else {
+					stroage = JSON.parse(localStorage.getItem("storage"))
+				}
+
+				storage.require_password = file.security.require_password
+				storage.password = password.toString("base64")
+				storage.new_encryption = file.security.new_encryption
+				storage.key = salt.toString("base64")
+
+				if (storage.backup_key !== undefined) {
+					const encrypted = rsa.encrypt(Buffer.from(storage.backup_key, "base64").toString(), password.toString("base64"))
+
+					storage.backup_string = encrypted
 				}
 
 				if (dev === true) {
@@ -172,6 +221,8 @@ const noPassword = () => {
 					password.fill(0)
 
 					ipc.send("to_application1")
+
+					location.reload()
 				}, 1000)
 			}
 		})
@@ -187,6 +238,60 @@ const encryptionMethodToggle = () => {
 	} else {
 		tgt0.textContent = "On"
 	}
+}
+
+// ?  generate backup key
+
+const generateKey = () => {
+	const keys = Buffer.from(rsa.generateKeys())
+	const public_key = Buffer.from(keys.toString().split("@")[0])
+	let private_key = Buffer.from(keys.toString().split("@")[1])
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Copy"],
+			defaultId: 0,
+			noLink: true,
+			type: "info",
+			message: "Please save this key to a secure location, anyone with this key can decrypt your codes!\n\n You can only copy this key now, after closing this dialog you can't copy it again!",
+		})
+		.then((result) => {
+			navigator.clipboard.writeText(private_key.toString())
+
+			if (result.response === 0) {
+				navigator.clipboard.writeText(private_key.toString())
+			}
+
+			navigator.clipboard.readText().then((text) => {
+				private_key = Buffer.from(text)
+
+				/**
+				 * Load storage
+				 * @type {libStorage}
+				 */
+				let storage
+
+				if (dev === true) {
+					storage = JSON.parse(localStorage.getItem("dev_storage"))
+				} else {
+					stroage = JSON.parse(localStorage.getItem("storage"))
+				}
+
+				storage.backup_key = public_key.toString("base64")
+				storage.hash = sha.generateHash(private_key.toString("base64"))
+
+				if (dev === true) {
+					localStorage.setItem("dev_storage", JSON.stringify(storage))
+				} else {
+					localStorage.setItem("storage", JSON.stringify(storage))
+				}
+
+				keys.fill(0)
+				public_key.fill(0)
+				private_key.fill(0)
+			})
+		})
 }
 
 // ? show password
