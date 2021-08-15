@@ -287,11 +287,53 @@ const createSave = () => {
 					save_text += substr
 				}
 
-				saveCodes()
+				if (file.security.new_encryption === true) {
+					newSaveCodes()
+				} else {
+					saveCodes()
+				}
 
 				restart()
 			}
 		})
+}
+
+const newSaveCodes = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {libStorage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	const encrypted = aes.encrypt(save_text, key)
+
+	const codes = {
+		codes: encrypted.toString("base64"),
+		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		version: "2",
+	}
+
+	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+
+	password.fill(0)
+	key.fill(0)
 }
 
 // ? load more
@@ -326,14 +368,12 @@ const addMore = () => {
 						} else {
 							data = []
 
-							const container = document.querySelector(".container")
+							const container = document.querySelector(".codes_container")
 							container.innerHTML = ""
 
 							processdata(input.toString())
 						}
 					})
-
-					console.log(files[i])
 				}
 			}
 		})

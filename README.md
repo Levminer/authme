@@ -17,13 +17,14 @@
 
 ## Contributing and development
 
--   Read: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
--   Read: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
+-   Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
+-   Read before contributing: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
 
 ## Release cycle
 
 -   Standard updates coming on Tuesdays if there is something to update and hotfix updates can come on Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
 -   More information at: [Security](https://github.com/Levminer/authme/security/policy)
+
 ## Project board
 
 -   You can check out all the issues in progress at the project board!
