@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
-const { typedef, logger, markdown } = require("@levminer/lib")
+const { logger, markdown } = require("@levminer/lib")
 const contextmenu = require("electron-context-menu")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
@@ -47,14 +47,13 @@ if (app.isPackaged === false) {
 	debug({
 		showDevTools: false,
 	})
-
+	dev = true
+} else {
 	if (process.platform === "darwin") {
 		debug({
-			showDevTools: true,
+			showDevTools: false,
 		})
 	}
-
-	dev = true
 }
 
 // pre prelease
@@ -644,7 +643,7 @@ const createWindow = () => {
 	}
 
 	if (file.statistics.rate === true || file.statistics.feedback === true) {
-		if (opens % 100 === 0) {
+		if (opens % 150 === 0) {
 			openInfo()
 		}
 	} else if (file.statistics.rate === true && file.statistics.feedback === true) {
@@ -969,10 +968,22 @@ ipc.on("request_password", (event) => {
 	event.returnValue = password_buffer
 })
 
+// ? reload codes in dev
 ipc.on("window_reload", () => {
 	if (file.security.new_encryption === true) {
 		window_application.webContents.executeJavaScript("loadSave()")
 	}
+})
+
+// ? reload application window
+ipc.on("reload_application", () => {
+	window_application.webContents.executeJavaScript("reload()")
+
+	setTimeout(() => {
+		if (file.security.new_encryption === true) {
+			window_application.webContents.executeJavaScript("loadSave()")
+		}
+	}, 100)
 })
 
 // ? error in window

@@ -384,3 +384,17 @@ details[open] summary ~ * {
 .info {
 	display: none;
 }
+
+.warning {
+	color: #a30015;
+	font-weight: bold;
+	margin-top: 30px;
+	font-size: 24px;
+}
+
+.unstable {
+	color: #f5ab00;
+	font-weight: bold;
+	margin-top: 30px;
+	font-size: 24px;
+}

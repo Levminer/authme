@@ -357,188 +357,116 @@ const reset = () => {
 		})
 }
 
-// ? names
+// ? show 2fa names
 const names = () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			const toggle = () => {
-				if (names_state === true) {
-					file.settings.show_2fa_names = false
+	const toggle = () => {
+		if (names_state === true) {
+			file.settings.show_2fa_names = false
 
-					save()
+			save()
 
-					tgt3.textContent = "Off"
-					tgl3.checked = false
+			tgt3.textContent = "Off"
+			tgl3.checked = false
 
-					names_state = false
-				} else {
-					file.settings.show_2fa_names = true
+			names_state = false
+		} else {
+			file.settings.show_2fa_names = true
 
-					save()
+			save()
 
-					tgt3.textContent = "On"
-					tgl3.checked = true
+			tgt3.textContent = "On"
+			tgl3.checked = true
 
-					names_state = true
-				}
-			}
+			names_state = true
+		}
+	}
 
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
+	toggle()
+	reload()
 }
 
-// ? reveal
+// ? blur codes
 const reveal = () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			const toggle = () => {
-				if (reveal_state === true) {
-					file.settings.click_to_reveal = false
+	const toggle = () => {
+		if (reveal_state === true) {
+			file.settings.click_to_reveal = false
 
-					save()
+			save()
 
-					tgt4.textContent = "Off"
-					tgl4.checked = false
+			tgt4.textContent = "Off"
+			tgl4.checked = false
 
-					reveal_state = false
-				} else {
-					file.settings.click_to_reveal = true
+			reveal_state = false
+		} else {
+			file.settings.click_to_reveal = true
 
-					save()
+			save()
 
-					tgt4.textContent = "On"
-					tgl4.checked = true
+			tgt4.textContent = "On"
+			tgl4.checked = true
 
-					reveal_state = true
-				}
-			}
+			reveal_state = true
+		}
+	}
 
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
+	toggle()
+	reload()
 }
 
-// ? search
+// ? save search results
 const results = () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			const toggle = () => {
-				if (search_state === true) {
-					file.settings.save_search_results = false
+	const toggle = () => {
+		if (search_state === true) {
+			file.settings.save_search_results = false
 
-					save()
+			save()
 
-					tgt5.textContent = "Off"
-					tgl5.checked = false
+			tgt5.textContent = "Off"
+			tgl5.checked = false
 
-					search_state = false
-				} else {
-					file.settings.save_search_results = true
+			search_state = false
+		} else {
+			file.settings.save_search_results = true
 
-					save()
+			save()
 
-					tgt5.textContent = "On"
-					tgl5.checked = true
+			tgt5.textContent = "On"
+			tgl5.checked = true
 
-					search_state = true
-				}
-			}
+			search_state = true
+		}
+	}
 
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
+	toggle()
+	reload()
 }
 
-// ? copy
+// ? reset search after copy
 const copy = () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			const toggle = () => {
-				if (copy_state === true) {
-					file.settings.reset_after_copy = false
+	const toggle = () => {
+		if (copy_state === true) {
+			file.settings.reset_after_copy = false
 
-					save()
+			save()
 
-					tgt6.textContent = "Off"
-					tgl6.checked = false
+			tgt6.textContent = "Off"
+			tgl6.checked = false
 
-					copy_state = false
-				} else {
-					file.settings.reset_after_copy = true
+			copy_state = false
+		} else {
+			file.settings.reset_after_copy = true
 
-					save()
+			save()
 
-					tgt6.textContent = "On"
-					tgl6.checked = true
+			tgt6.textContent = "On"
+			tgl6.checked = true
 
-					copy_state = true
-				}
-			}
+			copy_state = true
+		}
+	}
 
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
+	toggle()
+	reload()
 }
 
 // ? offset
@@ -886,6 +814,11 @@ if (res.build_number.startsWith("alpha")) {
 let offline_mode = false
 let offline_closed = false
 let online_closed = false
+
+// ? send reload
+const reload = () => {
+	ipc.send("reload_application")
+}
 
 const check_for_internet = () => {
 	dns.lookup("google.com", (err) => {

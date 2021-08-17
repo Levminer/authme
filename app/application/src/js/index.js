@@ -805,6 +805,11 @@ document.addEventListener("keydown", (event) => {
 	}
 })
 
+// ? reload
+const reload = () => {
+	location.reload()
+}
+
 // ? release notes
 const releaseNotes = () => {
 	ipc.send("release_notes")
