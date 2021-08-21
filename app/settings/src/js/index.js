@@ -624,7 +624,7 @@ const folder1 = () => {
 
 // ? support
 const support = () => {
-	ipc.send("support")
+	shell.openExternal("https://paypal.me/levminer")
 }
 
 // ? cache folder
