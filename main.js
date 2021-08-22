@@ -141,6 +141,9 @@ if (dev === false) {
 // ? force dark mode
 nativeTheme.themeSource = "dark"
 
+// ? disable hardware accekeration
+app.disableHardwareAcceleration()
+
 // ? settings
 const saveSettings = () => {
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
