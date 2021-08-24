@@ -90,6 +90,8 @@ const tgl5 = document.querySelector("#tgl5")
 const tgt5 = document.querySelector("#tgt5")
 const tgl6 = document.querySelector("#tgl6")
 const tgt6 = document.querySelector("#tgt6")
+const tgl7 = document.querySelector("#tgl7")
+const tgt7 = document.querySelector("#tgt7")
 
 // launch on startup
 let startup_state = file.settings.launch_on_startup
@@ -187,6 +189,16 @@ if (sort_number === 1) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 	</svg> Z-A`
+}
+
+// hardware
+let hardware_state = file.settings.disable_hardware_acceleration
+if (hardware_state === true) {
+	tgt7.textContent = "On"
+	tgl7.checked = true
+} else {
+	tgt7.textContent = "Off"
+	tgl7.checked = false
 }
 
 // ? startup
@@ -503,6 +515,34 @@ inp0.addEventListener("keyup", (event) => {
 			})
 	}
 })
+
+// ? save search results
+const hardware = () => {
+	const toggle = () => {
+		if (hardware_state === true) {
+			file.settings.disable_hardware_acceleration = false
+
+			save()
+
+			tgt7.textContent = "Off"
+			tgl7.checked = false
+
+			hardware_state = false
+		} else {
+			file.settings.disable_hardware_acceleration = true
+
+			save()
+
+			tgt7.textContent = "On"
+			tgl7.checked = true
+
+			hardware_state = true
+		}
+	}
+
+	toggle()
+	reload()
+}
 
 let dropdown_state = false
 // ? dropdown

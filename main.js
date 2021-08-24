@@ -138,12 +138,6 @@ if (dev === false) {
 	}
 }
 
-// ? force dark mode
-nativeTheme.themeSource = "dark"
-
-// ? disable hardware accekeration
-app.disableHardwareAcceleration()
-
 // ? settings
 const saveSettings = () => {
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
@@ -161,7 +155,8 @@ const settings = `{
 			"click_to_reveal": false,
 			"reset_after_copy": false,
 			"save_search_results": true,
-			"disable_window_capture": true
+			"disable_window_capture": true,
+			"disable_hardware_acceleration": false
 		},
 		"experimental":{
 			"offset": null,
@@ -209,7 +204,7 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 
 /**
  * Read settings
- * @type {Settings}
+ * @type {libSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -249,6 +244,20 @@ if (file.statistics === undefined) {
 	}
 
 	saveSettings()
+}
+
+if (file.settings.disable_hardware_acceleration === undefined) {
+	file.settings.disable_hardware_acceleration = false
+
+	saveSettings()
+}
+
+// ? force dark mode
+nativeTheme.themeSource = "dark"
+
+// ? disable hardware accekeration
+if (file.settings.disable_hardware_acceleration === true) {
+	app.disableHardwareAcceleration()
 }
 
 // ? open app from tray
@@ -560,7 +569,7 @@ const createWindow = () => {
 		logger.log("Edit closed")
 	})
 
-	// ? - TEMPORARY - disable scren capture
+	// ? disable scren capture by default
 	if (file.settings.disable_window_capture === true) {
 		window_settings.setContentProtection(true)
 		window_edit.setContentProtection(true)

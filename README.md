@@ -1,25 +1,29 @@
 # Authme
 
-![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?style=for-the-badge)
+-   Simple cross platform two-factor authentication app for desktop.
+
+[![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?style=for-the-badge)](https://github.com/Levminer/authme/releases)
 [![Support](https://img.shields.io/badge/Support-PayPal-blue?style=for-the-badge)](https://paypal.me/levminer)
-![License](https://img.shields.io/github/license/levminer/authme?style=for-the-badge)
+[![License](https://img.shields.io/github/license/levminer/authme?style=for-the-badge)](https://github.com/Levminer/authme/blob/main/LICENSE.md)
 
 ## Latest Release
 
-![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release&style=for-the-badge)
+-   Latest release version for standard users.
+
+[![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release&style=for-the-badge)](https://github.com/Levminer/authme/releases)
 [![Windows Download](https://img.shields.io/badge/Windows-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/release/windows)
 [![Linux Download](https://img.shields.io/badge/Linux-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/release/linux)
-![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated&style=for-the-badge)
+[![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/releases)
 
 ## Latest Alpha
 
-![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&style=for-the-badge)
+-   Latest alpha version for advanced users.
+
+[![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 [![Windows Download](https://img.shields.io/badge/Windows-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/windows)
 [![Linux Download](https://img.shields.io/badge/Linux-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/linux)
 [![Mac Download](https://img.shields.io/badge/Mac-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/mac)
-![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated&style=for-the-badge)
-
--   Simple cross platform two-factor authentication app for desktop.
+[![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 
 <img src="https://raw.githubusercontent.com/Levminer/authme/main/screenshots/screenshot.png?raw=true">
 

@@ -239,6 +239,19 @@
 							<br />
 							<hr />
 						</div>
+						<div>
+							<h3>Disable hardware acceleration</h3>
+							<p class="text3">Disables hardware acceleration. Disable this if you expereince frame drops or lags.</p>
+							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<input id="tgl7" onclick="hardware()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+									<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+								</div>
+								<span id="tgt7" class="text-black text-xl">-</span>
+							</div>
+							<br />
+							<hr />
+						</div>
 						<h3>Clear data</h3>
 						<p class="text3">Clear password, 2FA codes and all other settings. Be careful.</p>
 						<button class="buttonm2" id="but1" onclick="reset()">
