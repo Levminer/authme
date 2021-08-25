@@ -4,6 +4,9 @@ const default_shortcuts = {
 		show: "CommandOrControl+q",
 		settings: "CommandOrControl+s",
 		exit: "CommandOrControl+w",
+		zoom_reset: "CommandOrControl+0",
+		zoom_in: "CommandOrControl+1",
+		zoom_out: "CommandOrControl+2",
 		edit: "CommandOrControl+t",
 		import: "CommandOrControl+i",
 		export: "CommandOrControl+e",
@@ -40,6 +43,9 @@ const hk8 = document.querySelector("#hk8_input")
 const hk9 = document.querySelector("#hk9_input")
 const hk10 = document.querySelector("#hk10_input")
 const hk11 = document.querySelector("#hk11_input")
+const hk12 = document.querySelector("#hk12_input")
+const hk13 = document.querySelector("#hk13_input")
+const hk14 = document.querySelector("#hk14_input")
 const hk100 = document.querySelector("#hk100_input")
 const hk101 = document.querySelector("#hk101_input")
 const hk102 = document.querySelector("#hk102_input")
@@ -56,6 +62,9 @@ hk8.value = file.shortcuts.docs
 hk9.value = file.shortcuts.licenses
 hk10.value = file.shortcuts.update
 hk11.value = file.shortcuts.info
+hk12.value = file.shortcuts.zoom_reset
+hk13.value = file.shortcuts.zoom_in
+hk14.value = file.shortcuts.zoom_out
 hk100.value = file.global_shortcuts.show
 hk101.value = file.global_shortcuts.settings
 hk102.value = file.global_shortcuts.exit
@@ -167,6 +176,21 @@ const hk_edit = (value) => {
 				const hk11 = document.querySelector("#hk11_input").value
 
 				file.shortcuts.info = hk11
+				break
+			case 12:
+				const hk12 = document.querySelector("#hk12_input").value
+
+				file.shortcuts.zoom_reset = hk12
+				break
+			case 13:
+				const hk13 = document.querySelector("#hk13_input").value
+
+				file.shortcuts.zoom_in = hk13
+				break
+			case 14:
+				const hk14 = document.querySelector("#hk14_input").value
+
+				file.shortcuts.zoom_out = hk14
 				break
 
 			// global shortcuts
@@ -284,6 +308,21 @@ const hk_delete = (value) => {
 
 			file.shortcuts.info = hk11
 			break
+		case 12:
+			const hk12 = document.querySelector("#hk12_input").value
+
+			file.shortcuts.zoom_reset = hk12
+			break
+		case 13:
+			const hk13 = document.querySelector("#hk13_input").value
+
+			file.shortcuts.zoom_in = hk13
+			break
+		case 14:
+			const hk14 = document.querySelector("#hk14_input").value
+
+			file.shortcuts.zoom_out = hk14
+			break
 
 		// global shortcuts
 		case 100:
@@ -386,6 +425,21 @@ const hk_reset = (value) => {
 			document.querySelector("#hk11_input").value = default_shortcuts.shortcuts.info
 
 			file.shortcuts.info = default_shortcuts.shortcuts.info
+			break
+		case 12:
+			document.querySelector("#hk12_input").value = default_shortcuts.shortcuts.zoom_reset
+
+			file.shortcuts.zoom_reset = default_shortcuts.shortcuts.zoom_reset
+			break
+		case 13:
+			document.querySelector("#hk13_input").value = default_shortcuts.shortcuts.zoom_in
+
+			file.shortcuts.zoom_in = default_shortcuts.shortcuts.zoom_in
+			break
+		case 14:
+			document.querySelector("#hk14_input").value = default_shortcuts.shortcuts.zoom_out
+
+			file.shortcuts.zoom_out = default_shortcuts.shortcuts.zoom_out
 			break
 
 		// global shortcuts

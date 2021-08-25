@@ -1,6 +1,6 @@
 const fs = require("fs")
 const electron = require("electron")
-const { app, BrowserWindow } = require("@electron/remote")
+const { app } = require("@electron/remote")
 const path = require("path")
 const ipc = electron.ipcRenderer
 
@@ -92,13 +92,4 @@ document.addEventListener("keydown", (event) => {
 	if (event.altKey && event.code === "F4") {
 		event.preventDefault()
 	}
-})
-
-// ? window zoom
-let windows = BrowserWindow.getAllWindows()
-
-windows = windows.slice(0, 7)
-windows.forEach((window) => {
-	window.webContents.setZoomFactor(1.0)
-	/* window.webContents.setZoomFactor(1.25) */
 })

@@ -172,6 +172,9 @@ const settings = `{
 			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
 			"exit": "CommandOrControl+w",
+			"zoom_reset": "CommandOrControl+0",
+			"zoom_in": "CommandOrControl+1",
+			"zoom_out": "CommandOrControl+2",
 			"edit": "CommandOrControl+t",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
@@ -250,6 +253,12 @@ if (file.settings.disable_hardware_acceleration === undefined) {
 	file.settings.disable_hardware_acceleration = false
 
 	saveSettings()
+}
+
+if (file.shortcuts.zoom_reset === undefined) {
+	file.shortcuts.zoom_reset = "CommandOrControl+0"
+	file.shortcuts.zoom_in = "CommandOrControl+1"
+	file.shortcuts.zoom_out = "CommandOrControl+2"
 }
 
 // ? force dark mode
@@ -1268,6 +1277,32 @@ app.whenReady().then(() => {
 
 							logger.log("App exited from menu")
 						},
+					},
+				],
+			},
+			{
+				label: "View",
+				submenu: [
+					{
+						label: "Reset zoom",
+						role: "resetZoom",
+						accelerator: shortcuts ? "" : file.shortcuts.zoom_reset,
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Zoom in",
+						role: "zoomIn",
+						accelerator: shortcuts ? "" : file.shortcuts.zoom_in,
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Zoom out",
+						role: "zoomOut",
+						accelerator: shortcuts ? "" : file.shortcuts.zoom_out,
 					},
 				],
 			},
