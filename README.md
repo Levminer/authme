@@ -1,4 +1,6 @@
 # Authme
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLevminer%2Fauthme.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLevminer%2Fauthme?ref=badge_shield)
+
 
 -   Simple cross platform two-factor authentication app for desktop.
 -   Download for: [Windows](https://api.levminer.com/api/v1/authme/release/windows), [Linux](https://api.levminer.com/api/v1/authme/release/linux), [Mac (Alpha)](https://api.levminer.com/api/v1/authme/alpha/mac)
@@ -38,3 +40,6 @@
 
 -   This software is licensed under: [GPL-3.0](https://github.com/Levminer/authme/blob/main/LICENSE.md)
 -   If you are planning to use this software as a business please contact me at: <authme@levminer.com>
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLevminer%2Fauthme.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLevminer%2Fauthme?ref=badge_large)
