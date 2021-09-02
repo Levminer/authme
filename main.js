@@ -357,6 +357,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -372,6 +373,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -387,6 +389,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -402,6 +405,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -417,6 +421,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -432,6 +437,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -447,6 +453,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -1021,7 +1028,7 @@ const logs = () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version}\n\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
 
@@ -1141,6 +1148,7 @@ app.whenReady().then(() => {
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -1284,7 +1292,7 @@ app.whenReady().then(() => {
 				label: "View",
 				submenu: [
 					{
-						label: "Reset zoom",
+						label: "Reset",
 						role: "resetZoom",
 						accelerator: shortcuts ? "" : file.shortcuts.zoom_reset,
 					},
