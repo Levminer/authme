@@ -1413,26 +1413,6 @@ app.whenReady().then(() => {
 				label: "Help",
 				submenu: [
 					{
-						label: "Release notes",
-						accelerator: shortcuts ? "" : file.shortcuts.release,
-						click: () => {
-							releaseNotes()
-						},
-					},
-					{
-						type: "separator",
-					},
-					{
-						label: "Support",
-						accelerator: shortcuts ? "" : file.shortcuts.support,
-						click: () => {
-							support()
-						},
-					},
-					{
-						type: "separator",
-					},
-					{
 						label: "Docs",
 						accelerator: shortcuts ? "" : file.shortcuts.docs,
 						click: () => {
@@ -1451,6 +1431,26 @@ app.whenReady().then(() => {
 										shell.openExternal("https://docs.authme.levminer.com")
 									}
 								})
+						},
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Release notes",
+						accelerator: shortcuts ? "" : file.shortcuts.release,
+						click: () => {
+							releaseNotes()
+						},
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Support development",
+						accelerator: shortcuts ? "" : file.shortcuts.support,
+						click: () => {
+							support()
 						},
 					},
 				],
