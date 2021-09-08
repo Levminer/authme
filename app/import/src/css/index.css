@@ -4,53 +4,6 @@
 	height: auto;
 }
 
-.button1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-	margin-bottom: 30px;
-}
-
-.button1:hover {
-	color: white;
-	border-color: white;
-}
-
-.input1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-	width: 250px;
-}
-
-#button1 {
-	position: relative;
-	top: 45px;
-}
-
-#version {
-	position: relative;
-	top: 30px;
-}
-
-a:link {
-	color: white;
-	font-size: 24px;
-	font-weight: bold;
-	transition: 0.2s ease-in;
-	text-decoration: underline !important;
-}
-
-a:hover {
-	color: gray;
-	text-decoration: underline !important;
-}
-
-a:visited {
-	color: white;
-	text-decoration: none !important;
-}
-
 .grid {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
@@ -96,29 +49,4 @@ input:hover::placeholder {
 
 #dt {
 	margin-bottom: 30px;
-}
-
-.buttonm {
-	color: black;
-	background: white;
-	border: 1px solid black;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-	text-align: center;
-	width: 18rem;
-}
-
-.buttonm:hover {
-	border-color: white;
-	background: transparent;
-	color: white;
-}
-
-.buttonm > svg {
-	position: relative;
-	top: 4px;
 }

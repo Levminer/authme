@@ -1413,7 +1413,7 @@ app.whenReady().then(() => {
 				label: "Help",
 				submenu: [
 					{
-						label: "Docs",
+						label: "Documentation",
 						accelerator: shortcuts ? "" : file.shortcuts.docs,
 						click: () => {
 							dialog

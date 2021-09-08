@@ -14,21 +14,10 @@ h4 {
 	height: auto;
 }
 
-.button1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-}
-
-.button1:hover {
-	color: white;
-	border-color: white;
-}
-
 .button11 {
 	color: black;
 	background: white;
-	border: 1px solid black;
+	border: 2px solid white;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
@@ -214,31 +203,6 @@ a {
 	color: gray;
 }
 
-.buttonm {
-	color: black;
-	background: white;
-	border: 1px solid black;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-	text-align: center;
-	width: 18rem;
-}
-
-.buttonm:hover {
-	border-color: white;
-	background: transparent;
-	color: white;
-}
-
-.buttonm > svg {
-	position: relative;
-	top: 4px;
-}
-
 #starting,
 #choose {
 	display: none;
@@ -249,4 +213,6 @@ a {
 	padding-right: 10px;
 	padding-left: 10px;
 	border-radius: 30px;
+	user-select: all;
+	margin-bottom: 10px;
 }

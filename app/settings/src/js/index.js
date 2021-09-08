@@ -642,6 +642,11 @@ const provideFeedback = () => {
 	shell.openExternal("https://github.com/levminer/authme/issues")
 }
 
+// ? docs
+const onlineDocs = () => {
+	shell.openExternal("https://docs.authme.levminer.com")
+}
+
 // ? show ifno
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"

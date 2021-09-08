@@ -126,63 +126,75 @@
 
 		<!-- content -->
 		<div class="h-screen flex">
-			<div class="h-screen bg-gray-900 flex flex-col overflow-auto">
-				<div class="mb-1 mt-3 mr-4 ml-4">
-					<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-						</svg>
-						General
-					</button>
+			<div class="h-screen bg-gray-900 flex flex-col justify-between overflow-auto">
+				<div class="flex flex-col">
+					<div class="mb-1 mt-5 mr-4 ml-4">
+						<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+							</svg>
+							General
+						</button>
+					</div>
+					<div class="mb-1 mt-1 mr-4 ml-4">
+						<button id="codes " class="buttonm codes" onclick="menu(event, 'codes')">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+							</svg>
+							Codes
+						</button>
+					</div>
+					<div class="mb-1 mt-1 mr-4 ml-4">
+						<button id="shortcuts " class="buttonm shortcuts" onclick="menu(event, 'shortcuts')">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+							</svg>
+							Shortcuts
+						</button>
+					</div>
+					<div class="mb-1 mt-1 mr-4 ml-4">
+						<button id="experimental " class="buttonm experimental" onclick="menu(event, 'experimental')">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+							</svg>
+							Experimental
+						</button>
+					</div>
 				</div>
-				<div class="mb-1 mt-1 mr-4 ml-4">
-					<button id="codes " class="buttonm codes" onclick="menu(event, 'codes')">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-						</svg>
-						Codes
-					</button>
-				</div>
-				<div class="mb-1 mt-1 mr-4 ml-4">
-					<button id="shortcuts " class="buttonm shortcuts" onclick="menu(event, 'shortcuts')">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-						</svg>
-						Shortcuts
-					</button>
-				</div>
-				<div class="mb-1 mt-1 mr-4 ml-4">
-					<button id="experimental " class="buttonm experimental" onclick="menu(event, 'experimental')">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-						</svg>
-						Experimental
-					</button>
-				</div>
-				<div class="mb-1 mt-1 mr-4 ml-4">
-					<button id="about" class="buttonm about" onclick="provideFeedback()">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-						</svg>
-						Feedback
-					</button>
-				</div>
-				<div class="mb-1 mt-1 mr-4 ml-4">
-					<button id="about" class="buttonm about" onclick="support()">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-						</svg>
-						Support
-					</button>
-				</div>
-				<div class="mb-10 mt-1 mr-4 ml-4">
-					<button id="about" class="buttonm about" onclick="about()">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-						</svg>
-						About
-					</button>
+				<div class="flex-flex-col">
+					<div class="mb-1 mt-1 mr-4 ml-4">
+						<button class="buttonm" onclick="onlineDocs()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+							</svg>
+							Documentation
+						</button>
+					</div>
+					<div class="mb-1 mt-1 mr-4 ml-4">
+						<button class="buttonm" onclick="provideFeedback()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+							</svg>
+							Feedback
+						</button>
+					</div>
+					<div class="mb-1 mt-1 mr-4 ml-4">
+						<button class="buttonm" onclick="support()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+							</svg>
+							Support
+						</button>
+					</div>
+					<div class="mb-5 mt-1 mr-4 ml-4">
+						<button class="buttonm" onclick="about()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							About
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="flex-1 flex overflow-hidden">
@@ -192,7 +204,7 @@
 						<h1>Authme</h1>
 						<h2>Settings</h2>
 						<p class="text3">You can configure the app setting here.</p>
-						<button class="buttonm2" onclick="hide()">
+						<button class="buttoni" onclick="hide()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 							</svg>
@@ -254,7 +266,7 @@
 						</div>
 						<h3>Clear data</h3>
 						<p class="text3">Clear password, 2FA codes and all other settings. Be careful.</p>
-						<button class="buttonm2" id="but1" onclick="reset()">
+						<button class="buttoni" id="but1" onclick="reset()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 							</svg>
@@ -264,19 +276,19 @@
 						<hr />
 						<h3>Open folders</h3>
 						<p class="text3">You can open the folders Authme uses to function. Editing or deleting files might cause a crash.</p>
-						<button class="buttonm2" id="but3" onclick="folder0()">
+						<button class="buttoni" id="but3" onclick="folder0()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
 							</svg>
 							Authme folder
 						</button>
-						<button class="buttonm2" id="but4" onclick="folder1()">
+						<button class="buttoni" id="but4" onclick="folder1()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
 							</svg>
 							Settings folder
 						</button>
-						<button class="buttonm2" id="but12" onclick="folder2()">
+						<button class="buttoni" id="but12" onclick="folder2()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
 							</svg>
@@ -286,7 +298,7 @@
 						<hr />
 						<h3>Logs</h3>
 						<p class="text3">You can view the logs for debugging. You can view all the logs in the settings folder.</p>
-						<button class="buttonm2" id="but14" onclick="logs()">
+						<button class="buttoni" id="but14" onclick="logs()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
 							</svg>
@@ -296,18 +308,18 @@
 						<hr />
 						<h3>Status</h3>
 						<p class="text3">Current status of the API, used for updates only. Click for all the status informations.</p>
-						<button class="buttonm2" id="but6" onclick="statusLink()">-</button>
+						<button class="buttoni" id="but6" onclick="statusLink()">-</button>
 						<br />
 						<hr />
 						<h3>Version</h3>
 						<p class="text3">Your current Authme version. Click for more info about Authme.</p>
-						<button class="buttonm2" id="but7" onclick="about()">-</button>
+						<button class="buttoni" id="but7" onclick="about()">-</button>
 					</div>
 
 					<!-- codes -->
 					<div id="codes" class="tabcontent part">
 						<h3>Show 2FA names</h3>
-						<p class="text3">The saved 2FA names will show up. Needs restart.</p>
+						<p class="text3">The saved 2FA names will show up. You can copy it after clicking it.</p>
 						<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
 							<a href="#" onclick="names()">
 								<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -319,7 +331,7 @@
 						<br />
 						<hr />
 						<h3>Blur codes</h3>
-						<p class="text3">Blurs the code, but you can still copy it or hover over it to reveal. Needs restart.</p>
+						<p class="text3">Blurs the 2FA code. You can still copy it or hover over it to reveal. </p>
 						<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
 							<a href="#" onclick="reveal()">
 								<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -331,7 +343,7 @@
 						<br />
 						<hr />
 						<h3>Save search history</h3>
-						<p class="text3">Keep your search history. Needs restart.</p>
+						<p class="text3">Keep your search history. Works even after restart.</p>
 						<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
 							<a href="#" onclick="results()">
 								<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -343,7 +355,7 @@
 						<br />
 						<hr />
 						<h3>Reset search after copy</h3>
-						<p class="text3">Reset the search bar after you copied your code. Needs restart.</p>
+						<p class="text3">Reset the search bar after you copied your code. Usefull if you copy a lot of codes.</p>
 						<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
 							<a href="#" onclick="copy()">
 								<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -362,7 +374,7 @@
 							<br />
 							Shortcuts not work on this page, go back to the settings tab to reactivate them!
 						</p>
-						<button class="buttonm2" onclick="shortcutsLink()">
+						<button class="buttoni" onclick="shortcutsLink()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
 							</svg>
@@ -379,19 +391,19 @@
 								<input class="input1" disabled type="text" id="hk0_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk0_button_edit" onclick="hk_edit(0)">
+								<button class="buttonr button" id="hk0_button_edit" onclick="hk_edit(0)">
 									<svg id="hk0_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk0_button_reset" onclick="hk_reset(0)">
+								<button class="buttonr button" id="hk0_button_reset" onclick="hk_reset(0)">
 									<svg id="hk0_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk0_button_delete" onclick="hk_delete(0)">
+								<button class="buttonr button" id="hk0_button_delete" onclick="hk_delete(0)">
 									<svg id="hk0_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -406,19 +418,19 @@
 								<input class="input1" disabled type="text" id="hk1_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk1_button_edit" onclick="hk_edit(1)">
+								<button class="buttonr button" id="hk1_button_edit" onclick="hk_edit(1)">
 									<svg id="hk1_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk1_button_reset" onclick="hk_reset(1)">
+								<button class="buttonr button" id="hk1_button_reset" onclick="hk_reset(1)">
 									<svg id="hk1_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk1_button_delete" onclick="hk_delete(1)">
+								<button class="buttonr button" id="hk1_button_delete" onclick="hk_delete(1)">
 									<svg id="hk1_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -433,19 +445,19 @@
 								<input class="input1" disabled type="text" id="hk2_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk2_button_edit" onclick="hk_edit(2)">
+								<button class="buttonr button" id="hk2_button_edit" onclick="hk_edit(2)">
 									<svg id="hk2_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk2_button_reset" onclick="hk_reset(2)">
+								<button class="buttonr button" id="hk2_button_reset" onclick="hk_reset(2)">
 									<svg id="hk2_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk2_button_delete" onclick="hk_delete(2)">
+								<button class="buttonr button" id="hk2_button_delete" onclick="hk_delete(2)">
 									<svg id="hk2_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -454,25 +466,25 @@
 						</div>
 						<div class="grid">
 							<div class="div1">
-								<p class="text3 text">Reset zoom</p>
+								<p class="text3 text">Reset</p>
 							</div>
 							<div class="div2">
 								<input class="input1" disabled type="text" id="hk12_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk12_button_edit" onclick="hk_edit(12)">
+								<button class="buttonr button" id="hk12_button_edit" onclick="hk_edit(12)">
 									<svg id="hk12_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk12_button_reset" onclick="hk_reset(12)">
+								<button class="buttonr button" id="hk12_button_reset" onclick="hk_reset(12)">
 									<svg id="hk12_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk12_button_delete" onclick="hk_delete(12)">
+								<button class="buttonr button" id="hk12_button_delete" onclick="hk_delete(12)">
 									<svg id="hk12_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -487,19 +499,19 @@
 								<input class="input1" disabled type="text" id="hk13_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk13_button_edit" onclick="hk_edit(13)">
+								<button class="buttonr button" id="hk13_button_edit" onclick="hk_edit(13)">
 									<svg id="hk13_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk13_button_reset" onclick="hk_reset(13)">
+								<button class="buttonr button" id="hk13_button_reset" onclick="hk_reset(13)">
 									<svg id="hk13_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk13_button_delete" onclick="hk_delete(13)">
+								<button class="buttonr button" id="hk13_button_delete" onclick="hk_delete(13)">
 									<svg id="hk13_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -514,19 +526,19 @@
 								<input class="input1" disabled type="text" id="hk14_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk14_button_edit" onclick="hk_edit(14)">
+								<button class="buttonr button" id="hk14_button_edit" onclick="hk_edit(14)">
 									<svg id="hk14_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk14_button_reset" onclick="hk_reset(14)">
+								<button class="buttonr button" id="hk14_button_reset" onclick="hk_reset(14)">
 									<svg id="hk14_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk14_button_delete" onclick="hk_delete(14)">
+								<button class="buttonr button" id="hk14_button_delete" onclick="hk_delete(14)">
 									<svg id="hk14_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -541,19 +553,19 @@
 								<input class="input1" disabled type="text" id="hk3_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk3_button_edit" onclick="hk_edit(3)">
+								<button class="buttonr button" id="hk3_button_edit" onclick="hk_edit(3)">
 									<svg id="hk3_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk3_button_reset" onclick="hk_reset(3)">
+								<button class="buttonr button" id="hk3_button_reset" onclick="hk_reset(3)">
 									<svg id="hk3_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk3_button_delete" onclick="hk_delete(3)">
+								<button class="buttonr button" id="hk3_button_delete" onclick="hk_delete(3)">
 									<svg id="hk3_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -568,19 +580,19 @@
 								<input class="input1" disabled type="text" id="hk4_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk4_button_edit" onclick="hk_edit(4)">
+								<button class="buttonr button" id="hk4_button_edit" onclick="hk_edit(4)">
 									<svg id="hk4_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk4_button_reset" onclick="hk_reset(4)">
+								<button class="buttonr button" id="hk4_button_reset" onclick="hk_reset(4)">
 									<svg id="hk4_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk4_button_delete" onclick="hk_delete(4)">
+								<button class="buttonr button" id="hk4_button_delete" onclick="hk_delete(4)">
 									<svg id="hk4_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -595,19 +607,19 @@
 								<input class="input1" disabled type="text" id="hk5_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk5_button_edit" onclick="hk_edit(5)">
+								<button class="buttonr button" id="hk5_button_edit" onclick="hk_edit(5)">
 									<svg id="hk5_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk5_button_reset" onclick="hk_reset(5)">
+								<button class="buttonr button" id="hk5_button_reset" onclick="hk_reset(5)">
 									<svg id="hk5_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk5_button_delete" onclick="hk_delete(5)">
+								<button class="buttonr button" id="hk5_button_delete" onclick="hk_delete(5)">
 									<svg id="hk5_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -622,19 +634,19 @@
 								<input class="input1" disabled type="text" id="hk6_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk6_button_edit" onclick="hk_edit(6)">
+								<button class="buttonr button" id="hk6_button_edit" onclick="hk_edit(6)">
 									<svg id="hk6_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk6_button_reset" onclick="hk_reset(6)">
+								<button class="buttonr button" id="hk6_button_reset" onclick="hk_reset(6)">
 									<svg id="hk6_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk6_button_delete" onclick="hk_delete(6)">
+								<button class="buttonr button" id="hk6_button_delete" onclick="hk_delete(6)">
 									<svg id="hk6_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -649,19 +661,19 @@
 								<input class="input1" disabled type="text" id="hk7_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk7_button_edit" onclick="hk_edit(7)">
+								<button class="buttonr button" id="hk7_button_edit" onclick="hk_edit(7)">
 									<svg id="hk7_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk7_button_reset" onclick="hk_reset(7)">
+								<button class="buttonr button" id="hk7_button_reset" onclick="hk_reset(7)">
 									<svg id="hk7_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk7_button_delete" onclick="hk_delete(7)">
+								<button class="buttonr button" id="hk7_button_delete" onclick="hk_delete(7)">
 									<svg id="hk7_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -670,25 +682,25 @@
 						</div>
 						<div class="grid">
 							<div class="div1">
-								<p class="text3 text">Docs</p>
+								<p class="text3 text">Documentation</p>
 							</div>
 							<div class="div2">
 								<input class="input1" disabled type="text" id="hk8_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk8_button_edit" onclick="hk_edit(8)">
+								<button class="buttonr button" id="hk8_button_edit" onclick="hk_edit(8)">
 									<svg id="hk8_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk8_button_reset" onclick="hk_reset(8)">
+								<button class="buttonr button" id="hk8_button_reset" onclick="hk_reset(8)">
 									<svg id="hk8_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk8_button_delete" onclick="hk_delete(8)">
+								<button class="buttonr button" id="hk8_button_delete" onclick="hk_delete(8)">
 									<svg id="hk8_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -703,19 +715,19 @@
 								<input class="input1" disabled type="text" id="hk9_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk9_button_edit" onclick="hk_edit(9)">
+								<button class="buttonr button" id="hk9_button_edit" onclick="hk_edit(9)">
 									<svg id="hk9_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk9_button_reset" onclick="hk_reset(9)">
+								<button class="buttonr button" id="hk9_button_reset" onclick="hk_reset(9)">
 									<svg id="hk9_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk9_button_delete" onclick="hk_delete(9)">
+								<button class="buttonr button" id="hk9_button_delete" onclick="hk_delete(9)">
 									<svg id="hk9_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -730,19 +742,19 @@
 								<input class="input1" disabled type="text" id="hk10_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk10_button_edit" onclick="hk_edit(10)">
+								<button class="buttonr button" id="hk10_button_edit" onclick="hk_edit(10)">
 									<svg id="hk10_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk10_button_reset" onclick="hk_reset(10)">
+								<button class="buttonr button" id="hk10_button_reset" onclick="hk_reset(10)">
 									<svg id="hk10_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk10_button_delete" onclick="hk_delete(10)">
+								<button class="buttonr button" id="hk10_button_delete" onclick="hk_delete(10)">
 									<svg id="hk10_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -757,19 +769,19 @@
 								<input class="input1" disabled type="text" id="hk11_input" />
 							</div>
 							<div class="div3">
-								<button class="buttoni button" id="hk11_button_edit" onclick="hk_edit(11)">
+								<button class="buttonr button" id="hk11_button_edit" onclick="hk_edit(11)">
 									<svg id="hk11_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk11_button_reset" onclick="hk_reset(11)">
+								<button class="buttonr button" id="hk11_button_reset" onclick="hk_reset(11)">
 									<svg id="hk11_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
 								</button>
 
-								<button class="buttoni button" id="hk11_button_delete" onclick="hk_delete(11)">
+								<button class="buttonr button" id="hk11_button_delete" onclick="hk_delete(11)">
 									<svg id="hk11_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
@@ -784,7 +796,7 @@
 							<br />
 							Shortcuts not work on this page, go back to the settings tab to reactivate them!
 						</p>
-						<button class="buttonm2" onclick="globalShortcutsLink()">
+						<button class="buttoni" onclick="globalShortcutsLink()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
 							</svg>
@@ -802,19 +814,19 @@
 							</div>
 							<div class="div3">
 								<div class="div3">
-									<button class="buttoni button" id="hk100_button_edit" onclick="hk_edit(100)">
+									<button class="buttonr button" id="hk100_button_edit" onclick="hk_edit(100)">
 										<svg id="hk100_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 										</svg>
 									</button>
 
-									<button class="buttoni button" id="hk100_button_reset" onclick="hk_reset(100)">
+									<button class="buttonr button" id="hk100_button_reset" onclick="hk_reset(100)">
 										<svg id="hk100_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 										</svg>
 									</button>
 
-									<button class="buttoni button" id="hk100_button_delete" onclick="hk_delete(100)">
+									<button class="buttonr button" id="hk100_button_delete" onclick="hk_delete(100)">
 										<svg id="hk100_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 										</svg>
@@ -831,19 +843,19 @@
 							</div>
 							<div class="div3">
 								<div class="div3">
-									<button class="buttoni button" id="hk101_button_edit" onclick="hk_edit(101)">
+									<button class="buttonr button" id="hk101_button_edit" onclick="hk_edit(101)">
 										<svg id="hk101_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 										</svg>
 									</button>
 
-									<button class="buttoni button" id="hk101_button_reset" onclick="hk_reset(101)">
+									<button class="buttonr button" id="hk101_button_reset" onclick="hk_reset(101)">
 										<svg id="hk101_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 										</svg>
 									</button>
 
-									<button class="buttoni button" id="hk101_button_delete" onclick="hk_delete(101)">
+									<button class="buttonr button" id="hk101_button_delete" onclick="hk_delete(101)">
 										<svg id="hk101_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 										</svg>
@@ -860,19 +872,19 @@
 							</div>
 							<div class="div3">
 								<div class="div3">
-									<button class="buttoni button" id="hk102_button_edit" onclick="hk_edit(102)">
+									<button class="buttonr button" id="hk102_button_edit" onclick="hk_edit(102)">
 										<svg id="hk102_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 										</svg>
 									</button>
 
-									<button class="buttoni button" id="hk102_button_reset" onclick="hk_reset(102)">
+									<button class="buttonr button" id="hk102_button_reset" onclick="hk_reset(102)">
 										<svg id="hk102_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 										</svg>
 									</button>
 
-									<button class="buttoni button" id="hk102_button_delete" onclick="hk_delete(102)">
+									<button class="buttonr button" id="hk102_button_delete" onclick="hk_delete(102)">
 										<svg id="hk102_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 										</svg>
