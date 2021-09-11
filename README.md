@@ -27,6 +27,12 @@
 
 <img src="https://raw.githubusercontent.com/Levminer/authme/main/screenshots/screenshot.png?raw=true">
 
+## Features
+
+-   🔒 Secure: Your codes is secured by AES 256bit encrypton and your own password.
+-   🗄️ Import: You can directly import from Google Authenticator or from any 2FA QR code you screenshot.
+-   ⌨️ Shortcuts: Easily open Authme with custom shortcuts and it can also start when your system starts.
+
 ## How to use
 
 -   For detailed instructions check out the: [Docs](https://docs.authme.levminer.com/#/import?id=import)
