@@ -156,7 +156,7 @@ const settings = `{
 			"reset_after_copy": false,
 			"save_search_results": true,
 			"disable_window_capture": true,
-			"disable_hardware_acceleration": false
+			"disable_hardware_acceleration": true
 		},
 		"experimental":{
 			"offset": null,
@@ -472,10 +472,6 @@ const createWindow = () => {
 
 		logger.warn("First start")
 	}
-
-	window_application.on("show", () => {
-		window_application.webContents.executeJavaScript("focusSearch()")
-	})
 
 	window_landing.on("close", () => {
 		app.exit()
@@ -1006,12 +1002,6 @@ ipc.on("window_reload", () => {
 // ? reload application window
 ipc.on("reload_application", () => {
 	window_application.webContents.executeJavaScript("reload()")
-
-	setTimeout(() => {
-		if (file.security.new_encryption === true) {
-			window_application.webContents.executeJavaScript("loadSave()")
-		}
-	}, 100)
 })
 
 // ? error in window

@@ -586,7 +586,7 @@ let diva1
 // ? animations
 app.on("browser-window-focus", () => {
 	if (focus === true) {
-		try {
+		setTimeout(() => {
 			const center = document.querySelector(".center")
 			center.classList.add("animate__animated", "animate__fadeIn")
 
@@ -602,9 +602,6 @@ app.on("browser-window-focus", () => {
 			const search = document.querySelector("#search")
 			search.classList.add("animate__animated", "animate__slideInDown")
 
-			const button = document.querySelector(".button")
-			button.classList.add("animate__animated", "animate__slideInDown")
-
 			if (clear == true) {
 				diva0 = document.querySelector(".diva0")
 				diva0.classList.add("animate__animated", "animate__zoomIn")
@@ -612,28 +609,26 @@ app.on("browser-window-focus", () => {
 				diva1 = document.querySelector(".diva1")
 				diva1.classList.add("animate__animated", "animate__zoomIn")
 			}
-		} catch (error) {
-			console.error("Authme - Animations failed")
-		}
 
-		setTimeout(() => {
-			try {
+			setTimeout(() => {
 				if (clear == true) {
 					diva0.classList.remove("animate__animated", "animate__zoomIn")
 					diva1.classList.remove("animate__animated", "animate__zoomIn")
 				}
-			} catch (error) {
-				console.error("Authme - Code animations failed")
-			}
-		}, 1500)
+			}, 1500)
 
-		focus = false
+			focus = false
+		}, 100)
 	}
+
+	focusSearch()
 })
 
 // ? focus search bar
 const focusSearch = () => {
-	document.getElementById("search").focus()
+	setTimeout(() => {
+		document.getElementById("search").focus()
+	}, 100)
 }
 
 // ? show update
