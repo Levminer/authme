@@ -95,7 +95,7 @@
 		"qrcode-decoder": "^0.2.2"
 	},
 	"devDependencies": {
-		"autoprefixer": "^10.3.3",
+		"autoprefixer": "^10.3.4",
 		"electron": "^14.0.0",
 		"electron-builder": "^22.11.7",
 		"eslint": "^7.32.0",
@@ -107,9 +107,9 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-promise": "^5.1.0",
 		"eslint-plugin-standard": "^5.0.0",
-		"prettier": "^2.3.2",
-		"sass": "^1.38.2",
-		"tailwindcss": "^2.2.9"
+		"prettier": "^2.4.0",
+		"sass": "^1.39.2",
+		"tailwindcss": "^2.2.15"
 	},
 	"engines": {
 		"node": ">=15.0.0",
