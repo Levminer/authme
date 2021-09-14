@@ -96,7 +96,7 @@
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.3.4",
-		"electron": "^14.0.0",
+		"electron": "^14.0.1",
 		"electron-builder": "^22.11.7",
 		"eslint": "^7.32.0",
 		"eslint-config-node": "^4.1.0",
@@ -108,7 +108,7 @@
 		"eslint-plugin-promise": "^5.1.0",
 		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.4.0",
-		"sass": "^1.39.2",
+		"sass": "^1.40.1",
 		"tailwindcss": "^2.2.15"
 	},
 	"engines": {
