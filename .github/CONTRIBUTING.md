@@ -6,16 +6,17 @@
 1.  Use VS Code
 1.  Use ESLint and prettier extension
 
-## Developing
+## Developing instructions
+
 -   Install Node.js 15+ and Git
 -   Clone the repository `git clone https://github.com/Levminer/authme`
 -   Install node modules `npm i`
--   Run build command: `npm run start`
+-   Run start command: `npm run start`
 
 ## Building
 
 -   Follow Developing instructions.
--   Run build command: `npm run build`
+-   Run build command: `npm run build` (You can only build for your own OS)
 
 ## NPM commands
 
@@ -23,16 +24,16 @@
 -   Build app: `npm run build`
 -   Lint app: `npm run lint`
 
-## Rules
+## Contributing rules
 
 1. Use ESLint.
 1. Use Prettier.
 1. Variable names: snake_case.
 1. Function names: camelCase.
-1. Try not use new node modules.
+1. Don't use new node modules.
 1. Make your PR to the dev branch.
 
 ## Before the PR
 
+1. Read Contributing rules
 1. Lint the code: `npm run lint`
-

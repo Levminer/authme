@@ -5,7 +5,33 @@
 *,
 ::before,
 ::after {
-  border-width: 0;
-  border-style: solid;
-  border-color: theme('borderColor.default', currentColor);
+	border-width: 0;
+	border-style: solid;
+	border-color: theme("borderColor.default", currentColor);
+}
+
+@layer base {
+	button {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4;
+	}
+
+	input[type="checkbox"] {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4;
+	}
+
+	summary {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+	}
+
+	a {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+	}
+
+	p {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+	}
+
+	svg {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+	}
 }

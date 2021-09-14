@@ -1,9 +1,37 @@
 # Authme
 
 -   Simple cross platform two-factor authentication app for desktop.
--   Download for: [Windows](https://api.levminer.com/api/v1/authme/release/windows), [Linux](https://api.levminer.com/api/v1/authme/release/linux), [Mac (Alpha)](https://api.levminer.com/api/v1/authme/alpha/mac)
+
+[![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?style=for-the-badge)](https://github.com/Levminer/authme/releases)
+[![Support](https://img.shields.io/badge/Support-PayPal-blue?style=for-the-badge)](https://paypal.me/levminer)
+[![License](https://img.shields.io/github/license/levminer/authme?style=for-the-badge)](https://github.com/Levminer/authme/blob/main/LICENSE.md)
+
+## Latest Release
+
+-   Latest release version for standard users.
+
+[![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release&style=for-the-badge)](https://github.com/Levminer/authme/releases)
+[![Windows Download](https://img.shields.io/badge/Windows-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/release/windows)
+[![Linux Download](https://img.shields.io/badge/Linux-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/release/linux)
+[![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/releases)
+
+## Latest Alpha
+
+-   Latest alpha version for advanced users.
+
+[![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
+[![Windows Download](https://img.shields.io/badge/Windows-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/windows)
+[![Linux Download](https://img.shields.io/badge/Linux-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/linux)
+[![Mac Download](https://img.shields.io/badge/Mac-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/mac)
+[![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 
 <img src="https://raw.githubusercontent.com/Levminer/authme/main/screenshots/screenshot.png?raw=true">
+
+## Features
+
+-   🔒 Secure: Your codes is secured by AES 256bit encrypton and your own password.
+-   🗄️ Import: You can directly import from Google Authenticator or from any 2FA QR code you screenshot.
+-   ⌨️ Shortcuts: Easily open Authme with custom shortcuts and it can also start when your system starts.
 
 ## How to use
 
@@ -17,13 +45,9 @@
 
 ## Contributing and development
 
--   Read: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
--   Read: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
+-   Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
+-   Read before contributing: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
 
-## Release cycle
-
--   Standard updates coming on Tuesdays if there is something to update and hotfix updates can come on Tuesdays, Thursdays or Saturdays if there is a problem that can not wait until the next Tuesday.
--   More information at: [Security](https://github.com/Levminer/authme/security/policy)
 ## Project board
 
 -   You can check out all the issues in progress at the project board!

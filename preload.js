@@ -26,7 +26,10 @@ if (process.platform === "win32") {
 // ? settings
 const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
-// read settings
+/**
+ * Read settings
+ * @type {libSettings}
+ */
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
 		if (err) {

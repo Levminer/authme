@@ -1,5 +1,6 @@
 body {
 	overflow: hidden;
+	display: block;
 }
 
 .center {
@@ -8,24 +9,12 @@ body {
 	height: 3150px;
 }
 
-.button1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-}
-
-.button1:hover {
-	color: white;
-	border-color: white;
-	background-color: transparent;
-}
-
 .input1 {
 	color: black;
 	background-color: white;
 	border-color: white;
-	width: 14rem;
-	height: 25px !important;
+	width: 226px;
+	height: 29px !important;
 }
 
 .input1:hover {
@@ -37,13 +26,6 @@ body {
 #button1 {
 	position: relative;
 	top: 45px;
-}
-
-.link1 {
-	font-size: 1rem !important;
-	position: relative;
-	top: 50px;
-	color: white !important;
 }
 
 hr {
@@ -97,29 +79,10 @@ hr {
 	right: 130px;
 }
 
-.buttoni {
-	margin: 3px;
-	color: black;
-	background: white;
-	border: 1px solid var(--df_primary_color);
-	font-size: 1.25rem;
-	padding: 13px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-}
-
-.buttoni:hover {
-	border: 1px solid var(--df_primary_color);
-	background: transparent;
-	color: var(--df_primary_color);
-}
-
 .buttonm {
 	color: white;
 	background: black;
-	border: 1px solid black;
+	border: 2px solid black;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
@@ -131,14 +94,14 @@ hr {
 }
 
 .buttonm:hover {
-	border: 1px solid rgb(10, 10, 10);
+	border: 2px solid rgb(20, 20, 20);
 	background: rgb(20, 20, 20);
 	color: white;
 }
 
 .buttonmselected {
-	border: 1px solid rgb(10, 10, 10);
-	background: rgb(20, 20, 20);
+	border: 2px solid rgb(30, 30, 30);
+	background: rgb(30, 30, 30);
 	color: white;
 }
 
@@ -155,41 +118,10 @@ hr {
 	display: none;
 }
 
-.warning {
-	color: red;
-	font-weight: bold;
-	margin-top: 30px;
-	font-size: 2rem;
-}
-
-.unstable {
-	color: orange;
-	font-weight: bold;
-	margin-top: 30px;
-	font-size: 2rem;
-}
-
-.offset {
-	text-align: center;
-	width: 80px;
-	padding: 17.5px;
-	height: 17.5px;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
-}
-
-.link {
-	cursor: pointer;
-	font-weight: bold;
-	transition: 0.2s ease-in;
-}
-
-.link:hover {
-	color: gray;
 }
 
 .part {
@@ -198,106 +130,15 @@ input::-webkit-inner-spin-button {
 	background-color: rgb(10, 10, 10);
 }
 
-.buttonm2 {
-	color: black;
-	background: white;
-	border: 1px solid black;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
+.toggle:checked ~ .toggle-bg {
+	background-color: black !important;
 	transition: 0.2s ease-in;
-	text-align: center;
-	width: 18rem;
 }
 
-.buttonm2:hover {
-	border-color: white;
-	background: transparent;
-	color: white;
+.toggle:checked {
+	right: 4px !important;
 }
 
-.buttonm2 > svg {
-	position: relative;
-	top: 4px;
-}
-
-/* Dropdown Button */
-.dropdown-button {
-	color: black;
-	background: white;
-	border: 1px solid black;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-	text-align: center;
-	width: 18rem;
-	height: 3.8rem;
-}
-
-.dropdown-button:hover {
-	color: white;
-	background-color: transparent;
-	border-color: white;
-}
-
-.dropdown {
-	position: relative;
-	display: inline-block;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-	top: 65px;
-	display: none;
-	position: absolute;
-	width: 18rem;
-	z-index: 1;
-	border-radius: 30px;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-	color: black;
-	padding: 10px 10px;
-	text-decoration: none;
-	display: block;
-	background-color: white;
-}
-
-.dropdown-content a:hover {
-	background-color: rgb(20,20,20);
-	color: white;
-}
-
-.dropdown-content a:first-child {
-	border-top-left-radius: 30px;
-	border-top-right-radius: 30px;
-}
-
-.dropdown-content :last-child {
-	border-bottom-left-radius: 30px;
-	border-bottom-right-radius: 30px;
-}
-
-.dropdown-link > svg {
-	height: 1em;
-	width: 1em;
-	margin: 0 0.05em 0 0.1em;
-	vertical-align: -0.1em;
-}
-
-.dropdown-link:link {
-	text-decoration: none !important;
-	font-weight: normal;
-	font-size: 20px;
-}
-
-.dropdown-button > svg {
-	position: relative;
-	top: 4px;
+.noclick {
+	pointer-events: none;
 }

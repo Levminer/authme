@@ -1,12 +1,11 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
+const { logger, markdown } = require("@levminer/lib")
 const contextmenu = require("electron-context-menu")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
-const markdown = require("./lib/markdown")
 const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
-const logger = require("./lib/logger")
 const electron = require("electron")
 const fetch = require("node-fetch")
 const path = require("path")
@@ -48,14 +47,13 @@ if (app.isPackaged === false) {
 	debug({
 		showDevTools: false,
 	})
-
+	dev = true
+} else {
 	if (process.platform === "darwin") {
 		debug({
-			showDevTools: true,
+			showDevTools: false,
 		})
 	}
-
-	dev = true
 }
 
 // pre prelease
@@ -88,6 +86,11 @@ if (!fs.existsSync(full_path)) {
 
 if (!fs.existsSync(file_path)) {
 	fs.mkdirSync(file_path)
+}
+
+// codes folder
+if (!fs.existsSync(path.join(file_path, "codes"))) {
+	fs.mkdirSync(path.join(file_path, "codes"))
 }
 
 // ? version and logs
@@ -135,9 +138,6 @@ if (dev === false) {
 	}
 }
 
-// ? force dark mode
-nativeTheme.themeSource = "dark"
-
 // ? settings
 const saveSettings = () => {
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
@@ -155,7 +155,8 @@ const settings = `{
 			"click_to_reveal": false,
 			"reset_after_copy": false,
 			"save_search_results": true,
-			"disable_window_capture": true
+			"disable_window_capture": true,
+			"disable_hardware_acceleration": true
 		},
 		"experimental":{
 			"offset": null,
@@ -163,12 +164,17 @@ const settings = `{
 		},
 		"security": {
 			"require_password": null,
-			"password": null
+			"password": null,
+			"new_encryption": null,
+			"key": null
 		},
 		"shortcuts": {
 			"show": "CommandOrControl+q",
 			"settings": "CommandOrControl+s",
 			"exit": "CommandOrControl+w",
+			"zoom_reset": "CommandOrControl+0",
+			"zoom_in": "CommandOrControl+1",
+			"zoom_out": "CommandOrControl+2",
 			"edit": "CommandOrControl+t",
 			"import": "CommandOrControl+i",
 			"export": "CommandOrControl+e",
@@ -199,7 +205,10 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 	fs.writeFileSync(path.join(file_path, "settings.json"), settings)
 }
 
-// read settings
+/**
+ * Read settings
+ * @type {libSettings}
+ */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
 // settings compatibility
@@ -238,6 +247,26 @@ if (file.statistics === undefined) {
 	}
 
 	saveSettings()
+}
+
+if (file.settings.disable_hardware_acceleration === undefined) {
+	file.settings.disable_hardware_acceleration = false
+
+	saveSettings()
+}
+
+if (file.shortcuts.zoom_reset === undefined) {
+	file.shortcuts.zoom_reset = "CommandOrControl+0"
+	file.shortcuts.zoom_in = "CommandOrControl+1"
+	file.shortcuts.zoom_out = "CommandOrControl+2"
+}
+
+// ? force dark mode
+nativeTheme.themeSource = "dark"
+
+// ? disable hardware accekeration
+if (file.settings.disable_hardware_acceleration === true) {
+	app.disableHardwareAcceleration()
 }
 
 // ? open app from tray
@@ -328,6 +357,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -343,6 +373,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -358,6 +389,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -373,6 +405,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -388,6 +421,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -403,6 +437,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -418,6 +453,7 @@ const createWindow = () => {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -437,10 +473,6 @@ const createWindow = () => {
 		logger.warn("First start")
 	}
 
-	window_application.on("show", () => {
-		window_application.webContents.executeJavaScript("focusSearch()")
-	})
-
 	window_landing.on("close", () => {
 		app.exit()
 
@@ -456,11 +488,21 @@ const createWindow = () => {
 	// window closings
 	window_application.on("close", async (event) => {
 		if (dev === true) {
+			try {
+				password_buffer.fill(0)
+			} catch (error) {}
+
 			app.exit()
 		}
 
 		if (tray_minimized === false) {
+			try {
+				password_buffer.fill(0)
+			} catch (error) {}
+
 			app.exit()
+
+			logger.log("Application exited")
 		} else {
 			event.preventDefault()
 			setTimeout(() => {
@@ -539,7 +581,7 @@ const createWindow = () => {
 		logger.log("Edit closed")
 	})
 
-	// ? - TEMPORARY - disable scren capture
+	// ? disable scren capture by default
 	if (file.settings.disable_window_capture === true) {
 		window_settings.setContentProtection(true)
 		window_edit.setContentProtection(true)
@@ -618,10 +660,14 @@ const createWindow = () => {
 		window_application.on("show", () => {
 			window_application.webContents.executeJavaScript("showInfo()")
 		})
+
+		window_settings.on("show", () => {
+			window_settings.webContents.executeJavaScript("showInfo()")
+		})
 	}
 
 	if (file.statistics.rate === true || file.statistics.feedback === true) {
-		if (opens % 100 === 0) {
+		if (opens % 150 === 0) {
 			openInfo()
 		}
 	} else if (file.statistics.rate === true && file.statistics.feedback === true) {
@@ -713,8 +759,6 @@ ipc.on("to_application0", () => {
 
 		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
-
-	console.log(authenticated)
 })
 
 ipc.on("to_application1", () => {
@@ -936,6 +980,30 @@ ipc.on("provide_feedback", () => {
 	saveSettings()
 })
 
+// ? new encrypton method
+let password_buffer
+ipc.on("send_password", (event, data) => {
+	password_buffer = Buffer.from(data)
+
+	window_application.webContents.executeJavaScript("loadSave()")
+})
+
+ipc.on("request_password", (event) => {
+	event.returnValue = password_buffer
+})
+
+// ? reload codes in dev
+ipc.on("window_reload", () => {
+	if (file.security.new_encryption === true) {
+		window_application.webContents.executeJavaScript("loadSave()")
+	}
+})
+
+// ? reload application window
+ipc.on("reload_application", () => {
+	window_application.webContents.executeJavaScript("reload()")
+})
+
 // ? error in window
 ipc.on("rendererError", (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
@@ -950,7 +1018,7 @@ const logs = () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nV8: ${v8_version}\nNode: ${node_version}\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version}\n\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
 
@@ -1070,6 +1138,7 @@ app.whenReady().then(() => {
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
+			nativeWindowOpen: true,
 		},
 	})
 
@@ -1101,7 +1170,7 @@ app.whenReady().then(() => {
 
 	// ? create tray
 	const iconpath = path.join(__dirname, "img/tray.png")
-	tray = new Tray(iconpath)
+	const tray = new Tray(iconpath)
 
 	tray.on("click", () => {
 		showAppFromTray()
@@ -1210,6 +1279,32 @@ app.whenReady().then(() => {
 				],
 			},
 			{
+				label: "View",
+				submenu: [
+					{
+						label: "Reset",
+						role: "resetZoom",
+						accelerator: shortcuts ? "" : file.shortcuts.zoom_reset,
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Zoom in",
+						role: "zoomIn",
+						accelerator: shortcuts ? "" : file.shortcuts.zoom_in,
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Zoom out",
+						role: "zoomOut",
+						accelerator: shortcuts ? "" : file.shortcuts.zoom_out,
+					},
+				],
+			},
+			{
 				label: "Advanced",
 				submenu: [
 					{
@@ -1308,27 +1403,7 @@ app.whenReady().then(() => {
 				label: "Help",
 				submenu: [
 					{
-						label: "Release notes",
-						accelerator: shortcuts ? "" : file.shortcuts.release,
-						click: () => {
-							releaseNotes()
-						},
-					},
-					{
-						type: "separator",
-					},
-					{
-						label: "Support",
-						accelerator: shortcuts ? "" : file.shortcuts.support,
-						click: () => {
-							support()
-						},
-					},
-					{
-						type: "separator",
-					},
-					{
-						label: "Docs",
+						label: "Documentation",
 						accelerator: shortcuts ? "" : file.shortcuts.docs,
 						click: () => {
 							dialog
@@ -1346,6 +1421,26 @@ app.whenReady().then(() => {
 										shell.openExternal("https://docs.authme.levminer.com")
 									}
 								})
+						},
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Release notes",
+						accelerator: shortcuts ? "" : file.shortcuts.release,
+						click: () => {
+							releaseNotes()
+						},
+					},
+					{
+						type: "separator",
+					},
+					{
+						label: "Support development",
+						accelerator: shortcuts ? "" : file.shortcuts.support,
+						click: () => {
+							support()
 						},
 					},
 				],

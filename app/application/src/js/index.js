@@ -1,5 +1,6 @@
 const speakeasy = require("@levminer/speakeasy")
 const { app, shell, dialog } = require("@electron/remote")
+const { typedef, aes } = require("@levminer/lib")
 const fs = require("fs")
 const path = require("path")
 const electron = require("electron")
@@ -49,8 +50,24 @@ const querry = []
 
 let clear
 
-// ? read settings
-file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+/**
+ * Read settings
+ * @type{libSettings}
+ */
+let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+// ? refresh settings
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		console.warn("Authme - Settings refresh completed")
+	}
+
+	console.warn("Authme - Settings refreshed")
+}, 100)
 
 const name_state = file.settings.show_2fa_names
 const copy_state = file.settings.reset_after_copy
@@ -153,18 +170,18 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -179,18 +196,18 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -207,15 +224,15 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -232,15 +249,15 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1 blur" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -259,18 +276,18 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -285,18 +302,18 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p class="text3 name" id="text${counter}">Name</p>
+					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
 					<button class="button11" id="copy${counter}" >
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -313,15 +330,15 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -338,15 +355,15 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" class="input1" id="code${counter}" readonly/>
+					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -372,6 +389,7 @@ const go = () => {
 			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
+
 			const item = issuer[i].toLowerCase().trim()
 
 			querry.push(item)
@@ -462,10 +480,9 @@ const go = () => {
 							}
 
 							document.querySelector("#search").value = ""
+							document.getElementById("search").focus()
 						}
 					}, 1200)
-
-					document.getElementById("search").focus()
 				}, 1000)
 			})
 
@@ -501,7 +518,7 @@ const go = () => {
 	}
 
 	// prev
-	if (prev == false) {
+	if (prev === false) {
 		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "block"
 	} else {
@@ -569,7 +586,7 @@ let diva1
 // ? animations
 app.on("browser-window-focus", () => {
 	if (focus === true) {
-		try {
+		setTimeout(() => {
 			const center = document.querySelector(".center")
 			center.classList.add("animate__animated", "animate__fadeIn")
 
@@ -585,9 +602,6 @@ app.on("browser-window-focus", () => {
 			const search = document.querySelector("#search")
 			search.classList.add("animate__animated", "animate__slideInDown")
 
-			const button = document.querySelector(".button")
-			button.classList.add("animate__animated", "animate__slideInDown")
-
 			if (clear == true) {
 				diva0 = document.querySelector(".diva0")
 				diva0.classList.add("animate__animated", "animate__zoomIn")
@@ -595,33 +609,36 @@ app.on("browser-window-focus", () => {
 				diva1 = document.querySelector(".diva1")
 				diva1.classList.add("animate__animated", "animate__zoomIn")
 			}
-		} catch (error) {
-			console.error("Authme - Animations failed")
-		}
 
-		setTimeout(() => {
-			try {
+			setTimeout(() => {
 				if (clear == true) {
 					diva0.classList.remove("animate__animated", "animate__zoomIn")
 					diva1.classList.remove("animate__animated", "animate__zoomIn")
 				}
-			} catch (error) {
-				console.error("Authme - Code animations failed")
-			}
-		}, 1500)
+			}, 1500)
 
-		focus = false
+			focus = false
+		}, 100)
 	}
+
+	focusSearch()
 })
 
 // ? focus search bar
 const focusSearch = () => {
-	document.getElementById("search").focus()
+	setTimeout(() => {
+		document.getElementById("search").focus()
+	}, 100)
 }
 
 // ? show update
 const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
+}
+
+// ? show ifno
+const showInfo = () => {
+	document.querySelector(".info").style.display = "block"
 }
 
 // ? offline mode
@@ -667,6 +684,127 @@ setInterval(() => {
 	check_for_internet()
 }, 5000)
 
+// ? save chooser
+const saveChooser = () => {
+	if (file.security.new_encryption === true) {
+		newSave()
+	} else {
+		save()
+	}
+}
+
+// new save method
+const newSave = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {libStorage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	const encrypted = aes.encrypt(save_text, key)
+
+	const codes = {
+		codes: encrypted.toString("base64"),
+		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		version: "2",
+	}
+
+	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+
+	document.querySelector("#save").style.display = "none"
+
+	dialog.showMessageBox({
+		title: "Authme",
+		buttons: ["Close"],
+		defaultId: 0,
+		cancelId: 1,
+		type: "info",
+		message: "Code(s) saved! \n\nIf you want to add more code(s) or delete code(s) go to Edit codes!",
+	})
+
+	password.fill(0)
+	key.fill(0)
+}
+
+// load save
+const loadSave = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {libStorage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+		if (err) {
+			console.warn("Authme - The file codes.authme don't exists")
+
+			password.fill(0)
+			key.fill(0)
+		} else {
+			const codes_file = JSON.parse(content)
+
+			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+			prev = true
+
+			processdata(decrypted.toString())
+
+			decrypted.fill(0)
+			password.fill(0)
+			key.fill(0)
+		}
+	})
+}
+
+if (file.security.require_password === false && file.security.new_encryption === true) {
+	loadSave()
+}
+
+document.addEventListener("keydown", (event) => {
+	if (event.ctrlKey && event.code === "KeyR" && file.security.require_password === true) {
+		ipc.send("window_reload")
+	}
+})
+
+// ? reload
+const reload = () => {
+	location.reload()
+}
+
 // ? release notes
 const releaseNotes = () => {
 	ipc.send("release_notes")
@@ -675,6 +813,16 @@ const releaseNotes = () => {
 // ? download update
 const downloadUpdate = () => {
 	ipc.send("download_update")
+}
+
+// ? rate
+const rateAuthme = () => {
+	ipc.send("rate_authme")
+}
+
+// ? feedback
+const provideFeedback = () => {
+	ipc.send("provide_feedback")
 }
 
 // ? build

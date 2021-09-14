@@ -1,4 +1,5 @@
 const { shell, app, dialog } = require("@electron/remote")
+const { aes } = require("@levminer/lib")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -33,8 +34,27 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? settings folder
+// ? file path
 const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+
+/**
+ * Read settings
+ * @type{libSettings}
+ */
+let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+// ? refresh settings
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		console.warn("Authme - Settings refresh completed")
+	}
+
+	console.warn("Authme - Settings refreshed")
+}, 100)
 
 // ? rollback
 const cache_path = path.join(file_path, "cache")
@@ -157,12 +177,12 @@ const go = () => {
 		<input type="text" class="input1" id="edit_inp_${[i]}" value="${names[i]}" readonly/> 
 		</div>
 		<div class="div3">
-		<button class="buttoni button" id="edit_but_${[i]}" onclick="edit(${[i]})">
+		<button class="buttonr button" id="edit_but_${[i]}" onclick="edit(${[i]})">
 		<svg id="edit_svg_${[i]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttoni" id="del_but_${[i]}" onclick="del(${[i]})">
+		<button class="buttonr" id="del_but_${[i]}" onclick="del(${[i]})">
 		<svg id="del_svg_${[i]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
@@ -267,11 +287,53 @@ const createSave = () => {
 					save_text += substr
 				}
 
-				saveCodes()
+				if (file.security.new_encryption === true) {
+					newSaveCodes()
+				} else {
+					saveCodes()
+				}
 
 				restart()
 			}
 		})
+}
+
+const newSaveCodes = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {libStorage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	const encrypted = aes.encrypt(save_text, key)
+
+	const codes = {
+		codes: encrypted.toString("base64"),
+		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		version: "2",
+	}
+
+	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+
+	password.fill(0)
+	key.fill(0)
 }
 
 // ? load more
@@ -306,14 +368,12 @@ const addMore = () => {
 						} else {
 							data = []
 
-							const container = document.querySelector(".container")
+							const container = document.querySelector(".codes_container")
 							container.innerHTML = ""
 
 							processdata(input.toString())
 						}
 					})
-
-					console.log(files[i])
 				}
 			}
 		})
@@ -321,23 +381,43 @@ const addMore = () => {
 
 // ? create cache
 const createCache = () => {
-	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
-		if (err) {
-			console.error("Authme - Error reading hash file", err)
-		} else {
-			if (!fs.existsSync(cache_path)) {
-				fs.mkdirSync(cache_path)
-			}
-
-			fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
-				if (err) {
-					console.error("Authme - Failed to create cache folder", err)
-				} else {
-					console.log("Authme - Cache file created")
+	if (file.security.new_encryption === true) {
+		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+			if (err) {
+				console.error("Authme - Error reading hash file", err)
+			} else {
+				if (!fs.existsSync(cache_path)) {
+					fs.mkdirSync(cache_path)
 				}
-			})
-		}
-	})
+
+				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
+					if (err) {
+						console.error("Authme - Failed to create cache folder", err)
+					} else {
+						console.log("Authme - Cache file created")
+					}
+				})
+			}
+		})
+	} else {
+		fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
+			if (err) {
+				console.error("Authme - Error reading hash file", err)
+			} else {
+				if (!fs.existsSync(cache_path)) {
+					fs.mkdirSync(cache_path)
+				}
+
+				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
+					if (err) {
+						console.error("Authme - Failed to create cache folder", err)
+					} else {
+						console.log("Authme - Cache file created")
+					}
+				})
+			}
+		})
+	}
 }
 
 // ? error handeling
@@ -352,6 +432,59 @@ const loadError = () => {
 				
 				Go back to the main page and save your codes!`,
 			})
+		}
+	})
+}
+
+// ? new encryption method
+const loadChooser = () => {
+	if (file.security.new_encryption === true) {
+		newLoad()
+	} else {
+		loadCodes()
+	}
+}
+
+const newLoad = () => {
+	let password
+	let key
+
+	if (file.security.require_password === true) {
+		password = Buffer.from(ipc.sendSync("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+	} else {
+		/**
+		 * Load storage
+		 * @type {libStorage}
+		 */
+		let storage
+
+		if (dev === false) {
+			storage = JSON.parse(localStorage.getItem("storage"))
+		} else {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		}
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+		if (err) {
+			console.warn("Authme - The file codes.authme don't exists")
+
+			password.fill(0)
+			key.fill(0)
+		} else {
+			const codes_file = JSON.parse(content)
+
+			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+			processdata(decrypted.toString())
+
+			decrypted.fill(0)
+			password.fill(0)
+			key.fill(0)
 		}
 	})
 }

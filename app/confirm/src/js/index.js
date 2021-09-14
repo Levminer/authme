@@ -1,8 +1,9 @@
-const { app, dialog } = require("@electron/remote")
+const { app, dialog, clipboard } = require("@electron/remote")
 const bcrypt = require("bcryptjs")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
+const { sha, rsa } = require("@levminer/lib")
 const path = require("path")
 
 // ? error in window
@@ -135,22 +136,97 @@ const unhashPassword = async () => {
 	)
 
 	// compare
-	const password_input = document.querySelector("#password_input").value
+	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input, file.security.password).then(console.warn("Authme - Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), file.security.password).then(console.warn("Authme - Passwords compared!"))
 
 	if (compare == true) {
+		if (file.security.new_encryption === true) {
+			ipc.send("send_password", password_input)
+		}
+
 		text.style.color = "#28A443"
 		text.textContent = "Passwords match! Please wait!"
 
 		setInterval(() => {
+			password_input.fill(0)
+
 			ipc.send("to_application0")
+
+			location.reload()
 		}, 1000)
 	} else {
 		console.warn("Authme - Passwords dont match!")
 
 		text.style.color = "#A30015"
 		text.textContent = "Passwords don't match! Try again!"
+	}
+}
+
+// ? forgot password
+const forgotPassword = () => {
+	const text = Buffer.from(clipboard.readText())
+
+	if (text.toString().startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
+		/**
+		 * Load storage
+		 * @type {libStorage}
+		 */
+		let storage
+
+		if (dev === true) {
+			storage = JSON.parse(localStorage.getItem("dev_storage"))
+		} else {
+			stroage = JSON.parse(localStorage.getItem("storage"))
+		}
+
+		const hash = Buffer.from(sha.generateHash(text.toString("base64")))
+
+		console.log(hash.toString())
+		console.log("-")
+		console.log(storage.hash)
+
+		if (hash.toString() === storage.hash) {
+			const encrypted = Buffer.from(rsa.decrypt(text.toString(), Buffer.from(storage.backup_string, "base64")), "base64")
+
+			dialog
+				.showMessageBox({
+					title: "Authme",
+					buttons: ["Copy"],
+					defaultId: 0,
+					noLink: true,
+					type: "info",
+					message: "Backup key sucesfully decrypted!\n\nThe password is copied to your clipboard!",
+				})
+				.then((result) => {
+					clipboard.writeText(encrypted.toString())
+
+					if (result.response === 0) {
+						clipboard.writeText(encrypted.toString())
+					}
+
+					text.fill(0)
+					hash.fill()
+					encrypted.fill(0)
+				})
+		} else {
+			dialog.showMessageBox({
+				title: "Authme",
+				buttons: ["Close"],
+				type: "error",
+				message: "Backup key found on your clipboard!\n\nThis backup key is not macthing with the saved backup key!",
+			})
+
+			text.fill(0)
+			hash.fill(0)
+		}
+	} else {
+		dialog.showMessageBox({
+			title: "Authme",
+			buttons: ["Close"],
+			type: "error",
+			message: "No backup key found on your clipboard!\n\nMake your your backup key is copied to your clipboard!",
+		})
 	}
 }
 
