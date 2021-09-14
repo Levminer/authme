@@ -47,7 +47,7 @@ const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(
 
 /**
  * Read settings
- * @type{libSettings}
+ * @type{LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -647,7 +647,7 @@ const onlineDocs = () => {
 	shell.openExternal("https://docs.authme.levminer.com")
 }
 
-// ? show ifno
+// ? show info
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }

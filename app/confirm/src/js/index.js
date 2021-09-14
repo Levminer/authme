@@ -170,7 +170,7 @@ const forgotPassword = () => {
 	if (text.toString().startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 

@@ -56,7 +56,7 @@ if (app.isPackaged === false) {
 	}
 }
 
-// pre prelease
+// pre release
 let pre_release = false
 if (number.startsWith("alpha")) {
 	pre_release = true
@@ -207,7 +207,7 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 
 /**
  * Read settings
- * @type {libSettings}
+ * @type {LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -264,7 +264,7 @@ if (file.shortcuts.zoom_reset === undefined) {
 // ? force dark mode
 nativeTheme.themeSource = "dark"
 
-// ? disable hardware accekeration
+// ? disable hardware acceleration
 if (file.settings.disable_hardware_acceleration === true) {
 	app.disableHardwareAcceleration()
 }
@@ -581,7 +581,7 @@ const createWindow = () => {
 		logger.log("Edit closed")
 	})
 
-	// ? disable scren capture by default
+	// ? disable screen capture by default
 	if (file.settings.disable_window_capture === true) {
 		window_settings.setContentProtection(true)
 		window_edit.setContentProtection(true)
@@ -980,7 +980,7 @@ ipc.on("provide_feedback", () => {
 	saveSettings()
 })
 
-// ? new encrypton method
+// ? new encryption method
 let password_buffer
 ipc.on("send_password", (event, data) => {
 	password_buffer = Buffer.from(data)
@@ -1080,7 +1080,7 @@ const support = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["PayPal", /* "OpenColletive", */ "Close"],
+			buttons: ["PayPal", /* "OpenCollective", */ "Close"],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
@@ -1169,8 +1169,8 @@ app.whenReady().then(() => {
 	})
 
 	// ? create tray
-	const iconpath = path.join(__dirname, "img/tray.png")
-	const tray = new Tray(iconpath)
+	const icon_path = path.join(__dirname, "img/tray.png")
+	const tray = new Tray(icon_path)
 
 	tray.on("click", () => {
 		showAppFromTray()

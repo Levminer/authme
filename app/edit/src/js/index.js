@@ -39,7 +39,7 @@ const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(
 
 /**
  * Read settings
- * @type{libSettings}
+ * @type{LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -308,7 +308,7 @@ const newSaveCodes = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 
@@ -455,7 +455,7 @@ const newLoad = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 

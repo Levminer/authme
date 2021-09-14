@@ -52,7 +52,7 @@ let clear
 
 /**
  * Read settings
- * @type{libSettings}
+ * @type{LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -77,7 +77,7 @@ const search_state = file.settings.save_search_results
 const offset_number = file.experimental.offset
 const sort_number = file.experimental.sort
 
-// ? separet values
+// ? separate values
 const separation = () => {
 	let c0 = 0
 	let c1 = 1
@@ -636,7 +636,7 @@ const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
-// ? show ifno
+// ? show info
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }
@@ -704,7 +704,7 @@ const newSave = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 
@@ -754,7 +754,7 @@ const loadSave = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 
@@ -799,11 +799,6 @@ document.addEventListener("keydown", (event) => {
 		ipc.send("window_reload")
 	}
 })
-
-// ? reload
-const reload = () => {
-	location.reload()
-}
 
 // ? release notes
 const releaseNotes = () => {

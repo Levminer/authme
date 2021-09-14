@@ -28,7 +28,7 @@ const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(fol
 
 /**
  * Read settings
- * @type {libSettings}
+ * @type {LibSettings}
  */
 const file = JSON.parse(
 	fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", (err, data) => {
