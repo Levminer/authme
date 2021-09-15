@@ -888,7 +888,7 @@ const check_for_internet = () => {
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection resetted")
+			console.warn("Authme - Connection restored")
 		}
 	})
 }

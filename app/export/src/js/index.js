@@ -64,7 +64,7 @@ const secret = []
 const issuer = []
 const type = []
 
-// ? separete value
+// ? separate value
 const separation = () => {
 	document.querySelector(".before_export").style.display = "none"
 	document.querySelector(".after_export").style.display = "block"
@@ -193,7 +193,7 @@ const hide = () => {
 	ipc.send("hide_export")
 }
 
-// ? error handeling
+// ? error handling
 const error = () => {
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, content) => {
 		if (err) {

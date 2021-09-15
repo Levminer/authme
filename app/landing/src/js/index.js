@@ -119,7 +119,7 @@ const hashPasswords = async () => {
 	if (dev === true) {
 		storage = JSON.parse(localStorage.getItem("dev_storage"))
 	} else {
-		stroage = JSON.parse(localStorage.getItem("storage"))
+		storage = JSON.parse(localStorage.getItem("storage"))
 	}
 
 	storage.require_password = file.security.require_password
@@ -195,7 +195,7 @@ const noPassword = () => {
 				if (dev === true) {
 					storage = JSON.parse(localStorage.getItem("dev_storage"))
 				} else {
-					stroage = JSON.parse(localStorage.getItem("storage"))
+					storage = JSON.parse(localStorage.getItem("storage"))
 				}
 
 				storage.require_password = file.security.require_password
@@ -275,7 +275,7 @@ const generateKey = () => {
 				if (dev === true) {
 					storage = JSON.parse(localStorage.getItem("dev_storage"))
 				} else {
-					stroage = JSON.parse(localStorage.getItem("storage"))
+					storage = JSON.parse(localStorage.getItem("storage"))
 				}
 
 				storage.backup_key = public_key.toString("base64")

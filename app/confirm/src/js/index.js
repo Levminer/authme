@@ -48,7 +48,7 @@ const text = document.querySelector("#text")
 document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	if (e.key === "Enter") {
 		if (integrity === false) {
-			check_inegrity()
+			check_integrity()
 		}
 
 		setTimeout(() => {
@@ -58,7 +58,7 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 })
 
 // ? check integrity
-const check_inegrity = () => {
+const check_integrity = () => {
 	// read settings
 	// ? read settings
 	const file = JSON.parse(
@@ -66,12 +66,12 @@ const check_inegrity = () => {
 			if (err) {
 				return console.warn(`Authme - Error reading settings.json - ${err}`)
 			} else {
-				return console.warn("Authme - Succesfully readed settings.json")
+				return console.warn("Authme - Successfully readed settings.json")
 			}
 		})
 	)
 
-	// check integritiy
+	// check integrity
 	const storage = JSON.parse(localStorage.getItem("storage"))
 
 	if (integrity == false) {
@@ -120,7 +120,7 @@ const check_inegrity = () => {
 // ? compare
 const unhashPassword = async () => {
 	if (integrity === false) {
-		check_inegrity()
+		check_integrity()
 	}
 
 	// read settings
@@ -130,7 +130,7 @@ const unhashPassword = async () => {
 			if (err) {
 				return console.warn(`Authme - Error reading settings.json - ${err}`)
 			} else {
-				return console.warn("Authme - Succesfully readed settings.json")
+				return console.warn("Authme - Successfully readed settings.json")
 			}
 		})
 	)
@@ -196,7 +196,7 @@ const forgotPassword = () => {
 					defaultId: 0,
 					noLink: true,
 					type: "info",
-					message: "Backup key sucesfully decrypted!\n\nThe password is copied to your clipboard!",
+					message: "Backup key successfully decrypted!\n\nThe password is copied to your clipboard!",
 				})
 				.then((result) => {
 					clipboard.writeText(encrypted.toString())
@@ -214,7 +214,7 @@ const forgotPassword = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: "Backup key found on your clipboard!\n\nThis backup key is not macthing with the saved backup key!",
+				message: "Backup key found on your clipboard!\n\nThis backup key is not matching with the saved backup key!",
 			})
 
 			text.fill(0)

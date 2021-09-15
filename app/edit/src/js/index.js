@@ -112,7 +112,7 @@ const rollback = () => {
 		})
 }
 
-// ? separete value
+// ? separate value
 const names = []
 const secrets = []
 const issuers = []
@@ -250,9 +250,9 @@ const del = (number) => {
 				const div = document.querySelector(`#grid${number}`)
 				div.remove()
 
-				const querry = (element) => element === input
+				const query = (element) => element === input
 
-				const index = names.findIndex(querry)
+				const index = names.findIndex(query)
 
 				names.splice(index, 1)
 				secrets.splice(index, 1)
@@ -420,7 +420,7 @@ const createCache = () => {
 	}
 }
 
-// ? error handeling
+// ? error handling
 const loadError = () => {
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
 		if (err) {

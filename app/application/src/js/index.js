@@ -9,7 +9,6 @@ const dns = require("dns")
 
 // ? error in window
 window.onerror = (error) => {
-	console.log(error)
 	ipc.send("rendererError", { renderer: "application", error: error })
 }
 
@@ -46,7 +45,7 @@ let secret = []
 const issuer = []
 const type = []
 
-const querry = []
+const query = []
 
 let clear
 
@@ -392,7 +391,7 @@ const go = () => {
 
 			const item = issuer[i].toLowerCase().trim()
 
-			querry.push(item)
+			query.push(item)
 
 			// interval0
 			const int0 = setInterval(() => {
@@ -412,7 +411,7 @@ const go = () => {
 					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
-				// settting elements
+				// setting elements
 				try {
 					text.textContent = names[i]
 				} catch (error) {
@@ -442,7 +441,7 @@ const go = () => {
 					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
-				// settting elements
+				// setting elements
 				name.textContent = issuer[i]
 				code.value = token
 				time.textContent = remaining
@@ -546,7 +545,7 @@ const search = () => {
 	}
 
 	// search algorithm
-	querry.forEach((e) => {
+	query.forEach((e) => {
 		if (e.startsWith(input)) {
 			console.warn("Authme - Search result found")
 		} else {
@@ -673,7 +672,7 @@ const check_for_internet = () => {
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection resetted")
+			console.warn("Authme - Connection restored")
 		}
 	})
 }
