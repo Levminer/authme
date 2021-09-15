@@ -177,7 +177,7 @@ const forgotPassword = () => {
 		if (dev === true) {
 			storage = JSON.parse(localStorage.getItem("dev_storage"))
 		} else {
-			stroage = JSON.parse(localStorage.getItem("storage"))
+			storage = JSON.parse(localStorage.getItem("storage"))
 		}
 
 		const hash = Buffer.from(sha.generateHash(text.toString("base64")))

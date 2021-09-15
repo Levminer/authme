@@ -103,8 +103,6 @@ ipc.on("info", (event) => {
 	event.returnValue = { authme_version, release_date, tag_name, build_number }
 })
 
-const v8_version = process.versions.v8
-const node_version = process.versions.node
 const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
@@ -992,16 +990,13 @@ ipc.on("request_password", (event) => {
 	event.returnValue = password_buffer
 })
 
-// ? reload codes in dev
-ipc.on("window_reload", () => {
-	if (file.security.new_encryption === true) {
-		window_application.webContents.executeJavaScript("loadSave()")
-	}
-})
-
 // ? reload application window
 ipc.on("reload_application", () => {
-	window_application.webContents.executeJavaScript("reload()")
+	window_application.reload()
+
+	if (file.security.new_encryption === true && file.security.require_password === true) {
+		window_application.webContents.executeJavaScript("loadSave()")
+	}
 })
 
 // ? error in window

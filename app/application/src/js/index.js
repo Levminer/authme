@@ -793,12 +793,6 @@ if (file.security.require_password === false && file.security.new_encryption ===
 	loadSave()
 }
 
-document.addEventListener("keydown", (event) => {
-	if (event.ctrlKey && event.code === "KeyR" && file.security.require_password === true) {
-		ipc.send("window_reload")
-	}
-})
-
 // ? release notes
 const releaseNotes = () => {
 	ipc.send("release_notes")
