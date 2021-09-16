@@ -56,7 +56,7 @@ if (app.isPackaged === false) {
 	}
 }
 
-// pre prelease
+// pre release
 let pre_release = false
 if (number.startsWith("alpha")) {
 	pre_release = true
@@ -103,8 +103,6 @@ ipc.on("info", (event) => {
 	event.returnValue = { authme_version, release_date, tag_name, build_number }
 })
 
-const v8_version = process.versions.v8
-const node_version = process.versions.node
 const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
 
@@ -207,7 +205,7 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
 
 /**
  * Read settings
- * @type {libSettings}
+ * @type {LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -264,7 +262,7 @@ if (file.shortcuts.zoom_reset === undefined) {
 // ? force dark mode
 nativeTheme.themeSource = "dark"
 
-// ? disable hardware accekeration
+// ? disable hardware acceleration
 if (file.settings.disable_hardware_acceleration === true) {
 	app.disableHardwareAcceleration()
 }
@@ -581,7 +579,7 @@ const createWindow = () => {
 		logger.log("Edit closed")
 	})
 
-	// ? disable scren capture by default
+	// ? disable screen capture by default
 	if (file.settings.disable_window_capture === true) {
 		window_settings.setContentProtection(true)
 		window_edit.setContentProtection(true)
@@ -980,7 +978,7 @@ ipc.on("provide_feedback", () => {
 	saveSettings()
 })
 
-// ? new encrypton method
+// ? new encryption method
 let password_buffer
 ipc.on("send_password", (event, data) => {
 	password_buffer = Buffer.from(data)
@@ -992,16 +990,13 @@ ipc.on("request_password", (event) => {
 	event.returnValue = password_buffer
 })
 
-// ? reload codes in dev
-ipc.on("window_reload", () => {
-	if (file.security.new_encryption === true) {
-		window_application.webContents.executeJavaScript("loadSave()")
-	}
-})
-
 // ? reload application window
 ipc.on("reload_application", () => {
-	window_application.webContents.executeJavaScript("reload()")
+	window_application.reload()
+
+	if (file.security.new_encryption === true && file.security.require_password === true) {
+		window_application.webContents.executeJavaScript("loadSave()")
+	}
 })
 
 // ? error in window
@@ -1080,7 +1075,7 @@ const support = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["PayPal", /* "OpenColletive", */ "Close"],
+			buttons: ["PayPal", /* "OpenCollective", */ "Close"],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
@@ -1169,8 +1164,8 @@ app.whenReady().then(() => {
 	})
 
 	// ? create tray
-	const iconpath = path.join(__dirname, "img/tray.png")
-	const tray = new Tray(iconpath)
+	const icon_path = path.join(__dirname, "img/tray.png")
+	const tray = new Tray(icon_path)
 
 	tray.on("click", () => {
 		showAppFromTray()

@@ -63,10 +63,10 @@ const comparePasswords = () => {
 
 	if (password_input1.toString().length > 64) {
 		text.style.color = "#A30015"
-		text.textContent = "Maximum password length is 64 charachters!"
+		text.textContent = "Maximum password length is 64 characters!"
 	} else if (password_input1.toString().length < 8) {
 		text.style.color = "#A30015"
-		text.textContent = "Minimum password length is 8 charachters!"
+		text.textContent = "Minimum password length is 8 characters!"
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
 			console.warn("Authme - Passwords match!")
@@ -98,7 +98,7 @@ const hashPasswords = async () => {
 
 	/**
 	 * Read settings
-	 * @type{libSettings}
+	 * @type {LibSettings}
 	 */
 	const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -112,14 +112,14 @@ const hashPasswords = async () => {
 
 	/**
 	 * Load storage
-	 * @type {libStorage}
+	 * @type {LibStorage}
 	 */
 	let storage
 
 	if (dev === true) {
 		storage = JSON.parse(localStorage.getItem("dev_storage"))
 	} else {
-		stroage = JSON.parse(localStorage.getItem("storage"))
+		storage = JSON.parse(localStorage.getItem("storage"))
 	}
 
 	storage.require_password = file.security.require_password
@@ -171,7 +171,7 @@ const noPassword = () => {
 
 				/**
 				 * Read settings
-				 * @type{libSettings}
+				 * @type{LibSettings}
 				 */
 				const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -188,14 +188,14 @@ const noPassword = () => {
 
 				/**
 				 * Load storage
-				 * @type {libStorage}
+				 * @type {LibStorage}
 				 */
 				let storage
 
 				if (dev === true) {
 					storage = JSON.parse(localStorage.getItem("dev_storage"))
 				} else {
-					stroage = JSON.parse(localStorage.getItem("storage"))
+					storage = JSON.parse(localStorage.getItem("storage"))
 				}
 
 				storage.require_password = file.security.require_password
@@ -268,14 +268,14 @@ const generateKey = () => {
 
 				/**
 				 * Load storage
-				 * @type {libStorage}
+				 * @type {LibStorage}
 				 */
 				let storage
 
 				if (dev === true) {
 					storage = JSON.parse(localStorage.getItem("dev_storage"))
 				} else {
-					stroage = JSON.parse(localStorage.getItem("storage"))
+					storage = JSON.parse(localStorage.getItem("storage"))
 				}
 
 				storage.backup_key = public_key.toString("base64")

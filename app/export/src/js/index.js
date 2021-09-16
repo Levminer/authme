@@ -42,7 +42,7 @@ const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(
 
 /**
  * Read settings
- * @type{libSettings}
+ * @type{LibSettings}
  */
 let settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -64,7 +64,7 @@ const secret = []
 const issuer = []
 const type = []
 
-// ? separete value
+// ? separate value
 const separation = () => {
 	document.querySelector(".before_export").style.display = "none"
 	document.querySelector(".after_export").style.display = "block"
@@ -193,7 +193,7 @@ const hide = () => {
 	ipc.send("hide_export")
 }
 
-// ? error handeling
+// ? error handling
 const error = () => {
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, content) => {
 		if (err) {
@@ -228,7 +228,7 @@ const newExp = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 

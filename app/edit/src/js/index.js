@@ -39,7 +39,7 @@ const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(
 
 /**
  * Read settings
- * @type{libSettings}
+ * @type{LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -112,7 +112,7 @@ const rollback = () => {
 		})
 }
 
-// ? separete value
+// ? separate value
 const names = []
 const secrets = []
 const issuers = []
@@ -250,9 +250,9 @@ const del = (number) => {
 				const div = document.querySelector(`#grid${number}`)
 				div.remove()
 
-				const querry = (element) => element === input
+				const query = (element) => element === input
 
-				const index = names.findIndex(querry)
+				const index = names.findIndex(query)
 
 				names.splice(index, 1)
 				secrets.splice(index, 1)
@@ -308,7 +308,7 @@ const newSaveCodes = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 
@@ -420,7 +420,7 @@ const createCache = () => {
 	}
 }
 
-// ? error handeling
+// ? error handling
 const loadError = () => {
 	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
 		if (err) {
@@ -455,7 +455,7 @@ const newLoad = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 

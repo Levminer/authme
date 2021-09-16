@@ -9,7 +9,6 @@ const dns = require("dns")
 
 // ? error in window
 window.onerror = (error) => {
-	console.log(error)
 	ipc.send("rendererError", { renderer: "application", error: error })
 }
 
@@ -46,13 +45,13 @@ let secret = []
 const issuer = []
 const type = []
 
-const querry = []
+const query = []
 
 let clear
 
 /**
  * Read settings
- * @type{libSettings}
+ * @type{LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 
@@ -77,7 +76,7 @@ const search_state = file.settings.save_search_results
 const offset_number = file.experimental.offset
 const sort_number = file.experimental.sort
 
-// ? separet values
+// ? separate values
 const separation = () => {
 	let c0 = 0
 	let c1 = 1
@@ -392,7 +391,7 @@ const go = () => {
 
 			const item = issuer[i].toLowerCase().trim()
 
-			querry.push(item)
+			query.push(item)
 
 			// interval0
 			const int0 = setInterval(() => {
@@ -412,7 +411,7 @@ const go = () => {
 					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
-				// settting elements
+				// setting elements
 				try {
 					text.textContent = names[i]
 				} catch (error) {
@@ -442,7 +441,7 @@ const go = () => {
 					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
-				// settting elements
+				// setting elements
 				name.textContent = issuer[i]
 				code.value = token
 				time.textContent = remaining
@@ -546,7 +545,7 @@ const search = () => {
 	}
 
 	// search algorithm
-	querry.forEach((e) => {
+	query.forEach((e) => {
 		if (e.startsWith(input)) {
 			console.warn("Authme - Search result found")
 		} else {
@@ -636,7 +635,7 @@ const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
-// ? show ifno
+// ? show info
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }
@@ -673,7 +672,7 @@ const check_for_internet = () => {
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection resetted")
+			console.warn("Authme - Connection restored")
 		}
 	})
 }
@@ -704,7 +703,7 @@ const newSave = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 
@@ -754,7 +753,7 @@ const loadSave = () => {
 	} else {
 		/**
 		 * Load storage
-		 * @type {libStorage}
+		 * @type {LibStorage}
 		 */
 		let storage
 
@@ -792,17 +791,6 @@ const loadSave = () => {
 
 if (file.security.require_password === false && file.security.new_encryption === true) {
 	loadSave()
-}
-
-document.addEventListener("keydown", (event) => {
-	if (event.ctrlKey && event.code === "KeyR" && file.security.require_password === true) {
-		ipc.send("window_reload")
-	}
-})
-
-// ? reload
-const reload = () => {
-	location.reload()
 }
 
 // ? release notes
