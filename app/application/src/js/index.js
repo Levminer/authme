@@ -1,6 +1,6 @@
 const speakeasy = require("@levminer/speakeasy")
 const { app, shell, dialog } = require("@electron/remote")
-const { typedef, aes } = require("@levminer/lib")
+const { aes, convert } = require("@levminer/lib")
 const fs = require("fs")
 const path = require("path")
 const electron = require("electron")
@@ -39,14 +39,8 @@ if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
 
 // eslint-disable-next-line
 let prev = false
-
-let names = []
-let secret = []
-const issuer = []
-const type = []
-
+let save_text
 const query = []
-
 let clear
 
 /**
@@ -76,83 +70,53 @@ const search_state = file.settings.save_search_results
 const offset_number = file.experimental.offset
 const sort_number = file.experimental.sort
 
-// ? separate values
-const separation = () => {
-	let c0 = 0
-	let c1 = 1
-	let c2 = 2
-	let c3 = 3
+/**
+ * Load file first time from dialog
+ */
+const loadFile = () => {
+	dialog
+		.showOpenDialog({
+			title: "Import from Authme Import Text file",
+			properties: ["openFile"],
+			filters: [{ name: "Text file", extensions: ["txt"] }],
+		})
+		.then((result) => {
+			canceled = result.canceled
+			filepath = result.filePaths
 
-	for (let i = 0; i < data.length; i++) {
-		if (i == c0) {
-			const names_before = data[i]
-			const names_after = names_before.slice(8).trim()
-			names.push(names_after)
-			c0 = c0 + 4
-		}
+			if (canceled === false) {
+				const text = fs.readFileSync(filepath.toString(), "utf-8")
+				save_text = text
 
-		if (i == c1) {
-			const secret_before = data[i]
-			const secret_after = secret_before.slice(8).trim()
-			secret.push(secret_after)
-			c1 = c1 + 4
-		}
-
-		if (i == c2) {
-			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8).trim()
-			issuer.push(issuer_after)
-			c2 = c2 + 4
-		}
-
-		if (i == c3) {
-			type.push(data[i])
-			c3 = c3 + 4
-		}
-	}
-
-	const issuer_original = [...issuer]
-
-	const sort = () => {
-		const names_new = []
-		const secret_new = []
-
-		issuer.forEach((element) => {
-			for (let i = 0; i < issuer_original.length; i++) {
-				if (element === issuer_original[i]) {
-					names_new.push(names[i])
-					secret_new.push(secret[i])
-				}
+				processdata(text)
 			}
 		})
-
-		names = names_new
-		secret = secret_new
-	}
-
-	if (sort_number === 1) {
-		issuer.sort((a, b) => {
-			return a.localeCompare(b)
-		})
-
-		sort()
-	} else if (sort_number === 2) {
-		issuer.sort((a, b) => {
-			return b.localeCompare(a)
-		})
-
-		sort()
-	}
-
-	go()
 }
 
-const go = () => {
+/**
+ * Process data from saved source
+ * @param {String} text
+ */
+const processdata = (text) => {
+	const data = convert.fromText(text, sort_number)
+
+	go(data)
+}
+
+/**
+ * Start creating 2FA elements
+ * @param {LibImportFile} data
+ */
+const go = (data) => {
 	document.querySelector("#search").style.display = "grid"
 	document.querySelector(".h1").style.marginBottom = "0px"
 	document.querySelector(".center").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
+
+	const names = data.names
+	const secrets = data.secrets
+	const issuers = data.issuers
 
 	const generate = () => {
 		// counter
@@ -388,16 +352,21 @@ const go = () => {
 			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
-
-			const item = issuer[i].toLowerCase().trim()
-
+			const item = issuers[i].toLowerCase().trim()
 			query.push(item)
+
+			// setting elements
+			try {
+				text.textContent = names[i]
+			} catch (error) {
+				console.warn(`Authme - Setting names - ${error}`)
+			}
 
 			// interval0
 			const int0 = setInterval(() => {
 				// generate token
 				const token = speakeasy.totp({
-					secret: secret[i],
+					secret: secrets[i],
 					encoding: "base32",
 					epoch: offset_number,
 				})
@@ -411,14 +380,7 @@ const go = () => {
 					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
 				}
 
-				// setting elements
-				try {
-					text.textContent = names[i]
-				} catch (error) {
-					console.warn(`Authme - Setting names - ${error}`)
-				}
-
-				name.textContent = issuer[i]
+				name.textContent = issuers[i]
 				code.value = token
 				time.textContent = remaining
 			}, 100)
@@ -427,7 +389,7 @@ const go = () => {
 			const int1 = setInterval(() => {
 				// generate token
 				const token = speakeasy.totp({
-					secret: secret[i],
+					secret: secrets[i],
 					encoding: "base32",
 					epoch: offset_number,
 				})
@@ -442,7 +404,7 @@ const go = () => {
 				}
 
 				// setting elements
-				name.textContent = issuer[i]
+				name.textContent = issuers[i]
 				code.value = token
 				time.textContent = remaining
 
@@ -450,18 +412,15 @@ const go = () => {
 			}, 500)
 
 			// copy
-			const el = copy.addEventListener("click", () => {
-				code.select()
-				code.setSelectionRange(0, 9999)
-				document.execCommand("copy")
+			copy.addEventListener("click", () => {
+				navigator.clipboard.writeText(code.value)
+
 				copy.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
 			 	 </svg>
 				Copied
 				`
-
-				window.getSelection().removeAllRanges()
 
 				setTimeout(() => {
 					copy.innerHTML = `
@@ -539,7 +498,7 @@ const search = () => {
 	}
 
 	// restart
-	for (let i = 0; i < names.length; i++) {
+	for (let i = 0; i < query.length; i++) {
 		const div = document.querySelector(`#grid${[i]}`)
 		div.style.display = "grid"
 	}
@@ -557,7 +516,7 @@ const search = () => {
 
 	// if search empty
 	if (search.value == "") {
-		for (let i = 0; i < names.length; i++) {
+		for (let i = 0; i < query.length; i++) {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "grid"
 		}

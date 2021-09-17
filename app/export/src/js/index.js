@@ -1,6 +1,6 @@
 const electron = require("electron")
 const { app, dialog, shell } = require("@electron/remote")
-const { aes } = require("@levminer/lib")
+const { aes, convert } = require("@levminer/lib")
 const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
@@ -59,58 +59,29 @@ const settings_refresher = setInterval(() => {
 	console.warn("Authme - Settings refreshed")
 }, 100)
 
-const name = []
-const secret = []
-const issuer = []
-const type = []
+/**
+ * Process data from saved file
+ * @param {String} text
+ */
+const processdata = (text) => {
+	const converted = convert.fromText(text, 0)
 
-// ? separate value
-const separation = () => {
-	document.querySelector(".before_export").style.display = "none"
-	document.querySelector(".after_export").style.display = "block"
-
-	let c0 = 0
-	let c1 = 1
-	let c2 = 2
-	let c3 = 3
-
-	for (let i = 0; i < data.length; i++) {
-		if (i == c0) {
-			const name_before = data[i]
-			const name_after = name_before.slice(8)
-			name.push(name_after)
-			c0 = c0 + 4
-		}
-
-		if (i == c1) {
-			const secret_before = data[i]
-			const secret_after = secret_before.slice(8)
-			secret.push(secret_after)
-			c1 = c1 + 4
-		}
-
-		if (i == c2) {
-			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8)
-			issuer.push(issuer_after)
-			c2 = c2 + 4
-		}
-
-		if (i == c3) {
-			type.push(data[i])
-			c3 = c3 + 4
-		}
-	}
-
-	go()
+	go(converted)
 }
 
-// ? render values
-const go = () => {
-	for (let i = 0; i < name.length; i++) {
+/**
+ * Start creating export elements
+ * @param {LibImportFile} data
+ */
+const go = (data) => {
+	const names = data.names
+	const secrets = data.secrets
+	const issuers = data.issuers
+
+	for (let i = 0; i < names.length; i++) {
 		const element = document.createElement("div")
 
-		qrcode.toDataURL(`otpauth://totp/${name[i]}?secret=${secret[i]}&issuer=${issuer[i]}`, (err, data) => {
+		qrcode.toDataURL(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`, (err, data) => {
 			if (err) {
 				console.warn(`Authme - Failed to generate QR code - ${err}`)
 			}
@@ -120,7 +91,7 @@ const go = () => {
 			const text = `
 			<div data-scroll class="qr">
 				<img src="${data}">
-				<h2>${issuer[i]}</h2>
+				<h2>${issuers[i]}</h2>
 			</div>`
 
 			element.innerHTML = text

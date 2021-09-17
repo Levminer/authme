@@ -1,5 +1,5 @@
-const { shell, app, dialog } = require("@electron/remote")
-const { aes } = require("@levminer/lib")
+const { app, dialog } = require("@electron/remote")
+const { aes, convert } = require("@levminer/lib")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -113,52 +113,30 @@ const rollback = () => {
 }
 
 // ? separate value
-const names = []
-const secrets = []
-const issuers = []
-const types = []
+let names = []
+let secrets = []
+let issuers = []
 
-const separation = () => {
-	rollback_con.style.display = "none"
+/**
+ * Process data from saved file
+ * @param {String} text
+ */
+const processdata = (text) => {
+	const data = convert.fromText(text, 0)
 
-	let c0 = 0
-	let c1 = 1
-	let c2 = 2
-	let c3 = 3
-
-	for (let i = 0; i < data.length; i++) {
-		if (i == c0) {
-			const name_before = data[i]
-			const name_after = name_before.slice(8)
-			names.push(name_after.trim())
-			c0 = c0 + 4
-		}
-
-		if (i == c1) {
-			const secret_before = data[i]
-			const secret_after = secret_before.slice(8)
-			secrets.push(secret_after.trim())
-			c1 = c1 + 4
-		}
-
-		if (i == c2) {
-			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8)
-			issuers.push(issuer_after.trim())
-			c2 = c2 + 4
-		}
-
-		if (i == c3) {
-			types.push(data[i])
-			c3 = c3 + 4
-		}
-	}
-
-	go()
+	go(data)
 }
 
-const go = () => {
+/**
+ * Start creating edit elements
+ * @param {LibImportFile} data
+ */
+const go = (data) => {
 	createCache()
+
+	names = data.names
+	secrets = data.secrets
+	issuers = data.issuers
 
 	document.querySelector(".beforeLoad").style.display = "none"
 	document.querySelector(".afterLoad").style.display = "block"
