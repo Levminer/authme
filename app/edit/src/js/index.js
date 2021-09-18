@@ -139,6 +139,7 @@ const go = (data) => {
 	issuers = data.issuers
 
 	document.querySelector(".beforeLoad").style.display = "none"
+	document.querySelector(".rollback").style.display = "none"
 	document.querySelector(".afterLoad").style.display = "block"
 
 	for (let i = 0; i < names.length; i++) {

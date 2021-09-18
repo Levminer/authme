@@ -100,6 +100,9 @@ const go = (data) => {
 		})
 
 		document.querySelector(".center").appendChild(element)
+
+		document.querySelector(".before_export").style.display = "none"
+		document.querySelector(".after_export").style.display = "block"
 	}
 }
 
@@ -219,6 +222,8 @@ const newExp = () => {
 
 			password.fill(0)
 			key.fill(0)
+
+			error()
 		} else {
 			const codes_file = JSON.parse(content)
 

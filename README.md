@@ -29,7 +29,7 @@
 
 ## Features
 
--   🔒 Secure: Your codes is secured by AES 256bit encrypton and your own password.
+-   🔒 Secure: Your codes is secured by AES 256bit encryption and your own password.
 -   🗄️ Import: You can directly import from Google Authenticator or from any 2FA QR code you screenshot.
 -   ⌨️ Shortcuts: Easily open Authme with custom shortcuts and it can also start when your system starts.
 
@@ -40,7 +40,7 @@
 
 ## Importing
 
--   From QR codes: You screenshot all the QR codes from your favourite websites, and import all of them to Authme
+-   From QR codes: You screenshot all the QR codes from your favorite websites, and import all of them to Authme
 -   From Google Authenticator: Import all of your saved QR codes from your Google Authenticator app.
 
 ## Contributing and development

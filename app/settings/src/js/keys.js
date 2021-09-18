@@ -104,16 +104,17 @@ const hk_edit = (value) => {
 	if (modify === true) {
 		document.addEventListener("keydown", call, true)
 
-		inp_name.value = "Press any key combiantion"
-		inp_name.style.border = "green 1px solid"
-		btn_name.style.border = "green 1px solid"
+		inp_name.value = "Press any key combination"
+		inp_name.style.borderColor = "green"
+		btn_name.style.borderColor = "green"
 		svg_name.style.color = "green"
 
 		modify = false
-	} else if (inp_name.value !== "Press any key combiantion") {
+	} else if (inp_name.value !== "Press any key combination") {
 		document.removeEventListener("keydown", call, true)
 		svg_name.style.color = ""
 		btn_name.style.border = ""
+		inp_name.style.border = ""
 
 		switch (id) {
 			case 0:
@@ -239,7 +240,7 @@ const hk_delete = (value) => {
 	inp_name.value = "None"
 
 	svg_name.style.color = "red"
-	btn_name.style.border = "red 1px solid"
+	btn_name.style.borderColor = "red"
 
 	setTimeout(() => {
 		svg_name.style.color = ""
@@ -357,7 +358,7 @@ const hk_reset = (value) => {
 	svg_name = document.querySelector(`#hk${value}_svg_reset`)
 
 	svg_name.style.color = "orange"
-	btn_name.style.border = "orange 1px solid"
+	btn_name.style.borderColor = "orange"
 
 	setTimeout(() => {
 		svg_name.style.color = ""
