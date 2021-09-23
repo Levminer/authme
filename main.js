@@ -353,9 +353,7 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
@@ -369,9 +367,7 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
@@ -385,9 +381,7 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
@@ -401,9 +395,7 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
@@ -417,9 +409,7 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
@@ -433,9 +423,7 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
@@ -449,11 +437,18 @@ const createWindow = () => {
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 			nodeIntegration: true,
-			enableRemoteModule: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
+
+	// remote module
+	remote.enable(window_landing.webContents)
+	remote.enable(window_confirm.webContents)
+	remote.enable(window_application.webContents)
+	remote.enable(window_settings.webContents)
+	remote.enable(window_import.webContents)
+	remote.enable(window_export.webContents)
+	remote.enable(window_edit.webContents)
 
 	// load window files
 	window_landing.loadFile("./app/landing/index.html")
@@ -1133,7 +1128,6 @@ app.whenReady().then(() => {
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
-			nativeWindowOpen: true,
 		},
 	})
 
