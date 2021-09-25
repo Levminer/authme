@@ -65,14 +65,6 @@ const settings_refresher = setInterval(() => {
 }, 100)
 
 // ? elements
-const but0 = document.querySelector("#but0")
-const but2 = document.querySelector("#but2")
-const but5 = document.querySelector("#but5")
-const but10 = document.querySelector("#but10")
-const but11 = document.querySelector("#but11")
-const but13 = document.querySelector("#but13")
-const but15 = document.querySelector("#but15")
-
 const inp0 = document.querySelector("#inp0")
 const drp0 = document.querySelector("#drp0")
 
@@ -92,6 +84,8 @@ const tgl6 = document.querySelector("#tgl6")
 const tgt6 = document.querySelector("#tgt6")
 const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
+const tgl8 = document.querySelector("#tgl8")
+const tgt8 = document.querySelector("#tgt8")
 
 // launch on startup
 let startup_state = file.settings.launch_on_startup
@@ -199,6 +193,17 @@ if (hardware_state === true) {
 } else {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
+}
+
+// webcam
+let webcam_state = file.experimental.webcam
+
+if (webcam_state === true) {
+	tgt8.textContent = "On"
+	tgl8.checked = true
+} else {
+	tgt8.textContent = "Off"
+	tgl8.checked = false
 }
 
 // ? startup
@@ -615,6 +620,54 @@ const dropdownChoose = (id) => {
 				break
 		}
 	}
+}
+
+// ? webcam
+const webcam = () => {
+	const toggle = () => {
+		if (webcam_state === true) {
+			file.experimental.webcam = false
+
+			save()
+
+			tgt8.textContent = "Off"
+			tgl8.checked = false
+
+			webcam_state = false
+		} else {
+			file.experimental.webcam = true
+
+			save()
+
+			tgt8.textContent = "On"
+			tgl8.checked = true
+
+			webcam_state = true
+		}
+	}
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				reload()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+				reload()
+			}
+		})
 }
 
 // ? save settings

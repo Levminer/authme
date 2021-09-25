@@ -158,7 +158,8 @@ const settings = `{
 		},
 		"experimental":{
 			"offset": null,
-			"sort": null
+			"sort": null,
+			"webcam": "null"
 		},
 		"security": {
 			"require_password": null,
@@ -215,6 +216,12 @@ if (file.experimental === undefined) {
 		offset: null,
 		sort: null,
 	}
+
+	saveSettings()
+}
+
+if (file.experimental.webcam === undefined) {
+	file.experimental.webcam = null
 
 	saveSettings()
 }
