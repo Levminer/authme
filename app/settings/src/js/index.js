@@ -114,13 +114,13 @@ if (tray_state === true) {
 // capture
 let capture_state = file.settings.disable_window_capture
 if (capture_state === true) {
-	tgt2.textContent = "On"
-	tgl2.checked = true
+	tgt2.textContent = "Off"
+	tgl2.checked = false
 
 	ipc.send("disable_capture")
 } else {
-	tgt2.textContent = "Off"
-	tgl2.checked = false
+	tgt2.textContent = "On"
+	tgl2.checked = true
 
 	ipc.send("enable_capture")
 }
@@ -165,13 +165,6 @@ if (copy_state === true) {
 	tgl6.checked = false
 }
 
-// offset
-const offset_number = file.experimental.offset
-
-if (offset_number === null) {
-	inp0.value = 0
-}
-
 // sort
 const sort_number = file.experimental.sort
 
@@ -188,11 +181,11 @@ if (sort_number === 1) {
 // hardware
 let hardware_state = file.settings.disable_hardware_acceleration
 if (hardware_state === true) {
-	tgt7.textContent = "On"
-	tgl7.checked = true
-} else {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
+} else {
+	tgt7.textContent = "On"
+	tgl7.checked = true
 }
 
 // webcam
@@ -263,8 +256,8 @@ const capture = () => {
 
 		save()
 
-		tgt2.textContent = "Off"
-		tgl2.checked = false
+		tgt2.textContent = "On"
+		tgl2.checked = true
 
 		capture_state = false
 
@@ -274,8 +267,8 @@ const capture = () => {
 
 		save()
 
-		tgt2.textContent = "On"
-		tgl2.checked = true
+		tgt2.textContent = "Off"
+		tgl2.checked = false
 
 		capture_state = true
 
@@ -486,42 +479,7 @@ const copy = () => {
 	reload()
 }
 
-// ? offset
-inp0.addEventListener("keyup", (event) => {
-	if (event.key === "Enter") {
-		const offset_input = document.querySelector("#inp0").value
-
-		console.log(event)
-
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Yes", "No", "Cancel"],
-				defaultId: 2,
-				cancelId: 2,
-				noLink: true,
-				type: "warning",
-				message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					file.experimental.offset = parseInt(offset_input)
-
-					save()
-
-					restart()
-				}
-
-				if (result.response === 1) {
-					file.experimental.offset = parseInt(offset_input)
-
-					save()
-				}
-			})
-	}
-})
-
-// ? save search results
+// ? hardware acceleration
 const hardware = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
@@ -545,8 +503,26 @@ const hardware = () => {
 		}
 	}
 
-	toggle()
-	reload()
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
 }
 
 let dropdown_state = false
@@ -659,13 +635,11 @@ const webcam = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				toggle()
-				reload()
 				restart()
 			}
 
 			if (result.response === 1) {
 				toggle()
-				reload()
 			}
 		})
 }

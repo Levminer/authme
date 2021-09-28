@@ -223,8 +223,8 @@
 						<br />
 						<hr />
 						<div id="disable_screen_capture_div">
-							<h3>Disable window capture</h3>
-							<p class="text3">Disables screenshots and screen capture. You can't record or screenshot the app.</p>
+							<h3>Window capture</h3>
+							<p class="text3">Allows screenshots and screen capture. You can record or screenshot the app.</p>
 							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 									<input id="tgl2" onclick="capture()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
@@ -236,13 +236,14 @@
 							<hr />
 						</div>
 						<div>
-							<h3>Disable hardware acceleration</h3>
-							<p class="text3">Disables hardware acceleration. Disable this if you experience frame drops or lags.</p>
+							<h3>Hardware acceleration</h3>
+							<p class="text3">Uses GPU for smoother experience. Enable this option if you experience frame drops or lags.</p>
 							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
-								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-									<input id="tgl7" onclick="hardware()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
-									<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
-								</div>
+								<a href="#" onclick="hardware()">
+									<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+										<input tabindex="-1" id="tgl7" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+								></a>
 								<span id="tgt7" class="text-black text-xl">-</span>
 							</div>
 							<br />
@@ -260,24 +261,26 @@
 						<hr />
 						<h3>Open folders</h3>
 						<p class="text3">You can open the folders Authme uses to function. Editing or deleting files might cause a crash.</p>
-						<button class="buttoni" id="but3" onclick="folder0()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
-							</svg>
-							Authme folder
-						</button>
-						<button class="buttoni" id="but4" onclick="folder1()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
-							</svg>
-							Settings folder
-						</button>
-						<button class="buttoni" id="but12" onclick="folder2()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
-							</svg>
-							Cache folder
-						</button>
+						<div class="space-x-3">
+							<button class="buttoni" id="but3" onclick="folder0()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+								</svg>
+								Authme folder
+							</button>
+							<button class="buttoni" id="but4" onclick="folder1()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+								</svg>
+								Settings folder
+							</button>
+							<button class="buttoni" id="but12" onclick="folder2()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+								</svg>
+								Cache folder
+							</button>
+						</div>
 						<br />
 						<hr />
 						<h3>Logs</h3>
@@ -924,12 +927,7 @@
 							<span id="tgt8" class="text-black text-xl">-</span>
 						</div>
 						<p class="unstable">This feature is WIP! It might be unstable or buggy!</p>
-						<br />
-						<hr />
-						<h3>Codes time offset</h3>
-						<p class="text3">You can set a time offset for the codes, confirm by pressing enter. Specify the time in seconds, it can be a positive or a negative number.</p>
-						<input type="number" id="inp0" class="input1 offset" max="1000" min="-1000" maxlength="5" step="5" value="0" />
-						<p class="warning">This feature is WIP! Use it at your own risk!</p>
+						<!-- <p class="warning">This feature is WIP! Use it at your own risk!</p> -->
 					</div>
 				</div>
 			</div>

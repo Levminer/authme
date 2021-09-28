@@ -16,14 +16,14 @@ const ipc = electron.ipcMain
 // ?  init
 
 // windows
-let window_splash
-let window_landing
-let window_confirm
-let window_application
-let window_settings
-let window_import
-let window_export
-let window_edit
+let /** @type{BrowserWindow} */ window_splash
+let /** @type{BrowserWindow} */ window_landing
+let /** @type{BrowserWindow} */ window_confirm
+let /** @type{BrowserWindow} */ window_application
+let /** @type{BrowserWindow} */ window_settings
+let /** @type{BrowserWindow} */ window_import
+let /** @type{BrowserWindow} */ window_export
+let /** @type{BrowserWindow} */ window_edit
 
 // window states
 let confirm_shown = false
@@ -157,7 +157,6 @@ const settings = `{
 			"disable_hardware_acceleration": true
 		},
 		"experimental":{
-			"offset": null,
 			"sort": null,
 			"webcam": "null"
 		},
@@ -213,7 +212,6 @@ let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "ut
 // settings compatibility
 if (file.experimental === undefined) {
 	file.experimental = {
-		offset: null,
 		sort: null,
 	}
 

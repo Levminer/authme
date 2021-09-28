@@ -67,7 +67,6 @@ const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
 const search_state = file.settings.save_search_results
 
-const offset_number = file.experimental.offset
 const sort_number = file.experimental.sort
 
 /**
@@ -368,17 +367,10 @@ const go = (data) => {
 				const token = speakeasy.totp({
 					secret: secrets[i],
 					encoding: "base32",
-					epoch: offset_number,
 				})
 
 				// time
-				let remaining
-
-				if (offset_number === undefined || null || 0) {
-					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-				} else {
-					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
-				}
+				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 
 				name.textContent = issuers[i]
 				code.value = token
@@ -391,17 +383,10 @@ const go = (data) => {
 				const token = speakeasy.totp({
 					secret: secrets[i],
 					encoding: "base32",
-					epoch: offset_number,
 				})
 
 				// time
-				let remaining
-
-				if (offset_number === undefined || null || 0) {
-					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-				} else {
-					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
-				}
+				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 
 				// setting elements
 				name.textContent = issuers[i]
