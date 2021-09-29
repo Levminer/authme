@@ -37,6 +37,7 @@ let edit_shown = false
 let authenticated = false
 let offline = false
 let shortcuts = false
+let reload = false
 let tray_minimized = false
 let update_seen = false
 
@@ -148,7 +149,7 @@ const settings = `{
 		},
 		"settings": {
 			"launch_on_startup": false,
-			"close_to_tray": false,
+			"close_to_tray": true,
 			"show_2fa_names": false,
 			"click_to_reveal": false,
 			"reset_after_copy": false,
@@ -883,8 +884,12 @@ ipc.on("enable_tray", () => {
 })
 
 ipc.on("startup", () => {
-	window_application.hide()
-	window_confirm.hide()
+	if (reload === false) {
+		window_application.hide()
+		window_confirm.hide()
+
+		reload = true
+	}
 })
 
 ipc.on("app_path", () => {

@@ -25,7 +25,6 @@
 		"appId": "com.levminer.authme",
 		"files": [
 			"!screenshots",
-			"!extract",
 			"!sample",
 			"!scripts",
 			"!**/*.scss",
@@ -95,7 +94,7 @@
 		"qrcode-decoder": "^0.2.2"
 	},
 	"devDependencies": {
-		"autoprefixer": "^10.3.5",
+		"autoprefixer": "^10.3.6",
 		"electron": "^15.0.0",
 		"electron-builder": "^22.11.7",
 		"eslint": "^7.32.0",
@@ -109,7 +108,7 @@
 		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.4.1",
 		"sass": "^1.42.1",
-		"tailwindcss": "^2.2.15"
+		"tailwindcss": "^2.2.16"
 	},
 	"engines": {
 		"node": ">=15.0.0",
