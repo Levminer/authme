@@ -1,5 +1,6 @@
 const { app, dialog } = require("@electron/remote")
 const { aes, convert } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -9,6 +10,9 @@ const path = require("path")
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "edit", error: error })
 }
+
+// ? logger
+logger.getWindow("edit")
 
 // ? if development
 let dev = false
@@ -50,10 +54,8 @@ const settings_refresher = setInterval(() => {
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		console.warn("Authme - Settings refresh completed")
+		logger.log("Settings refresh completed")
 	}
-
-	console.warn("Authme - Settings refreshed")
 }, 100)
 
 // ? rollback
@@ -63,9 +65,9 @@ const rollback_text = document.querySelector("#rollbackBut")
 
 fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
 	if (err) {
-		console.warn("Authme - Cache file don't exist")
+		logger.warn("Cache file don't exist")
 	} else {
-		console.log("Authme - Cache file exists")
+		logger.log("Cache file exists")
 
 		rollback_con.style.display = "block"
 
@@ -95,13 +97,13 @@ const rollback = () => {
 			if (result.response === 0) {
 				fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
 					if (err) {
-						console.error("Authme - Error reading hash file", err)
+						logger.error("Error reading hash file", err)
 					} else {
 						fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
 							if (err) {
-								console.error("Authme - Failed to create cache folder", err)
+								logger.error("Failed to create cache folder", err)
 							} else {
-								console.log("Authme - Hash file created")
+								logger.log("Hash file created")
 							}
 						})
 					}
@@ -343,7 +345,7 @@ const addMore = () => {
 				for (let i = 0; i < files.length; i++) {
 					fs.readFile(files[i], (err, input) => {
 						if (err) {
-							console.log("Authme - Error loading file")
+							logger.log("Error loading file")
 						} else {
 							data = []
 
@@ -363,7 +365,7 @@ const createCache = () => {
 	if (file.security.new_encryption === true) {
 		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 			if (err) {
-				console.error("Authme - Error reading hash file", err)
+				logger.error("Error reading hash file", err)
 			} else {
 				if (!fs.existsSync(cache_path)) {
 					fs.mkdirSync(cache_path)
@@ -371,9 +373,9 @@ const createCache = () => {
 
 				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
 					if (err) {
-						console.error("Authme - Failed to create cache folder", err)
+						logger.error("Failed to create cache folder", err)
 					} else {
-						console.log("Authme - Cache file created")
+						logger.log("Cache file created")
 					}
 				})
 			}
@@ -381,7 +383,7 @@ const createCache = () => {
 	} else {
 		fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
 			if (err) {
-				console.error("Authme - Error reading hash file", err)
+				logger.error("Error reading hash file", err)
 			} else {
 				if (!fs.existsSync(cache_path)) {
 					fs.mkdirSync(cache_path)
@@ -389,9 +391,9 @@ const createCache = () => {
 
 				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
 					if (err) {
-						console.error("Authme - Failed to create cache folder", err)
+						logger.error("Failed to create cache folder", err)
 					} else {
-						console.log("Authme - Cache file created")
+						logger.log("Cache file created")
 					}
 				})
 			}
@@ -450,7 +452,7 @@ const newLoad = () => {
 
 	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
-			console.warn("Authme - The file codes.authme don't exists")
+			logger.warn("The file codes.authme don't exists")
 
 			password.fill(0)
 			key.fill(0)

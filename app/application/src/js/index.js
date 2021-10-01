@@ -1,6 +1,7 @@
-const speakeasy = require("@levminer/speakeasy")
 const { app, shell, dialog } = require("@electron/remote")
+const logger = require("@levminer/lib/logger/renderer")
 const { aes, convert } = require("@levminer/lib")
+const speakeasy = require("@levminer/speakeasy")
 const fs = require("fs")
 const path = require("path")
 const electron = require("electron")
@@ -11,6 +12,9 @@ const dns = require("dns")
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "application", error: error })
 }
+
+// ? logger
+logger.getWindow("application")
 
 // ? if development
 let dev = false
@@ -56,10 +60,8 @@ const settings_refresher = setInterval(() => {
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		console.warn("Authme - Settings refresh completed")
+		logger.log("Settings refresh completed")
 	}
-
-	console.warn("Authme - Settings refreshed")
 }, 100)
 
 const name_state = file.settings.show_2fa_names
@@ -358,7 +360,7 @@ const go = (data) => {
 			try {
 				text.textContent = names[i]
 			} catch (error) {
-				console.warn(`Authme - Setting names - ${error}`)
+				logger.warn(`Setting names - ${error}`)
 			}
 
 			// interval0
@@ -491,7 +493,7 @@ const search = () => {
 	// search algorithm
 	query.forEach((e) => {
 		if (e.startsWith(input)) {
-			console.warn("Authme - Search result found")
+			logger.warn("Search result found")
 		} else {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "none"
@@ -518,7 +520,7 @@ try {
 		})
 	}, 500)
 } catch (error) {
-	console.error("Authme - Block animations failed")
+	logger.error("Block animations failed")
 }
 
 let focus = true
@@ -600,7 +602,7 @@ const check_for_internet = () => {
 
 			ipc.send("offline")
 
-			console.warn("Authme - Can't connect to the internet")
+			logger.warn("Can't connect to the internet")
 		} else if (err === null && offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
 			document.querySelector(".offline").style.display = "none"
@@ -610,13 +612,13 @@ const check_for_internet = () => {
 
 			ipc.send("offline")
 
-			console.warn("Authme - Connected to the internet")
+			logger.warn("Connected to the internet")
 		} else if ((online_closed === true || offline_closed === true) && err === null) {
 			offline_mode = false
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection restored")
+			logger.warn("Connection restored")
 		}
 	})
 }
@@ -713,7 +715,7 @@ const loadSave = () => {
 
 	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
-			console.warn("Authme - The file codes.authme don't exists")
+			logger.warn("The file codes.authme don't exists")
 
 			password.fill(0)
 			key.fill(0)

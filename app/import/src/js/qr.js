@@ -41,7 +41,7 @@ const qrImport = () => {
 						Try to take a better picture and try again!`,
 					})
 
-					return console.warn("Authme - No QR code found (QR)")
+					return logger.warn("No QR code found (QR)")
 				} else if (res.data.startsWith("otpauth://totp/")) {
 					// correct pictures
 					corrects.push(element)
@@ -106,13 +106,13 @@ const qrImport = () => {
 										if (canceled === false) {
 											fs.writeFile(output, str, (err) => {
 												if (err) {
-													console.warn(`Authme - Error creating file - ${err}`)
+													logger.error(`Error creating file - ${err}`)
 												} else {
-													console.warn("Authme - File created")
+													logger.log("File created")
 												}
 											})
 										} else {
-											return console.warn("Authme - Saving canceled")
+											return logger.warn("Saving canceled")
 										}
 									})
 							})
@@ -127,7 +127,7 @@ const qrImport = () => {
 						Make sure this is a correct QR code and try again!`,
 					})
 
-					return console.error("Authme - Wrong QR code found (QR)")
+					return logger.error("Wrong QR code found (QR)")
 				}
 			})
 		}
@@ -198,13 +198,13 @@ const qrCamera = () => {
 							if (canceled === false) {
 								fs.writeFile(output, str, (err) => {
 									if (err) {
-										console.warn(`Authme - Error creating file - ${err}`)
+										logger.error(`Error creating file - ${err}`)
 									} else {
-										console.warn("Authme - File created")
+										logger.log("File created")
 									}
 								})
 							} else {
-								return console.warn("Authme - Saving canceled")
+								return logger.warn("Saving canceled")
 							}
 						})
 				})
@@ -223,7 +223,7 @@ const qrCamera = () => {
 
 			reader.stop()
 
-			return console.error("Authme - Wrong QR code found (QR)")
+			return logger.error("Wrong QR code found (QR)")
 		}
 
 		video.style.display = "none"

@@ -6,6 +6,10 @@ const path = require("path")
 const fetch = require("node-fetch")
 const dns = require("dns")
 const { typedef } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
+
+// ? logger
+logger.getWindow("settings")
 
 // ? error in window
 window.onerror = (error) => {
@@ -58,10 +62,8 @@ const settings_refresher = setInterval(() => {
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		console.warn("Authme - Settings refresh completed")
+		logger.warn("Settings refresh completed")
 	}
-
-	console.warn("Authme - Settings refreshed")
 }, 100)
 
 // ? elements
@@ -305,45 +307,45 @@ const reset = () => {
 							// remove settings file
 							fs.unlink(path.join(file_path, "settings.json"), (err) => {
 								if (err && err.code === "ENOENT") {
-									return console.warn(`Authme - Error deleting settings.json - ${err}`)
+									return logger.error(`Error deleting settings.json - ${err}`)
 								} else {
-									console.warn("Authme - File settings.json deleted")
+									logger.log("File settings.json deleted")
 								}
 							})
 
 							// remove hash file
 							fs.unlink(path.join(file_path, "hash.authme"), (err) => {
 								if (err && err.code === "ENOENT") {
-									return console.warn(`Authme - Error deleting hash.authme - ${err}`)
+									return logger.error(`Error deleting hash.authme - ${err}`)
 								} else {
-									console.warn("Authme - File hash.authme deleted")
+									logger.log("File hash.authme deleted")
 								}
 							})
 
 							// clear logs
 							fs.rmdir(path.join(file_path, "codes"), { recursive: true }, (err) => {
 								if (err) {
-									return console.warn(`Authme - Error deleting logs - ${err}`)
+									return logger.error(`Error deleting logs - ${err}`)
 								} else {
-									console.warn("Authme - Logs deleted")
+									logger.log("Logs deleted")
 								}
 							})
 
 							// clear logs
 							fs.rmdir(path.join(file_path, "logs"), { recursive: true }, (err) => {
 								if (err) {
-									return console.warn(`Authme - Error deleting logs - ${err}`)
+									return logger.error(`Error deleting logs - ${err}`)
 								} else {
-									console.warn("Authme - Logs deleted")
+									logger.log("Logs deleted")
 								}
 							})
 
 							// clear cache files
 							fs.rmdir(path.join(file_path, "cache"), { recursive: true }, (err) => {
 								if (err) {
-									return console.warn(`Authme - Error deleting caches - ${err}`)
+									return logger.error(`Error deleting caches - ${err}`)
 								} else {
-									console.warn("Authme - Caches deleted")
+									logger.log("Caches deleted")
 								}
 							})
 
@@ -733,7 +735,7 @@ const api = async () => {
 					  </svg> \n Some systems offline`
 					}
 				} catch (error) {
-					return console.warn(`Authme - Error loading API - ${error}`)
+					return logger.warn("Error loading API", error)
 				}
 			})
 	} catch (error) {
@@ -901,7 +903,7 @@ const check_for_internet = () => {
 			offline_mode = true
 			offline_closed = true
 
-			console.warn("Authme - Can't connect to the internet")
+			logger.warn("Can't connect to the internet")
 		} else if (err === null && offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
 			document.querySelector(".offline").style.display = "none"
@@ -909,13 +911,13 @@ const check_for_internet = () => {
 			offline_mode = false
 			online_closed = true
 
-			console.warn("Authme - Connected to the internet")
+			logger.log("Connected to the internet")
 		} else if ((online_closed === true || offline_closed === true) && err === null) {
 			offline_mode = false
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection restored")
+			logger.log("Connection restored")
 		}
 	})
 }

@@ -5,11 +5,15 @@ const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
 const { aes, rsa, sha } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
 
 // ? error in window
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "landing", error: error })
 }
+
+// ? logger
+logger.getWindow("landing")
 
 // ? init
 const text = document.querySelector("#text")
@@ -69,7 +73,7 @@ const comparePasswords = () => {
 		text.textContent = "Minimum password length is 8 characters!"
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
-			console.warn("Authme - Passwords match!")
+			logger.log("Passwords match!")
 
 			text.style.color = "#28A443"
 			text.textContent = "Passwords match! Please wait!"
@@ -79,7 +83,7 @@ const comparePasswords = () => {
 
 			hashPasswords()
 		} else {
-			console.warn("Authme - Passwords dont match!")
+			logger.warn("Passwords dont match!")
 
 			text.style.color = "#A30015"
 			text.textContent = "Passwords don't match! Try again!"
@@ -94,7 +98,7 @@ const hashPasswords = async () => {
 
 	const salt = await bcrypt.genSalt(10)
 
-	const hashed = await bcrypt.hash(password_input.toString(), salt).then(console.warn("Hash completed!"))
+	const hashed = await bcrypt.hash(password_input.toString(), salt).then(logger.log("Hash completed!"))
 
 	/**
 	 * Read settings

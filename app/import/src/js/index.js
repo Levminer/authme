@@ -1,5 +1,6 @@
 const { app, dialog, shell } = require("@electron/remote")
 const QrcodeDecoder = require("qrcode-decoder").default
+const logger = require("@levminer/lib/logger/renderer")
 const electron = require("electron")
 const path = require("path")
 const fs = require("fs")
@@ -10,6 +11,9 @@ const ipc = electron.ipcRenderer
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "import", error: error })
 }
+
+// ? logger
+logger.getWindow("import")
 
 // ? if development
 let dev = false

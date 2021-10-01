@@ -1,6 +1,7 @@
 const electron = require("electron")
 const { app, dialog, shell } = require("@electron/remote")
 const { aes, convert } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
@@ -10,6 +11,9 @@ const ipc = electron.ipcRenderer
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "export", error: error })
 }
+
+// ? logger
+logger.getWindow("export")
 
 // ? if development
 let dev = false
@@ -53,11 +57,9 @@ const settings_refresher = setInterval(() => {
 
 	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
-
-		console.warn("Authme - Settings refresh completed")
 	}
 
-	console.warn("Authme - Settings refreshed")
+	logger.log("Authme - Settings refreshed")
 }, 100)
 
 /**
@@ -84,7 +86,7 @@ const go = (data) => {
 
 		qrcode.toDataURL(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`, (err, data) => {
 			if (err) {
-				console.warn(`Authme - Failed to generate QR code - ${err}`)
+				logger.error(`Failed to generate QR code - ${err}`)
 			}
 
 			qr_data = data
@@ -122,15 +124,15 @@ const saveFile = () => {
 			if (canceled === false) {
 				fs.writeFile(output, file, (err) => {
 					if (err) {
-						return console.warn(`Authme - Error creating file - ${err}`)
+						return logger.error(`Error creating file - ${err}`)
 					} else {
-						return console.warn("Authme - File created")
+						return logger.log("File created")
 					}
 				})
 			}
 		})
 		.catch((err) => {
-			console.warn(`Authme - Failed to save - ${err}`)
+			logger.error(`Failed to save - ${err}`)
 		})
 }
 
@@ -150,16 +152,16 @@ const saveQrCodes = () => {
 				for (let i = 0; i < codes.length; i++) {
 					fs.appendFile(output, `${codes[i]} \n`, (err) => {
 						if (err) {
-							return console.warn(`Authme - Error creating file - ${err}`)
+							return logger.error(`Error creating file - ${err}`)
 						} else {
-							return console.warn("Authme - File created")
+							return logger.log("File created")
 						}
 					})
 				}
 			}
 		})
 		.catch((err) => {
-			console.warn(`Authme - Failed to save - ${err}`)
+			logger.error(`Failed to save - ${err}`)
 		})
 }
 
@@ -219,7 +221,7 @@ const newExp = () => {
 
 	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
-			console.warn("Authme - The file codes.authme don't exists")
+			logger.warn("The file codes.authme don't exists")
 
 			password.fill(0)
 			key.fill(0)

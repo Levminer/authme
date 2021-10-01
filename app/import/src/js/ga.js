@@ -41,7 +41,7 @@ const gaImport = () => {
 						Try to take a better picture and try again!`,
 					})
 
-					return console.warn("Authme - No QR code found (GA)")
+					return logger.warn("No QR code found (GA)")
 				} else if (res.data.startsWith("otpauth-migration://")) {
 					// split string
 					const uri = res.data.split("=")
@@ -105,13 +105,13 @@ const gaImport = () => {
 										if (canceled === false) {
 											fs.writeFile(output, str, (err) => {
 												if (err) {
-													console.warn(`Authme - Error creating file - ${err}`)
+													logger.error(`Error creating file - ${err}`)
 												} else {
-													console.warn("Authme - File created")
+													logger.log("File created")
 												}
 											})
 										} else {
-											return console.warn("Authme - Saving canceled")
+											return logger.warn("Saving canceled")
 										}
 									})
 							})
@@ -126,7 +126,7 @@ const gaImport = () => {
 						Make sure this is a correct QR code and try again!`,
 					})
 
-					return console.error("Authme - Wrong QR code found (GA)")
+					return logger.error("Wrong QR code found (GA)")
 				}
 			})
 		}
@@ -192,13 +192,13 @@ const gaCamera = () => {
 							if (canceled === false) {
 								fs.writeFile(output, string, (err) => {
 									if (err) {
-										console.warn(`Authme - Error creating file - ${err}`)
+										logger.error(`Error creating file - ${err}`)
 									} else {
-										console.warn("Authme - File created")
+										logger.log("File created")
 									}
 								})
 							} else {
-								return console.warn("Authme - Saving canceled")
+								return logger.warn("Saving canceled")
 							}
 						})
 				})
@@ -217,7 +217,7 @@ const gaCamera = () => {
 
 			reader.stop()
 
-			return console.error("Authme - Wrong QR code found (GA)")
+			return logger.error("Wrong QR code found (GA)")
 		}
 
 		video.style.display = "none"
