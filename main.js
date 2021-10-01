@@ -1024,15 +1024,15 @@ ipc.on("rendererError", (event, data) => {
 // ? logger
 
 ipc.on("loggerLog", (event, data) => {
-	logger.log(`${logger.colors.purple}<${data.id}>${logger.colors.white} ${data.message}`, data.log)
+	logger.rendererLog(data.id, data.message, data.log)
 })
 
 ipc.on("loggerWarn", (event, data) => {
-	logger.warn(`${logger.colors.purple}<${data.id}>${logger.colors.white} ${data.message}`, data.warn)
+	logger.rendererWarn(data.id, data.message, data.warn)
 })
 
 ipc.on("loggerError", (event, data) => {
-	logger.error(`${logger.colors.purple}<${data.id}>${logger.colors.white} ${data.message}`, data.error)
+	logger.rendererError(data.id, data.message, data.error)
 })
 
 // ? logs
