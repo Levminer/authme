@@ -28,6 +28,7 @@ if (res.build_number.startsWith("alpha")) {
 
 // ? init codes for save to qr codes
 const codes = []
+let file
 
 // ? os specific folders
 let folder
@@ -119,7 +120,7 @@ const saveFile = () => {
 			output = result.filePath
 
 			if (canceled === false) {
-				fs.writeFile(output, settings, (err) => {
+				fs.writeFile(output, file, (err) => {
 					if (err) {
 						return console.warn(`Authme - Error creating file - ${err}`)
 					} else {
@@ -230,6 +231,7 @@ const newExp = () => {
 			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
 			processdata(decrypted.toString())
+			file = decrypted.toString()
 
 			decrypted.fill(0)
 			password.fill(0)
