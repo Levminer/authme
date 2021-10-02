@@ -57,9 +57,9 @@ const settings_refresher = setInterval(() => {
 
 	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
-	}
 
-	logger.log("Authme - Settings refreshed")
+		logger.log("Settings refresh completed")
+	}
 }, 100)
 
 /**
