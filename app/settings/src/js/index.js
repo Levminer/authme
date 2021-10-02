@@ -62,7 +62,7 @@ const settings_refresher = setInterval(() => {
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		logger.warn("Settings refresh completed")
+		logger.log("Settings refresh completed")
 	}
 }, 100)
 
@@ -322,12 +322,12 @@ const reset = () => {
 								}
 							})
 
-							// clear logs
+							// clear codes
 							fs.rmdir(path.join(file_path, "codes"), { recursive: true }, (err) => {
 								if (err) {
-									return logger.error(`Error deleting logs - ${err}`)
+									return logger.error(`Error deleting codes - ${err}`)
 								} else {
-									logger.log("Logs deleted")
+									logger.log("Codes deleted")
 								}
 							})
 

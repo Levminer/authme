@@ -1,4 +1,4 @@
-const { app, shell, dialog } = require("@electron/remote")
+const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
 const { aes, convert } = require("@levminer/lib")
 const speakeasy = require("@levminer/speakeasy")
@@ -118,6 +118,26 @@ const go = (data) => {
 	const names = data.names
 	const secrets = data.secrets
 	const issuers = data.issuers
+
+	/**
+	 * Load storage
+	 * @type {LibStorage}
+	 */
+	let storage
+
+	if (dev === false) {
+		storage = JSON.parse(localStorage.getItem("storage"))
+
+		storage.issuers = issuers
+
+		localStorage.setItem("storage", JSON.stringify(storage))
+	} else {
+		storage = JSON.parse(localStorage.getItem("dev_storage"))
+
+		storage.issuers = issuers
+
+		localStorage.setItem("dev_storage", JSON.stringify(storage))
+	}
 
 	const generate = () => {
 		// counter
@@ -357,10 +377,8 @@ const go = (data) => {
 			query.push(item)
 
 			// setting elements
-			try {
+			if (name_state === true) {
 				text.textContent = names[i]
-			} catch (error) {
-				logger.warn(`Setting names - ${error}`)
 			}
 
 			// interval0
@@ -492,9 +510,7 @@ const search = () => {
 
 	// search algorithm
 	query.forEach((e) => {
-		if (e.startsWith(input)) {
-			logger.warn("Search result found")
-		} else {
+		if (!e.startsWith(input)) {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "none"
 		}
@@ -737,6 +753,25 @@ const loadSave = () => {
 
 if (file.security.require_password === false && file.security.new_encryption === true) {
 	loadSave()
+}
+
+// ? quick copy
+const quickCopy = (key) => {
+	for (let i = 0; i < query.length; i++) {
+		if (key.toLowerCase() === query[i]) {
+			const input = document.querySelector(`#code${[i]}`).value
+
+			clipboard.writeText(input)
+
+			const notification = new Notification({ title: "Authme", body: `${key} 2FA code copied to the clipboard!` })
+
+			notification.show()
+
+			setTimeout(() => {
+				notification.close()
+			}, 2500)
+		}
+	}
 }
 
 // ? release notes

@@ -203,6 +203,7 @@ const settings = `{
 			"settings": "CommandOrControl+Shift+s",
 			"exit": "CommandOrControl+Shift+d"
 		},
+		"quick_shortcuts:": {},
 		"search_history": {
 			"latest": null
 		},
@@ -229,6 +230,12 @@ if (file.experimental === undefined) {
 	file.experimental = {
 		sort: null,
 	}
+
+	saveSettings()
+}
+
+if (file.quick_shortcuts === undefined) {
+	file.quick_shortcuts = {}
 
 	saveSettings()
 }
@@ -1157,6 +1164,18 @@ app.whenReady()
 				})
 		})
 
+		// ? quick shortcuts
+		const quickShortcuts = () => {
+			const keys = Object.keys(file.quick_shortcuts)
+			const values = Object.values(file.quick_shortcuts)
+
+			for (let i = 0; i < keys.length; i++) {
+				globalShortcut.register(values[i], () => {
+					window_application.webContents.executeJavaScript(`quickCopy("${keys[i]}")`)
+				})
+			}
+		}
+
 		window_splash = new BrowserWindow({
 			width: 500,
 			height: 550,
@@ -1180,6 +1199,7 @@ app.whenReady()
 			if (dev === true) {
 				setTimeout(() => {
 					createWindow()
+					quickShortcuts()
 				}, 500)
 
 				setTimeout(() => {
@@ -1188,6 +1208,7 @@ app.whenReady()
 			} else {
 				setTimeout(() => {
 					createWindow()
+					quickShortcuts()
 				}, 2000)
 
 				setTimeout(() => {
@@ -1621,6 +1642,8 @@ app.whenReady()
 						exitFromTray()
 					})
 				}
+
+				quickShortcuts()
 
 				createTray()
 
