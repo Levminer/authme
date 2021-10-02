@@ -60,10 +60,12 @@ if (app.isPackaged === false) {
 	debug({
 		showDevTools: false,
 	})
+
 	dev = true
 } else {
 	if (process.platform === "darwin") {
 		debug({
+			isEnabled: true,
 			showDevTools: false,
 		})
 	}
