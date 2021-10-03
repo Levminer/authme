@@ -44,6 +44,15 @@ if (settings.experimental.webcam === true) {
 	document.querySelector("#but3").style.display = "inline-block"
 }
 
+// ? check for webcam
+const checkWebcam = (callback) => {
+	const md = navigator.mediaDevices
+	if (!md || !md.enumerateDevices) return callback(false)
+	md.enumerateDevices().then((devices) => {
+		callback(devices.some((device) => device.kind === "videoinput"))
+	})
+}
+
 // ? link
 const onlineDocs = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")

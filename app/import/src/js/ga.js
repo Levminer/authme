@@ -137,92 +137,107 @@ const gaImport = () => {
  * Read google authenticator qr codes from camera
  */
 const gaCamera = () => {
-	const video = document.querySelector("#gaCamera")
-	const button = document.querySelector("#gaStop")
-
-	const reader = new QrcodeDecoder()
-
-	button.addEventListener("click", () => {
-		video.style.display = "none"
-		button.style.display = "none"
-
-		reader.stop()
-	})
-
-	setTimeout(() => {
-		video.style.display = "block"
-		button.style.display = "inline"
-	}, 300)
-
-	reader.decodeFromCamera(video).then((res) => {
-		if (res.data.startsWith("otpauth-migration://")) {
-			// split string
-			const uri = res.data.split("=")
-
-			// decode data
-			const data = qrcodeConverter.convert(uri[1])
-
-			// make a string
-			let string = ""
-
-			data.forEach((element) => {
-				const temp_string = `\nName:   ${element.name} \nSecret: ${element.secret} \nIssuer: ${element.issuer} \nType:   OTP_TOTP\n`
-				string += temp_string
-			})
-
-			dialog
-				.showMessageBox({
-					title: "Authme",
-					buttons: ["Close"],
-					type: "info",
-					defaultId: 0,
-					message: "Google Authenticator QR codes found on camera!\n\nNow select where do you want to save the file!",
-				})
-				.then(() => {
-					dialog
-						.showSaveDialog({
-							title: "Save import file",
-							filters: [{ name: "Text file", extensions: ["txt"] }],
-							defaultPath: "~/authme_import.txt",
-						})
-						.then((result) => {
-							canceled = result.canceled
-							output = result.filePath
-
-							if (canceled === false) {
-								fs.writeFile(output, string, (err) => {
-									if (err) {
-										logger.error(`Error creating file - ${err}`)
-									} else {
-										logger.log("File created")
-									}
-								})
-							} else {
-								return logger.warn("Saving canceled")
-							}
-						})
-				})
-		} else {
+	checkWebcam((hasWebcam) => {
+		if (hasWebcam === false) {
 			dialog.showMessageBox({
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `Wrong QR code found on camera!
+				message: `Not found webcam!
 				
-				Make sure this is a correct QR code and try again!`,
+				Please check if your webcam is working correctly or not used by another application.`,
 			})
 
-			video.style.display = "none"
-			button.style.display = "none"
+			return logger.error("Not found webcam")
+		} else {
+			const video = document.querySelector("#gaCamera")
+			const button = document.querySelector("#gaStop")
 
-			reader.stop()
+			const reader = new QrcodeDecoder()
 
-			return logger.error("Wrong QR code found (GA)")
+			button.addEventListener("click", () => {
+				video.style.display = "none"
+				button.style.display = "none"
+
+				reader.stop()
+			})
+
+			setTimeout(() => {
+				video.style.display = "block"
+				button.style.display = "inline"
+			}, 300)
+
+			reader.decodeFromCamera(video).then((res) => {
+				if (res.data.startsWith("otpauth-migration://")) {
+					// split string
+					const uri = res.data.split("=")
+
+					// decode data
+					const data = qrcodeConverter.convert(uri[1])
+
+					// make a string
+					let string = ""
+
+					data.forEach((element) => {
+						const temp_string = `\nName:   ${element.name} \nSecret: ${element.secret} \nIssuer: ${element.issuer} \nType:   OTP_TOTP\n`
+						string += temp_string
+					})
+
+					dialog
+						.showMessageBox({
+							title: "Authme",
+							buttons: ["Close"],
+							type: "info",
+							defaultId: 0,
+							message: "Google Authenticator QR codes found on camera!\n\nNow select where do you want to save the file!",
+						})
+						.then(() => {
+							dialog
+								.showSaveDialog({
+									title: "Save import file",
+									filters: [{ name: "Text file", extensions: ["txt"] }],
+									defaultPath: "~/authme_import.txt",
+								})
+								.then((result) => {
+									canceled = result.canceled
+									output = result.filePath
+
+									if (canceled === false) {
+										fs.writeFile(output, string, (err) => {
+											if (err) {
+												logger.error(`Error creating file - ${err}`)
+											} else {
+												logger.log("File created")
+											}
+										})
+									} else {
+										return logger.warn("Saving canceled")
+									}
+								})
+						})
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						type: "error",
+						message: `Wrong QR code found on camera!
+						
+						Make sure this is a correct QR code and try again!`,
+					})
+
+					video.style.display = "none"
+					button.style.display = "none"
+
+					reader.stop()
+
+					return logger.error("Wrong QR code found (GA)")
+				}
+
+				video.style.display = "none"
+				button.style.display = "none"
+
+				reader.stop()
+			})
 		}
-
-		video.style.display = "none"
-		button.style.display = "none"
-
-		reader.stop()
 	})
 }

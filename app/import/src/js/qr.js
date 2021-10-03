@@ -138,97 +138,112 @@ const qrImport = () => {
  * Read qr code from camera
  */
 const qrCamera = () => {
-	const video = document.querySelector("#qrCamera")
-	const button = document.querySelector("#qrStop")
-
-	const reader = new QrcodeDecoder()
-
-	button.addEventListener("click", () => {
-		video.style.display = "none"
-		button.style.display = "none"
-
-		reader.stop()
-	})
-
-	setTimeout(() => {
-		video.style.display = "block"
-		button.style.display = "inline"
-	}, 300)
-
-	reader.decodeFromCamera(video).then((res) => {
-		if (res.data.startsWith("otpauth://totp/")) {
-			// construct
-			let url = res.data.replaceAll(/\s/g, "")
-			url = url.slice(15)
-
-			// get name
-			const name_index = url.match(/[?]/)
-			const name = url.slice(0, name_index.index)
-			url = url.slice(name.length + 1)
-
-			// get secret
-			const secret_index = url.match(/[&]/)
-			const secret = url.slice(7, secret_index.index)
-			url = url.slice(secret.length + 14 + 1)
-
-			// get issuer
-			const issuer = url
-
-			const str = `\nName:   ${name} \nSecret: ${secret} \nIssuer: ${issuer} \nType:   OTP_TOTP\n`
-
-			dialog
-				.showMessageBox({
-					title: "Authme",
-					buttons: ["Close"],
-					type: "info",
-					defaultId: 0,
-					message: "QR codes found on camera!\n\nNow select where do you want to save the file!",
-				})
-				.then(() => {
-					dialog
-						.showSaveDialog({
-							title: "Save import file",
-							filters: [{ name: "Text file", extensions: ["txt"] }],
-							defaultPath: "~/authme_import.txt",
-						})
-						.then((result) => {
-							canceled = result.canceled
-							output = result.filePath
-
-							if (canceled === false) {
-								fs.writeFile(output, str, (err) => {
-									if (err) {
-										logger.error(`Error creating file - ${err}`)
-									} else {
-										logger.log("File created")
-									}
-								})
-							} else {
-								return logger.warn("Saving canceled")
-							}
-						})
-				})
-		} else {
+	checkWebcam((hasWebcam) => {
+		if (hasWebcam === false) {
 			dialog.showMessageBox({
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `Wrong QR code found on camera!
+				message: `Not found webcam!
 				
-				Make sure this is a correct QR code and try again!`,
+				Please check if your webcam is working correctly or not used by another application.`,
 			})
 
-			video.style.display = "none"
-			button.style.display = "none"
+			return logger.error("Not found webcam")
+		} else {
+			const video = document.querySelector("#qrCamera")
+			const button = document.querySelector("#qrStop")
 
-			reader.stop()
+			const reader = new QrcodeDecoder()
 
-			return logger.error("Wrong QR code found (QR)")
+			button.addEventListener("click", () => {
+				video.style.display = "none"
+				button.style.display = "none"
+
+				reader.stop()
+			})
+
+			setTimeout(() => {
+				video.style.display = "block"
+				button.style.display = "inline"
+			}, 300)
+
+			reader.decodeFromCamera(video).then((res) => {
+				if (res.data.startsWith("otpauth://totp/")) {
+					// construct
+					let url = res.data.replaceAll(/\s/g, "")
+					url = url.slice(15)
+
+					// get name
+					const name_index = url.match(/[?]/)
+					const name = url.slice(0, name_index.index)
+					url = url.slice(name.length + 1)
+
+					// get secret
+					const secret_index = url.match(/[&]/)
+					const secret = url.slice(7, secret_index.index)
+					url = url.slice(secret.length + 14 + 1)
+
+					// get issuer
+					const issuer = url
+
+					const str = `\nName:   ${name} \nSecret: ${secret} \nIssuer: ${issuer} \nType:   OTP_TOTP\n`
+
+					dialog
+						.showMessageBox({
+							title: "Authme",
+							buttons: ["Close"],
+							type: "info",
+							defaultId: 0,
+							message: "QR codes found on camera!\n\nNow select where do you want to save the file!",
+						})
+						.then(() => {
+							dialog
+								.showSaveDialog({
+									title: "Save import file",
+									filters: [{ name: "Text file", extensions: ["txt"] }],
+									defaultPath: "~/authme_import.txt",
+								})
+								.then((result) => {
+									canceled = result.canceled
+									output = result.filePath
+
+									if (canceled === false) {
+										fs.writeFile(output, str, (err) => {
+											if (err) {
+												logger.error(`Error creating file - ${err}`)
+											} else {
+												logger.log("File created")
+											}
+										})
+									} else {
+										return logger.warn("Saving canceled")
+									}
+								})
+						})
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						type: "error",
+						message: `Wrong QR code found on camera!
+						
+						Make sure this is a correct QR code and try again!`,
+					})
+
+					video.style.display = "none"
+					button.style.display = "none"
+
+					reader.stop()
+
+					return logger.error("Wrong QR code found (QR)")
+				}
+
+				video.style.display = "none"
+				button.style.display = "none"
+
+				reader.stop()
+			})
 		}
-
-		video.style.display = "none"
-		button.style.display = "none"
-
-		reader.stop()
 	})
 }
