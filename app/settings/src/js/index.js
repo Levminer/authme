@@ -323,7 +323,7 @@ const reset = () => {
 							})
 
 							// clear codes
-							fs.rmdir(path.join(file_path, "codes"), { recursive: true }, (err) => {
+							fs.rm(path.join(file_path, "codes"), { recursive: true }, (err) => {
 								if (err) {
 									return logger.error(`Error deleting codes - ${err}`)
 								} else {
@@ -332,7 +332,7 @@ const reset = () => {
 							})
 
 							// clear logs
-							fs.rmdir(path.join(file_path, "logs"), { recursive: true }, (err) => {
+							fs.rm(path.join(file_path, "logs"), { recursive: true }, (err) => {
 								if (err) {
 									return logger.error(`Error deleting logs - ${err}`)
 								} else {
@@ -341,7 +341,7 @@ const reset = () => {
 							})
 
 							// clear cache files
-							fs.rmdir(path.join(file_path, "cache"), { recursive: true }, (err) => {
+							fs.rm(path.join(file_path, "cache"), { recursive: true }, (err) => {
 								if (err) {
 									return logger.error(`Error deleting caches - ${err}`)
 								} else {

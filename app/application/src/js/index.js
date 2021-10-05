@@ -539,13 +539,13 @@ try {
 	logger.error("Block animations failed")
 }
 
+// ? animations
 let focus = true
 
 let diva0
 let diva1
 
-// ? animations
-app.on("browser-window-focus", () => {
+const animations = () => {
 	if (focus === true) {
 		setTimeout(() => {
 			const center = document.querySelector(".center")
@@ -579,17 +579,15 @@ app.on("browser-window-focus", () => {
 			}, 1500)
 
 			focus = false
-		}, 100)
+		}, 150)
 	}
-
-	focusSearch()
-})
+}
 
 // ? focus search bar
 const focusSearch = () => {
 	setTimeout(() => {
 		document.getElementById("search").focus()
-	}, 100)
+	}, 150)
 }
 
 // ? show update

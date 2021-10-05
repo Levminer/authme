@@ -52,6 +52,7 @@ let shortcuts = false
 let reload = false
 let tray_minimized = false
 let update_seen = false
+let animations_showed = false
 
 // ? development
 let dev = false
@@ -643,11 +644,28 @@ const createWindow = () => {
 			}
 		}
 
+		if (reload === false && file.settings.launch_on_startup === true) {
+			window_application.hide()
+			window_confirm.hide()
+
+			reload = true
+		}
+
 		if (update_seen == false) {
 			api()
 
 			update_seen = true
 		}
+	})
+
+	window_application.on("focus", () => {
+		if (animations_showed === false) {
+			window_application.webContents.executeJavaScript("animations()")
+
+			animations_showed = true
+		}
+
+		window_application.webContents.executeJavaScript("focusSearch()")
 	})
 
 	// ? global shortcuts
