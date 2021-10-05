@@ -904,15 +904,6 @@ ipc.on("enable_tray", () => {
 	logger.log("Close to tray enabled")
 })
 
-ipc.on("startup", () => {
-	if (reload === false) {
-		window_application.hide()
-		window_confirm.hide()
-
-		reload = true
-	}
-})
-
 ipc.on("app_path", () => {
 	shell.showItemInFolder(app.getPath("exe"))
 })

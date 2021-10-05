@@ -44,11 +44,6 @@ const file = JSON.parse(
 	})
 )
 
-// settings launch_on_startup
-if (file.settings.launch_on_startup === true) {
-	ipc.send("startup")
-}
-
 // ? local storage
 let storage
 
