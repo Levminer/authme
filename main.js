@@ -1034,6 +1034,11 @@ ipc.on("reload_application", () => {
 	}
 })
 
+// ? reload settings window
+ipc.on("reload_settings", () => {
+	window_settings.reload()
+})
+
 // ? error in window
 ipc.on("rendererError", (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
