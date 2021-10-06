@@ -62,6 +62,7 @@ const settings_refresher = setInterval(() => {
 const cache_path = path.join(file_path, "cache")
 const rollback_con = document.querySelector(".rollback")
 const rollback_text = document.querySelector("#rollbackBut")
+let cache = true
 
 fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
 	if (err) {
@@ -91,7 +92,7 @@ const rollback = () => {
 			noLink: true,
 			message: `Are you sure you want to rollback to the latest save?
 			
-			This requires a restart and will overwrite your saved codes!`,
+			This will overwrite your saved codes!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -109,15 +110,17 @@ const rollback = () => {
 					}
 				})
 
-				restart()
+				reloadApplication()
+				reloadSettings()
 			}
 		})
 }
 
 // ? separate value
-let names = []
-let secrets = []
-let issuers = []
+const names = []
+const secrets = []
+const issuers = []
+const ids = []
 
 /**
  * Process data from saved file
@@ -126,45 +129,54 @@ let issuers = []
 const processdata = (text) => {
 	const data = convert.fromText(text, 0)
 
-	go(data)
+	for (let i = 0; i < data.names.length; i++) {
+		names.push(data.names[i])
+		secrets.push(data.secrets[i])
+		issuers.push(data.issuers[i])
+	}
+
+	go()
 }
+
+// block counter
+let counter = 0
 
 /**
  * Start creating edit elements
- * @param {LibImportFile} data
  */
-const go = (data) => {
-	createCache()
+const go = () => {
+	document.querySelector(".codes_container").innerHTML = ""
 
-	names = data.names
-	secrets = data.secrets
-	issuers = data.issuers
+	if (cache === true) {
+		createCache()
+		cache = false
+	}
 
 	document.querySelector(".beforeLoad").style.display = "none"
 	document.querySelector(".rollback").style.display = "none"
 	document.querySelector(".afterLoad").style.display = "block"
 
-	for (let i = 0; i < names.length; i++) {
+	for (let j = 0; j < names.length; j++) {
 		const codes_container = document.querySelector(".codes_container")
 
 		const div = document.createElement("div")
 
 		div.innerHTML = `
-		<div class="grid" id="grid${[i]}">
+		<div class="grid" id="grid${[counter]}">
 		<div class="div1">
-		<h2>${issuers[i]}</h2>
+		<h2>${issuers[counter]}</h2>
 		</div>
 		<div class="div2">
-		<input type="text" class="input1" id="edit_inp_${[i]}" value="${names[i]}" readonly/> 
+		<input type="text" class="input1" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/> 
 		</div>
 		<div class="div3">
-		<button class="buttonr button" id="edit_but_${[i]}" onclick="edit(${[i]})">
-		<svg id="edit_svg_${[i]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<button class="buttonr button" id="edit_but_${[counter]}" onclick="edit(${[counter]})">
+		<svg id="edit_svg_${[counter]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttonr" id="del_but_${[i]}" onclick="del(${[i]})">
-		<svg id="del_svg_${[i]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<button class="buttonr" id="del_but_${[counter]}" onclick="del(${[counter]})">
+		<svg id="del_svg_${[counter]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
 		</button>
@@ -172,8 +184,13 @@ const go = (data) => {
 		</div>
 		`
 
+		div.setAttribute("id", counter)
 		codes_container.appendChild(div)
+
+		counter++
 	}
+
+	save_text = ""
 }
 
 // ? edit
@@ -212,6 +229,8 @@ const del = (number) => {
 	del_but.style.color = "red"
 	del_but.style.borderColor = "red"
 
+	counter = 0
+
 	dialog
 		.showMessageBox({
 			title: "Authme",
@@ -226,18 +245,14 @@ const del = (number) => {
 				del_but.style.color = ""
 				del_but.style.borderColor = "white"
 
-				const input = document.querySelector(`#edit_inp_${number}`).value
-
 				const div = document.querySelector(`#grid${number}`)
 				div.remove()
 
-				const query = (element) => element === input
+				names.splice(number, 1)
+				secrets.splice(number, 1)
+				issuers.splice(number, 1)
 
-				const index = names.findIndex(query)
-
-				names.splice(index, 1)
-				secrets.splice(index, 1)
-				issuers.splice(index, 1)
+				go()
 			} else {
 				del_but.style.color = ""
 				del_but.style.borderColor = "white"
@@ -259,7 +274,7 @@ const createSave = () => {
 			noLink: true,
 			message: `Are you sure you want to save the modified code(s)?
 			
-			This requires a restart and will overwrite your saved codes!`,
+			This will overwrite your saved codes!`,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -274,7 +289,28 @@ const createSave = () => {
 					saveCodes()
 				}
 
-				restart()
+				/**
+				 * Load storage
+				 * @type {LibStorage}
+				 */
+				let storage
+
+				if (dev === false) {
+					storage = JSON.parse(localStorage.getItem("storage"))
+
+					storage.issuers = issuers
+
+					localStorage.setItem("storage", JSON.stringify(storage))
+				} else {
+					storage = JSON.parse(localStorage.getItem("dev_storage"))
+
+					storage.issuers = issuers
+
+					localStorage.setItem("dev_storage", JSON.stringify(storage))
+				}
+
+				reloadApplication()
+				reloadSettings()
 			}
 		})
 }
@@ -345,14 +381,26 @@ const addMore = () => {
 				for (let i = 0; i < files.length; i++) {
 					fs.readFile(files[i], (err, input) => {
 						if (err) {
-							logger.log("Error loading file")
+							logger.error("Error loading file")
 						} else {
+							logger.log("File readed")
+
 							data = []
 
 							const container = document.querySelector(".codes_container")
 							container.innerHTML = ""
 
-							processdata(input.toString())
+							counter = 0
+
+							const /** @type{LibImportFile} */ imported = convert.fromText(input.toString(), 0)
+
+							for (let i = 0; i < imported.names.length; i++) {
+								names.push(imported.names[i])
+								secrets.push(imported.secrets[i])
+								issuers.push(imported.issuers[i])
+							}
+
+							go()
 						}
 					})
 				}
@@ -475,9 +523,34 @@ const hide = () => {
 	ipc.send("hide_edit")
 }
 
-const restart = () => {
-	setTimeout(() => {
-		app.relaunch()
-		app.exit()
-	}, 500)
+// ? reloads
+const reloadApplication = () => {
+	ipc.send("reload_application")
+}
+
+const reloadSettings = () => {
+	ipc.send("reload_settings")
+}
+
+/**
+ * Revert all current changes
+ */
+const revertChanges = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
+			type: "warning",
+			noLink: true,
+			message: `Are you sure you want to revert all current change(s)?
+		
+			You will lose all current changes!`,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				location.reload()
+			}
+		})
 }
