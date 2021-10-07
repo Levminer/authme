@@ -39,7 +39,7 @@
 	top: 10px;
 }
 
-img {
+.img {
 	filter: blur(6px);
 	transition: 0.2s ease-in;
 	padding: 30px;
@@ -47,7 +47,7 @@ img {
 	border-radius: 30px;
 }
 
-img:hover {
+.img:hover {
 	filter: none;
 }
 

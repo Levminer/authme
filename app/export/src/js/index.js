@@ -93,7 +93,7 @@ const go = (data) => {
 
 			const text = `
 			<div data-scroll class="qr">
-				<img src="${data}">
+				<img class="img" src="${data}">
 				<h2>${issuers[i]}</h2>
 			</div>`
 

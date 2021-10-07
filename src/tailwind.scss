@@ -10,6 +10,9 @@
 	border-color: theme("borderColor.default", currentColor);
 }
 
+@layer components {
+}
+
 @layer base {
 	button {
 		@apply focus-visible:ring-popup-magenta focus-visible:ring-4;
@@ -34,4 +37,35 @@
 	svg {
 		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
 	}
+}
+
+/* headings */
+h1 {
+	font-size: 64px;
+	font-weight: bold;
+	margin: 2rem;
+}
+
+h2 {
+	font-size: 48px;
+	font-weight: bold;
+	margin: 2rem;
+}
+
+h3 {
+	font-size: 32px;
+	font-weight: bold;
+	margin: 2rem;
+}
+
+h4 {
+	font-size: 24px;
+	margin: 2rem;
+	font-weight: normal;
+}
+
+h5 {
+	font-size: 18px;
+	margin: 2rem;
+	font-weight: normal;
 }
