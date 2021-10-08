@@ -102,7 +102,7 @@ const go = (data) => {
 			codes.push(text)
 		})
 
-		document.querySelector(".center").appendChild(element)
+		document.querySelector(".blocks").appendChild(element)
 
 		document.querySelector(".before_export").style.display = "none"
 		document.querySelector(".after_export").style.display = "block"

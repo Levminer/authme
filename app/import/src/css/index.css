@@ -1,9 +1,3 @@
-.center {
-	top: -50px;
-	width: 1000px;
-	height: auto;
-}
-
 .grid {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);

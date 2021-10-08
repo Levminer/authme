@@ -24,22 +24,23 @@
 			</div>
 		</div>
 
-		<!-- content -->
-		<div class="center">
-			<div class="mx-auto rounded-2xl bg-gray-900 w-2/3 mt-16">
-				<img src="../../img/icon.png" class="h-16 w-16 relative top-5" />
-				<h2>Import</h2>
-				<h4>You can import from QR code(s) and Google Authenticator QR code(s). You can use your webcam by turning on an experimental feature in settings.</h4>
-				<button class="buttoni mb-6" onclick="hide()">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					Close window
-				</button>
-			</div>
+		<!-- header -->
+		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
+			<img src="../../img/icon.png" class="h-16 w-16 relative top-5" />
+			<h2>Import</h2>
+			<h4>You can import from QR code(s) and Google Authenticator QR code(s). You can use your webcam by turning on an experimental feature in settings.</h4>
+			<button class="buttoni mb-6" onclick="hide()">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				Close window
+			</button>
+		</div>
 
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
-				<h2 class="pt-3">Instructions</h2>
+		<!-- content -->
+		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20 mt-20" id="choose">
+				<h2 class="pt-5">Instructions</h2>
 				<h3>If you don't know what to do please read the documentation and come back here!</h3>
 				<button class="buttoni" id="but0" onclick="onlineDocs()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,12 +48,11 @@
 					</svg>
 					Read documentation
 				</button>
-				<br />
 			</div>
 
 			<div class="choose">
-				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
-					<h2 class="pt-3">Import</h2>
+				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
+					<h2 class="pt-5">Import</h2>
 					<h3>QR code(s)</h3>
 					<details class="details1" id="dt">
 						<summary class="summary1">Instructions</summary>
@@ -73,7 +73,7 @@
 							</svg>
 							Choose image(s)
 						</button>
-						<button class="buttoni hidden" id="but2" onclick="qrCamera()">
+						<button class="buttoni hidden mb-5" id="but2" onclick="qrCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -88,11 +88,10 @@
 						</svg>
 						Stop
 					</button>
-					<br />
 				</div>
 
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
-					<h2 class="pt-3">Advanced import</h2>
+					<h2 class="pt-5">Advanced import</h2>
 					<h3>Google Authenticator QR code(s)</h3>
 					<details class="details1" id="dt">
 						<summary class="summary1">Instructions</summary>
@@ -113,7 +112,7 @@
 							</svg>
 							Choose image(s)
 						</button>
-						<button class="buttoni hidden" id="but3" onclick="gaCamera()">
+						<button class="buttoni hidden mb-5" id="but3" onclick="gaCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -128,7 +127,6 @@
 						</svg>
 						Stop
 					</button>
-					<br />
 					</div>
 				</div>
 			</div>
