@@ -305,7 +305,7 @@ details[open] summary ~ * {
 .dropdown-button {
 	color: black;
 	background: white;
-	border: 1px solid black;
+	border: 2px solid black;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
@@ -346,7 +346,7 @@ details[open] summary ~ * {
 }
 
 .dropdown-content a:hover {
-	background-color: rgb(20, 20, 20);
+	background-color: rgb(30, 30, 30);
 	color: white;
 }
 

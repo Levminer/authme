@@ -762,6 +762,10 @@ const globalShortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
 }
 
+const quickCopyShortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=quick-copy-shortcuts")
+}
+
 const hide = () => {
 	ipc.send("hide_settings")
 }

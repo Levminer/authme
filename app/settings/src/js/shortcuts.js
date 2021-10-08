@@ -491,29 +491,28 @@ const generateCodes = () => {
 			content = file.quick_shortcuts[issuers[i]]
 		}
 
-		const element = `						
-		<div class="grid">
-		<div class="div1">
-		<p class="text3 text">${issuers[i]}</p>
+		const element = `
+		<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+		<div class="flex justify-center items-center">
+		<h3>${issuers[i]}</h3>
 		</div>
-		<div class="div2">
+		<div class="flex justify-center items-center">
 		<input class="input1" disabled type="text" id="qs${i}_input" value="${content}"/>
 		</div>
-		<div class="div3">
-		<div class="div3">
+		<div class="flex justify-center items-center mb-10 mt-5">
 		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
-		<svg id="qs${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<svg id="hk102_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttonr button" id="qs${i}_button_delete" onclick="qsDelete(${i})">
-		<svg id="qs${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
+		<svg id="hk102_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
 		</button>
 		</div>
 		</div>
-		</div>`
+		`
 
 		const div = document.createElement("div")
 		div.innerHTML = element

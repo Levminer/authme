@@ -3,12 +3,6 @@ body {
 	display: block;
 }
 
-.center {
-	top: -50px;
-	width: 1000px;
-	height: 3150px;
-}
-
 .input1 {
 	color: black;
 	background-color: white;
@@ -34,13 +28,6 @@ hr {
 	border-width: 1px;
 }
 
-/* tabs */
-.tab {
-	overflow: hidden;
-
-	text-align: center;
-}
-
 .tabcontent {
 	animation: fadeEffect 1s;
 }
@@ -56,27 +43,6 @@ hr {
 
 #shortcuts {
 	display: none;
-}
-
-/* grid */
-.grid {
-	display: grid;
-	position: relative;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: 1fr;
-	grid-row-gap: 0px;
-	margin-bottom: 30px;
-	column-gap: 150px;
-}
-
-.text {
-	position: relative;
-	left: 130px;
-}
-
-.button {
-	position: relative;
-	right: 130px;
 }
 
 .buttonm {
@@ -122,12 +88,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
-}
-
-.part {
-	padding-bottom: 100px;
-	text-align: center;
-	background-color: rgb(10, 10, 10);
 }
 
 .toggle:checked ~ .toggle-bg {
