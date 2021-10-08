@@ -27,7 +27,9 @@ input:hover::placeholder {
 }
 
 #but0,
-#but1 {
+#but1,
+#but2,
+#but3 {
 	margin-bottom: 30px;
 }
 
