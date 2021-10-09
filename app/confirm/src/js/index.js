@@ -244,3 +244,26 @@ document.querySelector("#show_pass_01").addEventListener("click", () => {
 	document.querySelector("#show_pass_0").style.display = "flex"
 	document.querySelector("#show_pass_01").style.display = "none"
 })
+
+let more_options_shown = false
+
+/**
+ * Show more options div
+ */
+const showMoreOptions = () => {
+	const more_options = document.querySelector("#more_options")
+
+	if (more_options_shown === false) {
+		more_options.style.visibility = "visible"
+
+		setTimeout(() => {
+			more_options.style.display = "block"
+		}, 10)
+
+		more_options_shown = true
+	} else {
+		more_options.style.display = "none"
+
+		more_options_shown = false
+	}
+}
