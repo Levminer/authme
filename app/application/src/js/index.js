@@ -111,7 +111,7 @@ const processdata = (text) => {
 const go = (data) => {
 	document.querySelector("#search").style.display = "grid"
 	document.querySelector(".h1").style.marginBottom = "0px"
-	document.querySelector(".center").style.top = "80px"
+	document.querySelector(".content").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
 
@@ -154,15 +154,15 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -180,15 +180,15 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -208,15 +208,15 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -233,15 +233,15 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -260,15 +260,15 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -286,15 +286,15 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -314,15 +314,15 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -339,15 +339,15 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -363,7 +363,7 @@ const go = (data) => {
 			}
 
 			// set div in html
-			document.querySelector(".center").appendChild(element)
+			document.querySelector(".content").appendChild(element)
 
 			// elements
 			const name = document.querySelector(`#name${counter}`)
@@ -393,7 +393,7 @@ const go = (data) => {
 				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 
 				name.textContent = issuers[i]
-				code.value = token
+				code.textContent = token
 				time.textContent = remaining
 			}, 100)
 
@@ -410,7 +410,7 @@ const go = (data) => {
 
 				// setting elements
 				name.textContent = issuers[i]
-				code.value = token
+				code.textContent = token
 				time.textContent = remaining
 
 				clearInterval(int0)
@@ -418,7 +418,7 @@ const go = (data) => {
 
 			// copy
 			copy.addEventListener("click", () => {
-				navigator.clipboard.writeText(code.value)
+				navigator.clipboard.writeText(code.textContent)
 
 				copy.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -548,7 +548,7 @@ let diva1
 const animations = () => {
 	if (focus === true) {
 		setTimeout(() => {
-			const center = document.querySelector(".center")
+			const center = document.querySelector(".conent")
 			center.classList.add("animate__animated", "animate__fadeIn")
 
 			const h1 = document.querySelector(".h1")

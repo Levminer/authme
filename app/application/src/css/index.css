@@ -8,12 +8,6 @@ h4 {
 	font-size: 1.5rem;
 }
 
-.center {
-	top: -70px;
-	width: 1000px;
-	height: auto;
-}
-
 .button11 {
 	color: black;
 	background: white;
@@ -86,6 +80,12 @@ h4 {
 	height: 270px;
 }
 
+@media (max-width: 1199.98px) {
+	.grid {
+		width: 90%;
+	}
+}
+
 .grid:last-child {
 	margin-bottom: 50px;
 }
@@ -113,8 +113,12 @@ h4 {
 }
 
 .input1 {
-	width: 90px;
-	font-size: 1.3rem;
+	width: 128px !important;
+	font-size: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	user-select: all !important;
 }
 
 .input2 {
@@ -215,4 +219,8 @@ a {
 	border-radius: 30px;
 	user-select: all;
 	margin-bottom: 10px;
+}
+
+.text2 {
+	font-size: 26px !important;
 }

@@ -8,6 +8,9 @@
 	border-width: 0;
 	border-style: solid;
 	border-color: theme("borderColor.default", currentColor);
+	user-select: none;
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
 }
 
 @layer components {
@@ -35,6 +38,10 @@
 	}
 
 	svg {
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+	}
+
+	h3 {
 		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
 	}
 }
