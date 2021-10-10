@@ -96,8 +96,8 @@
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.3.7",
-		"electron": "^15.1.1",
-		"electron-builder": "^22.11.7",
+		"electron": "^15.1.2",
+		"electron-builder": "^22.13.1",
 		"eslint": "^7.32.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.3.0",

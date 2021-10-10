@@ -82,8 +82,6 @@ const go = (data) => {
 	const issuers = data.issuers
 
 	for (let i = 0; i < names.length; i++) {
-		const element = document.createElement("div")
-
 		qrcode.toDataURL(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`, (err, data) => {
 			if (err) {
 				logger.error(`Failed to generate QR code - ${err}`)
@@ -97,12 +95,8 @@ const go = (data) => {
 				<h2>${issuers[i]}</h2>
 			</div>`
 
-			element.innerHTML = text
-
 			codes.push(text)
 		})
-
-		document.querySelector(".blocks").appendChild(element)
 
 		document.querySelector(".before_export").style.display = "none"
 		document.querySelector(".after_export").style.display = "block"
@@ -126,7 +120,7 @@ const saveFile = () => {
 					if (err) {
 						return logger.error(`Error creating file - ${err}`)
 					} else {
-						return logger.log("File created")
+						return logger.log("Text file created")
 					}
 				})
 			}
@@ -149,15 +143,19 @@ const saveQrCodes = () => {
 			output = result.filePath
 
 			if (canceled === false) {
+				let string = ""
+
 				for (let i = 0; i < codes.length; i++) {
-					fs.appendFile(output, `${codes[i]} \n`, (err) => {
-						if (err) {
-							return logger.error(`Error creating file - ${err}`)
-						} else {
-							return logger.log("File created")
-						}
-					})
+					string += `${codes[i]} \n`
 				}
+
+				fs.writeFile(output, string, (err) => {
+					if (err) {
+						return logger.error(`Error creating file - ${err}`)
+					} else {
+						return logger.log("QR code file created")
+					}
+				})
 			}
 		})
 		.catch((err) => {

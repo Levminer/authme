@@ -990,7 +990,40 @@ ipc.on("release_notes", () => {
 })
 
 ipc.on("download_update", () => {
-	shell.openExternal("https://authme.levminer.com/#downloads")
+	const donwloadUpdate = async () => {
+		try {
+			await fetch("https://api.levminer.com/api/v1/authme/releases")
+				.then((res) => res.json())
+				.then((data) => {
+					try {
+						const notes = markdown.convert(data.body).split("\n").slice(6).join("\n")
+						const message = `Update available: Authme ${data.tag_name}\n\nYou currently running: Authme ${tag_name}\n\nUpdates:\n\n${notes}`
+
+						dialog
+							.showMessageBox({
+								title: "Authme",
+								buttons: ["Download", "Close"],
+								defaultId: 0,
+								cancelId: 1,
+								noLink: true,
+								type: "info",
+								message: message,
+							})
+							.then((result) => {
+								if (result.response === 0) {
+									shell.openExternal("https://authme.levminer.com/#downloads")
+								}
+							})
+					} catch (error) {
+						return logger.error(error)
+					}
+				})
+		} catch (error) {
+			return logger.error(error)
+		}
+	}
+
+	donwloadUpdate()
 })
 
 ipc.on("support", () => {

@@ -468,7 +468,20 @@ const loadError = () => {
 // ? new encryption method
 const loadChooser = () => {
 	if (file.security.new_encryption === true) {
-		newLoad()
+		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+			if (err) {
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					type: "error",
+					message: `No save file found.
+					
+					Go back to the main page and save your codes!`,
+				})
+			} else {
+				newLoad()
+			}
+		})
 	} else {
 		loadCodes()
 	}

@@ -1,46 +1,8 @@
-.grid {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	grid-template-rows: repeat(5, 1fr);
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
-
-	width: 300px;
-	background-color: black;
-	margin: 0 auto;
-}
-
-input:focus::placeholder {
-	transition: 0.2s ease-in;
-	color: transparent;
-}
-
-input:hover::placeholder {
-	transition: 0.2s ease-in;
-	color: transparent;
-}
-
-.text-inputs {
-	display: none;
-	margin: 0 auto;
-	margin-top: 30px;
-}
-
 #but0,
 #but1,
 #but2,
 #but3 {
 	margin-bottom: 30px;
-}
-
-.details1 {
-	width: 98%;
-}
-
-.summary1 {
-	color: white;
-	color: white;
-	font-weight: bolder;
 }
 
 #dt {

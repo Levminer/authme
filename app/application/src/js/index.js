@@ -548,7 +548,7 @@ let diva1
 const animations = () => {
 	if (focus === true) {
 		setTimeout(() => {
-			const center = document.querySelector(".conent")
+			const center = document.querySelector(".content")
 			center.classList.add("animate__animated", "animate__fadeIn")
 
 			const h1 = document.querySelector(".h1")

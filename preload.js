@@ -92,3 +92,7 @@ document.addEventListener("keydown", (event) => {
 		event.preventDefault()
 	}
 })
+
+// prevent drag and drop
+document.addEventListener("dragover", (event) => event.preventDefault())
+document.addEventListener("drop", (event) => event.preventDefault())
