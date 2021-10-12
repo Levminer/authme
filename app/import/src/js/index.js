@@ -1,14 +1,56 @@
 const { app, dialog, shell } = require("@electron/remote")
-const qrcodedecoder = require("qrcode-decoder")
+const QrcodeDecoder = require("qrcode-decoder").default
+const logger = require("@levminer/lib/logger/renderer")
 const electron = require("electron")
 const path = require("path")
 const fs = require("fs")
-const qr = require(path.join(__dirname, "../../lib/qrcodeConverter.js"))
+const { qrcodeConverter } = require("@levminer/lib")
 const ipc = electron.ipcRenderer
 
 // ? error in window
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "import", error: error })
+}
+
+// ? logger
+logger.getWindow("import")
+
+// ? if development
+let dev = false
+
+if (app.isPackaged === false) {
+	dev = true
+}
+
+// ? os specific folders
+let folder
+
+if (process.platform === "win32") {
+	folder = process.env.APPDATA
+} else {
+	folder = process.env.HOME
+}
+
+const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+
+/**
+ * Read settings
+ * @type{LibSettings}
+ */
+const settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+
+if (settings.experimental.webcam === true) {
+	document.querySelector("#but2").style.display = "inline-block"
+	document.querySelector("#but3").style.display = "inline-block"
+}
+
+// ? check for webcam
+const checkWebcam = (callback) => {
+	const md = navigator.mediaDevices
+	if (!md || !md.enumerateDevices) return callback(false)
+	md.enumerateDevices().then((devices) => {
+		callback(devices.some((device) => device.kind === "videoinput"))
+	})
 }
 
 // ? link

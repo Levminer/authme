@@ -6,6 +6,10 @@ const path = require("path")
 const fetch = require("node-fetch")
 const dns = require("dns")
 const { typedef } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
+
+// ? logger
+logger.getWindow("settings")
 
 // ? error in window
 window.onerror = (error) => {
@@ -58,21 +62,11 @@ const settings_refresher = setInterval(() => {
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		console.warn("Authme - Settings refresh completed")
+		logger.log("Settings refresh completed")
 	}
-
-	console.warn("Authme - Settings refreshed")
 }, 100)
 
 // ? elements
-const but0 = document.querySelector("#but0")
-const but2 = document.querySelector("#but2")
-const but5 = document.querySelector("#but5")
-const but10 = document.querySelector("#but10")
-const but11 = document.querySelector("#but11")
-const but13 = document.querySelector("#but13")
-const but15 = document.querySelector("#but15")
-
 const inp0 = document.querySelector("#inp0")
 const drp0 = document.querySelector("#drp0")
 
@@ -92,6 +86,8 @@ const tgl6 = document.querySelector("#tgl6")
 const tgt6 = document.querySelector("#tgt6")
 const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
+const tgl8 = document.querySelector("#tgl8")
+const tgt8 = document.querySelector("#tgt8")
 
 // launch on startup
 let startup_state = file.settings.launch_on_startup
@@ -120,13 +116,13 @@ if (tray_state === true) {
 // capture
 let capture_state = file.settings.disable_window_capture
 if (capture_state === true) {
-	tgt2.textContent = "On"
-	tgl2.checked = true
+	tgt2.textContent = "Off"
+	tgl2.checked = false
 
 	ipc.send("disable_capture")
 } else {
-	tgt2.textContent = "Off"
-	tgl2.checked = false
+	tgt2.textContent = "On"
+	tgl2.checked = true
 
 	ipc.send("enable_capture")
 }
@@ -171,13 +167,6 @@ if (copy_state === true) {
 	tgl6.checked = false
 }
 
-// offset
-const offset_number = file.experimental.offset
-
-if (offset_number === null) {
-	inp0.value = 0
-}
-
 // sort
 const sort_number = file.experimental.sort
 
@@ -194,11 +183,22 @@ if (sort_number === 1) {
 // hardware
 let hardware_state = file.settings.disable_hardware_acceleration
 if (hardware_state === true) {
-	tgt7.textContent = "On"
-	tgl7.checked = true
-} else {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
+} else {
+	tgt7.textContent = "On"
+	tgl7.checked = true
+}
+
+// webcam
+let webcam_state = file.experimental.webcam
+
+if (webcam_state === true) {
+	tgt8.textContent = "On"
+	tgl8.checked = true
+} else {
+	tgt8.textContent = "Off"
+	tgl8.checked = false
 }
 
 // ? startup
@@ -258,8 +258,8 @@ const capture = () => {
 
 		save()
 
-		tgt2.textContent = "Off"
-		tgl2.checked = false
+		tgt2.textContent = "On"
+		tgl2.checked = true
 
 		capture_state = false
 
@@ -269,8 +269,8 @@ const capture = () => {
 
 		save()
 
-		tgt2.textContent = "On"
-		tgl2.checked = true
+		tgt2.textContent = "Off"
+		tgl2.checked = false
 
 		capture_state = true
 
@@ -307,45 +307,45 @@ const reset = () => {
 							// remove settings file
 							fs.unlink(path.join(file_path, "settings.json"), (err) => {
 								if (err && err.code === "ENOENT") {
-									return console.warn(`Authme - Error deleting settings.json - ${err}`)
+									return logger.error(`Error deleting settings.json - ${err}`)
 								} else {
-									console.warn("Authme - File settings.json deleted")
+									logger.log("File settings.json deleted")
 								}
 							})
 
 							// remove hash file
 							fs.unlink(path.join(file_path, "hash.authme"), (err) => {
 								if (err && err.code === "ENOENT") {
-									return console.warn(`Authme - Error deleting hash.authme - ${err}`)
+									return logger.error(`Error deleting hash.authme - ${err}`)
 								} else {
-									console.warn("Authme - File hash.authme deleted")
+									logger.log("File hash.authme deleted")
+								}
+							})
+
+							// clear codes
+							fs.rm(path.join(file_path, "codes"), { recursive: true }, (err) => {
+								if (err) {
+									return logger.error(`Error deleting codes - ${err}`)
+								} else {
+									logger.log("Codes deleted")
 								}
 							})
 
 							// clear logs
-							fs.rmdir(path.join(file_path, "codes"), { recursive: true }, (err) => {
+							fs.rm(path.join(file_path, "logs"), { recursive: true }, (err) => {
 								if (err) {
-									return console.warn(`Authme - Error deleting logs - ${err}`)
+									return logger.error(`Error deleting logs - ${err}`)
 								} else {
-									console.warn("Authme - Logs deleted")
-								}
-							})
-
-							// clear logs
-							fs.rmdir(path.join(file_path, "logs"), { recursive: true }, (err) => {
-								if (err) {
-									return console.warn(`Authme - Error deleting logs - ${err}`)
-								} else {
-									console.warn("Authme - Logs deleted")
+									logger.log("Logs deleted")
 								}
 							})
 
 							// clear cache files
-							fs.rmdir(path.join(file_path, "cache"), { recursive: true }, (err) => {
+							fs.rm(path.join(file_path, "cache"), { recursive: true }, (err) => {
 								if (err) {
-									return console.warn(`Authme - Error deleting caches - ${err}`)
+									return logger.error(`Error deleting caches - ${err}`)
 								} else {
-									console.warn("Authme - Caches deleted")
+									logger.log("Caches deleted")
 								}
 							})
 
@@ -481,42 +481,7 @@ const copy = () => {
 	reload()
 }
 
-// ? offset
-inp0.addEventListener("keyup", (event) => {
-	if (event.key === "Enter") {
-		const offset_input = document.querySelector("#inp0").value
-
-		console.log(event)
-
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Yes", "No", "Cancel"],
-				defaultId: 2,
-				cancelId: 2,
-				noLink: true,
-				type: "warning",
-				message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					file.experimental.offset = parseInt(offset_input)
-
-					save()
-
-					restart()
-				}
-
-				if (result.response === 1) {
-					file.experimental.offset = parseInt(offset_input)
-
-					save()
-				}
-			})
-	}
-})
-
-// ? save search results
+// ? hardware acceleration
 const hardware = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
@@ -540,8 +505,26 @@ const hardware = () => {
 		}
 	}
 
-	toggle()
-	reload()
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
 }
 
 let dropdown_state = false
@@ -615,6 +598,52 @@ const dropdownChoose = (id) => {
 				break
 		}
 	}
+}
+
+// ? webcam
+const webcam = () => {
+	const toggle = () => {
+		if (webcam_state === true) {
+			file.experimental.webcam = false
+
+			save()
+
+			tgt8.textContent = "Off"
+			tgl8.checked = false
+
+			webcam_state = false
+		} else {
+			file.experimental.webcam = true
+
+			save()
+
+			tgt8.textContent = "On"
+			tgl8.checked = true
+
+			webcam_state = true
+		}
+	}
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
 }
 
 // ? save settings
@@ -706,7 +735,7 @@ const api = async () => {
 					  </svg> \n Some systems offline`
 					}
 				} catch (error) {
-					return console.warn(`Authme - Error loading API - ${error}`)
+					return logger.warn("Error loading API", error)
 				}
 			})
 	} catch (error) {
@@ -731,6 +760,10 @@ const shortcutsLink = () => {
 // ? shortcuts docs
 const globalShortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
+}
+
+const quickCopyShortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=quick-copy-shortcuts")
 }
 
 const hide = () => {
@@ -874,7 +907,7 @@ const check_for_internet = () => {
 			offline_mode = true
 			offline_closed = true
 
-			console.warn("Authme - Can't connect to the internet")
+			logger.warn("Can't connect to the internet")
 		} else if (err === null && offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
 			document.querySelector(".offline").style.display = "none"
@@ -882,13 +915,13 @@ const check_for_internet = () => {
 			offline_mode = false
 			online_closed = true
 
-			console.warn("Authme - Connected to the internet")
+			logger.log("Connected to the internet")
 		} else if ((online_closed === true || offline_closed === true) && err === null) {
 			offline_mode = false
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection restored")
+			logger.log("Connection restored")
 		}
 	})
 }

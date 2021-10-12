@@ -1,4 +1,5 @@
 const { app, dialog, clipboard } = require("@electron/remote")
+const logger = require("@levminer/lib/logger/renderer")
 const bcrypt = require("bcryptjs")
 const fs = require("fs")
 const electron = require("electron")
@@ -10,6 +11,9 @@ const path = require("path")
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "confirm", error: error })
 }
+
+// ? logger
+logger.getWindow("confirm")
 
 // ? if development
 let dev = false
@@ -64,9 +68,9 @@ const check_integrity = () => {
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
 			if (err) {
-				return console.warn(`Authme - Error reading settings.json - ${err}`)
+				return logger.warn(`Error reading settings.json - ${err}`)
 			} else {
-				return console.warn("Authme - Successfully readed settings.json")
+				return logger.warn("Successfully readed settings.json")
 			}
 		})
 	)
@@ -76,7 +80,7 @@ const check_integrity = () => {
 
 	if (integrity == false) {
 		try {
-			console.log(storage)
+			logger.log(storage)
 
 			if (file.security.password !== storage.password || file.security.require_password !== storage.require_password) {
 				dialog
@@ -96,7 +100,7 @@ const check_integrity = () => {
 					})
 			}
 		} catch (error) {
-			console.warn("Authme - Local storage not found")
+			logger.error("Local storage not found")
 
 			dialog
 				.showMessageBox({
@@ -128,9 +132,9 @@ const unhashPassword = async () => {
 	const file = JSON.parse(
 		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
 			if (err) {
-				return console.warn(`Authme - Error reading settings.json - ${err}`)
+				return logger.warn(`Error reading settings.json - ${err}`)
 			} else {
-				return console.warn("Authme - Successfully readed settings.json")
+				return logger.log("Successfully readed settings.json")
 			}
 		})
 	)
@@ -138,7 +142,7 @@ const unhashPassword = async () => {
 	// compare
 	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input.toString(), file.security.password).then(console.warn("Authme - Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), file.security.password).then(logger.log("Passwords compared!"))
 
 	if (compare == true) {
 		if (file.security.new_encryption === true) {
@@ -156,7 +160,7 @@ const unhashPassword = async () => {
 			location.reload()
 		}, 1000)
 	} else {
-		console.warn("Authme - Passwords dont match!")
+		logger.warn("Passwords dont match!")
 
 		text.style.color = "#A30015"
 		text.textContent = "Passwords don't match! Try again!"
@@ -181,10 +185,6 @@ const forgotPassword = () => {
 		}
 
 		const hash = Buffer.from(sha.generateHash(text.toString("base64")))
-
-		console.log(hash.toString())
-		console.log("-")
-		console.log(storage.hash)
 
 		if (hash.toString() === storage.hash) {
 			const encrypted = Buffer.from(rsa.decrypt(text.toString(), Buffer.from(storage.backup_string, "base64")), "base64")
@@ -244,3 +244,26 @@ document.querySelector("#show_pass_01").addEventListener("click", () => {
 	document.querySelector("#show_pass_0").style.display = "flex"
 	document.querySelector("#show_pass_01").style.display = "none"
 })
+
+let more_options_shown = false
+
+/**
+ * Show more options div
+ */
+const showMoreOptions = () => {
+	const more_options = document.querySelector("#more_options")
+
+	if (more_options_shown === false) {
+		more_options.style.visibility = "visible"
+
+		setTimeout(() => {
+			more_options.style.display = "block"
+		}, 10)
+
+		more_options_shown = true
+	} else {
+		more_options.style.display = "none"
+
+		more_options_shown = false
+	}
+}

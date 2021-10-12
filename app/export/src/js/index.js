@@ -1,6 +1,7 @@
 const electron = require("electron")
 const { app, dialog, shell } = require("@electron/remote")
-const { aes } = require("@levminer/lib")
+const { aes, convert } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const path = require("path")
 const qrcode = require("qrcode")
@@ -10,6 +11,9 @@ const ipc = electron.ipcRenderer
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "export", error: error })
 }
+
+// ? logger
+logger.getWindow("export")
 
 // ? if development
 let dev = false
@@ -28,6 +32,7 @@ if (res.build_number.startsWith("alpha")) {
 
 // ? init codes for save to qr codes
 const codes = []
+let file
 
 // ? os specific folders
 let folder
@@ -53,82 +58,48 @@ const settings_refresher = setInterval(() => {
 	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		console.warn("Authme - Settings refresh completed")
+		logger.log("Settings refresh completed")
 	}
-
-	console.warn("Authme - Settings refreshed")
 }, 100)
 
-const name = []
-const secret = []
-const issuer = []
-const type = []
+/**
+ * Process data from saved file
+ * @param {String} text
+ */
+const processdata = (text) => {
+	const converted = convert.fromText(text, 0)
 
-// ? separate value
-const separation = () => {
-	document.querySelector(".before_export").style.display = "none"
-	document.querySelector(".after_export").style.display = "block"
-
-	let c0 = 0
-	let c1 = 1
-	let c2 = 2
-	let c3 = 3
-
-	for (let i = 0; i < data.length; i++) {
-		if (i == c0) {
-			const name_before = data[i]
-			const name_after = name_before.slice(8)
-			name.push(name_after)
-			c0 = c0 + 4
-		}
-
-		if (i == c1) {
-			const secret_before = data[i]
-			const secret_after = secret_before.slice(8)
-			secret.push(secret_after)
-			c1 = c1 + 4
-		}
-
-		if (i == c2) {
-			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8)
-			issuer.push(issuer_after)
-			c2 = c2 + 4
-		}
-
-		if (i == c3) {
-			type.push(data[i])
-			c3 = c3 + 4
-		}
-	}
-
-	go()
+	go(converted)
 }
 
-// ? render values
-const go = () => {
-	for (let i = 0; i < name.length; i++) {
-		const element = document.createElement("div")
+/**
+ * Start creating export elements
+ * @param {LibImportFile} data
+ */
+const go = (data) => {
+	const names = data.names
+	const secrets = data.secrets
+	const issuers = data.issuers
 
-		qrcode.toDataURL(`otpauth://totp/${name[i]}?secret=${secret[i]}&issuer=${issuer[i]}`, (err, data) => {
+	for (let i = 0; i < names.length; i++) {
+		qrcode.toDataURL(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`, (err, data) => {
 			if (err) {
-				console.warn(`Authme - Failed to generate QR code - ${err}`)
+				logger.error(`Failed to generate QR code - ${err}`)
 			}
 
 			qr_data = data
 
 			const text = `
 			<div data-scroll class="qr">
-				<img src="${data}">
-				<h2>${issuer[i]}</h2>
+				<img class="img" src="${data}">
+				<h2>${issuers[i]}</h2>
 			</div>`
-
-			element.innerHTML = text
 
 			codes.push(text)
 		})
 
-		document.querySelector(".center").appendChild(element)
+		document.querySelector(".before_export").style.display = "none"
+		document.querySelector(".after_export").style.display = "block"
 	}
 }
 
@@ -145,17 +116,17 @@ const saveFile = () => {
 			output = result.filePath
 
 			if (canceled === false) {
-				fs.writeFile(output, settings, (err) => {
+				fs.writeFile(output, file, (err) => {
 					if (err) {
-						return console.warn(`Authme - Error creating file - ${err}`)
+						return logger.error(`Error creating file - ${err}`)
 					} else {
-						return console.warn("Authme - File created")
+						return logger.log("Text file created")
 					}
 				})
 			}
 		})
 		.catch((err) => {
-			console.warn(`Authme - Failed to save - ${err}`)
+			logger.error(`Failed to save - ${err}`)
 		})
 }
 
@@ -172,19 +143,23 @@ const saveQrCodes = () => {
 			output = result.filePath
 
 			if (canceled === false) {
+				let string = ""
+
 				for (let i = 0; i < codes.length; i++) {
-					fs.appendFile(output, `${codes[i]} \n`, (err) => {
-						if (err) {
-							return console.warn(`Authme - Error creating file - ${err}`)
-						} else {
-							return console.warn("Authme - File created")
-						}
-					})
+					string += `${codes[i]} \n`
 				}
+
+				fs.writeFile(output, string, (err) => {
+					if (err) {
+						return logger.error(`Error creating file - ${err}`)
+					} else {
+						return logger.log("QR code file created")
+					}
+				})
 			}
 		})
 		.catch((err) => {
-			console.warn(`Authme - Failed to save - ${err}`)
+			logger.error(`Failed to save - ${err}`)
 		})
 }
 
@@ -244,16 +219,19 @@ const newExp = () => {
 
 	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
-			console.warn("Authme - The file codes.authme don't exists")
+			logger.warn("The file codes.authme don't exists")
 
 			password.fill(0)
 			key.fill(0)
+
+			error()
 		} else {
 			const codes_file = JSON.parse(content)
 
 			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
 			processdata(decrypted.toString())
+			file = decrypted.toString()
 
 			decrypted.fill(0)
 			password.fill(0)

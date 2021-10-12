@@ -30,5 +30,6 @@ module.exports = {
 		"node/no-missing-require": ["warn"],
 		"node/no-extraneous-require": ["off"],
 		"node/no-unsupported-features/node-builtins": ["off"],
+		"node/no-callback-literal": ["off"],
 	},
 }

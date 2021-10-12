@@ -2,7 +2,7 @@ module.exports = {
 	mode: "jit",
 	purge: {
 		enabled: true,
-		content: ["./app/**/*.html"],
+		content: ["./app/**/*.html", "./app/**/*.js"],
 	},
 	theme: {
 		extend: {
@@ -36,6 +36,10 @@ module.exports = {
 
 			borderRadius: {
 				"2xl": "30px",
+			},
+
+			screens: {
+				lg: "1400px",
 			},
 		},
 	},

@@ -23,7 +23,6 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 	background: rgb(10, 10, 10);
-	user-select: none;
 }
 
 /* selection */
@@ -123,31 +122,6 @@ a:visited {
 	color: var(--df_primary_color);
 }
 
-/* headings */
-h1,
-h2,
-h3,
-h4 {
-	margin: 2rem;
-	font-weight: 600;
-}
-
-h1 {
-	font-size: 64px;
-}
-
-h2 {
-	font-size: 48px;
-}
-
-h3 {
-	font-size: 32px;
-}
-
-h4 {
-	font-size: 24px;
-}
-
 /* text */
 .text1,
 .text2,
@@ -238,7 +212,7 @@ h4 {
 	padding-top: 30px;
 	margin: 130px auto;
 	height: 300px;
-	width: 600px;
+	width: 60%;
 	border-radius: 30px;
 }
 
@@ -279,6 +253,7 @@ details {
 
 summary {
 	cursor: pointer;
+	font-weight: bold;
 }
 
 details[open] summary ~ * {
@@ -330,7 +305,7 @@ details[open] summary ~ * {
 .dropdown-button {
 	color: black;
 	background: white;
-	border: 1px solid black;
+	border: 2px solid black;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
@@ -371,7 +346,7 @@ details[open] summary ~ * {
 }
 
 .dropdown-content a:hover {
-	background-color: rgb(20, 20, 20);
+	background-color: rgb(30, 30, 30);
 	color: white;
 }
 

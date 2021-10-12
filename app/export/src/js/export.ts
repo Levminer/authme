@@ -10,10 +10,6 @@ let exp = () => {
 
 			file = decrypted
 
-			let result = document.querySelector("#result")
-			result.value = decrypted
-			result.style.display = "flex"
-
 			processdata(decrypted)
 		}
 	})

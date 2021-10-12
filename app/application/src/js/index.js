@@ -1,6 +1,7 @@
+const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
+const logger = require("@levminer/lib/logger/renderer")
+const { aes, convert } = require("@levminer/lib")
 const speakeasy = require("@levminer/speakeasy")
-const { app, shell, dialog } = require("@electron/remote")
-const { typedef, aes } = require("@levminer/lib")
 const fs = require("fs")
 const path = require("path")
 const electron = require("electron")
@@ -11,6 +12,9 @@ const dns = require("dns")
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "application", error: error })
 }
+
+// ? logger
+logger.getWindow("application")
 
 // ? if development
 let dev = false
@@ -39,14 +43,8 @@ if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
 
 // eslint-disable-next-line
 let prev = false
-
-let names = []
-let secret = []
-const issuer = []
-const type = []
-
+let save_text
 const query = []
-
 let clear
 
 /**
@@ -62,10 +60,8 @@ const settings_refresher = setInterval(() => {
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
-		console.warn("Authme - Settings refresh completed")
+		logger.log("Settings refresh completed")
 	}
-
-	console.warn("Authme - Settings refreshed")
 }, 100)
 
 const name_state = file.settings.show_2fa_names
@@ -73,86 +69,75 @@ const copy_state = file.settings.reset_after_copy
 const reveal_state = file.settings.click_to_reveal
 const search_state = file.settings.save_search_results
 
-const offset_number = file.experimental.offset
 const sort_number = file.experimental.sort
 
-// ? separate values
-const separation = () => {
-	let c0 = 0
-	let c1 = 1
-	let c2 = 2
-	let c3 = 3
+/**
+ * Load file first time from dialog
+ */
+const loadFile = () => {
+	dialog
+		.showOpenDialog({
+			title: "Import from Authme Import Text file",
+			properties: ["openFile"],
+			filters: [{ name: "Text file", extensions: ["txt"] }],
+		})
+		.then((result) => {
+			canceled = result.canceled
+			filepath = result.filePaths
 
-	for (let i = 0; i < data.length; i++) {
-		if (i == c0) {
-			const names_before = data[i]
-			const names_after = names_before.slice(8).trim()
-			names.push(names_after)
-			c0 = c0 + 4
-		}
+			if (canceled === false) {
+				const text = fs.readFileSync(filepath.toString(), "utf-8")
+				save_text = text
 
-		if (i == c1) {
-			const secret_before = data[i]
-			const secret_after = secret_before.slice(8).trim()
-			secret.push(secret_after)
-			c1 = c1 + 4
-		}
-
-		if (i == c2) {
-			const issuer_before = data[i]
-			const issuer_after = issuer_before.slice(8).trim()
-			issuer.push(issuer_after)
-			c2 = c2 + 4
-		}
-
-		if (i == c3) {
-			type.push(data[i])
-			c3 = c3 + 4
-		}
-	}
-
-	const issuer_original = [...issuer]
-
-	const sort = () => {
-		const names_new = []
-		const secret_new = []
-
-		issuer.forEach((element) => {
-			for (let i = 0; i < issuer_original.length; i++) {
-				if (element === issuer_original[i]) {
-					names_new.push(names[i])
-					secret_new.push(secret[i])
-				}
+				processdata(text)
 			}
 		})
-
-		names = names_new
-		secret = secret_new
-	}
-
-	if (sort_number === 1) {
-		issuer.sort((a, b) => {
-			return a.localeCompare(b)
-		})
-
-		sort()
-	} else if (sort_number === 2) {
-		issuer.sort((a, b) => {
-			return b.localeCompare(a)
-		})
-
-		sort()
-	}
-
-	go()
 }
 
-const go = () => {
+/**
+ * Process data from saved source
+ * @param {String} text
+ */
+const processdata = (text) => {
+	const data = convert.fromText(text, sort_number)
+
+	go(data)
+}
+
+/**
+ * Start creating 2FA elements
+ * @param {LibImportFile} data
+ */
+const go = (data) => {
 	document.querySelector("#search").style.display = "grid"
 	document.querySelector(".h1").style.marginBottom = "0px"
-	document.querySelector(".center").style.top = "80px"
+	document.querySelector(".content").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
+
+	const names = data.names
+	const secrets = data.secrets
+	const issuers = data.issuers
+
+	/**
+	 * Load storage
+	 * @type {LibStorage}
+	 */
+	let storage
+
+	if (dev === false) {
+		storage = JSON.parse(localStorage.getItem("storage"))
+
+		storage.issuers = issuers
+
+		localStorage.setItem("storage", JSON.stringify(storage))
+	} else {
+		storage = JSON.parse(localStorage.getItem("dev_storage"))
+
+		storage.issuers = issuers
+
+		localStorage.setItem("dev_storage", JSON.stringify(storage))
+	}
 
 	const generate = () => {
 		// counter
@@ -169,15 +154,15 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -195,15 +180,15 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2" id="time${counter}">Time</p>
+					<p class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -223,15 +208,15 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -248,15 +233,15 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1 blur" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -275,15 +260,15 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -301,15 +286,15 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
@@ -329,15 +314,15 @@ const go = () => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -354,15 +339,15 @@ const go = () => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<input type="text" onclick="this.select()" class="input1" id="code${counter}" readonly/>
+					<p tabindex="0" class="input1" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p tabindex="0" class="text2" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
 					<button class="button11" id="copy${counter}" >
@@ -378,7 +363,7 @@ const go = () => {
 			}
 
 			// set div in html
-			document.querySelector(".center").appendChild(element)
+			document.querySelector(".content").appendChild(element)
 
 			// elements
 			const name = document.querySelector(`#name${counter}`)
@@ -388,38 +373,27 @@ const go = () => {
 			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
-
-			const item = issuer[i].toLowerCase().trim()
-
+			const item = issuers[i].toLowerCase().trim()
 			query.push(item)
+
+			// setting elements
+			if (name_state === true) {
+				text.textContent = names[i]
+			}
 
 			// interval0
 			const int0 = setInterval(() => {
 				// generate token
 				const token = speakeasy.totp({
-					secret: secret[i],
+					secret: secrets[i],
 					encoding: "base32",
-					epoch: offset_number,
 				})
 
 				// time
-				let remaining
+				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 
-				if (offset_number === undefined || null || 0) {
-					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-				} else {
-					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
-				}
-
-				// setting elements
-				try {
-					text.textContent = names[i]
-				} catch (error) {
-					console.warn(`Authme - Setting names - ${error}`)
-				}
-
-				name.textContent = issuer[i]
-				code.value = token
+				name.textContent = issuers[i]
+				code.textContent = token
 				time.textContent = remaining
 			}, 100)
 
@@ -427,41 +401,31 @@ const go = () => {
 			const int1 = setInterval(() => {
 				// generate token
 				const token = speakeasy.totp({
-					secret: secret[i],
+					secret: secrets[i],
 					encoding: "base32",
-					epoch: offset_number,
 				})
 
 				// time
-				let remaining
-
-				if (offset_number === undefined || null || 0) {
-					remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-				} else {
-					remaining = 30 - Math.floor((new Date(Date.now() - offset_number * 1000).getTime() / 1000.0) % 30)
-				}
+				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 
 				// setting elements
-				name.textContent = issuer[i]
-				code.value = token
+				name.textContent = issuers[i]
+				code.textContent = token
 				time.textContent = remaining
 
 				clearInterval(int0)
 			}, 500)
 
 			// copy
-			const el = copy.addEventListener("click", () => {
-				code.select()
-				code.setSelectionRange(0, 9999)
-				document.execCommand("copy")
+			copy.addEventListener("click", () => {
+				navigator.clipboard.writeText(code.textContent)
+
 				copy.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
 			 	 </svg>
 				Copied
 				`
-
-				window.getSelection().removeAllRanges()
 
 				setTimeout(() => {
 					copy.innerHTML = `
@@ -539,16 +503,14 @@ const search = () => {
 	}
 
 	// restart
-	for (let i = 0; i < names.length; i++) {
+	for (let i = 0; i < query.length; i++) {
 		const div = document.querySelector(`#grid${[i]}`)
 		div.style.display = "grid"
 	}
 
 	// search algorithm
 	query.forEach((e) => {
-		if (e.startsWith(input)) {
-			console.warn("Authme - Search result found")
-		} else {
+		if (!e.startsWith(input)) {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "none"
 		}
@@ -557,7 +519,7 @@ const search = () => {
 
 	// if search empty
 	if (search.value == "") {
-		for (let i = 0; i < names.length; i++) {
+		for (let i = 0; i < query.length; i++) {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "grid"
 		}
@@ -574,19 +536,19 @@ try {
 		})
 	}, 500)
 } catch (error) {
-	console.error("Authme - Block animations failed")
+	logger.error("Block animations failed")
 }
 
+// ? animations
 let focus = true
 
 let diva0
 let diva1
 
-// ? animations
-app.on("browser-window-focus", () => {
+const animations = () => {
 	if (focus === true) {
 		setTimeout(() => {
-			const center = document.querySelector(".center")
+			const center = document.querySelector(".content")
 			center.classList.add("animate__animated", "animate__fadeIn")
 
 			const h1 = document.querySelector(".h1")
@@ -617,17 +579,15 @@ app.on("browser-window-focus", () => {
 			}, 1500)
 
 			focus = false
-		}, 100)
+		}, 150)
 	}
-
-	focusSearch()
-})
+}
 
 // ? focus search bar
 const focusSearch = () => {
 	setTimeout(() => {
 		document.getElementById("search").focus()
-	}, 100)
+	}, 150)
 }
 
 // ? show update
@@ -656,7 +616,7 @@ const check_for_internet = () => {
 
 			ipc.send("offline")
 
-			console.warn("Authme - Can't connect to the internet")
+			logger.warn("Can't connect to the internet")
 		} else if (err === null && offline_mode === true && online_closed === false) {
 			document.querySelector(".online").style.display = "block"
 			document.querySelector(".offline").style.display = "none"
@@ -666,13 +626,13 @@ const check_for_internet = () => {
 
 			ipc.send("offline")
 
-			console.warn("Authme - Connected to the internet")
+			logger.warn("Connected to the internet")
 		} else if ((online_closed === true || offline_closed === true) && err === null) {
 			offline_mode = false
 			offline_closed = false
 			online_closed = false
 
-			console.warn("Authme - Connection restored")
+			logger.warn("Connection restored")
 		}
 	})
 }
@@ -769,7 +729,7 @@ const loadSave = () => {
 
 	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
-			console.warn("Authme - The file codes.authme don't exists")
+			logger.warn("The file codes.authme don't exists")
 
 			password.fill(0)
 			key.fill(0)
@@ -791,6 +751,25 @@ const loadSave = () => {
 
 if (file.security.require_password === false && file.security.new_encryption === true) {
 	loadSave()
+}
+
+// ? quick copy
+const quickCopy = (key) => {
+	for (let i = 0; i < query.length; i++) {
+		if (key.toLowerCase() === query[i]) {
+			const input = document.querySelector(`#code${[i]}`).value
+
+			clipboard.writeText(input)
+
+			const notification = new Notification({ title: "Authme", body: `${key} 2FA code copied to the clipboard!` })
+
+			notification.show()
+
+			setTimeout(() => {
+				notification.close()
+			}, 2500)
+		}
+	}
 }
 
 // ? release notes

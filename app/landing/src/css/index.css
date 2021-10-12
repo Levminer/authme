@@ -1,9 +1,3 @@
-.center {
-	top: 50px;
-	width: 1000px;
-	height: auto;
-}
-
 #password_input1:hover ~ #show_pass_0 {
 	transition: 0.2s ease-in;
 	stroke: white;
@@ -35,4 +29,23 @@ details {
 
 .toggle:checked {
 	right: 4px !important;
+}
+
+hr {
+	margin-top: 15px;
+	color: white;
+	border-width: 1px;
+}
+
+.animation {
+	animation: fadeEffect 1s;
+}
+
+@keyframes fadeEffect {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }

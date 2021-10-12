@@ -1,8 +1,12 @@
-const fs = require("fs")
-const electron = require("electron")
 const { app } = require("@electron/remote")
+const sentry = require("@sentry/electron")
+const electron = require("electron")
 const path = require("path")
+const fs = require("fs")
 const ipc = electron.ipcRenderer
+
+// ? crash report
+sentry.init({ dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541" })
 
 // ? if development
 let dev = false
@@ -39,11 +43,6 @@ const file = JSON.parse(
 		}
 	})
 )
-
-// settings launch_on_startup
-if (file.settings.launch_on_startup === true) {
-	ipc.send("startup")
-}
 
 // ? local storage
 let storage
@@ -93,3 +92,7 @@ document.addEventListener("keydown", (event) => {
 		event.preventDefault()
 	}
 })
+
+// prevent drag and drop
+document.addEventListener("dragover", (event) => event.preventDefault())
+document.addEventListener("drop", (event) => event.preventDefault())

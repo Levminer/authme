@@ -24,6 +24,18 @@ const default_shortcuts = {
 	},
 }
 
+/**
+ * Load storage
+ * @type {LibStorage}
+ */
+let storage
+
+if (dev === false) {
+	storage = JSON.parse(localStorage.getItem("storage"))
+} else {
+	storage = JSON.parse(localStorage.getItem("dev_storage"))
+}
+
 // ? shortcuts
 let modify = true
 
@@ -104,16 +116,17 @@ const hk_edit = (value) => {
 	if (modify === true) {
 		document.addEventListener("keydown", call, true)
 
-		inp_name.value = "Press any key combiantion"
-		inp_name.style.border = "green 1px solid"
-		btn_name.style.border = "green 1px solid"
+		inp_name.value = "Press any key combination"
+		inp_name.style.borderColor = "green"
+		btn_name.style.borderColor = "green"
 		svg_name.style.color = "green"
 
 		modify = false
-	} else if (inp_name.value !== "Press any key combiantion") {
+	} else if (inp_name.value !== "Press any key combination") {
 		document.removeEventListener("keydown", call, true)
 		svg_name.style.color = ""
 		btn_name.style.border = ""
+		inp_name.style.border = ""
 
 		switch (id) {
 			case 0:
@@ -239,7 +252,7 @@ const hk_delete = (value) => {
 	inp_name.value = "None"
 
 	svg_name.style.color = "red"
-	btn_name.style.border = "red 1px solid"
+	btn_name.style.borderColor = "red"
 
 	setTimeout(() => {
 		svg_name.style.color = ""
@@ -357,7 +370,7 @@ const hk_reset = (value) => {
 	svg_name = document.querySelector(`#hk${value}_svg_reset`)
 
 	svg_name.style.color = "orange"
-	btn_name.style.border = "orange 1px solid"
+	btn_name.style.borderColor = "orange"
 
 	setTimeout(() => {
 		svg_name.style.color = ""
@@ -465,4 +478,115 @@ const hk_reset = (value) => {
 	}
 
 	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+}
+
+// ? quick shortcuts
+const issuers = storage.issuers
+
+const generateCodes = () => {
+	for (let i = 0; i < issuers.length; i++) {
+		let content = "None"
+
+		if (file.quick_shortcuts[issuers[i]] !== undefined) {
+			content = file.quick_shortcuts[issuers[i]]
+		}
+
+		const element = `
+		<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+		<div class="flex justify-center items-center">
+		<h3>${issuers[i]}</h3>
+		</div>
+		<div class="flex justify-center items-center">
+		<input class="input1" disabled type="text" id="qs${i}_input" value="${content}"/>
+		</div>
+		<div class="flex justify-center items-center mb-10 mt-5">
+		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
+		<svg id="hk102_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+		</svg>
+		</button>
+		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
+		<svg id="hk102_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+		</svg>
+		</button>
+		</div>
+		</div>
+		`
+
+		const div = document.createElement("div")
+		div.innerHTML = element
+		document.querySelector(".quick").appendChild(div)
+	}
+}
+
+if (issuers !== undefined) {
+	generateCodes()
+} else {
+	document.querySelector(".quick").innerHTML = "<h3>Please restart the app to be able to create quick shortcuts!</h3>"
+}
+
+const qsEdit = (value) => {
+	id = value
+	inp_name = document.querySelector(`#qs${value}_input`)
+	btn_name = document.querySelector(`#qs${value}_button_edit`)
+	svg_name = document.querySelector(`#qs${value}_svg_edit`)
+
+	if (modify === true) {
+		document.addEventListener("keydown", call, true)
+
+		inp_name.value = "Press any key combination"
+		inp_name.style.borderColor = "green"
+		btn_name.style.borderColor = "green"
+		svg_name.style.color = "green"
+
+		modify = false
+	} else if (inp_name.value !== "Press any key combination") {
+		document.removeEventListener("keydown", call, true)
+		svg_name.style.color = ""
+		btn_name.style.border = ""
+		inp_name.style.border = ""
+
+		modify = true
+	} else {
+		document.removeEventListener("keydown", call, true)
+		svg_name.style.color = ""
+		btn_name.style.border = ""
+		inp_name.style.border = ""
+
+		document.querySelector(`#qs${value}_input`).value = "None"
+		modify = true
+	}
+
+	const input = document.querySelector(`#qs${value}_input`).value
+
+	if (input !== "Press any key combination" && input !== "None") {
+		file.quick_shortcuts[issuers[id]] = input
+
+		save()
+	} else if (input === "None") {
+		delete file.quick_shortcuts[issuers[value]]
+
+		save()
+	}
+}
+
+const qsDelete = (value) => {
+	inp_name = document.querySelector(`#qs${value}_input`)
+	btn_name = document.querySelector(`#qs${value}_button_delete`)
+	svg_name = document.querySelector(`#qs${value}_svg_delete`)
+
+	inp_name.value = "None"
+
+	svg_name.style.color = "red"
+	btn_name.style.borderColor = "red"
+
+	setTimeout(() => {
+		svg_name.style.color = ""
+		btn_name.style.border = ""
+	}, 500)
+
+	delete file.quick_shortcuts[issuers[value]]
+
+	save()
 }
