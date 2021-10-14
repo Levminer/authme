@@ -533,7 +533,11 @@ const dropdown = (id) => {
 	const dropdown_content = document.querySelector(".dropdown-content")
 
 	if (dropdown_state === false) {
-		dropdown_content.style.display = "block"
+		dropdown_content.style.visibility = "visible"
+
+		setTimeout(() => {
+			dropdown_content.style.display = "block"
+		}, 10)
 
 		dropdown_state = true
 	} else {

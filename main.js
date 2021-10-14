@@ -5,7 +5,7 @@ const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
 const { markdown } = require("@levminer/lib")
-const sentry = require("@sentry/electron")
+const sentry = require("@sentry/electron/main")
 const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
 const electron = require("electron")
@@ -25,7 +25,10 @@ process.on("uncaughtException", (error) => {
 	process.crash()
 })
 
-sentry.init({ dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541" })
+sentry.init({
+	dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541",
+	release: `authme@${version}`,
+})
 
 // ? windows
 let /** @type{BrowserWindow} */ window_splash
@@ -990,7 +993,7 @@ ipc.on("release_notes", () => {
 })
 
 ipc.on("download_update", () => {
-	const donwloadUpdate = async () => {
+	const downloadUpdate = async () => {
 		try {
 			await fetch("https://api.levminer.com/api/v1/authme/releases")
 				.then((res) => res.json())
@@ -1023,7 +1026,7 @@ ipc.on("download_update", () => {
 		}
 	}
 
-	donwloadUpdate()
+	downloadUpdate()
 })
 
 ipc.on("support", () => {

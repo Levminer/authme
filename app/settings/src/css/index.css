@@ -41,6 +41,19 @@ hr {
 	}
 }
 
+.animation {
+	animation: fadeEffect 0.5s;
+}
+
+@keyframes fadeEffect {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
 #shortcuts {
 	display: none;
 }
