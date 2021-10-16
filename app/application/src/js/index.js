@@ -757,7 +757,7 @@ if (file.security.require_password === false && file.security.new_encryption ===
 const quickCopy = (key) => {
 	for (let i = 0; i < query.length; i++) {
 		if (key.toLowerCase() === query[i]) {
-			const input = document.querySelector(`#code${[i]}`).value
+			const input = document.querySelector(`#code${[i]}`).textContent
 
 			clipboard.writeText(input)
 

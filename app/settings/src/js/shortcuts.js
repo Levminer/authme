@@ -492,7 +492,7 @@ const generateCodes = () => {
 		}
 
 		const element = `
-		<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 		<div class="flex justify-center items-center">
 		<h3>${issuers[i]}</h3>
 		</div>
