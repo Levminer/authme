@@ -61,7 +61,7 @@ const settings_refresher = setInterval(() => {
 // ? rollback
 const cache_path = path.join(file_path, "cache")
 const rollback_con = document.querySelector(".rollback")
-const rollback_text = document.querySelector("#rollbackBut")
+const rollback_text = document.querySelector("#rollbackText")
 let cache = true
 
 fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
@@ -74,10 +74,17 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 
 		const edited_date = fs.statSync(cache_path).atime
 
-		const temp_date = `${edited_date.toLocaleDateString().split("/").reverse().join(".")}.`
-		const temp_time = edited_date.toLocaleTimeString()
+		const year = edited_date.getFullYear()
+		const month = edited_date.toLocaleString("en-us", { month: "long" })
+		const day = edited_date.toISOString().substring(8, 10)
 
-		rollback_text.textContent = `Latest rollback: ${temp_date} ${temp_time}`
+		console.log(year)
+		console.log(month)
+
+		const temp_date = `${year}. ${month}. ${day}.`
+		const temp_time = edited_date.toLocaleTimeString().replace("AM", "").replace("PM", "")
+
+		rollback_text.innerHTML = `Latest rollback: <br /> ${temp_date}  ${temp_time}`
 	}
 })
 
