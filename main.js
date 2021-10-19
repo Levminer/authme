@@ -124,6 +124,7 @@ ipc.on("info", (event) => {
 
 const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
+const args = process.argv
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
@@ -166,7 +167,7 @@ const settings = `{
 			"build": "${build_number}"
 		},
 		"settings": {
-			"launch_on_startup": false,
+			"launch_on_startup": true,
 			"close_to_tray": true,
 			"show_2fa_names": false,
 			"click_to_reveal": false,
@@ -495,6 +496,10 @@ const createWindow = () => {
 		window_landing.maximize()
 
 		logger.warn("First start")
+
+		if (dev === false) {
+			authme_launcher.enable()
+		}
 	}
 
 	window_landing.on("close", () => {
@@ -647,7 +652,7 @@ const createWindow = () => {
 			}
 		}
 
-		if (reload === false && file.settings.launch_on_startup === true) {
+		if (reload === false && file.settings.launch_on_startup === true && args[1] === "--hidden") {
 			window_application.hide()
 			window_confirm.hide()
 
@@ -726,6 +731,7 @@ const createWindow = () => {
 const authme_launcher = new AutoLaunch({
 	name: "Authme",
 	path: app.getPath("exe"),
+	isHidden: true,
 })
 
 // ? context menu
