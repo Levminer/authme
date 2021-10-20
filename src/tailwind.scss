@@ -14,6 +14,9 @@
 }
 
 @layer components {
+	.checkbox {
+		@apply form-checkbox rounded-full relative border-2 -top-0.5 focus:ring-white text-black cursor-pointer;
+	}
 }
 
 @layer base {

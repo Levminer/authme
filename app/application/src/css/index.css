@@ -128,13 +128,18 @@ h4 {
 	background-color: white;
 	border-color: white;
 	font-size: 1.5rem;
-	padding: 15px 30px;
+	padding: 15px 50px;
 	border-radius: 30px;
 	cursor: text;
 	text-align: center;
 	transition: 0.2s ease-in;
-	margin-bottom: 50px;
+	margin-bottom: 10px;
 	display: none;
+}
+
+.input2:hover ~ .searchIcon {
+	transition: 0.2s ease-in;
+	stroke: white;
 }
 
 .input2:hover {
@@ -223,4 +228,15 @@ a {
 
 .text2 {
 	font-size: 26px !important;
+}
+
+.dropdown-content {
+	width: 12rem;
+	left: 280px;
+}
+
+.dropdown-content a:hover {
+	background-color: white;
+	color: black;
+	cursor: default;
 }

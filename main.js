@@ -174,7 +174,11 @@ const settings = `{
 			"reset_after_copy": false,
 			"save_search_results": true,
 			"disable_window_capture": true,
-			"disable_hardware_acceleration": true
+			"disable_hardware_acceleration": true,
+			"search_bar_filter": {
+				"name": true,
+				"description": false
+			}
 		},
 		"experimental":{
 			"sort": null,
@@ -241,6 +245,15 @@ if (file.experimental === undefined) {
 
 if (file.quick_shortcuts === undefined) {
 	file.quick_shortcuts = {}
+
+	saveSettings()
+}
+
+if (file.settings.search_bar_filter === undefined) {
+	file.settings.search_bar_filter = {
+		name: true,
+		description: false,
+	}
 
 	saveSettings()
 }

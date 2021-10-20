@@ -305,7 +305,7 @@ details[open] summary ~ * {
 .dropdown-button {
 	color: black;
 	background: white;
-	border: 2px solid black;
+	border: 2px solid white;
 	font-size: 1.25rem;
 	padding: 15px 30px;
 	border-radius: 30px;
@@ -314,7 +314,6 @@ details[open] summary ~ * {
 	transition: 0.2s ease-in;
 	text-align: center;
 	width: 18rem;
-	height: 3.8rem;
 }
 
 .dropdown-button:hover {
@@ -329,7 +328,7 @@ details[open] summary ~ * {
 }
 
 .dropdown-content {
-	top: 65px;
+	top: 70px;
 	display: none;
 	position: absolute;
 	width: 18rem;
@@ -355,7 +354,7 @@ details[open] summary ~ * {
 	border-top-right-radius: 30px;
 }
 
-.dropdown-content :last-child {
+.dropdown-content a:last-child {
 	border-bottom-left-radius: 30px;
 	border-bottom-right-radius: 30px;
 }
@@ -376,4 +375,8 @@ details[open] summary ~ * {
 .dropdown-button > svg {
 	position: relative;
 	top: 4px;
+}
+
+.animation {
+	animation: fadeEffect 0.5s;
 }

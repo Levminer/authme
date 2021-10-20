@@ -45,6 +45,8 @@ if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
 let prev = false
 let save_text
 const query = []
+const description_query = []
+const name_query = []
 let clear
 
 /**
@@ -373,8 +375,9 @@ const go = (data) => {
 			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
-			const item = issuers[i].toLowerCase().trim()
-			query.push(item)
+			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
+			name_query.push(issuers[i].toLowerCase().trim())
+			description_query.push(names[i].toLowerCase().trim())
 
 			// setting elements
 			if (name_state === true) {
@@ -495,6 +498,7 @@ const search = () => {
 	const search = document.querySelector("#search")
 	const input = search.value.toLowerCase()
 	let i = 0
+	let no_results = 0
 
 	// save result
 	if (search_state === true) {
@@ -503,23 +507,70 @@ const search = () => {
 	}
 
 	// restart
-	for (let i = 0; i < query.length; i++) {
+	for (let i = 0; i < name_query.length; i++) {
 		const div = document.querySelector(`#grid${[i]}`)
 		div.style.display = "grid"
 	}
 
+	// remove no results div
+	try {
+		document.querySelector("#noResult").remove()
+	} catch (error) {}
+
 	// search algorithm
-	query.forEach((e) => {
-		if (!e.startsWith(input)) {
-			const div = document.querySelector(`#grid${[i]}`)
-			div.style.display = "none"
+	name_query.forEach((result) => {
+		if (file.settings.search_bar_filter.name === true && file.settings.search_bar_filter.description === false) {
+			if (!result.startsWith(input)) {
+				const div = document.querySelector(`#grid${[i]}`)
+				div.style.display = "none"
+
+				if (div.style.display === "none") {
+					no_results++
+				}
+			}
+		} else if (file.settings.search_bar_filter.description === true && file.settings.search_bar_filter.name === false) {
+			if (!description_query[i].startsWith(input)) {
+				const div = document.querySelector(`#grid${[i]}`)
+				div.style.display = "none"
+
+				if (div.style.display === "none") {
+					no_results++
+				}
+			}
+		} else {
+			if (!query[i].includes(input)) {
+				const div = document.querySelector(`#grid${[i]}`)
+				div.style.display = "none"
+
+				if (div.style.display === "none") {
+					no_results++
+				}
+			}
 		}
+
 		i++
 	})
 
+	// display no results
+	if (name_query.length === no_results) {
+		const element = document.createElement("div")
+
+		element.innerHTML = `
+		<div class="flex justify-center">
+		<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
+		<h3 class="pt-3">No results found!</h3>
+		<h4>Not found search results for "${document.querySelector("#search").value}".</h4>
+		</div>
+		</div>
+		`
+
+		element.setAttribute("id", "noResult")
+		document.querySelector(".content").appendChild(element)
+	}
+
 	// if search empty
 	if (search.value == "") {
-		for (let i = 0; i < query.length; i++) {
+		for (let i = 0; i < name_query.length; i++) {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "grid"
 		}
@@ -753,10 +804,57 @@ if (file.security.require_password === false && file.security.new_encryption ===
 	loadSave()
 }
 
+let dropdown_state = false
+// ? dropdown
+const dropdown = () => {
+	const dropdown_content = document.querySelector(".dropdown-content")
+
+	if (dropdown_state === false) {
+		console.log("OFF")
+
+		dropdown_content.style.visibility = "visible"
+
+		setTimeout(() => {
+			dropdown_content.style.display = "block"
+		}, 10)
+
+		dropdown_state = true
+	} else {
+		console.log("ON")
+
+		dropdown_content.style.display = ""
+
+		dropdown_state = false
+	}
+}
+
+document.querySelector("#checkbox0").checked = file.settings.search_bar_filter.name
+document.querySelector("#checkbox1").checked = file.settings.search_bar_filter.description
+// ? dropdown checkboxes
+document.querySelector("#checkbox0").addEventListener("click", () => {
+	if (file.settings.search_bar_filter.name === true) {
+		file.settings.search_bar_filter.name = false
+	} else {
+		file.settings.search_bar_filter.name = true
+	}
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+})
+
+document.querySelector("#checkbox1").addEventListener("click", () => {
+	if (file.settings.search_bar_filter.description === true) {
+		file.settings.search_bar_filter.description = false
+	} else {
+		file.settings.search_bar_filter.description = true
+	}
+
+	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+})
+
 // ? quick copy
 const quickCopy = (key) => {
-	for (let i = 0; i < query.length; i++) {
-		if (key.toLowerCase() === query[i]) {
+	for (let i = 0; i < name_query.length; i++) {
+		if (key.toLowerCase() === name_query[i]) {
 			const input = document.querySelector(`#code${[i]}`).textContent
 
 			clipboard.writeText(input)
@@ -820,3 +918,20 @@ const readDocs = () => {
 const sampleImport = () => {
 	shell.openExternal("https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true")
 }
+
+// ? dismiss dialog on click outside
+window.addEventListener("click", (event) => {
+	const dropdown_content = document.querySelector(".dropdown-content")
+	const filter = document.querySelector("#filter")
+	const filter_path = document.querySelector("#filter_path")
+	const checkbox0 = document.querySelector("#checkbox0")
+	const checkbox1 = document.querySelector("#checkbox1")
+	const link0 = document.querySelector("#link0")
+	const link1 = document.querySelector("#link1")
+
+	if (event.target != filter && event.target != filter_path && event.target != checkbox0 && event.target != checkbox1 && event.target != link0 && event.target != link1) {
+		dropdown_content.style.display = ""
+
+		dropdown_state = false
+	}
+})
