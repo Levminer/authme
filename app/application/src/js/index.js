@@ -116,6 +116,8 @@ const go = (data) => {
 	document.querySelector(".content").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
+	document.querySelector("#search_icon").style.display = "inline-block"
+	document.querySelector("#filter_icon").style.display = "inline-block"
 
 	const names = data.names
 	const secrets = data.secrets
@@ -810,8 +812,6 @@ const dropdown = () => {
 	const dropdown_content = document.querySelector(".dropdown-content")
 
 	if (dropdown_state === false) {
-		console.log("OFF")
-
 		dropdown_content.style.visibility = "visible"
 
 		setTimeout(() => {
@@ -820,8 +820,6 @@ const dropdown = () => {
 
 		dropdown_state = true
 	} else {
-		console.log("ON")
-
 		dropdown_content.style.display = ""
 
 		dropdown_state = false
@@ -922,7 +920,7 @@ const sampleImport = () => {
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
 	const dropdown_content = document.querySelector(".dropdown-content")
-	const filter = document.querySelector("#filter")
+	const filter = document.querySelector("#filter_icon")
 	const filter_path = document.querySelector("#filter_path")
 	const checkbox0 = document.querySelector("#checkbox0")
 	const checkbox1 = document.querySelector("#checkbox1")
