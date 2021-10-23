@@ -3,7 +3,6 @@ const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const fetch = require("node-fetch")
 const dns = require("dns")
 const { typedef } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
@@ -723,30 +722,31 @@ const folder2 = () => {
 // ? status api
 const status = document.querySelector("#but6")
 
-const api = async () => {
-	try {
-		await fetch("https://api.levminer.com/api/v1/status/all")
-			.then((res) => res.json())
-			.then((data) => {
-				try {
-					if (data.state === "up") {
-						status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+const api = () => {
+	fetch("https://api.levminer.com/api/v1/status/all")
+		.then((res) => res.json())
+		.then((data) => {
+			try {
+				if (data.state === "up") {
+					status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
 					  </svg> \n All systems online`
-					} else {
-						status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				} else {
+					status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
 					  </svg> \n Some systems offline`
-					}
-				} catch (error) {
-					return logger.warn("Error loading API", error)
 				}
-			})
-	} catch (error) {
-		status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
-	  </svg> \n Can't connect to API`
-	}
+			} catch (error) {
+				return logger.warn("Error loading API", error)
+			}
+		})
+		.catch((error) => {
+			logger.warn("Can't connect to API", error)
+
+			status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
+			  </svg> \n Can't connect to API`
+		})
 }
 
 api()

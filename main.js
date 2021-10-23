@@ -1,18 +1,18 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
-const logger = require("@levminer/lib/logger/main")
 const contextmenu = require("electron-context-menu")
+const logger = require("@levminer/lib/logger/main")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
+const sentry = require("@sentry/electron/main")
 const remote = require("@electron/remote/main")
 const { markdown } = require("@levminer/lib")
-const sentry = require("@sentry/electron/main")
 const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
 const electron = require("electron")
-const fetch = require("node-fetch")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
+const axios = require("axios").default
 const ipc = electron.ipcMain
 
 // ? crash report
@@ -634,35 +634,30 @@ const createWindow = () => {
 
 	// ? check for auto update
 	window_application.on("show", () => {
-		const api = async () => {
-			try {
-				await fetch("https://api.levminer.com/api/v1/authme/releases")
-					.then((res) => res.json())
-					.then((data) => {
-						try {
-							if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
-								window_application.webContents.executeJavaScript("showUpdate()")
+		const api = () => {
+			axios
+				.get("https://api.levminer.com/api/v1/authme/releases")
+				.then((res) => {
+					if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+						window_application.webContents.executeJavaScript("showUpdate()")
 
-								window_settings.on("show", () => {
-									window_settings.webContents.executeJavaScript("showUpdate()")
-								})
+						window_settings.on("show", () => {
+							window_settings.webContents.executeJavaScript("showUpdate()")
+						})
 
-								new Notification({
-									title: "Authme Update",
-									body: `Update available: Authme ${data.tag_name}`,
-								}).show()
+						new Notification({
+							title: "Authme Update",
+							body: `Update available: Authme ${res.data.tag_name}`,
+						}).show()
 
-								logger.log("Auto update found!")
-							} else {
-								logger.log("No auto update found!")
-							}
-						} catch (error) {
-							return logger.error("Error during auto update", error.stack)
-						}
-					})
-			} catch (error) {
-				return logger.error("Error during auto update", error.stack)
-			}
+						logger.log("Auto update found!")
+					} else {
+						logger.log("No auto update found!")
+					}
+				})
+				.catch((error) => {
+					logger.error("Error during auto update", error.stack)
+				})
 		}
 
 		if (reload === false && file.settings.launch_on_startup === true && args[1] === "--hidden") {
@@ -1012,40 +1007,35 @@ ipc.on("release_notes", () => {
 })
 
 ipc.on("download_update", () => {
-	const downloadUpdate = async () => {
-		try {
-			await fetch("https://api.levminer.com/api/v1/authme/releases")
-				.then((res) => res.json())
-				.then((data) => {
-					try {
-						const notes = markdown.convert(data.body).split("\n").slice(6).join("\n")
-						const message = `Update available: Authme ${data.tag_name}\n\nYou currently running: Authme ${tag_name}\n\nUpdates:\n\n${notes}`
+	axios
+		.get("https://api.levminer.com/api/v1/authme/releases")
+		.then((res) => {
+			if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+				const notes = markdown.convert(res.data.body).split("\n").slice(4).join("\n").split("Bug")[0]
+				const message = `Update available: Authme ${res.data.tag_name}\n\nYou currently running: Authme ${tag_name}\n\nNotable changes:\n\n${notes}Check out release note for all changes.`
 
-						dialog
-							.showMessageBox({
-								title: "Authme",
-								buttons: ["Download", "Close"],
-								defaultId: 0,
-								cancelId: 1,
-								noLink: true,
-								type: "info",
-								message: message,
-							})
-							.then((result) => {
-								if (result.response === 0) {
-									shell.openExternal("https://authme.levminer.com/#downloads")
-								}
-							})
-					} catch (error) {
-						return logger.error(error)
-					}
-				})
-		} catch (error) {
-			return logger.error(error)
-		}
-	}
+				dialog
+					.showMessageBox({
+						title: "Authme",
+						buttons: ["Download", "Close"],
+						defaultId: 0,
+						cancelId: 1,
+						noLink: true,
+						type: "info",
+						message: message,
+					})
+					.then((result) => {
+						if (result.response === 0) {
+							shell.openExternal("https://authme.levminer.com/#downloads")
+						}
+					})
+			}
+		})
+		.catch((error) => {
+			dialog.showErrorBox("Authme", "Error getting latest update. \n\nTry again later!")
 
-	downloadUpdate()
+			logger.error("Error getting latest update", error.stack)
+		})
 })
 
 ipc.on("support", () => {
@@ -1146,37 +1136,30 @@ const about = () => {
 
 // ? release notes
 const releaseNotes = () => {
-	const api = async () => {
-		try {
-			await fetch("https://api.levminer.com/api/v1/authme/releases")
-				.then((res) => res.json())
-				.then((data) => {
-					try {
-						dialog
-							.showMessageBox({
-								title: "Authme",
-								buttons: ["More", "Close"],
-								defaultId: 1,
-								cancelId: 1,
-								noLink: true,
-								type: "info",
-								message: markdown.convert(data.body),
-							})
-							.then((result) => {
-								if (result.response === 0) {
-									shell.openExternal("https://github.com/Levminer/authme/releases")
-								}
-							})
-					} catch (error) {
-						return logger.error(error)
+	axios
+		.get("https://api.levminer.com/api/v1/authme/releases")
+		.then((res) => {
+			dialog
+				.showMessageBox({
+					title: "Authme",
+					buttons: ["More", "Close"],
+					defaultId: 1,
+					cancelId: 1,
+					noLink: true,
+					type: "info",
+					message: markdown.convert(res.data.body),
+				})
+				.then((result) => {
+					if (result.response === 0) {
+						shell.openExternal("https://github.com/Levminer/authme/releases")
 					}
 				})
-		} catch (error) {
-			return logger.error(error)
-		}
-	}
+		})
+		.catch((error) => {
+			dialog.showErrorBox("Authme", "Error getting release notes. \n\nTry again later!")
 
-	api()
+			logger.error("Error getting release notes", error.stack)
+		})
 }
 
 // ? support
@@ -1594,68 +1577,40 @@ app.whenReady()
 							label: "Update",
 							accelerator: shortcuts ? "" : file.shortcuts.update,
 							click: () => {
-								const api = async () => {
-									try {
-										await fetch("https://api.levminer.com/api/v1/authme/releases")
-											.then((res) => res.json())
-											.then((data) => {
-												try {
-													if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
-														dialog
-															.showMessageBox({
-																title: "Authme",
-																buttons: ["Yes", "No"],
-																defaultId: 0,
-																cancelId: 1,
-																type: "info",
-																message: `Update available: Authme ${data.tag_name}
-															
-															Do you want to download it?
-										
-															You currently running: Authme ${tag_name}`,
-															})
-															.then((result) => {
-																if (result.response === 0) {
-																	shell.openExternal("https://authme.levminer.com#downloads")
-																}
-															})
-													} else {
-														dialog.showMessageBox({
-															title: "Authme",
-															buttons: ["Close"],
-															defaultId: 0,
-															cancelId: 1,
-															type: "info",
-															message: `No update available:
-														
-														You are running the latest version!
-									
-														You are currently running: Authme ${tag_name}`,
-														})
+								axios
+									.get("https://api.levminer.com/api/v1/authme/releases")
+									.then((res) => {
+										if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+											dialog
+												.showMessageBox({
+													title: "Authme",
+													buttons: ["Yes", "No"],
+													defaultId: 0,
+													cancelId: 1,
+													type: "info",
+													message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
+												})
+												.then((result) => {
+													if (result.response === 0) {
+														shell.openExternal("https://authme.levminer.com#downloads")
 													}
-												} catch (error) {
-													return logger.error("Error during manual update", error.stack)
-												}
+												})
+										} else {
+											dialog.showMessageBox({
+												title: "Authme",
+												buttons: ["Close"],
+												defaultId: 0,
+												cancelId: 1,
+												type: "info",
+												message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${tag_name}`,
 											})
-									} catch (error) {
-										dialog.showMessageBox({
-											title: "Authme",
-											buttons: ["Close"],
-											defaultId: 0,
-											cancelId: 1,
-											type: "info",
-											message: `No update available:
-										
-										Can't connect to API, check your internet connection or the API status in the settings!
-					
-										You currently running: Authme ${tag_name}`,
-										})
+										}
+									})
+									.catch((error) => {
+										dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
 
-										return logger.error("Error during manual update", error.stack)
-									}
-								}
-
-								api()
+										logger.error("Error getting update manually", error.stack)
+									})
 							},
 						},
 						{
