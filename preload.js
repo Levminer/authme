@@ -6,7 +6,7 @@ const fs = require("fs")
 const ipc = electron.ipcRenderer
 
 // ? crash report
-sentry.init({ dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541" })
+sentry.init({})
 
 // ? if development
 let dev = false

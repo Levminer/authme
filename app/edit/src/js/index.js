@@ -1,5 +1,5 @@
 const { app, dialog } = require("@electron/remote")
-const { aes, convert } = require("@levminer/lib")
+const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const electron = require("electron")
@@ -78,11 +78,8 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 		const month = edited_date.toLocaleString("en-us", { month: "long" })
 		const day = edited_date.toISOString().substring(8, 10)
 
-		console.log(year)
-		console.log(month)
-
-		const temp_date = `${year}. ${month}. ${day}.`
-		const temp_time = edited_date.toLocaleTimeString().replace("AM", "").replace("PM", "")
+		const temp_date = `${year}. ${month} ${day}.`
+		const temp_time = `${edited_date.getHours().toString().padStart(2, "0")}:${edited_date.getMinutes().toString().padStart(2, "0")}:${edited_date.getSeconds().toString().padStart(2, "0")}`
 
 		rollback_text.innerHTML = `Latest rollback: <br /> ${temp_date}  ${temp_time}`
 	}
@@ -107,13 +104,23 @@ const rollback = () => {
 					if (err) {
 						logger.error("Error reading hash file", err)
 					} else {
-						fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
-							if (err) {
-								logger.error("Failed to create cache folder", err)
-							} else {
-								logger.log("Hash file created")
-							}
-						})
+						if (file.security.new_encryption === true) {
+							fs.writeFile(path.join(file_path, "codes", "codes.authme"), data, (err) => {
+								if (err) {
+									logger.error("Failed to create codes.authme folder", err)
+								} else {
+									logger.log("codes.authme file created")
+								}
+							})
+						} else {
+							fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
+								if (err) {
+									logger.error("Failed to create hash.authme", err)
+								} else {
+									logger.log("hash.authme file created")
+								}
+							})
+						}
 					}
 				})
 
@@ -127,7 +134,6 @@ const rollback = () => {
 const names = []
 const secrets = []
 const issuers = []
-const ids = []
 
 /**
  * Process data from saved file
@@ -279,9 +285,7 @@ const createSave = () => {
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: `Are you sure you want to save the modified code(s)?
-			
-			This will overwrite your saved codes!`,
+			message: "Are you sure you want to save the modified code(s)? \n\nThis will overwrite your saved codes!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -350,7 +354,7 @@ const newSaveCodes = () => {
 
 	const codes = {
 		codes: encrypted.toString("base64"),
-		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		date: time.timestamp(),
 		version: "2",
 	}
 
@@ -366,7 +370,7 @@ const addMore = () => {
 		.showOpenDialog({
 			title: "Import from Authme Import Text file",
 			properties: ["openFile", "multiSelections"],
-			filters: [{ name: "Text file", extensions: ["txt"] }],
+			filters: [{ name: "Authme import/export file", extensions: ["authme", "txt"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
@@ -380,9 +384,7 @@ const addMore = () => {
 					cancelId: 0,
 					type: "info",
 					noLink: true,
-					message: `Code(s) added!
-	
-					Scroll down to view them!`,
+					message: "Code(s) added! \n\nScroll down to view them!",
 				})
 
 				for (let i = 0; i < files.length; i++) {
@@ -464,9 +466,7 @@ const loadError = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `No save file found.
-				
-				Go back to the main page and save your codes!`,
+				message: "No save file found. \n\nGo back to the main page and save your codes!",
 			})
 		}
 	})
@@ -481,9 +481,7 @@ const loadChooser = () => {
 					title: "Authme",
 					buttons: ["Close"],
 					type: "error",
-					message: `No save file found.
-					
-					Go back to the main page and save your codes!`,
+					message: "No save file found. \n\nGo back to the main page and save your codes!",
 				})
 			} else {
 				newLoad()

@@ -10,7 +10,6 @@
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly.css" />
 		<link rel="stylesheet" href="../.././src/tailwind.css" />
-		<link rel="stylesheet" href="./src/css/index.css" />
 		<!-- favicon -->
 		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
@@ -40,7 +39,7 @@
 		<!-- content -->
 		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center">
 			<!-- rollback -->
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 rollback mt-20">
+			<div class="mx-auto rounded-2xl hidden bg-gray-800 w-2/3 rollback mt-20">
 				<h2 id="rollbackText" class="pt-5">Rollback</h2>
 				<h3>You can rollback to the latest save. If you load your codes below it will overwrite the current rollback save!</h3>
 				<button class="buttoni mb-5" onclick="rollback()">
@@ -62,8 +61,8 @@
 				</button>
 			</div>
 			<!-- save codes and add codes -->
-			<div class="afterLoad">
-				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20">
+			<div class="afterLoad hidden">
+				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
 					<h2 id="rollbackBut" class="pt-5">Edit mode</h2>
 					<h3>Now you can modify existing codes or add more.</h3>
 					<div class="flex flex-row justify-center gap-3 flex-wrap pb-5">
