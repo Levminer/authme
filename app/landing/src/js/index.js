@@ -258,7 +258,7 @@ const generateKey = () => {
 			defaultId: 0,
 			noLink: true,
 			type: "info",
-			message: "Please save this key to a secure location, anyone with this key can decrypt your codes!\n\n You can only copy this key now, after closing this dialog you can't copy it again!",
+			message: "Please save this key to a secure location, anyone with this key can decrypt your codes! \n\nYou can only copy this key now, after closing this dialog you can't copy it again!",
 		})
 		.then((result) => {
 			navigator.clipboard.writeText(private_key.toString())

@@ -549,31 +549,6 @@ const dropdown = (id) => {
 const dropdownChoose = (id) => {
 	const dropdown_button = document.querySelector(".dropdown-button")
 
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				dropdown()
-				sort()
-				save()
-				restart()
-			}
-
-			if (result.response === 1) {
-				dropdown()
-				sort()
-				save()
-			}
-		})
-
 	const sort = () => {
 		switch (id) {
 			case 0:
@@ -601,6 +576,12 @@ const dropdownChoose = (id) => {
 				break
 		}
 	}
+
+	dropdown()
+	sort()
+	save()
+
+	ipc.send("reload_application")
 }
 
 // ? webcam
@@ -936,3 +917,20 @@ setInterval(() => {
 	check_for_internet()
 	api()
 }, 10000)
+
+// ? dismiss dialog on click outside
+window.addEventListener("click", (event) => {
+	const dropdown_content = document.querySelector(".dropdown-content")
+	const dropdown_button = document.querySelector(".dropdown-button")
+	const sort_svg = document.querySelector("#sort_svg")
+	const sort_path = document.querySelector("#sort_path")
+	const link0 = document.querySelector("#link0")
+	const link1 = document.querySelector("#link1")
+	const link2 = document.querySelector("#link2")
+
+	if (event.target != dropdown_button && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
+		dropdown_content.style.display = ""
+
+		dropdown_state = false
+	}
+})

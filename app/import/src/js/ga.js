@@ -36,9 +36,7 @@ const gaImport = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `No Google Authenticator QR code found on the picture: ${element}.
-						
-						Try to take a better picture and try again!`,
+						message: `No Google Authenticator QR code found on the picture: ${element}. \n\nTry to take a better picture and try again!`,
 					})
 
 					return logger.warn("No QR code found (GA)")
@@ -87,9 +85,7 @@ const gaImport = () => {
 								buttons: ["Close"],
 								type: "info",
 								defaultId: 0,
-								message: `Google Authenticator QR codes found on these pictures: ${corrects_str}
-								
-								Now select where do you want to save the file!`,
+								message: `Google Authenticator QR codes found on these pictures: ${corrects_str} \n\nNow select where do you want to save the file!`,
 							})
 							.then(() => {
 								dialog
@@ -121,9 +117,7 @@ const gaImport = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `Wrong QR code found on the picture: ${element}.
-						
-						Make sure this is a correct QR code and try again!`,
+						message: `Wrong QR code found on the picture: ${element}. \n\nMake sure this is a correct QR code and try again!`,
 					})
 
 					return logger.error("Wrong QR code found (GA)")
@@ -143,9 +137,7 @@ const gaCamera = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `Not found webcam!
-				
-				Please check if your webcam is working correctly or not used by another application.`,
+				message: "Not found webcam! \n\nPlease check if your webcam is working correctly or not used by another application.",
 			})
 
 			return logger.error("Not found webcam")
@@ -191,14 +183,14 @@ const gaCamera = () => {
 								buttons: ["Close"],
 								type: "info",
 								defaultId: 0,
-								message: "Google Authenticator QR codes found on camera!\n\nNow select where do you want to save the file!",
+								message: "Google Authenticator QR codes found on camera! \n\nNow select where do you want to save the file!",
 							})
 							.then(() => {
 								dialog
 									.showSaveDialog({
-										title: "Save import file",
-										filters: [{ name: "Text file", extensions: ["txt"] }],
-										defaultPath: "~/authme_import.txt",
+										title: "Save Authme import file",
+										filters: [{ name: "Authme import file", extensions: ["authme"] }],
+										defaultPath: "~/import.authme",
 									})
 									.then((result) => {
 										canceled = result.canceled
@@ -222,9 +214,7 @@ const gaCamera = () => {
 							title: "Authme",
 							buttons: ["Close"],
 							type: "error",
-							message: `Wrong QR code found on camera!
-						
-						Make sure this is a correct QR code and try again!`,
+							message: "Wrong QR code found on camera! \n\nMake sure this is a correct QR code and try again!",
 						})
 
 						video.style.display = "none"
@@ -245,9 +235,7 @@ const gaCamera = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `Webcam in use!
-				
-					Please check if your webcam is not used by another application.`,
+						message: "Webcam in use! \n\nPlease check if your webcam is not used by another application.",
 					})
 
 					reader.stop()

@@ -94,9 +94,7 @@ const rollback = () => {
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: `Are you sure you want to rollback to the latest save?
-			
-			This will overwrite your saved codes!`,
+			message: "Are you sure you want to rollback to the latest save? \n\nThis will overwrite your saved codes!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -249,9 +247,7 @@ const del = (number) => {
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
 			type: "warning",
-			message: `Are you sure you want to delete this code?
-			
-			If you want to revert this don't save and restart the app!`,
+			message: "Are you sure you want to delete this code? \n\nIf you want to revert this don't save and restart the app!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -562,9 +558,7 @@ const revertChanges = () => {
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: `Are you sure you want to revert all current change(s)?
-		
-			You will lose all current changes!`,
+			message: "Are you sure you want to revert all current change(s)? \n\nYou will lose all current changes!",
 		})
 		.then((result) => {
 			if (result.response === 0) {

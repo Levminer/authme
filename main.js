@@ -18,7 +18,7 @@ const ipc = electron.ipcMain
 // ? crash report
 process.on("uncaughtException", (error) => {
 	logger.error("Error on load", error.stack)
-	dialog.showErrorBox("Authme", `Authme crashed, crash report is sent.\n\nPlease open a GitHub Issue with a screenshot of this error.\n\n${error.stack}`)
+	dialog.showErrorBox("Authme", `Authme crashed, crash report is sent. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
 
 	shell.openExternal("https://github.com/Levminer/authme/issues")
 
@@ -960,9 +960,7 @@ ipc.on("abort", () => {
 			defaultId: 0,
 			cancelId: 1,
 			noLink: true,
-			message: `Failed to check the integrity of the files.
-			
-			You or someone messed with the settings file, shutting down for security reasons!`,
+			message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -1112,7 +1110,7 @@ const logs = () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
 
@@ -1188,9 +1186,7 @@ app.whenReady()
 	.then(() => {
 		logger.log("Starting app")
 
-		if (dev === true) {
-			app.setAppUserModelId("Authme Dev")
-		} else {
+		if (dev === false) {
 			app.setAppUserModelId("Authme")
 		}
 

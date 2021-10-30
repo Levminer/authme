@@ -89,11 +89,7 @@ const check_integrity = () => {
 						buttons: ["Close"],
 						type: "error",
 						defaultId: 0,
-						message: `
-						Failed to check the integrity of the files.
-						
-						You or someone messed with the settings file, shutting down for security reasons!
-						`,
+						message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
 					})
 					.then((result) => {
 						app.exit()
@@ -108,11 +104,7 @@ const check_integrity = () => {
 					buttons: ["Close"],
 					type: "error",
 					defaultId: 0,
-					message: `
-						Failed to check the integrity of the files.
-						
-						You or someone messed with the settings file, shutting down for security reasons!
-						`,
+					message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
 				})
 				.then((result) => {
 					app.exit()
@@ -196,7 +188,7 @@ const forgotPassword = () => {
 					defaultId: 0,
 					noLink: true,
 					type: "info",
-					message: "Backup key successfully decrypted!\n\nThe password is copied to your clipboard!",
+					message: "Backup key successfully decrypted! \n\nThe password is copied to your clipboard!",
 				})
 				.then((result) => {
 					clipboard.writeText(encrypted.toString())
@@ -214,7 +206,7 @@ const forgotPassword = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: "Backup key found on your clipboard!\n\nThis backup key is not matching with the saved backup key!",
+				message: "Backup key found on your clipboard! \n\nThis backup key is not matching with the saved backup key!",
 			})
 
 			text.fill(0)
@@ -225,7 +217,7 @@ const forgotPassword = () => {
 			title: "Authme",
 			buttons: ["Close"],
 			type: "error",
-			message: "No backup key found on your clipboard!\n\nMake your your backup key is copied to your clipboard!",
+			message: "No backup key found on your clipboard! \n\nMake your your backup key is copied to your clipboard!",
 		})
 	}
 }

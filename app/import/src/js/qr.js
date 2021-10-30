@@ -36,9 +36,7 @@ const qrImport = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `No QR code found on the picture: ${element}.
-						
-						Try to take a better picture and try again!`,
+						message: `No QR code found on the picture: ${element}. \n\nTry to take a better picture and try again!`,
 					})
 
 					return logger.warn("No QR code found (QR)")
