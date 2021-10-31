@@ -86,9 +86,7 @@ const qrImport = () => {
 								buttons: ["Close"],
 								type: "info",
 								defaultId: 0,
-								message: `QR codes found on these pictures: ${corrects_str}
-								
-								Now select where do you want to save the file!`,
+								message: `QR codes found on these pictures: ${corrects_str} \n\nNow select where do you want to save the file!`,
 							})
 							.then(() => {
 								dialog
@@ -120,9 +118,7 @@ const qrImport = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `Wrong QR code found on the picture: ${element}.
-						
-						Make sure this is a correct QR code and try again!`,
+						message: `Wrong QR code found on the picture: ${element}. \n\nMake sure this is a correct QR code and try again!`,
 					})
 
 					return logger.error("Wrong QR code found (QR)")
@@ -142,9 +138,7 @@ const qrCamera = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `Not found webcam!
-				
-				Please check if your webcam is working correctly or not used by another application.`,
+				message: "Not found webcam! \n\nPlease check if your webcam is working correctly or not used by another application.",
 			})
 
 			return logger.error("Not found webcam")
@@ -195,7 +189,7 @@ const qrCamera = () => {
 								buttons: ["Close"],
 								type: "info",
 								defaultId: 0,
-								message: "QR codes found on camera!\n\nNow select where do you want to save the file!",
+								message: "QR codes found on camera! \n\nNow select where do you want to save the file!",
 							})
 							.then(() => {
 								dialog
@@ -226,9 +220,7 @@ const qrCamera = () => {
 							title: "Authme",
 							buttons: ["Close"],
 							type: "error",
-							message: `Wrong QR code found on camera!
-						
-						Make sure this is a correct QR code and try again!`,
+							message: "Wrong QR code found on camera! \n\nMake sure this is a correct QR code and try again!",
 						})
 
 						video.style.display = "none"
@@ -249,9 +241,7 @@ const qrCamera = () => {
 						title: "Authme",
 						buttons: ["Close"],
 						type: "error",
-						message: `Webcam in use!
-					
-						Please check if your webcam is not used by another application.`,
+						message: "Webcam in use! \n\nPlease check if your webcam is not used by another application.",
 					})
 
 					reader.stop()
