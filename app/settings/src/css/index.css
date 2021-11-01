@@ -3,59 +3,8 @@ body {
 	display: block;
 }
 
-.input1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-	width: 226px;
-	height: 29px !important;
-}
-
-.input1:hover {
-	color: white;
-	border-color: white;
-	background-color: transparent;
-}
-
-#button1 {
-	position: relative;
-	top: 45px;
-}
-
-hr {
-	margin-top: 30px;
-	color: white;
-	border-width: 1px;
-}
-
 .tabcontent {
 	animation: fadeEffect 1s;
-}
-
-@keyframes fadeEffect {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-.animation {
-	animation: fadeEffect 0.5s;
-}
-
-@keyframes fadeEffect {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-#shortcuts {
-	display: none;
 }
 
 .buttonm {
@@ -89,20 +38,6 @@ hr {
 	top: 4px;
 }
 
-#experimental {
-	display: none;
-}
-
-#codes {
-	display: none;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
-
 .toggle:checked ~ .toggle-bg {
 	background-color: black !important;
 	transition: 0.2s ease-in;
@@ -110,8 +45,4 @@ input::-webkit-inner-spin-button {
 
 .toggle:checked {
 	right: 4px !important;
-}
-
-.noclick {
-	pointer-events: none;
 }
