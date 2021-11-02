@@ -42,7 +42,7 @@ let /** @type{BrowserWindow} */ window_edit
 
 // ? window states
 let confirm_shown = false
-let application_shown = false
+let application_shown = true
 let settings_shown = false
 let import_shown = false
 let export_shown = false
@@ -324,8 +324,16 @@ const showAppFromTray = () => {
 			logger.log("App shown from tray")
 		} else {
 			window_application.hide()
+			window_settings.hide()
+			window_import.hide()
+			window_export.hide()
+			window_edit.hide()
 
 			application_shown = false
+			settings_shown = false
+			import_shown = false
+			export_shown = false
+			edit_shown = false
 
 			logger.log("App hidden from tray")
 		}
@@ -661,6 +669,8 @@ const createWindow = () => {
 		}
 
 		if (reload === false && file.settings.launch_on_startup === true && args[1] === "--hidden") {
+			application_shown = false
+
 			window_application.hide()
 			window_confirm.hide()
 
@@ -1271,6 +1281,8 @@ app.whenReady()
 
 		tray.on("click", () => {
 			showAppFromTray()
+			createTray()
+			createMenu()
 		})
 
 		// generate tray
@@ -1287,10 +1299,12 @@ app.whenReady()
 				},
 				{ type: "separator" },
 				{
-					label: "Show app",
+					label: application_shown ? "Hide app" : "Show app",
 					accelerator: shortcuts ? "" : file.global_shortcuts.show,
 					click: () => {
 						showAppFromTray()
+						createTray()
+						createMenu()
 					},
 				},
 				{ type: "separator" },
@@ -1310,6 +1324,7 @@ app.whenReady()
 					},
 				},
 			])
+
 			tray.setToolTip("Authme")
 			tray.setContextMenu(contextmenu)
 		}
@@ -1323,10 +1338,12 @@ app.whenReady()
 					label: "File",
 					submenu: [
 						{
-							label: "Show app",
+							label: application_shown ? "Hide app" : "Show app",
 							accelerator: shortcuts ? "" : file.shortcuts.show,
 							click: () => {
 								showAppFromTray()
+								createMenu()
+								createTray()
 							},
 						},
 						{
@@ -1346,6 +1363,8 @@ app.whenReady()
 										logger.log("Settings shown")
 									} else {
 										window_settings.hide()
+
+										window_application.focus()
 
 										settings_shown = false
 
@@ -1419,6 +1438,8 @@ app.whenReady()
 									} else {
 										window_edit.hide()
 
+										window_application.focus()
+
 										edit_shown = false
 
 										logger.log("Edit hidden")
@@ -1450,6 +1471,8 @@ app.whenReady()
 									} else {
 										window_import.hide()
 
+										window_application.focus()
+
 										import_shown = false
 
 										logger.log("Import hidden")
@@ -1480,6 +1503,8 @@ app.whenReady()
 										logger.log("Export shown")
 									} else {
 										window_export.hide()
+
+										window_application.focus()
 
 										export_shown = false
 
