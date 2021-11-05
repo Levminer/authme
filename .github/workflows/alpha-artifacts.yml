@@ -28,8 +28,3 @@ jobs:
               with:
                   name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
                   path: dist
-            - name: Get build file
-              uses: actions/upload-artifact@v2
-              with:
-                  name: build-${{matrix.NAME}}.json
-                  path: dist/build.json
