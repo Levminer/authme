@@ -161,65 +161,76 @@ const unhashPassword = async () => {
 
 // ? forgot password
 const forgotPassword = () => {
-	const text = Buffer.from(clipboard.readText())
-
-	if (text.toString().startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
-		/**
-		 * Load storage
-		 * @type {LibStorage}
-		 */
-		let storage
-
-		if (dev === true) {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		}
-
-		const hash = Buffer.from(sha.generateHash(text.toString("base64")))
-
-		if (hash.toString() === storage.hash) {
-			const encrypted = Buffer.from(rsa.decrypt(text.toString(), Buffer.from(storage.backup_string, "base64")), "base64")
-
-			dialog
-				.showMessageBox({
-					title: "Authme",
-					buttons: ["Copy"],
-					defaultId: 0,
-					noLink: true,
-					type: "info",
-					message: "Backup key successfully decrypted! \n\nThe password is copied to your clipboard!",
-				})
-				.then((result) => {
-					clipboard.writeText(encrypted.toString())
-
-					if (result.response === 0) {
-						clipboard.writeText(encrypted.toString())
-					}
-
-					text.fill(0)
-					hash.fill()
-					encrypted.fill(0)
-				})
-		} else {
-			dialog.showMessageBox({
-				title: "Authme",
-				buttons: ["Close"],
-				type: "error",
-				message: "Backup key found on your clipboard! \n\nThis backup key is not matching with the saved backup key!",
-			})
-
-			text.fill(0)
-			hash.fill(0)
-		}
-	} else {
-		dialog.showMessageBox({
-			title: "Authme",
-			buttons: ["Close"],
-			type: "error",
-			message: "No backup key found on your clipboard! \n\nMake your your backup key is copied to your clipboard!",
+	dialog
+		.showOpenDialog({
+			title: "Import from Authme import file",
+			properties: ["openFile"],
+			filters: [{ name: "Key file", extensions: ["key"] }],
 		})
-	}
+		.then((result) => {
+			canceled = result.canceled
+			filepath = result.filePaths
+
+			const loaded_key = Buffer.from(fs.readFileSync(filepath[0]))
+
+			if (loaded_key.toString().startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
+				/**
+				 * Load storage
+				 * @type {LibStorage}
+				 */
+				let storage
+
+				if (dev === true) {
+					storage = JSON.parse(localStorage.getItem("dev_storage"))
+				} else {
+					storage = JSON.parse(localStorage.getItem("storage"))
+				}
+
+				const hash = Buffer.from(sha.generateHash(loaded_key.toString("base64")))
+
+				if (hash.toString() === storage.hash) {
+					const encrypted = Buffer.from(rsa.decrypt(loaded_key.toString(), Buffer.from(storage.backup_string, "base64")), "base64")
+
+					dialog
+						.showMessageBox({
+							title: "Authme",
+							buttons: ["Copy"],
+							defaultId: 0,
+							noLink: true,
+							type: "info",
+							message: "Backup key successfully decrypted! \n\nThe password is copied to your clipboard!",
+						})
+						.then((result) => {
+							clipboard.writeText(encrypted.toString())
+
+							if (result.response === 0) {
+								clipboard.writeText(encrypted.toString())
+							}
+
+							loaded_key.fill(0)
+							hash.fill()
+							encrypted.fill(0)
+						})
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						type: "error",
+						message: "This is not a matching backup key! \n\nThis backup key is not matching with the your backup key!",
+					})
+
+					loaded_key.fill(0)
+					hash.fill(0)
+				}
+			} else {
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					type: "error",
+					message: "This is not a backup key! \n\nPlease choose another file!",
+				})
+			}
+		})
 }
 
 // ? show password

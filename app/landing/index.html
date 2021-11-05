@@ -27,7 +27,11 @@
 			<h1>Authme</h1>
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-16" id="choose">
 				<h3 class="pt-3">Welcome to Authme!</h3>
-				<h4 id="text">Please create a password to encrypt your 2FA codes!</h4>
+				<h4 id="text">
+					Please create a password to encrypt your 2FA codes!
+					<br />
+					If you don't want to type in a password every time you launch Authme choose More options and Don't require password.
+				</h4>
 				<div class="flex flex-row flex-wrap justify-center gap-3 pb-5 select-none">
 					<div class="flex flex-col">
 						<label class="mb-1" id="password_label1">Password</label>
@@ -80,7 +84,7 @@
 
 					<h3>Backup key</h3>
 					<h4>In case you forget your password you can use this backup key to get back your codes.</h4>
-					<button onclick="generateKey()" class="buttoni mb-7">
+					<button onclick="generateBackupKey()" class="buttoni mb-7">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
 						</svg>
