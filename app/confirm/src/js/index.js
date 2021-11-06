@@ -154,7 +154,7 @@ const unhashPassword = async () => {
 	} else {
 		logger.warn("Passwords dont match!")
 
-		text.style.color = "#A30015"
+		text.style.color = "#CC001B"
 		text.textContent = "Passwords don't match! Try again!"
 	}
 }

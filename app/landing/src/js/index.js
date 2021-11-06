@@ -66,10 +66,10 @@ const comparePasswords = () => {
 	const password_input2 = Buffer.from(document.querySelector("#password_input2").value)
 
 	if (password_input1.toString().length > 64) {
-		text.style.color = "#A30015"
+		text.style.color = "#CC001B"
 		text.textContent = "Maximum password length is 64 characters!"
 	} else if (password_input1.toString().length < 8) {
-		text.style.color = "#A30015"
+		text.style.color = "#CC001B"
 		text.textContent = "Minimum password length is 8 characters!"
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
@@ -85,7 +85,7 @@ const comparePasswords = () => {
 		} else {
 			logger.warn("Passwords dont match!")
 
-			text.style.color = "#A30015"
+			text.style.color = "#CC001B"
 			text.textContent = "Passwords don't match! Try again!"
 		}
 	}
