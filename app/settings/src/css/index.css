@@ -7,37 +7,6 @@ body {
 	animation: fadeEffect 1s;
 }
 
-.buttonm {
-	color: white;
-	background: black;
-	border: 2px solid black;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-	text-align: left;
-	width: 15rem;
-}
-
-.buttonm:hover {
-	border: 2px solid rgb(20, 20, 20);
-	background: rgb(20, 20, 20);
-	color: white;
-}
-
-.buttonmselected {
-	border: 2px solid rgb(30, 30, 30);
-	background: rgb(30, 30, 30);
-	color: white;
-}
-
-.buttonm > svg {
-	position: relative;
-	top: 4px;
-}
-
 .toggle:checked ~ .toggle-bg {
 	background-color: black !important;
 	transition: 0.2s ease-in;

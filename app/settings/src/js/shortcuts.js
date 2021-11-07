@@ -497,9 +497,9 @@ const generateCodes = () => {
 		<h3>${issuers[i]}</h3>
 		</div>
 		<div class="flex justify-center items-center">
-		<input class="input1" disabled type="text" id="qs${i}_input" value="${content}"/>
+		<input class="input" disabled type="text" id="qs${i}_input" value="${content}"/>
 		</div>
-		<div class="flex justify-center items-center mb-10 mt-5">
+		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
 		<svg id="qs${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -523,7 +523,7 @@ const generateCodes = () => {
 if (issuers !== undefined) {
 	generateCodes()
 } else {
-	document.querySelector(".quick").innerHTML = "<h3>Please restart the app to be able to create quick shortcuts!</h3>"
+	document.querySelector(".quick").innerHTML = "<h3>Please save your codes and restart the app to be able to create quick shortcuts!</h3>"
 }
 
 const qsEdit = (value) => {

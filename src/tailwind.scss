@@ -15,7 +15,23 @@
 
 @layer components {
 	.checkbox {
-		@apply form-checkbox rounded-full relative border-2 -top-0.5 focus:ring-white text-black cursor-pointer;
+		@apply outline-none form-checkbox rounded-full relative border-2 -top-0.5 focus:ring-white text-black cursor-pointer transform duration-200 ease-in;
+	}
+
+	.buttoni {
+		@apply bg-white rounded-2xl border-2 border-white w-72 cursor-pointer px-8 py-[16.5px] text-xl hover:bg-transparent hover:text-white transform duration-200 ease-in;
+	}
+
+	.buttonm {
+		@apply text-white bg-black rounded-2xl text-left border-2 border-black w-60 cursor-pointer px-8 py-[16.5px] text-xl hover:bg-gray-700 transform duration-200 ease-in;
+	}
+
+	.buttonr {
+		@apply bg-white rounded-2xl border-2 border-white w-[88px] cursor-pointer px-8 py-[16.5px] text-xl hover:bg-transparent hover:text-white hover:bg-gray-700 transform duration-200 ease-in;
+	}
+
+	.input {
+		@apply bg-white text-black rounded-2xl border-2 border-white w-[220px] cursor-text px-8 py-[18px] mb-6 text-lg text-center hover:bg-transparent hover:text-white transform duration-200 ease-in;
 	}
 }
 
@@ -85,4 +101,20 @@ hr {
 	margin-top: 30px;
 	color: white;
 	border-width: 1px;
+}
+
+/* button */
+.buttoni > svg {
+	position: relative;
+	top: 4px;
+}
+
+.buttonm2 > svg {
+	position: relative;
+	top: 4px;
+}
+
+.buttonmselected {
+	background-color: rgb(30, 30, 30) !important;
+	border-color: rgb(30, 30, 30) !important;
 }
