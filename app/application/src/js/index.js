@@ -158,19 +158,19 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
-					<button class="button11" id="copy${counter}" >
+					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
+					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -184,19 +184,19 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
-					<p class="text2 mt-11" id="time${counter}">Time</p>
+					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
-					<button class="button11" id="copy${counter}" >
+					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
+					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -212,18 +212,18 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}" >
+					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -241,14 +241,14 @@ const go = (data) => {
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}" >
+					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -264,19 +264,19 @@ const go = (data) => {
 					<div class="grid diva${i}" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
-					<button class="button11" id="copy${counter}" >
+					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
+					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -290,19 +290,19 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Name</p>
-					<button class="button11" id="copy${counter}" >
+					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
+					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -322,14 +322,14 @@ const go = (data) => {
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}" >
+					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -343,18 +343,18 @@ const go = (data) => {
 					<div data-scroll class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
-					<p tabindex="0" class="input1" id="code${counter}">Code</p>
+					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
 					</div>
 					<div class="div3">
 					<h3>Time</h3>
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="button11" id="copy${counter}" >
+					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>

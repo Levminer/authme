@@ -23,7 +23,7 @@
 	}
 
 	.buttonm {
-		@apply text-white bg-black rounded-2xl text-left border-2 border-black w-60 cursor-pointer px-8 py-[16.5px] text-xl hover:bg-gray-700 transform duration-200 ease-in;
+		@apply text-white bg-black rounded-2xl text-left border-2 border-black w-60 cursor-pointer px-8 py-[16.5px] text-xl hover:bg-gray-700 hover:border-gray-700 transform duration-200 ease-in;
 	}
 
 	.buttonr {
@@ -109,12 +109,17 @@ hr {
 	top: 4px;
 }
 
-.buttonm2 > svg {
+.buttonc > svg {
+	position: relative;
+	top: 4px;
+}
+
+.buttonm > svg {
 	position: relative;
 	top: 4px;
 }
 
 .buttonmselected {
-	background-color: rgb(30, 30, 30) !important;
-	border-color: rgb(30, 30, 30) !important;
+	background-color: rgb(30, 30, 30);
+	border-color: rgb(30, 30, 30);
 }
