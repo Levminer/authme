@@ -163,7 +163,7 @@ const unhashPassword = async () => {
 const forgotPassword = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme import file",
+			title: "Choose backup file",
 			properties: ["openFile"],
 			filters: [{ name: "Key file", extensions: ["key"] }],
 		})

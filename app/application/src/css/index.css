@@ -99,9 +99,11 @@ a {
 }
 
 .name {
-	background-color: rgb(30, 30, 30);
+	background-color: rgb(20, 20, 20);
 	padding-right: 10px;
 	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	border-radius: 30px;
 	user-select: all;
 	margin-bottom: 10px;
@@ -114,7 +116,7 @@ a {
 
 .dropdown-content {
 	width: 12rem;
-	left: 260px;
+	left: 253px;
 	top: 75px;
 }
 

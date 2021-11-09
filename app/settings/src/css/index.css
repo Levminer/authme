@@ -15,3 +15,7 @@ body {
 .toggle:checked {
 	right: 4px !important;
 }
+
+input[type="text"] {
+	width: 260px !important;
+}
