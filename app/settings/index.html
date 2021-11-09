@@ -15,7 +15,7 @@
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build">
+		<div class="w-full text-white bg-black font-bold build hidden">
 			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
 				<div class="flex">
 					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
@@ -24,7 +24,7 @@
 		</div>
 
 		<!-- offline mode -->
-		<div class="w-full text-white bg-popup-red font-bold offline">
+		<div class="w-full text-white bg-popup-red font-bold offline hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,7 +42,7 @@
 		</div>
 
 		<!-- online mode -->
-		<div class="w-full text-white bg-popup-green font-bold online">
+		<div class="w-full text-white bg-popup-green font-bold online hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +60,7 @@
 		</div>
 
 		<!-- update -->
-		<div class="w-full text-white bg-popup-blue font-bold update">
+		<div class="w-full text-white bg-popup-blue font-bold update hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -92,7 +92,7 @@
 		</div>
 
 		<!-- info -->
-		<div class="w-full text-white bg-popup-yellow font-bold info">
+		<div class="w-full text-white bg-popup-yellow font-bold info hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,7 +187,7 @@
 					<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
 						<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
 						<h2>Settings</h2>
-						<h4>You can configure the app setting here.</h4>
+						<h4>You can configure the app settings here.</h4>
 						<button class="buttoni mb-6" onclick="hide()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -200,8 +200,8 @@
 					<div class="mx-auto text-center mt-20 mb-20 pt-5 pb-10 rounded-2xl bg-gray-700 w-3/5">
 						<div id="setting" class="tabcontent">
 							<h3>Launch on startup</h3>
-							<h4>Start the app after the operating system loaded. The app will start on the tray.</h4>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+							<h4>Start the app after the operating system started. The app will start on the tray.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 									<input id="tgl0" onclick="startup()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 									<label for="tgl0" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
@@ -210,8 +210,8 @@
 							</div>
 							<hr />
 							<h3>Close app to tray</h3>
-							<h4>On closing the app will not quit. You can open the app from the tray menu.</h4>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+							<h4>On closing the app will not quit. You can open the app from the tray.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 									<input id="tgl1" onclick="tray()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 									<label for="tgl1" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
@@ -222,7 +222,7 @@
 							<div id="disable_screen_capture_div">
 								<h3>Window capture</h3>
 								<h4>Allows screenshots and screen capture. You can record or screenshot the app.</h4>
-								<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 									<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input id="tgl2" onclick="capture()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 										<label for="tgl2" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
@@ -234,9 +234,9 @@
 							<div>
 								<h3>Hardware acceleration</h3>
 								<h4>Uses GPU for smoother experience. Enable this option if you experience frame drops or lags.</h4>
-								<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 									<a href="#" onclick="hardware()">
-										<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+										<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 											<input tabindex="-1" id="tgl7" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 											<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 									></a>
@@ -254,7 +254,7 @@
 							</button>
 							<hr />
 							<h3>Open folders</h3>
-							<h4>You can open the folders Authme uses to function. Editing or deleting files might cause a crash.</h4>
+							<h4>You can open the folders Authme uses to function. Editing or deleting files might cause problems.</h4>
 							<div class="flex justify-center gap-3 flex-row flex-wrap">
 								<button class="buttoni" id="but3" onclick="folder0()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -295,12 +295,12 @@
 						</div>
 
 						<!-- codes -->
-						<div id="codes" class="tabcontent part">
-							<h3>Show 2FA names</h3>
-							<p class="text3">The saved 2FA names will show up. You can copy it after clicking it.</p>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+						<div id="codes" class="tabcontent part hidden">
+							<h3>Show 2FA descriptions</h3>
+							<h4>The saved 2FA description will be visible. You can copy it after clicking it.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="names()">
-									<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl3" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 										<label for="tgl3" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
@@ -309,10 +309,10 @@
 							<br />
 							<hr />
 							<h3>Blur codes</h3>
-							<p class="text3">Blurs the 2FA code. You can still copy it or hover over it to reveal.</p>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+							<h4>Blurs the 2FA code. You can still copy it or hover over it to reveal.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="reveal()">
-									<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl4" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 										<label for="tgl4" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
@@ -321,10 +321,10 @@
 							<br />
 							<hr />
 							<h3>Save search history</h3>
-							<p class="text3">Keep your search history. Works even after restart.</p>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+							<h4>Keep your search history. Works even after restart.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="results()">
-									<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl5" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 										<label for="tgl5" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
@@ -333,10 +333,10 @@
 							<br />
 							<hr />
 							<h3>Reset search after copy</h3>
-							<p class="text3">Reset the search bar after you copied your code. Useful if you copy a lot of codes.</p>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+							<h4>Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="copy()">
-									<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl6" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 										<label for="tgl6" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
@@ -345,7 +345,7 @@
 						</div>
 
 						<!-- shortcuts -->
-						<div id="shortcuts" class="tabcontent part">
+						<div id="shortcuts" class="tabcontent part hidden">
 							<h3>Shortcuts</h3>
 							<h4>
 								You can modify the shortcuts here, if you don't understand something just read the docs.
@@ -361,16 +361,16 @@
 							<br />
 							<br />
 							<br />
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Show app</h3>
+									<h3>Show/Hide app</h3>
 								</div>
 
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk0_input" />
+									<input class="input" disabled type="text" id="hk0_input" />
 								</div>
 
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk0_button_edit" onclick="hk_edit(0)">
 										<svg id="hk0_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -390,14 +390,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Settings</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk1_input" />
+									<input class="input" disabled type="text" id="hk1_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk1_button_edit" onclick="hk_edit(1)">
 										<svg id="hk1_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -417,14 +417,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Exit</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk2_input" />
+									<input class="input" disabled type="text" id="hk2_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk2_button_edit" onclick="hk_edit(2)">
 										<svg id="hk2_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -444,14 +444,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Reset</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk12_input" />
+									<input class="input" disabled type="text" id="hk12_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk12_button_edit" onclick="hk_edit(12)">
 										<svg id="hk12_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -471,14 +471,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Zoom in</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk13_input" />
+									<input class="input" disabled type="text" id="hk13_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk13_button_edit" onclick="hk_edit(13)">
 										<svg id="hk13_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -498,14 +498,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Zoom out</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk14_input" />
+									<input class="input" disabled type="text" id="hk14_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk14_button_edit" onclick="hk_edit(14)">
 										<svg id="hk14_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -525,14 +525,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Edit codes</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk3_input" />
+									<input class="input" disabled type="text" id="hk3_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk3_button_edit" onclick="hk_edit(3)">
 										<svg id="hk3_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -552,14 +552,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Import</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk4_input" />
+									<input class="input" disabled type="text" id="hk4_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk4_button_edit" onclick="hk_edit(4)">
 										<svg id="hk4_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -579,14 +579,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Export</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk5_input" />
+									<input class="input" disabled type="text" id="hk5_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk5_button_edit" onclick="hk_edit(5)">
 										<svg id="hk5_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -606,14 +606,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Documentation</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk8_input" />
+									<input class="input" disabled type="text" id="hk8_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk8_button_edit" onclick="hk_edit(8)">
 										<svg id="hk8_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -633,14 +633,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Release notes</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk6_input" />
+									<input class="input" disabled type="text" id="hk6_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk6_button_edit" onclick="hk_edit(6)">
 										<svg id="hk6_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -660,14 +660,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Support development</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk7_input" />
+									<input class="input" disabled type="text" id="hk7_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk7_button_edit" onclick="hk_edit(7)">
 										<svg id="hk7_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -687,14 +687,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Show licenses</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk9_input" />
+									<input class="input" disabled type="text" id="hk9_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk9_button_edit" onclick="hk_edit(9)">
 										<svg id="hk9_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -714,14 +714,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Update</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk10_input" />
+									<input class="input" disabled type="text" id="hk10_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk10_button_edit" onclick="hk_edit(10)">
 										<svg id="hk10_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -741,14 +741,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Info</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk11_input" />
+									<input class="input" disabled type="text" id="hk11_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk11_button_edit" onclick="hk_edit(11)">
 										<svg id="hk11_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -785,14 +785,14 @@
 							<br />
 							<br />
 							<br />
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Show app</h3>
+									<h3>Show/Hide app</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk100_input" />
+									<input class="input" disabled type="text" id="hk100_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk100_button_edit" onclick="hk_edit(100)">
 										<svg id="hk100_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -812,14 +812,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Settings</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk101_input" />
+									<input class="input" disabled type="text" id="hk101_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk101_button_edit" onclick="hk_edit(101)">
 										<svg id="hk101_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -839,14 +839,14 @@
 									</button>
 								</div>
 							</div>
-							<div class="flex flex-col w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
 									<h3>Exit app</h3>
 								</div>
 								<div class="flex justify-center items-center">
-									<input class="input1" disabled type="text" id="hk102_input" />
+									<input class="input" disabled type="text" id="hk102_input" />
 								</div>
-								<div class="flex justify-center items-center mb-10 mt-5">
+								<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 									<button class="buttonr button" id="hk102_button_edit" onclick="hk_edit(102)">
 										<svg id="hk102_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -888,30 +888,30 @@
 						</div>
 
 						<!-- experimental -->
-						<div id="experimental" class="tabcontent part">
+						<div id="experimental" class="tabcontent part hidden">
 							<h3>Sort codes</h3>
-							<p class="text3">You can choose how to sort the saved and loaded codes. By default codes are sorted by uploading order.</p>
+							<h4>You can choose how to sort the saved and loaded codes. By default codes are sorted by uploading order.</h4>
 							<div class="dropdown">
 								<button class="dropdown-button" id="drp0" onclick="dropdown()">
-									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+									<svg id="sort_svg" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path id="sort_path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 									</svg>
 									Default
 								</button>
-								<div class="dropdown-content">
-									<a tabindex="0" class="dropdown-link" href="#" onclick="dropdownChoose(0)">
+								<div class="dropdown-content animation">
+									<a tabindex="0" id="link0" class="dropdown-link" href="#" onclick="dropdownChoose(0)">
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 										</svg>
 										Default
 									</a>
-									<a tabindex="0" class="dropdown-link" href="#" onclick="dropdownChoose(1)">
+									<a tabindex="0" id="link1" class="dropdown-link" href="#" onclick="dropdownChoose(1)">
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 										</svg>
 										A-Z
 									</a>
-									<a tabindex="0" class="dropdown-link" href="#" onclick="dropdownChoose(2)">
+									<a tabindex="0" id="link2" class="dropdown-link" href="#" onclick="dropdownChoose(2)">
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 										</svg>
@@ -919,21 +919,21 @@
 									</a>
 								</div>
 							</div>
-							<p class="unstable">This feature is WIP! It might be unstable or buggy!</p>
+							<h4 class="text-popup-yellow font-bold mb-0">This feature is WIP! It might be unstable or buggy!</h4>
 							<br />
 							<hr />
 							<h3>Use webcam for import</h3>
-							<p class="text3">You can use your webcam to scan QR code(s). Works well with high quality webcams.</p>
-							<div class="flex justify-center items-center w-72 h-16 bg-white mx-auto rounded-full">
+							<h4>You can use your webcam to scan QR code(s). Works well with high quality webcams.</h4>
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="webcam()">
-									<div class="noclick relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl8" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
 										<label for="tgl8" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
 								<span id="tgt8" class="text-black text-xl">-</span>
 							</div>
-							<p class="unstable">This feature is WIP! It might be unstable or buggy!</p>
-							<!-- <p class="warning">This feature is WIP! Use it at your own risk!</p> -->
+							<h4 class="text-popup-yellow font-bold mb-0">This feature is WIP! It might be unstable or buggy!</h4>
+							<!-- <h4 class="text-popup-red font-bold mb-0">This feature is WIP! Use it at your own risk!</h4> -->
 						</div>
 					</div>
 				</div>

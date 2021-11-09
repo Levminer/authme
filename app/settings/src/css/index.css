@@ -3,91 +3,8 @@ body {
 	display: block;
 }
 
-.input1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-	width: 226px;
-	height: 29px !important;
-}
-
-.input1:hover {
-	color: white;
-	border-color: white;
-	background-color: transparent;
-}
-
-#button1 {
-	position: relative;
-	top: 45px;
-}
-
-hr {
-	margin-top: 30px;
-	color: white;
-	border-width: 1px;
-}
-
 .tabcontent {
 	animation: fadeEffect 1s;
-}
-
-@keyframes fadeEffect {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-#shortcuts {
-	display: none;
-}
-
-.buttonm {
-	color: white;
-	background: black;
-	border: 2px solid black;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-	text-align: left;
-	width: 15rem;
-}
-
-.buttonm:hover {
-	border: 2px solid rgb(20, 20, 20);
-	background: rgb(20, 20, 20);
-	color: white;
-}
-
-.buttonmselected {
-	border: 2px solid rgb(30, 30, 30);
-	background: rgb(30, 30, 30);
-	color: white;
-}
-
-.buttonm > svg {
-	position: relative;
-	top: 4px;
-}
-
-#experimental {
-	display: none;
-}
-
-#codes {
-	display: none;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
 }
 
 .toggle:checked ~ .toggle-bg {
@@ -99,6 +16,6 @@ input::-webkit-inner-spin-button {
 	right: 4px !important;
 }
 
-.noclick {
-	pointer-events: none;
+input[type="text"] {
+	width: 260px !important;
 }

@@ -19,7 +19,7 @@ module.exports = {
 					900: "#000000",
 				},
 				popup: {
-					red: "#A30015",
+					red: "#CC001B",
 					green: "#28A443",
 					blue: "#16A3DF",
 					yellow: "#F5AB00",
@@ -46,4 +46,9 @@ module.exports = {
 	corePlugins: {
 		preflight: false,
 	},
+	plugins: [
+		require("@tailwindcss/forms")({
+			strategy: "class",
+		}),
+	],
 }

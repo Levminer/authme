@@ -66,10 +66,10 @@ const comparePasswords = () => {
 	const password_input2 = Buffer.from(document.querySelector("#password_input2").value)
 
 	if (password_input1.toString().length > 64) {
-		text.style.color = "#A30015"
+		text.style.color = "#CC001B"
 		text.textContent = "Maximum password length is 64 characters!"
 	} else if (password_input1.toString().length < 8) {
-		text.style.color = "#A30015"
+		text.style.color = "#CC001B"
 		text.textContent = "Minimum password length is 8 characters!"
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
@@ -85,7 +85,7 @@ const comparePasswords = () => {
 		} else {
 			logger.warn("Passwords dont match!")
 
-			text.style.color = "#A30015"
+			text.style.color = "#CC001B"
 			text.textContent = "Passwords don't match! Try again!"
 		}
 	}
@@ -93,6 +93,20 @@ const comparePasswords = () => {
 
 // ? hash password
 const hashPasswords = async () => {
+	const result = await dialog.showMessageBox({
+		title: "Authme",
+		buttons: ["Yes", "No"],
+		type: "warning",
+		defaultId: 0,
+		cancelId: 1,
+		noLink: true,
+		message: "Do you want to create a backup key? \n\nIn case you forget your password you can use this backup key to retrieve them.",
+	})
+
+	if (result.response === 0) {
+		await generateBackupKey()
+	}
+
 	const password_input = Buffer.from(document.querySelector("#password_input1").value)
 	const new_encryption = document.querySelector("#tgl0").checked
 
@@ -164,7 +178,7 @@ const noPassword = () => {
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
-			message: "Are you sure? \n\nThis way nothing will protect your codes.",
+			message: "Are you sure? \n\nThis way everyone with access to your computer can access your codes too.",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -244,58 +258,80 @@ const encryptionMethodToggle = () => {
 	}
 }
 
-// ?  generate backup key
-
-const generateKey = () => {
+/**
+ * Generate a backup key which encrypts the password
+ */
+const generateBackupKey = async () => {
 	const keys = Buffer.from(rsa.generateKeys())
 	const public_key = Buffer.from(keys.toString().split("@")[0])
-	let private_key = Buffer.from(keys.toString().split("@")[1])
+	const private_key = Buffer.from(keys.toString().split("@")[1])
 
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Copy"],
-			defaultId: 0,
-			noLink: true,
-			type: "info",
-			message: "Please save this key to a secure location, anyone with this key can decrypt your codes!\n\n You can only copy this key now, after closing this dialog you can't copy it again!",
-		})
-		.then((result) => {
-			navigator.clipboard.writeText(private_key.toString())
+	const result = await dialog.showMessageBox({
+		title: "Authme",
+		buttons: ["Save", "Close"],
+		defaultId: 0,
+		cancelId: 1,
+		noLink: true,
+		type: "info",
+		message: "Please save this key to a secure location, anyone with this key can decrypt your codes! \n\nYou can only save this key now, after closing this dialog you can't save it again!",
+	})
 
-			if (result.response === 0) {
-				navigator.clipboard.writeText(private_key.toString())
-			}
+	if (result.response === 0) {
+		await dialog
+			.showSaveDialog({
+				title: "Save as Text file",
+				filters: [{ name: "Key file", extensions: ["key"] }],
+				defaultPath: "~/authme_backup.key",
+			})
+			.then((result) => {
+				canceled = result.canceled
+				output = result.filePath
 
-			navigator.clipboard.readText().then((text) => {
-				private_key = Buffer.from(text)
+				if (canceled === false) {
+					fs.writeFile(output, private_key, (err) => {
+						if (err) {
+							logger.error(`Error creating file - ${err}`)
+						} else {
+							logger.log("Text file created")
+						}
 
-				/**
-				 * Load storage
-				 * @type {LibStorage}
-				 */
-				let storage
+						/**
+						 * Load storage
+						 * @type {LibStorage}
+						 */
+						let storage
 
-				if (dev === true) {
-					storage = JSON.parse(localStorage.getItem("dev_storage"))
-				} else {
-					storage = JSON.parse(localStorage.getItem("storage"))
+						if (dev === true) {
+							storage = JSON.parse(localStorage.getItem("dev_storage"))
+						} else {
+							storage = JSON.parse(localStorage.getItem("storage"))
+						}
+
+						const saved_key = fs.readFileSync(output)
+
+						storage.backup_key = public_key.toString("base64")
+						storage.hash = sha.generateHash(saved_key.toString("base64"))
+
+						if (dev === true) {
+							localStorage.setItem("dev_storage", JSON.stringify(storage))
+						} else {
+							localStorage.setItem("storage", JSON.stringify(storage))
+						}
+
+						keys.fill(0)
+						public_key.fill(0)
+						private_key.fill(0)
+					})
 				}
-
-				storage.backup_key = public_key.toString("base64")
-				storage.hash = sha.generateHash(private_key.toString("base64"))
-
-				if (dev === true) {
-					localStorage.setItem("dev_storage", JSON.stringify(storage))
-				} else {
-					localStorage.setItem("storage", JSON.stringify(storage))
-				}
-
+			})
+			.catch((err) => {
 				keys.fill(0)
 				public_key.fill(0)
 				private_key.fill(0)
+
+				logger.error(`Failed to save - ${err}`)
 			})
-		})
+	}
 }
 
 // ? show password

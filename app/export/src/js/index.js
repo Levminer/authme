@@ -1,6 +1,6 @@
 const electron = require("electron")
 const { app, dialog, shell } = require("@electron/remote")
-const { aes, convert } = require("@levminer/lib")
+const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const path = require("path")
@@ -176,9 +176,7 @@ const error = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `No save file found.
-				
-				Go back to the main page and save your codes!`,
+				message: "No save file found. \n\nGo back to the main page and save your codes!",
 			})
 		}
 	})
@@ -201,11 +199,7 @@ const newExp = () => {
 		password = Buffer.from(ipc.sendSync("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
-		/**
-		 * Load storage
-		 * @type {LibStorage}
-		 */
-		let storage
+		let /** @type {LibStorage} */ storage
 
 		if (dev === false) {
 			storage = JSON.parse(localStorage.getItem("storage"))

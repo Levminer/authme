@@ -8,60 +8,6 @@ h4 {
 	font-size: 1.5rem;
 }
 
-.button11 {
-	color: black;
-	background: white;
-	border: 2px solid white;
-	font-size: 1.25rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: pointer;
-	text-decoration: none;
-	transition: 0.2s ease-in;
-	text-align: center;
-	width: 12rem;
-}
-
-.button11:hover {
-	border-color: white;
-	background: transparent;
-	color: white;
-}
-
-.button11 > svg {
-	position: relative;
-	top: 4px;
-}
-
-.input1 {
-	color: black;
-	background-color: white;
-	border-color: white;
-	width: 130px !important;
-	height: 29px !important;
-}
-
-.input1:hover {
-	color: white;
-	border-color: white;
-	background-color: rgb(10, 10, 10);
-}
-
-#password_input2 {
-	position: relative;
-	top: 20px;
-}
-
-#password_label2 {
-	position: relative;
-	top: 20px;
-}
-
-#button1 {
-	position: relative;
-	top: 30px;
-}
-
 /* grid */
 .grid {
 	display: grid;
@@ -112,39 +58,13 @@ h4 {
 	top: 20px;
 }
 
-.input1 {
-	width: 128px !important;
-	font-size: 20px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	user-select: all !important;
-}
-
-.input2 {
-	width: 300px;
-	margin: 0 auto;
-	color: rgb(0, 0, 0);
-	background-color: white;
-	border-color: white;
-	font-size: 1.5rem;
-	padding: 15px 30px;
-	border-radius: 30px;
-	cursor: text;
-	text-align: center;
+#search:hover ~ .searchIcon {
 	transition: 0.2s ease-in;
-	margin-bottom: 50px;
-	display: none;
+	stroke: white;
 }
 
-.input2:hover {
-	background-color: rgb(20, 20, 20);
-	color: white;
-	border-color: white;
-}
-
-.input2::placeholder {
-	color: black;
+#search {
+	line-height: 1.75rem !important;
 }
 
 #save {
@@ -153,33 +73,9 @@ h4 {
 	margin: 0 auto;
 }
 
-input:focus::placeholder {
-	transition: 0.2s ease-in !important;
-	color: transparent !important;
-}
-
-input:hover::placeholder {
-	transition: 0.2s ease-in !important;
-	color: transparent !important;
-}
-
-input:active::placeholder {
-	transition: 0.2s ease-in !important;
-	color: transparent !important;
-}
-
 .text3 {
 	position: relative;
 	top: 10px;
-}
-
-.blur {
-	filter: blur(4px);
-	transition: 0.2s ease-in;
-}
-
-.blur:hover {
-	filter: none;
 }
 
 a {
@@ -197,30 +93,35 @@ a {
 	left: 20px;
 }
 
-.link {
-	cursor: pointer;
-	font-weight: bold;
-	transition: 0.2s ease-in;
-}
-
-.link:hover {
-	color: gray;
-}
-
 #starting,
 #choose {
 	display: none;
 }
 
 .name {
-	background-color: rgb(30, 30, 30);
+	background-color: rgb(20, 20, 20);
 	padding-right: 10px;
 	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	border-radius: 30px;
 	user-select: all;
 	margin-bottom: 10px;
+	font-size: 24px;
 }
 
 .text2 {
-	font-size: 26px !important;
+	font-size: 24px !important;
+}
+
+.dropdown-content {
+	width: 12rem;
+	left: 253px;
+	top: 75px;
+}
+
+.dropdown-content a:hover {
+	background-color: white;
+	color: black;
+	cursor: default;
 }

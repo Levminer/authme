@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build">
+		<div class="w-full text-white bg-black font-bold build hidden">
 			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
 				<div class="flex">
 					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
@@ -26,7 +26,7 @@
 		</div>
 
 		<!-- offline mode -->
-		<div class="w-full text-white bg-popup-red font-bold offline">
+		<div class="w-full text-white bg-popup-red font-bold offline hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +44,7 @@
 		</div>
 
 		<!-- online mode -->
-		<div class="w-full text-white bg-popup-green font-bold online">
+		<div class="w-full text-white bg-popup-green font-bold online hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,7 +62,7 @@
 		</div>
 
 		<!-- update -->
-		<div class="w-full text-white bg-popup-blue font-bold update">
+		<div class="w-full text-white bg-popup-blue font-bold update hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -94,7 +94,7 @@
 		</div>
 
 		<!-- info -->
-		<div class="w-full text-white bg-popup-yellow font-bold info">
+		<div class="w-full text-white bg-popup-yellow font-bold info hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,13 +127,13 @@
 		</div>
 
 		<!-- content -->
-		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center content">
+		<div class="bg-gray-700 w-3/5 mx-auto mt-20 mb-60 rounded-2xl relative text-center content">
 			<h1 class="h1 mb-5">Authme</h1>
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
 				<h3 class="pt-3">Please choose your import file!</h3>
 				<h4>If you don't have an import file please create one!</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
-					<button class="buttoni input" id="input" onclick="loadFile()">
+					<button class="buttoni" id="input" onclick="loadFile()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" />
 						</svg>
@@ -202,8 +202,22 @@
 				</div>
 			</div>
 			<br />
-			<div class="search_container">
-				<input name="search" spellcheck="false" id="search" class="input2 input" onkeyup="search()" onkeydown="search()" placeholder="Search for names..." autofocus />
+			<div class="search_container relative inline-block">
+				<input name="search" spellcheck="false" id="search" class="input w-80 hidden text-2xl mb-1" onkeyup="search()" onkeydown="search()" />
+				<!-- search icon -->
+				<svg id="search_icon" xmlns="http://www.w3.org/2000/svg" class="hidden searchIcon h-6 w-6 relative top-[-50px] right-[150px] pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="black">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+				</svg>
+				<!-- filter icon -->
+				<svg id="filter_icon" onclick="dropdown()" xmlns="http://www.w3.org/2000/svg" class="hidden searchIcon h-6 w-6 relative top-[-50px] left-[150px] cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="black">
+					<path id="filter_path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+				</svg>
+				<br />
+				<!-- dropdown -->
+				<div class="dropdown-content animation">
+					<a tabindex="-1" id="link0" class="dropdown-link" href="#"> <input type="checkbox" tabindex="-1" id="checkbox0" name="checkbox1" class="checkbox" /> Name </a>
+					<a tabindex="-1" id="link1" class="dropdown-link" href="#"> <input type="checkbox" tabindex="-1" id="checkbox1" name="checkbox1" class="checkbox" /> Description </a>
+				</div>
 			</div>
 			<!-- grid -->
 		</div>

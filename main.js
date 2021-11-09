@@ -1,31 +1,34 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
-const logger = require("@levminer/lib/logger/main")
 const contextmenu = require("electron-context-menu")
+const logger = require("@levminer/lib/logger/main")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
+const sentry = require("@sentry/electron/main")
 const remote = require("@electron/remote/main")
 const { markdown } = require("@levminer/lib")
-const sentry = require("@sentry/electron")
 const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
 const electron = require("electron")
-const fetch = require("node-fetch")
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
+const axios = require("axios").default
 const ipc = electron.ipcMain
 
 // ? crash report
 process.on("uncaughtException", (error) => {
 	logger.error("Error on load", error.stack)
-	dialog.showErrorBox("Authme", `Authme crashed, crash report is sent.\n\nPlease open a GitHub Issue with a screenshot of this error.\n\n${error.stack}`)
+	dialog.showErrorBox("Authme", `Authme crashed, crash report is sent. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
 
 	shell.openExternal("https://github.com/Levminer/authme/issues")
 
 	process.crash()
 })
 
-sentry.init({ dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541" })
+sentry.init({
+	dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541",
+	release: `authme@${version}`,
+})
 
 // ? windows
 let /** @type{BrowserWindow} */ window_splash
@@ -39,7 +42,7 @@ let /** @type{BrowserWindow} */ window_edit
 
 // ? window states
 let confirm_shown = false
-let application_shown = false
+let application_shown = true
 let settings_shown = false
 let import_shown = false
 let export_shown = false
@@ -121,6 +124,7 @@ ipc.on("info", (event) => {
 
 const chrome_version = process.versions.chrome
 const electron_version = process.versions.electron
+const args = process.argv
 
 const os_version = `${os.type()} ${os.arch()} ${os.release()}`
 const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() / 1024 / 1024 / 1024)}GB RAM`
@@ -163,14 +167,18 @@ const settings = `{
 			"build": "${build_number}"
 		},
 		"settings": {
-			"launch_on_startup": false,
+			"launch_on_startup": true,
 			"close_to_tray": true,
 			"show_2fa_names": false,
 			"click_to_reveal": false,
 			"reset_after_copy": false,
 			"save_search_results": true,
 			"disable_window_capture": true,
-			"disable_hardware_acceleration": true
+			"disable_hardware_acceleration": true,
+			"search_bar_filter": {
+				"name": true,
+				"description": false
+			}
 		},
 		"experimental":{
 			"sort": null,
@@ -241,6 +249,15 @@ if (file.quick_shortcuts === undefined) {
 	saveSettings()
 }
 
+if (file.settings.search_bar_filter === undefined) {
+	file.settings.search_bar_filter = {
+		name: true,
+		description: false,
+	}
+
+	saveSettings()
+}
+
 if (file.experimental.webcam === undefined) {
 	file.experimental.webcam = null
 
@@ -307,8 +324,16 @@ const showAppFromTray = () => {
 			logger.log("App shown from tray")
 		} else {
 			window_application.hide()
+			window_settings.hide()
+			window_import.hide()
+			window_export.hide()
+			window_edit.hide()
 
 			application_shown = false
+			settings_shown = false
+			import_shown = false
+			export_shown = false
+			edit_shown = false
 
 			logger.log("App hidden from tray")
 		}
@@ -492,6 +517,10 @@ const createWindow = () => {
 		window_landing.maximize()
 
 		logger.warn("First start")
+
+		if (dev === false) {
+			authme_launcher.enable()
+		}
 	}
 
 	window_landing.on("close", () => {
@@ -613,38 +642,35 @@ const createWindow = () => {
 
 	// ? check for auto update
 	window_application.on("show", () => {
-		const api = async () => {
-			try {
-				await fetch("https://api.levminer.com/api/v1/authme/releases")
-					.then((res) => res.json())
-					.then((data) => {
-						try {
-							if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
-								window_application.webContents.executeJavaScript("showUpdate()")
+		const api = () => {
+			axios
+				.get("https://api.levminer.com/api/v1/authme/releases")
+				.then((res) => {
+					if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+						window_application.webContents.executeJavaScript("showUpdate()")
 
-								window_settings.on("show", () => {
-									window_settings.webContents.executeJavaScript("showUpdate()")
-								})
+						window_settings.on("show", () => {
+							window_settings.webContents.executeJavaScript("showUpdate()")
+						})
 
-								new Notification({
-									title: "Authme Update",
-									body: `Update available: Authme ${data.tag_name}`,
-								}).show()
+						new Notification({
+							title: "Authme Update",
+							body: `Update available: Authme ${res.data.tag_name}`,
+						}).show()
 
-								logger.log("Auto update found!")
-							} else {
-								logger.log("No auto update found!")
-							}
-						} catch (error) {
-							return logger.error("Error during auto update", error.stack)
-						}
-					})
-			} catch (error) {
-				return logger.error("Error during auto update", error.stack)
-			}
+						logger.log("Auto update found!")
+					} else {
+						logger.log("No auto update found!")
+					}
+				})
+				.catch((error) => {
+					logger.error("Error during auto update", error.stack)
+				})
 		}
 
-		if (reload === false && file.settings.launch_on_startup === true) {
+		if (reload === false && file.settings.launch_on_startup === true && args[1] === "--hidden") {
+			application_shown = false
+
 			window_application.hide()
 			window_confirm.hide()
 
@@ -723,6 +749,7 @@ const createWindow = () => {
 const authme_launcher = new AutoLaunch({
 	name: "Authme",
 	path: app.getPath("exe"),
+	isHidden: true,
 })
 
 // ? context menu
@@ -943,9 +970,7 @@ ipc.on("abort", () => {
 			defaultId: 0,
 			cancelId: 1,
 			noLink: true,
-			message: `Failed to check the integrity of the files.
-			
-			You or someone messed with the settings file, shutting down for security reasons!`,
+			message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -990,40 +1015,35 @@ ipc.on("release_notes", () => {
 })
 
 ipc.on("download_update", () => {
-	const donwloadUpdate = async () => {
-		try {
-			await fetch("https://api.levminer.com/api/v1/authme/releases")
-				.then((res) => res.json())
-				.then((data) => {
-					try {
-						const notes = markdown.convert(data.body).split("\n").slice(6).join("\n")
-						const message = `Update available: Authme ${data.tag_name}\n\nYou currently running: Authme ${tag_name}\n\nUpdates:\n\n${notes}`
+	axios
+		.get("https://api.levminer.com/api/v1/authme/releases")
+		.then((res) => {
+			if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+				const notes = markdown.convert(res.data.body).split("\n").slice(4).join("\n").split("Bug")[0]
+				const message = `Update available: Authme ${res.data.tag_name}\n\nYou currently running: Authme ${tag_name}\n\nNotable changes:\n\n${notes}Check out release note for all changes.`
 
-						dialog
-							.showMessageBox({
-								title: "Authme",
-								buttons: ["Download", "Close"],
-								defaultId: 0,
-								cancelId: 1,
-								noLink: true,
-								type: "info",
-								message: message,
-							})
-							.then((result) => {
-								if (result.response === 0) {
-									shell.openExternal("https://authme.levminer.com/#downloads")
-								}
-							})
-					} catch (error) {
-						return logger.error(error)
-					}
-				})
-		} catch (error) {
-			return logger.error(error)
-		}
-	}
+				dialog
+					.showMessageBox({
+						title: "Authme",
+						buttons: ["Download", "Close"],
+						defaultId: 0,
+						cancelId: 1,
+						noLink: true,
+						type: "info",
+						message: message,
+					})
+					.then((result) => {
+						if (result.response === 0) {
+							shell.openExternal("https://authme.levminer.com/#downloads")
+						}
+					})
+			}
+		})
+		.catch((error) => {
+			dialog.showErrorBox("Authme", "Error getting latest update. \n\nTry again later!")
 
-	donwloadUpdate()
+			logger.error("Error getting latest update", error.stack)
+		})
 })
 
 ipc.on("support", () => {
@@ -1100,7 +1120,7 @@ const logs = () => {
 
 // ? about
 const about = () => {
-	const message = `Authme: ${authme_version}\n\nElectron: ${electron_version}\nChrome: ${chrome_version}\n\nOS version: ${os_version}\nHardware info: ${os_info}\n\nRelease date: ${release_date}\nBuild number: ${build_number}\n\nCreated by: Lőrik Levente\n`
+	const message = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
 
@@ -1124,37 +1144,30 @@ const about = () => {
 
 // ? release notes
 const releaseNotes = () => {
-	const api = async () => {
-		try {
-			await fetch("https://api.levminer.com/api/v1/authme/releases")
-				.then((res) => res.json())
-				.then((data) => {
-					try {
-						dialog
-							.showMessageBox({
-								title: "Authme",
-								buttons: ["More", "Close"],
-								defaultId: 1,
-								cancelId: 1,
-								noLink: true,
-								type: "info",
-								message: markdown.convert(data.body),
-							})
-							.then((result) => {
-								if (result.response === 0) {
-									shell.openExternal("https://github.com/Levminer/authme/releases")
-								}
-							})
-					} catch (error) {
-						return logger.error(error)
+	axios
+		.get("https://api.levminer.com/api/v1/authme/releases")
+		.then((res) => {
+			dialog
+				.showMessageBox({
+					title: "Authme",
+					buttons: ["More", "Close"],
+					defaultId: 1,
+					cancelId: 1,
+					noLink: true,
+					type: "info",
+					message: markdown.convert(res.data.body),
+				})
+				.then((result) => {
+					if (result.response === 0) {
+						shell.openExternal("https://github.com/Levminer/authme/releases")
 					}
 				})
-		} catch (error) {
-			return logger.error(error)
-		}
-	}
+		})
+		.catch((error) => {
+			dialog.showErrorBox("Authme", "Error getting release notes. \n\nTry again later!")
 
-	api()
+			logger.error("Error getting release notes", error.stack)
+		})
 }
 
 // ? support
@@ -1183,9 +1196,7 @@ app.whenReady()
 	.then(() => {
 		logger.log("Starting app")
 
-		if (dev === true) {
-			app.setAppUserModelId("Authme Dev")
-		} else {
+		if (dev === false) {
 			app.setAppUserModelId("Authme")
 		}
 
@@ -1270,6 +1281,8 @@ app.whenReady()
 
 		tray.on("click", () => {
 			showAppFromTray()
+			createTray()
+			createMenu()
 		})
 
 		// generate tray
@@ -1286,10 +1299,12 @@ app.whenReady()
 				},
 				{ type: "separator" },
 				{
-					label: "Show app",
+					label: application_shown ? "Hide app" : "Show app",
 					accelerator: shortcuts ? "" : file.global_shortcuts.show,
 					click: () => {
 						showAppFromTray()
+						createTray()
+						createMenu()
 					},
 				},
 				{ type: "separator" },
@@ -1309,6 +1324,7 @@ app.whenReady()
 					},
 				},
 			])
+
 			tray.setToolTip("Authme")
 			tray.setContextMenu(contextmenu)
 		}
@@ -1322,10 +1338,12 @@ app.whenReady()
 					label: "File",
 					submenu: [
 						{
-							label: "Show app",
+							label: application_shown ? "Hide app" : "Show app",
 							accelerator: shortcuts ? "" : file.shortcuts.show,
 							click: () => {
 								showAppFromTray()
+								createMenu()
+								createTray()
 							},
 						},
 						{
@@ -1345,6 +1363,8 @@ app.whenReady()
 										logger.log("Settings shown")
 									} else {
 										window_settings.hide()
+
+										window_application.focus()
 
 										settings_shown = false
 
@@ -1418,6 +1438,8 @@ app.whenReady()
 									} else {
 										window_edit.hide()
 
+										window_application.focus()
+
 										edit_shown = false
 
 										logger.log("Edit hidden")
@@ -1449,6 +1471,8 @@ app.whenReady()
 									} else {
 										window_import.hide()
 
+										window_application.focus()
+
 										import_shown = false
 
 										logger.log("Import hidden")
@@ -1479,6 +1503,8 @@ app.whenReady()
 										logger.log("Export shown")
 									} else {
 										window_export.hide()
+
+										window_application.focus()
 
 										export_shown = false
 
@@ -1572,68 +1598,40 @@ app.whenReady()
 							label: "Update",
 							accelerator: shortcuts ? "" : file.shortcuts.update,
 							click: () => {
-								const api = async () => {
-									try {
-										await fetch("https://api.levminer.com/api/v1/authme/releases")
-											.then((res) => res.json())
-											.then((data) => {
-												try {
-													if (data.tag_name > tag_name && data.tag_name != undefined && data.prerelease != true) {
-														dialog
-															.showMessageBox({
-																title: "Authme",
-																buttons: ["Yes", "No"],
-																defaultId: 0,
-																cancelId: 1,
-																type: "info",
-																message: `Update available: Authme ${data.tag_name}
-															
-															Do you want to download it?
-										
-															You currently running: Authme ${tag_name}`,
-															})
-															.then((result) => {
-																if (result.response === 0) {
-																	shell.openExternal("https://authme.levminer.com#downloads")
-																}
-															})
-													} else {
-														dialog.showMessageBox({
-															title: "Authme",
-															buttons: ["Close"],
-															defaultId: 0,
-															cancelId: 1,
-															type: "info",
-															message: `No update available:
-														
-														You are running the latest version!
-									
-														You are currently running: Authme ${tag_name}`,
-														})
+								axios
+									.get("https://api.levminer.com/api/v1/authme/releases")
+									.then((res) => {
+										if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+											dialog
+												.showMessageBox({
+													title: "Authme",
+													buttons: ["Yes", "No"],
+													defaultId: 0,
+													cancelId: 1,
+													type: "info",
+													message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
+												})
+												.then((result) => {
+													if (result.response === 0) {
+														shell.openExternal("https://authme.levminer.com#downloads")
 													}
-												} catch (error) {
-													return logger.error("Error during manual update", error.stack)
-												}
+												})
+										} else {
+											dialog.showMessageBox({
+												title: "Authme",
+												buttons: ["Close"],
+												defaultId: 0,
+												cancelId: 1,
+												type: "info",
+												message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${tag_name}`,
 											})
-									} catch (error) {
-										dialog.showMessageBox({
-											title: "Authme",
-											buttons: ["Close"],
-											defaultId: 0,
-											cancelId: 1,
-											type: "info",
-											message: `No update available:
-										
-										Can't connect to API, check your internet connection or the API status in the settings!
-					
-										You currently running: Authme ${tag_name}`,
-										})
+										}
+									})
+									.catch((error) => {
+										dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
 
-										return logger.error("Error during manual update", error.stack)
-									}
-								}
-
-								api()
+										logger.error("Error getting update manually", error.stack)
+									})
 							},
 						},
 						{

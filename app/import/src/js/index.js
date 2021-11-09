@@ -4,7 +4,7 @@ const logger = require("@levminer/lib/logger/renderer")
 const electron = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { qrcodeConverter } = require("@levminer/lib")
+const { qrcodeConverter, time } = require("@levminer/lib")
 const ipc = electron.ipcRenderer
 
 // ? error in window

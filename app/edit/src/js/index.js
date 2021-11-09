@@ -1,5 +1,5 @@
 const { app, dialog } = require("@electron/remote")
-const { aes, convert } = require("@levminer/lib")
+const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const electron = require("electron")
@@ -61,7 +61,7 @@ const settings_refresher = setInterval(() => {
 // ? rollback
 const cache_path = path.join(file_path, "cache")
 const rollback_con = document.querySelector(".rollback")
-const rollback_text = document.querySelector("#rollbackBut")
+const rollback_text = document.querySelector("#rollbackText")
 let cache = true
 
 fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
@@ -74,10 +74,14 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 
 		const edited_date = fs.statSync(cache_path).atime
 
-		const temp_date = `${edited_date.toLocaleDateString().split("/").reverse().join(".")}.`
-		const temp_time = edited_date.toLocaleTimeString()
+		const year = edited_date.getFullYear()
+		const month = edited_date.toLocaleString("en-us", { month: "long" })
+		const day = edited_date.toISOString().substring(8, 10)
 
-		rollback_text.textContent = `Latest rollback: ${temp_date} ${temp_time}`
+		const temp_date = `${year}. ${month} ${day}.`
+		const temp_time = `${edited_date.getHours().toString().padStart(2, "0")}:${edited_date.getMinutes().toString().padStart(2, "0")}:${edited_date.getSeconds().toString().padStart(2, "0")}`
+
+		rollback_text.innerHTML = `Latest rollback: <br /> ${temp_date}  ${temp_time}`
 	}
 })
 
@@ -90,9 +94,7 @@ const rollback = () => {
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: `Are you sure you want to rollback to the latest save?
-			
-			This will overwrite your saved codes!`,
+			message: "Are you sure you want to rollback to the latest save? \n\nThis will overwrite your saved codes!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -100,13 +102,23 @@ const rollback = () => {
 					if (err) {
 						logger.error("Error reading hash file", err)
 					} else {
-						fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
-							if (err) {
-								logger.error("Failed to create cache folder", err)
-							} else {
-								logger.log("Hash file created")
-							}
-						})
+						if (file.security.new_encryption === true) {
+							fs.writeFile(path.join(file_path, "codes", "codes.authme"), data, (err) => {
+								if (err) {
+									logger.error("Failed to create codes.authme folder", err)
+								} else {
+									logger.log("codes.authme file created")
+								}
+							})
+						} else {
+							fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
+								if (err) {
+									logger.error("Failed to create hash.authme", err)
+								} else {
+									logger.log("hash.authme file created")
+								}
+							})
+						}
 					}
 				})
 
@@ -120,7 +132,6 @@ const rollback = () => {
 const names = []
 const secrets = []
 const issuers = []
-const ids = []
 
 /**
  * Process data from saved file
@@ -162,20 +173,20 @@ const go = () => {
 		const div = document.createElement("div")
 
 		div.innerHTML = `
-		<div class="grid" id="grid${[counter]}">
-		<div class="div1">
+		<div id="grid${[counter]}" class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+		<div class="flex justify-center items-center">
 		<h2>${issuers[counter]}</h2>
 		</div>
-		<div class="div2">
-		<input type="text" class="input1" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/> 
+		<div class="flex justify-center items-center">
+		<input class="input" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
 		</div>
-		<div class="div3">
+		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 		<button class="buttonr button" id="edit_but_${[counter]}" onclick="edit(${[counter]})">
 		<svg id="edit_svg_${[counter]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttonr" id="del_but_${[counter]}" onclick="del(${[counter]})">
+		<button class="buttonr button" id="del_but_${[counter]}" onclick="del(${[counter]})">
 		<svg id="del_svg_${[counter]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
@@ -236,9 +247,7 @@ const del = (number) => {
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
 			type: "warning",
-			message: `Are you sure you want to delete this code?
-			
-			If you want to revert this don't save and restart the app!`,
+			message: "Are you sure you want to delete this code? \n\nIf you want to revert this don't save and restart the app!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -272,9 +281,7 @@ const createSave = () => {
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: `Are you sure you want to save the modified code(s)?
-			
-			This will overwrite your saved codes!`,
+			message: "Are you sure you want to save the modified code(s)? \n\nThis will overwrite your saved codes!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -343,7 +350,7 @@ const newSaveCodes = () => {
 
 	const codes = {
 		codes: encrypted.toString("base64"),
-		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		date: time.timestamp(),
 		version: "2",
 	}
 
@@ -359,7 +366,7 @@ const addMore = () => {
 		.showOpenDialog({
 			title: "Import from Authme Import Text file",
 			properties: ["openFile", "multiSelections"],
-			filters: [{ name: "Text file", extensions: ["txt"] }],
+			filters: [{ name: "Authme import/export file", extensions: ["authme", "txt"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
@@ -373,9 +380,7 @@ const addMore = () => {
 					cancelId: 0,
 					type: "info",
 					noLink: true,
-					message: `Code(s) added!
-	
-					Scroll down to view them!`,
+					message: "Code(s) added! \n\nScroll down to view them!",
 				})
 
 				for (let i = 0; i < files.length; i++) {
@@ -457,9 +462,7 @@ const loadError = () => {
 				title: "Authme",
 				buttons: ["Close"],
 				type: "error",
-				message: `No save file found.
-				
-				Go back to the main page and save your codes!`,
+				message: "No save file found. \n\nGo back to the main page and save your codes!",
 			})
 		}
 	})
@@ -474,9 +477,7 @@ const loadChooser = () => {
 					title: "Authme",
 					buttons: ["Close"],
 					type: "error",
-					message: `No save file found.
-					
-					Go back to the main page and save your codes!`,
+					message: "No save file found. \n\nGo back to the main page and save your codes!",
 				})
 			} else {
 				newLoad()
@@ -557,9 +558,7 @@ const revertChanges = () => {
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: `Are you sure you want to revert all current change(s)?
-		
-			You will lose all current changes!`,
+			message: "Are you sure you want to revert all current change(s)? \n\nYou will lose all current changes!",
 		})
 		.then((result) => {
 			if (result.response === 0) {
