@@ -107,7 +107,7 @@ const rollback = () => {
 								if (err) {
 									logger.error("Failed to create codes.authme folder", err)
 								} else {
-									logger.log("codes.authme file created")
+									logger.log("rollback successful, codes.authme file created")
 								}
 							})
 						} else {
@@ -397,12 +397,17 @@ const addMore = () => {
 
 							counter = 0
 
-							const /** @type{LibImportFile} */ imported = convert.fromText(input.toString(), 0)
+							if (extension === "authme") {
+								const codes = Buffer.from(JSON.parse(input.toString()).codes, "base64").toString()
 
-							for (let i = 0; i < imported.names.length; i++) {
-								names.push(imported.names[i])
-								secrets.push(imported.secrets[i])
-								issuers.push(imported.issuers[i])
+								const /** @type{LibImportFile} */ imported = convert.fromText(codes.toString(), 0)
+								const /** @type{LibImportFile} */ imported = convert.fromText(input.toString(), 0)
+
+								for (let i = 0; i < imported.names.length; i++) {
+									names.push(imported.names[i])
+									secrets.push(imported.secrets[i])
+									issuers.push(imported.issuers[i])
+								}
 							}
 
 							go()
@@ -566,3 +571,31 @@ const revertChanges = () => {
 			}
 		})
 }
+
+/**
+ * Delete all codes
+ */
+const deleteCodes = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
+			type: "warning",
+			noLink: true,
+			message: "Are you sure you want to delete all codes? \n\nYou can revert this with a rollback.",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				// clear codes
+				fs.rm(path.join(file_path, "codes", "codes.authme"), (err) => {
+					if (err) {
+						return logger.error(`Error deleting codes - ${err}`)
+					} else {
+						logger.log("Codes deleted")
+					}
+				})
+
+				fs.rm(path.join(file_path, "hash.authme"), (err) => {
+					if (err) {
