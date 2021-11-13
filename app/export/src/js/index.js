@@ -130,6 +130,45 @@ const saveFile = () => {
 		})
 }
 
+// ? new save file
+const newSaveFile = () => {
+	dialog
+		.showSaveDialog({
+			title: "Save as Authme file",
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
+			defaultPath: "~/export.authme",
+		})
+		.then((result) => {
+			canceled = result.canceled
+			output = result.filePath
+
+			/**
+			 * .authme export file
+			 * @type {LibAuthmeFile}
+			 */
+			const save_file = {
+				role: "export",
+				encrypted: false,
+				codes: Buffer.from(file).toString("base64"),
+				date: time.timestamp(),
+				version: 3,
+			}
+
+			if (canceled === false) {
+				fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
+					if (err) {
+						return logger.error(`Error creating file - ${err}`)
+					} else {
+						return logger.log("Text file created")
+					}
+				})
+			}
+		})
+		.catch((err) => {
+			logger.error(`Failed to save - ${err}`)
+		})
+}
+
 // ? save qr codes
 const saveQrCodes = () => {
 	dialog

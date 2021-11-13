@@ -55,23 +55,39 @@
 					<h3>Save your exported data as a file to use it elsewhere.</h3>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
 						<div>
-							<button class="buttoni" id="but1" onclick="saveFile()">
+							<button class="buttoni" id="but1" onclick="newSaveFile()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 								</svg>
-								Save as .txt
+								Export .authme file
 							</button>
-							<h5 class="text-3 m-3">Ideal to import for Authme or for Authme Web.</h5>
+							<h5 class="m-3">Ideal to import for Authme or for Authme Web.</h5>
 						</div>
 						<div>
 							<button class="buttoni" id="but2" onclick="saveQrCodes()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 								</svg>
-								Save as .html
+								Export .html file
 							</button>
 							<h5 class="m-3">Ideal for scanning QR codes or for security backup.</h5>
 						</div>
+					</div>
+
+					<!-- advanced -->
+					<div class="mx-auto p-3">
+						<details class="mb-5 transform ease-in duration-200">
+							<summary class="font-bold mb-3 cursor-pointer">More options</summary>
+							<div>
+								<button class="buttoni" id="but1" onclick="saveFile()">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+									</svg>
+									Export .txt file
+								</button>
+								<h5 class="m-3">The old way to import for Authme or for Authme Web.</h5>
+							</div>
+						</details>
 					</div>
 				</div>
 			</div>
