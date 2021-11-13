@@ -64,7 +64,7 @@ const rollback_con = document.querySelector(".rollback")
 const rollback_text = document.querySelector("#rollbackText")
 let cache = true
 
-fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
+fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
 	if (err) {
 		logger.warn("Cache file don't exist")
 	} else {
@@ -98,7 +98,7 @@ const rollback = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
+				fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
 					if (err) {
 						logger.error("Error reading hash file", err)
 					} else {
@@ -173,7 +173,7 @@ const go = () => {
 	document.querySelector(".codes_container").innerHTML = ""
 
 	if (cache === true) {
-		createCache()
+		createRollback()
 		cache = false
 	}
 
@@ -362,7 +362,13 @@ const newSaveCodes = () => {
 
 	const encrypted = aes.encrypt(save_text, key)
 
+	/**
+	 * Save codes
+	 * @type{LibAuthmeFile}
+	 * */
 	const codes = {
+		role: "codes",
+		encrypted: true,
 		codes: encrypted.toString("base64"),
 		date: time.timestamp(),
 		version: "2",
@@ -443,8 +449,10 @@ const addMore = () => {
 		})
 }
 
-// ? create cache
-const createCache = () => {
+/**
+ * Create rollback.authme file
+ */
+const createRollback = () => {
 	if (file.security.new_encryption === true) {
 		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 			if (err) {
@@ -454,11 +462,14 @@ const createCache = () => {
 					fs.mkdirSync(cache_path)
 				}
 
-				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
+				const loaded = JSON.parse(data)
+				loaded.role = "rollback"
+
+				fs.writeFile(path.join(cache_path, "rollback.authme"), convert.fromJSON(loaded), (err) => {
 					if (err) {
 						logger.error("Failed to create cache folder", err)
 					} else {
-						logger.log("Cache file created")
+						logger.log("Rollback file created")
 					}
 				})
 			}
@@ -472,7 +483,7 @@ const createCache = () => {
 					fs.mkdirSync(cache_path)
 				}
 
-				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
+				fs.writeFile(path.join(cache_path, "rollback.authme"), data, (err) => {
 					if (err) {
 						logger.error("Failed to create cache folder", err)
 					} else {
