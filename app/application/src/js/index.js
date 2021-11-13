@@ -43,6 +43,7 @@ if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
 
 // eslint-disable-next-line
 let prev = false
+let text
 let save_text
 const query = []
 const description_query = []
@@ -79,19 +80,33 @@ const sort_number = file.experimental.sort
 const loadFile = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme Import Text file",
+			title: "Import from Authme import file",
 			properties: ["openFile"],
-			filters: [{ name: "Text file", extensions: ["txt"] }],
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
 			filepath = result.filePaths
 
 			if (canceled === false) {
-				const text = fs.readFileSync(filepath.toString(), "utf-8")
-				save_text = text
+				const /** @type{LibAuthmeFile} */ loaded = JSON.parse(fs.readFileSync(filepath.toString(), "utf-8"))
 
-				processdata(text)
+				if (loaded.role === "import" || loaded.role === "export") {
+					text = Buffer.from(loaded.codes, "base64").toString()
+					save_text = text
+
+					processdata(text)
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						defaultId: 0,
+						cancelId: 0,
+						type: "error",
+						noLink: true,
+						message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+					})
+				}
 			}
 		})
 }
@@ -732,10 +747,16 @@ const newSave = () => {
 
 	const encrypted = aes.encrypt(save_text, key)
 
+	/**
+	 * Save codes
+	 * @type{LibAuthmeFile}
+	 * */
 	const codes = {
+		role: "codes",
+		encrypted: true,
 		codes: encrypted.toString("base64"),
 		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
-		version: "2",
+		version: "3",
 	}
 
 	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
