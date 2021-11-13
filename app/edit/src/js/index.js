@@ -108,6 +108,13 @@ const rollback = () => {
 									logger.error("Failed to create codes.authme folder", err)
 								} else {
 									logger.log("rollback successful, codes.authme file created")
+
+									dialog.showMessageBox({
+										title: "Authme",
+										buttons: ["Close"],
+										type: "info",
+										message: "Rollback successful! \n\nGo back to the main page to check out the changes!",
+									})
 								}
 							})
 						} else {
@@ -115,7 +122,14 @@ const rollback = () => {
 								if (err) {
 									logger.error("Failed to create hash.authme", err)
 								} else {
-									logger.log("hash.authme file created")
+									logger.log("rollback successful, hash.authme file created")
+
+									dialog.showMessageBox({
+										title: "Authme",
+										buttons: ["Close"],
+										type: "info",
+										message: "Rollback successful! \n\nGo back to the main page to check out the changes!",
+									})
 								}
 							})
 						}
@@ -178,7 +192,7 @@ const go = () => {
 		<h2>${issuers[counter]}</h2>
 		</div>
 		<div class="flex justify-center items-center">
-		<input class="input" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
+		<input class="input w-[320px]" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
 		</div>
 		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 		<button class="buttonr button" id="edit_but_${[counter]}" onclick="edit(${[counter]})">
@@ -364,25 +378,15 @@ const newSaveCodes = () => {
 const addMore = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme Import Text file",
+			title: "Import from Authme file",
 			properties: ["openFile", "multiSelections"],
-			filters: [{ name: "Authme import/export file", extensions: ["authme", "txt"] }],
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
 			files = result.filePaths
 
 			if (canceled === false) {
-				dialog.showMessageBox({
-					title: "Authme",
-					buttons: ["Close"],
-					defaultId: 0,
-					cancelId: 0,
-					type: "info",
-					noLink: true,
-					message: "Code(s) added! \n\nScroll down to view them!",
-				})
-
 				for (let i = 0; i < files.length; i++) {
 					fs.readFile(files[i], (err, input) => {
 						if (err) {
@@ -390,27 +394,48 @@ const addMore = () => {
 						} else {
 							logger.log("File readed")
 
-							data = []
+							const /** @type{LibAuthmeFile} */ loaded = JSON.parse(input.toString())
 
-							const container = document.querySelector(".codes_container")
-							container.innerHTML = ""
+							if (loaded.role === "import" || loaded.role === "export") {
+								dialog.showMessageBox({
+									title: "Authme",
+									buttons: ["Close"],
+									defaultId: 0,
+									cancelId: 0,
+									type: "info",
+									noLink: true,
+									message: "Code(s) added! \n\nScroll down to view them!",
+								})
 
-							counter = 0
+								data = []
 
-							if (extension === "authme") {
-								const codes = Buffer.from(JSON.parse(input.toString()).codes, "base64").toString()
+								const container = document.querySelector(".codes_container")
+								container.innerHTML = ""
+
+								counter = 0
+
+								const codes = Buffer.from(loaded.codes, "base64")
 
 								const /** @type{LibImportFile} */ imported = convert.fromText(codes.toString(), 0)
-								const /** @type{LibImportFile} */ imported = convert.fromText(input.toString(), 0)
 
 								for (let i = 0; i < imported.names.length; i++) {
 									names.push(imported.names[i])
 									secrets.push(imported.secrets[i])
 									issuers.push(imported.issuers[i])
 								}
-							}
 
-							go()
+								go()
+							} else {
+								dialog.showMessageBox({
+									title: "Authme",
+									buttons: ["Close"],
+									defaultId: 0,
+									cancelId: 0,
+									type: "error",
+									noLink: true,
+									message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+								})
+							}
 						}
 					})
 				}
@@ -599,3 +624,38 @@ const deleteCodes = () => {
 
 				fs.rm(path.join(file_path, "hash.authme"), (err) => {
 					if (err) {
+						return logger.warn(`Error deleting hash - ${err}`)
+					} else {
+						logger.log("Codes deleted")
+					}
+				})
+
+				/**
+				 * Load storage
+				 * @type {LibStorage}
+				 */
+				let storage
+
+				if (dev === false) {
+					storage = JSON.parse(localStorage.getItem("storage"))
+
+					storage.issuers = undefined
+
+					localStorage.setItem("storage", JSON.stringify(storage))
+				} else {
+					storage = JSON.parse(localStorage.getItem("dev_storage"))
+
+					storage.issuers = undefined
+
+					localStorage.setItem("dev_storage", JSON.stringify(storage))
+				}
+
+				reloadApplication()
+				reloadSettings()
+
+				setTimeout(() => {
+					location.reload()
+				}, 100)
+			}
+		})
+}
