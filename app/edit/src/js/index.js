@@ -371,7 +371,7 @@ const newSaveCodes = () => {
 		encrypted: true,
 		codes: encrypted.toString("base64"),
 		date: time.timestamp(),
-		version: "2",
+		version: "3",
 	}
 
 	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))

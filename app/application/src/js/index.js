@@ -1,6 +1,6 @@
 const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
-const { aes, convert } = require("@levminer/lib")
+const { aes, convert, time } = require("@levminer/lib")
 const speakeasy = require("@levminer/speakeasy")
 const fs = require("fs")
 const path = require("path")
@@ -755,7 +755,7 @@ const newSave = () => {
 		role: "codes",
 		encrypted: true,
 		codes: encrypted.toString("base64"),
-		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
+		date: time.timestamp(),
 		version: "3",
 	}
 
