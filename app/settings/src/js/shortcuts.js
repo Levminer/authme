@@ -1,26 +1,26 @@
 // ? settings
 const default_shortcuts = {
 	shortcuts: {
-		show: "CommandOrControl+q",
-		settings: "CommandOrControl+s",
-		exit: "CommandOrControl+w",
-		zoom_reset: "CommandOrControl+0",
-		zoom_in: "CommandOrControl+1",
-		zoom_out: "CommandOrControl+2",
-		edit: "CommandOrControl+t",
-		import: "CommandOrControl+i",
-		export: "CommandOrControl+e",
-		release: "CommandOrControl+n",
-		support: "CommandOrControl+p",
-		docs: "CommandOrControl+d",
-		licenses: "CommandOrControl+l",
-		update: "CommandOrControl+u",
-		info: "CommandOrControl+o",
+		show: "CmdOrCtrl+q",
+		settings: "CmdOrCtrl+s",
+		exit: "CmdOrCtrl+w",
+		zoom_reset: "CmdOrCtrl+0",
+		zoom_in: "CmdOrCtrl+1",
+		zoom_out: "CmdOrCtrl+2",
+		edit: "CmdOrCtrl+t",
+		import: "CmdOrCtrl+i",
+		export: "CmdOrCtrl+e",
+		release: "CmdOrCtrl+n",
+		support: "CmdOrCtrl+p",
+		docs: "CmdOrCtrl+d",
+		licenses: "CmdOrCtrl+l",
+		update: "CmdOrCtrl+u",
+		info: "CmdOrCtrl+o",
 	},
 	global_shortcuts: {
-		show: "CommandOrControl+Shift+a",
-		settings: "CommandOrControl+Shift+s",
-		exit: "CommandOrControl+Shift+d",
+		show: "CmdOrCtrl+Shift+a",
+		settings: "CmdOrCtrl+Shift+s",
+		exit: "CmdOrCtrl+Shift+d",
 	},
 }
 
@@ -83,7 +83,7 @@ hk102.value = file.global_shortcuts.exit
 
 const call = (event) => {
 	if (event.ctrlKey === true) {
-		inp_name.value = `CommandOrControl+${event.key.toLowerCase()}`
+		inp_name.value = `CmdOrCtrl+${event.key.toLowerCase()}`
 	}
 
 	if (event.altKey === true) {
@@ -95,11 +95,11 @@ const call = (event) => {
 	}
 
 	if (event.ctrlKey === true && event.shiftKey === true) {
-		inp_name.value = `CommandOrControl+Shift+${event.key.toLowerCase()}`
+		inp_name.value = `CmdOrCtrl+Shift+${event.key.toLowerCase()}`
 	}
 
 	if (event.ctrlKey === true && event.altKey === true) {
-		inp_name.value = `CommandOrControl+Alt+${event.key.toLowerCase()}`
+		inp_name.value = `CmdOrCtrl+Alt+${event.key.toLowerCase()}`
 	}
 
 	if (event.shiftKey === true && event.altKey === true) {
@@ -523,7 +523,17 @@ const generateCodes = () => {
 if (issuers !== undefined) {
 	generateCodes()
 } else {
-	document.querySelector(".quick").innerHTML = "<h3>Please save your codes and restart the app to be able to create quick shortcuts!</h3>"
+	document.querySelector(".quick").innerHTML = `
+	<div class="mx-auto rounded-2xl bg-gray-800 w-2/3">
+	<h3 class="pt-5">Please save your codes on the main page and click reload to be able to create quick shortcuts!</h3>
+	<button class="buttoni mb-8" onclick="location.reload()">
+	<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+  	</svg>
+	Reload
+	</button>
+	</div>
+	`
 }
 
 const qsEdit = (value) => {

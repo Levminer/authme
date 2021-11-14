@@ -191,26 +191,26 @@ const settings = `{
 			"key": null
 		},
 		"shortcuts": {
-			"show": "CommandOrControl+q",
-			"settings": "CommandOrControl+s",
-			"exit": "CommandOrControl+w",
-			"zoom_reset": "CommandOrControl+0",
-			"zoom_in": "CommandOrControl+1",
-			"zoom_out": "CommandOrControl+2",
-			"edit": "CommandOrControl+t",
-			"import": "CommandOrControl+i",
-			"export": "CommandOrControl+e",
-			"release": "CommandOrControl+n",
-			"support": "CommandOrControl+p",
-			"docs": "CommandOrControl+d",
-			"licenses": "CommandOrControl+l",
-			"update": "CommandOrControl+u",
-			"info": "CommandOrControl+o"
+			"show": "CmdOrCtrl+q",
+			"settings": "CmdOrCtrl+s",
+			"exit": "CmdOrCtrl+w",
+			"zoom_reset": "CmdOrCtrl+0",
+			"zoom_in": "CmdOrCtrl+1",
+			"zoom_out": "CmdOrCtrl+2",
+			"edit": "CmdOrCtrl+t",
+			"import": "CmdOrCtrl+i",
+			"export": "CmdOrCtrl+e",
+			"release": "CmdOrCtrl+n",
+			"support": "CmdOrCtrl+p",
+			"docs": "CmdOrCtrl+d",
+			"licenses": "CmdOrCtrl+l",
+			"update": "CmdOrCtrl+u",
+			"info": "CmdOrCtrl+o"
 		},
 		"global_shortcuts": {
-			"show": "CommandOrControl+Shift+a",
-			"settings": "CommandOrControl+Shift+s",
-			"exit": "CommandOrControl+Shift+d"
+			"show": "CmdOrCtrl+Shift+a",
+			"settings": "CmdOrCtrl+Shift+s",
+			"exit": "CmdOrCtrl+Shift+d"
 		},
 		"quick_shortcuts:": {},
 		"search_history": {
@@ -265,13 +265,13 @@ if (file.experimental.webcam === undefined) {
 }
 
 if (file.shortcuts.edit === undefined) {
-	file.shortcuts.edit = "CommandOrControl+t"
+	file.shortcuts.edit = "CmdOrCtrl+t"
 
 	saveSettings()
 }
 
 if (file.shortcuts.support === undefined) {
-	file.shortcuts.support = "CommandOrControl+p"
+	file.shortcuts.support = "CmdOrCtrl+p"
 
 	saveSettings()
 }
@@ -299,9 +299,9 @@ if (file.settings.disable_hardware_acceleration === undefined) {
 }
 
 if (file.shortcuts.zoom_reset === undefined) {
-	file.shortcuts.zoom_reset = "CommandOrControl+0"
-	file.shortcuts.zoom_in = "CommandOrControl+1"
-	file.shortcuts.zoom_out = "CommandOrControl+2"
+	file.shortcuts.zoom_reset = "CmdOrCtrl+0"
+	file.shortcuts.zoom_in = "CmdOrCtrl+1"
+	file.shortcuts.zoom_out = "CmdOrCtrl+2"
 }
 
 // ? force dark mode
