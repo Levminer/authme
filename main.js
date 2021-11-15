@@ -55,7 +55,6 @@ let shortcuts = false
 let reload = false
 let tray_minimized = false
 let update_seen = false
-let animations_showed = false
 
 // ? development
 let dev = false
@@ -685,12 +684,6 @@ const createWindow = () => {
 	})
 
 	window_application.on("focus", () => {
-		if (animations_showed === false) {
-			window_application.webContents.executeJavaScript("animations()")
-
-			animations_showed = true
-		}
-
 		window_application.webContents.executeJavaScript("focusSearch()")
 	})
 
@@ -923,6 +916,7 @@ ipc.on("disable_capture", () => {
 	window_application.setContentProtection(true)
 	window_import.setContentProtection(true)
 	window_export.setContentProtection(true)
+	window_application.setContentProtection(false)
 
 	logger.log("Screen capture disabled")
 })

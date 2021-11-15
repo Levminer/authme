@@ -594,63 +594,6 @@ const search = () => {
 	}
 }
 
-// ? block animations
-try {
-	setTimeout(() => {
-		ScrollOut({
-			onShown(el) {
-				el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
-			},
-		})
-	}, 500)
-} catch (error) {
-	logger.error("Block animations failed")
-}
-
-// ? animations
-let focus = true
-
-let diva0
-let diva1
-
-const animations = () => {
-	if (focus === true) {
-		setTimeout(() => {
-			const center = document.querySelector(".content")
-			center.classList.add("animate__animated", "animate__fadeIn")
-
-			const h1 = document.querySelector(".h1")
-			h1.classList.add("animate__animated", "animate__slideInDown")
-
-			const choose = document.querySelector("#choose")
-			choose.classList.add("animate__animated", "animate__slideInDown")
-
-			const starting = document.querySelector("#starting")
-			starting.classList.add("animate__animated", "animate__slideInDown")
-
-			const search = document.querySelector("#search")
-			search.classList.add("animate__animated", "animate__slideInDown")
-
-			if (clear == true) {
-				diva0 = document.querySelector(".diva0")
-				diva0.classList.add("animate__animated", "animate__zoomIn")
-
-				diva1 = document.querySelector(".diva1")
-				diva1.classList.add("animate__animated", "animate__zoomIn")
-			}
-
-			setTimeout(() => {
-				if (clear == true) {
-					diva0.classList.remove("animate__animated", "animate__zoomIn")
-					diva1.classList.remove("animate__animated", "animate__zoomIn")
-				}
-			}, 1500)
-
-			focus = false
-		}, 150)
-	}
-}
-
 // ? focus search bar
 const focusSearch = () => {
 	setTimeout(() => {
