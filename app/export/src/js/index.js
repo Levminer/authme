@@ -221,16 +221,10 @@ const error = () => {
 	})
 }
 
-// ? new encryption method
-const expChooser = () => {
-	if (settings.security.new_encryption === true) {
-		newExp()
-	} else {
-		exp()
-	}
-}
-
-const newExp = () => {
+/**
+ * Export codes save to the disk
+ */
+const exportCodes = () => {
 	let password
 	let key
 
