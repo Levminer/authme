@@ -654,17 +654,10 @@ setInterval(() => {
 	check_for_internet()
 }, 5000)
 
-// ? save chooser
-const saveChooser = () => {
-	if (file.security.new_encryption === true) {
-		newSave()
-	} else {
-		save()
-	}
-}
-
-// new save method
-const newSave = () => {
+/**
+ * Save imported codes to disk
+ */
+const saveCodes = () => {
 	let password
 	let key
 
@@ -719,8 +712,10 @@ const newSave = () => {
 	key.fill(0)
 }
 
-// load save
-const loadSave = () => {
+/**
+ * Load saved codes from disk
+ */
+const loadCodes = () => {
 	let password
 	let key
 
@@ -766,8 +761,8 @@ const loadSave = () => {
 	})
 }
 
-if (file.security.require_password === false && file.security.new_encryption === true) {
-	loadSave()
+if (file.security.require_password === false) {
+	loadCodes()
 }
 
 let dropdown_state = false
@@ -792,6 +787,7 @@ const dropdown = () => {
 
 document.querySelector("#checkbox0").checked = file.settings.search_bar_filter.name
 document.querySelector("#checkbox1").checked = file.settings.search_bar_filter.description
+
 // ? dropdown checkboxes
 document.querySelector("#checkbox0").addEventListener("click", () => {
 	if (file.settings.search_bar_filter.name === true) {

@@ -1065,7 +1065,7 @@ let password_buffer
 ipc.on("send_password", (event, data) => {
 	password_buffer = Buffer.from(data)
 
-	window_application.webContents.executeJavaScript("loadSave()")
+	window_application.webContents.executeJavaScript("loadCodes()")
 })
 
 ipc.on("request_password", (event) => {
@@ -1076,8 +1076,8 @@ ipc.on("request_password", (event) => {
 ipc.on("reload_application", () => {
 	window_application.reload()
 
-	if (file.security.new_encryption === true && file.security.require_password === true) {
-		window_application.webContents.executeJavaScript("loadSave()")
+	if (file.security.require_password === true) {
+		window_application.webContents.executeJavaScript("loadCodes()")
 	}
 })
 
