@@ -108,10 +108,8 @@ const hashPasswords = async () => {
 	}
 
 	const password_input = Buffer.from(document.querySelector("#password_input1").value)
-	const new_encryption = document.querySelector("#tgl0").checked
 
 	const salt = await bcrypt.genSalt(10)
-
 	const hashed = await bcrypt.hash(password_input.toString(), salt).then(logger.log("Hash completed!"))
 
 	/**
@@ -122,11 +120,7 @@ const hashPasswords = async () => {
 
 	file.security.require_password = true
 	file.security.password = hashed
-
-	if (new_encryption === true) {
-		file.security.new_encryption = true
-		file.security.key = aes.generateSalt().toString("base64")
-	}
+	file.security.key = aes.generateSalt().toString("base64")
 
 	/**
 	 * Load storage
@@ -142,7 +136,6 @@ const hashPasswords = async () => {
 
 	storage.require_password = file.security.require_password
 	storage.password = hashed
-	storage.new_encryption = file.security.new_encryption
 	storage.key = file.security.key
 
 	if (storage.backup_key !== undefined) {
@@ -182,8 +175,6 @@ const noPassword = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				const new_encryption = document.querySelector("#tgl0").checked
-
 				text.style.color = "#28A443"
 				text.textContent = "Please wait!"
 
@@ -197,12 +188,6 @@ const noPassword = () => {
 				const password = Buffer.from(aes.generateRandomKey(salt))
 
 				file.security.require_password = false
-
-				if (new_encryption === true) {
-					file.security.new_encryption = true
-				} else {
-					file.security.new_encryption = false
-				}
 
 				/**
 				 * Load storage
@@ -218,7 +203,6 @@ const noPassword = () => {
 
 				storage.require_password = file.security.require_password
 				storage.password = password.toString("base64")
-				storage.new_encryption = file.security.new_encryption
 				storage.key = salt.toString("base64")
 
 				if (storage.backup_key !== undefined) {
