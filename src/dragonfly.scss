@@ -124,6 +124,17 @@ details[open] summary ~ * {
 	}
 }
 
+@media (prefers-reduced-motion) {
+	@keyframes fadeEffect {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+}
+
 /* dropdown */
 .dropdown-button {
 	color: black;
@@ -202,4 +213,15 @@ details[open] summary ~ * {
 
 .animation {
 	animation: fadeEffect 0.5s;
+}
+
+.toggle:checked ~ .toggle-bg {
+	background-color: black !important;
+	transition: 0.2s ease-in;
+}
+
+hr {
+	margin-top: 15px;
+	color: white;
+	border-width: 1px;
 }

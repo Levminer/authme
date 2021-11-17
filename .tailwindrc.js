@@ -41,6 +41,10 @@ module.exports = {
 			screens: {
 				lg: "1400px",
 			},
+
+			stroke: (theme) => ({
+				black: theme("colors.gray.900"),
+			}),
 		},
 	},
 	corePlugins: {

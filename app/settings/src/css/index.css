@@ -6,12 +6,3 @@ body {
 .tabcontent {
 	animation: fadeEffect 1s;
 }
-
-.toggle:checked ~ .toggle-bg {
-	background-color: black !important;
-	transition: 0.2s ease-in;
-}
-
-.toggle:checked {
-	right: 4px !important;
-}

@@ -203,7 +203,7 @@
 							<h4>Start the app after the operating system started. The app will start on the tray.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-									<input id="tgl0" onclick="startup()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+									<input id="tgl0" onclick="startup()" type="checkbox" class="toggle" />
 									<label for="tgl0" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
 								</div>
 								<span id="tgt0" class="text-black text-xl">-</span>
@@ -213,7 +213,7 @@
 							<h4>On closing the app will not quit. You can open the app from the tray.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-									<input id="tgl1" onclick="tray()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+									<input id="tgl1" onclick="tray()" type="checkbox" class="toggle" />
 									<label for="tgl1" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
 								</div>
 								<span id="tgt1" class="text-black text-xl">-</span>
@@ -224,7 +224,7 @@
 								<h4>Allows screenshots and screen capture. You can record or screenshot the app.</h4>
 								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 									<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-										<input id="tgl2" onclick="capture()" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<input id="tgl2" onclick="capture()" type="checkbox" class="toggle" />
 										<label for="tgl2" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
 									</div>
 									<span id="tgt2" class="text-black text-xl">-</span>
@@ -237,7 +237,7 @@
 								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 									<a href="#" onclick="hardware()">
 										<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-											<input tabindex="-1" id="tgl7" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+											<input tabindex="-1" id="tgl7" type="checkbox" class="toggle" />
 											<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 									></a>
 									<span id="tgt7" class="text-black text-xl">-</span>
@@ -301,7 +301,7 @@
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="names()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-										<input tabindex="-1" id="tgl3" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<input tabindex="-1" id="tgl3" type="checkbox" class="toggle" />
 										<label for="tgl3" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
 								<span id="tgt3" class="text-black text-xl">-</span>
@@ -313,7 +313,7 @@
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="reveal()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-										<input tabindex="-1" id="tgl4" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<input tabindex="-1" id="tgl4" type="checkbox" class="toggle" />
 										<label for="tgl4" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
 								<span id="tgt4" class="text-black text-xl">-</span>
@@ -325,7 +325,7 @@
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="results()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-										<input tabindex="-1" id="tgl5" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<input tabindex="-1" id="tgl5" type="checkbox" class="toggle" />
 										<label for="tgl5" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
 								<span id="tgt5" class="text-black text-xl">-</span>
@@ -337,7 +337,7 @@
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="copy()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-										<input tabindex="-1" id="tgl6" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<input tabindex="-1" id="tgl6" type="checkbox" class="toggle" />
 										<label for="tgl6" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
 								<span id="tgt6" class="text-black text-xl">-</span>
@@ -927,7 +927,7 @@
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="webcam()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-										<input tabindex="-1" id="tgl8" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+										<input tabindex="-1" id="tgl8" type="checkbox" class="toggle" />
 										<label for="tgl8" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
 								></a>
 								<span id="tgt8" class="text-black text-xl">-</span>
