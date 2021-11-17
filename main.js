@@ -186,7 +186,6 @@ const settings = `{
 		"security": {
 			"require_password": null,
 			"password": null,
-			"new_encryption": null,
 			"key": null
 		},
 		"shortcuts": {
@@ -211,7 +210,7 @@ const settings = `{
 			"settings": "CmdOrCtrl+Shift+s",
 			"exit": "CmdOrCtrl+Shift+d"
 		},
-		"quick_shortcuts:": {},
+		"quick_shortcuts": {},
 		"search_history": {
 			"latest": null
 		},
@@ -232,76 +231,6 @@ if (!fs.existsSync(path.join(file_path, "settings.json"))) {
  * @type {LibSettings}
  */
 let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
-
-// settings compatibility
-if (file.experimental === undefined) {
-	file.experimental = {
-		sort: null,
-	}
-
-	saveSettings()
-}
-
-if (file.quick_shortcuts === undefined) {
-	file.quick_shortcuts = {}
-
-	saveSettings()
-}
-
-if (file.settings.search_bar_filter === undefined) {
-	file.settings.search_bar_filter = {
-		name: true,
-		description: false,
-	}
-
-	saveSettings()
-}
-
-if (file.experimental.webcam === undefined) {
-	file.experimental.webcam = null
-
-	saveSettings()
-}
-
-if (file.shortcuts.edit === undefined) {
-	file.shortcuts.edit = "CmdOrCtrl+t"
-
-	saveSettings()
-}
-
-if (file.shortcuts.support === undefined) {
-	file.shortcuts.support = "CmdOrCtrl+p"
-
-	saveSettings()
-}
-
-if (file.settings.disable_window_capture === undefined) {
-	file.settings.disable_window_capture = true
-
-	saveSettings()
-}
-
-if (file.statistics === undefined) {
-	file.statistics = {
-		opens: 0,
-		rated: null,
-		feedback: null,
-	}
-
-	saveSettings()
-}
-
-if (file.settings.disable_hardware_acceleration === undefined) {
-	file.settings.disable_hardware_acceleration = false
-
-	saveSettings()
-}
-
-if (file.shortcuts.zoom_reset === undefined) {
-	file.shortcuts.zoom_reset = "CmdOrCtrl+0"
-	file.shortcuts.zoom_in = "CmdOrCtrl+1"
-	file.shortcuts.zoom_out = "CmdOrCtrl+2"
-}
 
 // ? force dark mode
 nativeTheme.themeSource = "dark"
