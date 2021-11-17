@@ -4,7 +4,7 @@ const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const path = require("path")
-const qrcode = require("qrcode")
+const qrcode = require("qrcode-generator")
 const ipc = electron.ipcRenderer
 
 // ? error in window
@@ -82,21 +82,20 @@ const go = (data) => {
 	const issuers = data.issuers
 
 	for (let i = 0; i < names.length; i++) {
-		qrcode.toDataURL(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`, (err, data) => {
-			if (err) {
-				logger.error(`Failed to generate QR code - ${err}`)
-			}
+		const qr = qrcode(10, "M")
 
-			qr_data = data
+		qr.addData(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`)
+		qr.make()
 
-			const text = `
-			<div data-scroll class="qr">
-				<img class="img" src="${data}">
-				<h2>${issuers[i]}</h2>
+		const qr_src = qr.createDataURL(3, 3)
+
+		const text = `
+			<div>
+				<img class="img" src="${qr_src}">
+				<h1 style=font-family:Arial;>${issuers[i]}</h1>
 			</div>`
 
-			codes.push(text)
-		})
+		codes.push(text)
 
 		document.querySelector(".before_export").style.display = "none"
 		document.querySelector(".after_export").style.display = "block"

@@ -1,12 +1,8 @@
 const { app } = require("@electron/remote")
-const sentry = require("@sentry/electron")
 const electron = require("electron")
 const path = require("path")
 const fs = require("fs")
 const ipc = electron.ipcRenderer
-
-// ? crash report
-sentry.init({})
 
 // ? if development
 let dev = false

@@ -3,7 +3,6 @@ const contextmenu = require("electron-context-menu")
 const logger = require("@levminer/lib/logger/main")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
-const sentry = require("@sentry/electron/main")
 const remote = require("@electron/remote/main")
 const { markdown } = require("@levminer/lib")
 const AutoLaunch = require("auto-launch")
@@ -18,16 +17,11 @@ const ipc = electron.ipcMain
 // ? crash report
 process.on("uncaughtException", (error) => {
 	logger.error("Error on load", error.stack)
-	dialog.showErrorBox("Authme", `Authme crashed, crash report is sent. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
+	dialog.showErrorBox("Authme", `Authme crashed, exiting now. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
 
 	shell.openExternal("https://github.com/Levminer/authme/issues")
 
 	process.crash()
-})
-
-sentry.init({
-	dsn: "https://173234c94f8f4294a28e114c9113c1ce@o1020924.ingest.sentry.io/5986541",
-	release: `authme@${version}`,
 })
 
 // ? windows
