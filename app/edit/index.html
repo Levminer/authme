@@ -4,9 +4,7 @@
 		<title>Authme</title>
 		<meta charset="UTF-8" />
 		<!-- js -->
-		<script defer src="./src/js/export.js"></script>
 		<script defer src="./src/js/index.js"></script>
-		<script defer src="./src/js/save.js"></script>
 		<!-- css -->
 		<link rel="stylesheet" href="../.././src/dragonfly.css" />
 		<link rel="stylesheet" href="../.././src/tailwind.css" />
@@ -42,7 +40,7 @@
 			<div class="mx-auto rounded-2xl hidden bg-gray-800 w-2/3 rollback mt-20">
 				<h2 id="rollbackText" class="pt-5">Rollback</h2>
 				<h3>You can rollback to the latest save. If you load your codes below it will overwrite the current rollback save!</h3>
-				<button class="buttoni mb-5" onclick="rollback()">
+				<button class="buttoni mb-5" onclick="loadRollback()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 					</svg>
@@ -53,7 +51,7 @@
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20 mt-20 beforeLoad">
 				<h2 id="rollbackBut" class="pt-5">Load saved code(s)</h2>
 				<h3>You can load the code(s) you saved. After that you can edit them or add more.</h3>
-				<button class="buttoni mb-5" onclick="loadChooser()">
+				<button class="buttoni mb-5" onclick="loadCodes()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
 					</svg>
@@ -73,7 +71,7 @@
 							Save modification(s)
 						</button>
 
-						<button class="buttoni" onclick="addMore()">
+						<button class="buttoni" onclick="addCodes()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 							</svg>
