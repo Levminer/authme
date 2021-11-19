@@ -844,9 +844,14 @@ ipc.on("disableWindowCapture", () => {
 	} catch (error) {}
 
 	window_application.setContentProtection(true)
+	window_settings.setContentProtection(true)
 	window_import.setContentProtection(true)
 	window_export.setContentProtection(true)
-	window_application.setContentProtection(false)
+	window_edit.setContentProtection(true)
+
+	if (authenticated === false) {
+		window_settings.webContents.executeJavaScript("toggleWindowCaptureSwitch()")
+	}
 
 	logger.log("Screen capture disabled")
 })
@@ -856,10 +861,19 @@ ipc.on("disableWindowCapture", () => {
  */
 ipc.on("enableWindowCapture", () => {
 	try {
+		window_landing.setContentProtection(false)
 		window_confirm.setContentProtection(false)
+	} catch (error) {}
+
 	window_application.setContentProtection(false)
+	window_settings.setContentProtection(false)
 	window_import.setContentProtection(false)
 	window_export.setContentProtection(false)
+	window_edit.setContentProtection(false)
+
+	if (authenticated === false) {
+		window_settings.webContents.executeJavaScript("toggleWindowCaptureSwitch()")
+	}
 
 	logger.log("Screen capture enabled")
 })
