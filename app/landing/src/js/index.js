@@ -230,18 +230,6 @@ const noPassword = () => {
 		})
 }
 
-// ? encryption method toggle
-const encryptionMethodToggle = () => {
-	const tgl0 = document.querySelector("#tgl0").checked
-	const tgt0 = document.querySelector("#tgt0")
-
-	if (tgl0 === false) {
-		tgt0.textContent = "Off"
-	} else {
-		tgt0.textContent = "On"
-	}
-}
-
 /**
  * Generate a backup key which encrypts the password
  */
@@ -370,5 +358,21 @@ const showMoreOptions = () => {
 		more_options.style.display = "none"
 
 		more_options_shown = false
+	}
+}
+
+/**
+ * Toggles window capture state
+ */
+const toggleWindowCapture = () => {
+	const tgl0 = document.querySelector("#tgl0").checked
+	const tgt0 = document.querySelector("#tgt0")
+
+	if (tgl0 === false) {
+		ipc.send("disableWindowCapture")
+		tgt0.textContent = "Off"
+	} else {
+		tgt0.textContent = "On"
+		ipc.send("enableWindowCapture")
 	}
 }

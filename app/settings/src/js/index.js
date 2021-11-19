@@ -112,20 +112,6 @@ if (tray_state === true) {
 	ipc.send("disable_tray")
 }
 
-// capture
-let capture_state = file.settings.disable_window_capture
-if (capture_state === true) {
-	tgt2.textContent = "Off"
-	tgl2.checked = false
-
-	ipc.send("disable_capture")
-} else {
-	tgt2.textContent = "On"
-	tgl2.checked = true
-
-	ipc.send("enable_capture")
-}
-
 // names
 let names_state = file.settings.show_2fa_names
 if (names_state === true) {
@@ -250,30 +236,37 @@ const tray = () => {
 	}
 }
 
-// ? capture
-const capture = () => {
-	if (capture_state == true) {
-		file.settings.disable_window_capture = false
+/**
+ * Toggles window capture
+ */
+const toggleWindowCapture = () => {
+	const tgl2 = document.querySelector("#tgl2").checked
+	const tgt2 = document.querySelector("#tgt2")
 
-		save()
+	if (tgl2 == true) {
+		tgt2.textContent = "On"
 
+		ipc.send("enableWindowCapture")
+	} else {
+		tgt2.textContent = "Off"
+
+		ipc.send("disableWindowCapture")
+	}
+}
+
+/**
+ * Toggles window capture switch if this option is switched somewhere else
+ */
+const toggleWindowCaptureSwitch = () => {
+	const tgl2 = document.querySelector("#tgl2")
+	const tgt2 = document.querySelector("#tgt2")
+
+	if (tgl2.checked === false) {
 		tgt2.textContent = "On"
 		tgl2.checked = true
-
-		capture_state = false
-
-		ipc.send("enable_capture")
 	} else {
-		file.settings.disable_window_capture = true
-
-		save()
-
 		tgt2.textContent = "Off"
 		tgl2.checked = false
-
-		capture_state = true
-
-		ipc.send("disable_capture")
 	}
 }
 

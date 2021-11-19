@@ -166,7 +166,6 @@ const settings = `{
 			"click_to_reveal": false,
 			"reset_after_copy": false,
 			"save_search_results": true,
-			"disable_window_capture": true,
 			"disable_hardware_acceleration": true,
 			"search_bar_filter": {
 				"name": true,
@@ -553,14 +552,16 @@ const createWindow = () => {
 		logger.log("Edit closed")
 	})
 
-	// ? disable screen capture by default
-	if (file.settings.disable_window_capture === true) {
-		window_settings.setContentProtection(true)
-		window_edit.setContentProtection(true)
-		window_application.setContentProtection(true)
-		window_import.setContentProtection(true)
-		window_export.setContentProtection(true)
-	}
+	/**
+	 * Disables window capture by default
+	 */
+	window_landing.setContentProtection(true)
+	window_confirm.setContentProtection(true)
+	window_application.setContentProtection(true)
+	window_settings.setContentProtection(true)
+	window_import.setContentProtection(true)
+	window_export.setContentProtection(true)
+	window_edit.setContentProtection(true)
 
 	// ? check for auto update
 	window_application.on("show", () => {
@@ -833,9 +834,15 @@ ipc.on("enable_startup", () => {
 	logger.log("Startup enabled")
 })
 
-ipc.on("disable_capture", () => {
-	window_settings.setContentProtection(true)
-	window_edit.setContentProtection(true)
+/**
+ * Disables screen capture until restart
+ */
+ipc.on("disableWindowCapture", () => {
+	try {
+		window_landing.setContentProtection(true)
+		window_confirm.setContentProtection(true)
+	} catch (error) {}
+
 	window_application.setContentProtection(true)
 	window_import.setContentProtection(true)
 	window_export.setContentProtection(true)
@@ -844,9 +851,12 @@ ipc.on("disable_capture", () => {
 	logger.log("Screen capture disabled")
 })
 
-ipc.on("enable_capture", () => {
-	window_settings.setContentProtection(false)
-	window_edit.setContentProtection(false)
+/**
+ * Enables screen capture until restart
+ */
+ipc.on("enableWindowCapture", () => {
+	try {
+		window_confirm.setContentProtection(false)
 	window_application.setContentProtection(false)
 	window_import.setContentProtection(false)
 	window_export.setContentProtection(false)
