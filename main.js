@@ -435,7 +435,11 @@ const createWindow = () => {
 
 	// window states
 	if (file.security.require_password === null) {
-		window_landing.maximize()
+		window_landing.on("ready-to-show", () => {
+			window_landing.maximize()
+		})
+
+		/* window_landing.maximize() */
 
 		logger.warn("First start")
 
@@ -464,25 +468,25 @@ const createWindow = () => {
 			} catch (error) {}
 
 			app.exit()
-		}
-
-		if (tray_minimized === false) {
-			try {
-				password_buffer.fill(0)
-			} catch (error) {}
-
-			app.exit()
-
-			logger.log("Application exited")
 		} else {
-			event.preventDefault()
-			setTimeout(() => {
-				window_application.hide()
-			}, 100)
+			if (tray_minimized === false) {
+				try {
+					password_buffer.fill(0)
+				} catch (error) {}
 
-			show_tray = true
+				app.exit()
 
-			application_shown = false
+				logger.log("Application exited")
+			} else {
+				event.preventDefault()
+				setTimeout(() => {
+					window_application.hide()
+				}, 100)
+
+				show_tray = true
+
+				application_shown = false
+			}
 		}
 
 		logger.log("Application closed")
@@ -715,9 +719,17 @@ contextmenu({
 // ? ipcs
 ipc.on("to_confirm", () => {
 	if (authenticated === false) {
-		window_confirm.maximize()
-		window_confirm.show()
-		window_landing.hide()
+		if (file.security.require_password === null) {
+			window_confirm.maximize()
+			window_confirm.show()
+			window_landing.hide()
+		} else {
+			window_confirm.on("ready-to-show", () => {
+				window_confirm.maximize()
+				window_confirm.show()
+				window_landing.hide()
+			})
+		}
 
 		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
 	}
@@ -747,14 +759,25 @@ ipc.on("to_application1", () => {
 	if (authenticated === false) {
 		window_landing.hide()
 
-		setTimeout(() => {
-			window_application.maximize()
-			window_application.show()
-		}, 300)
+		if (file.security.require_password === null) {
+			setTimeout(() => {
+				window_application.maximize()
+				window_application.show()
+			}, 300)
 
-		setTimeout(() => {
-			window_landing.destroy()
-		}, 500)
+			setTimeout(() => {
+				window_confirm.destroy()
+				window_landing.destroy()
+			}, 500)
+		} else {
+			window_application.on("ready-to-show", () => {
+				window_application.maximize()
+				window_application.show()
+
+				window_confirm.destroy()
+				window_landing.destroy()
+			})
+		}
 
 		authenticated = true
 
