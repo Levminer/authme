@@ -26,17 +26,16 @@ if (app.isPackaged === false) {
 	integrity = true
 }
 
-// ? platform
-let folder
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
-// get platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Read settings
+ * @type {LibSettings}
+ */
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 // ? build
 const res = ipc.sendSync("info")
@@ -64,16 +63,7 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 // ? check integrity
 const check_integrity = () => {
 	// read settings
-	// ? read settings
-	const file = JSON.parse(
-		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
-			if (err) {
-				return logger.warn(`Error reading settings.json - ${err}`)
-			} else {
-				return logger.warn("Successfully readed settings.json")
-			}
-		})
-	)
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 	// check integrity
 	const storage = JSON.parse(localStorage.getItem("storage"))
@@ -82,7 +72,7 @@ const check_integrity = () => {
 		try {
 			logger.log(storage)
 
-			if (file.security.password !== storage.password || file.security.require_password !== storage.require_password) {
+			if (settings.security.password !== storage.password || settings.security.require_password !== storage.require_password) {
 				dialog
 					.showMessageBox({
 						title: "Authme",
@@ -120,21 +110,12 @@ const unhashPassword = async () => {
 	}
 
 	// read settings
-	// ? read settings
-	const file = JSON.parse(
-		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
-			if (err) {
-				return logger.warn(`Error reading settings.json - ${err}`)
-			} else {
-				return logger.log("Successfully readed settings.json")
-			}
-		})
-	)
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 	// compare
 	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input.toString(), file.security.password).then(logger.log("Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), settings.security.password).then(logger.log("Passwords compared!"))
 
 	if (compare == true) {
 		ipc.send("send_password", password_input)

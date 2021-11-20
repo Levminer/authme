@@ -25,15 +25,16 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-let folder
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Read settings
+ * @type {LibSettings}
+ */
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 // ? build
 const res = ipc.sendSync("info")
@@ -116,11 +117,11 @@ const hashPasswords = async () => {
 	 * Read settings
 	 * @type {LibSettings}
 	 */
-	const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	file.security.require_password = true
-	file.security.password = hashed
-	file.security.key = aes.generateSalt().toString("base64")
+	settings.security.require_password = true
+	settings.security.password = hashed
+	settings.security.key = aes.generateSalt().toString("base64")
 
 	/**
 	 * Load storage
@@ -134,9 +135,9 @@ const hashPasswords = async () => {
 		storage = JSON.parse(localStorage.getItem("storage"))
 	}
 
-	storage.require_password = file.security.require_password
+	storage.require_password = settings.security.require_password
 	storage.password = hashed
-	storage.key = file.security.key
+	storage.key = settings.security.key
 
 	if (storage.backup_key !== undefined) {
 		const encrypted = rsa.encrypt(Buffer.from(storage.backup_key, "base64").toString(), password_input.toString("base64"))
@@ -150,7 +151,7 @@ const hashPasswords = async () => {
 		localStorage.setItem("storage", JSON.stringify(storage))
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
 	setInterval(() => {
 		password_input.fill(0)
@@ -182,12 +183,12 @@ const noPassword = () => {
 				 * Read settings
 				 * @type{LibSettings}
 				 */
-				const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+				settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 				const salt = aes.generateSalt().toString("base64")
 				const password = Buffer.from(aes.generateRandomKey(salt))
 
-				file.security.require_password = false
+				settings.security.require_password = false
 
 				/**
 				 * Load storage
@@ -201,7 +202,7 @@ const noPassword = () => {
 					storage = JSON.parse(localStorage.getItem("storage"))
 				}
 
-				storage.require_password = file.security.require_password
+				storage.require_password = settings.security.require_password
 				storage.password = password.toString("base64")
 				storage.key = salt.toString("base64")
 
@@ -217,7 +218,7 @@ const noPassword = () => {
 					localStorage.setItem("storage", JSON.stringify(storage))
 				}
 
-				fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+				fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
 				setInterval(() => {
 					password.fill(0)

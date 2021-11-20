@@ -77,32 +77,40 @@ if (number.startsWith("alpha")) {
 // ? remote module
 remote.initialize()
 
-// ? folders
-let folder
-
-// choose platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
+// ? folder
+const folder = process.env.APPDATA
 
 // init folders
 const full_path = path.join(folder, "Levminer")
-const file_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+const folder_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
 
 // check if folders exists
 if (!fs.existsSync(full_path)) {
 	fs.mkdirSync(path.join(full_path))
 }
 
-if (!fs.existsSync(file_path)) {
-	fs.mkdirSync(file_path)
+if (!fs.existsSync(folder_path)) {
+	fs.mkdirSync(folder_path)
 }
 
 // codes folder
-if (!fs.existsSync(path.join(file_path, "codes"))) {
-	fs.mkdirSync(path.join(file_path, "codes"))
+if (!fs.existsSync(path.join(folder_path, "codes"))) {
+	fs.mkdirSync(path.join(folder_path, "codes"))
+}
+
+// settings folder
+if (!fs.existsSync(path.join(folder_path, "settings"))) {
+	fs.mkdirSync(path.join(folder_path, "settings"))
+}
+
+// logs folder
+if (!fs.existsSync(path.join(folder_path, "logs"))) {
+	fs.mkdirSync(path.join(folder_path, "logs"))
+}
+
+// rollbacks folder
+if (!fs.existsSync(path.join(folder_path, "rollbacks"))) {
+	fs.mkdirSync(path.join(folder_path, "rollbacks"))
 }
 
 // ? version and logs
@@ -126,7 +134,7 @@ const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() /
 	.replace(/ +(?= )/g, "")
 
 // logs
-logger.createFile(file_path, "authme")
+logger.createFile(folder_path, "authme")
 logger.log(`Authme ${authme_version} ${build_number}`)
 logger.log(`System ${os_version}`)
 logger.log(`Hardware ${os_info}`)
@@ -151,85 +159,84 @@ if (dev === false) {
 
 // ? settings
 const saveSettings = () => {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 }
 
-const settings = `{
-		"version":{
-			"tag": "${tag_name}",
-			"build": "${build_number}"
+const settings_file = {
+	version: {
+		tag: `${tag_name}`,
+		build: `${build_number}`,
+	},
+	settings: {
+		launch_on_startup: true,
+		close_to_tray: true,
+		show_2fa_names: false,
+		click_to_reveal: false,
+		reset_after_copy: false,
+		save_search_results: true,
+		disable_hardware_acceleration: true,
+		search_bar_filter: {
+			name: true,
+			description: false,
 		},
-		"settings": {
-			"launch_on_startup": true,
-			"close_to_tray": true,
-			"show_2fa_names": false,
-			"click_to_reveal": false,
-			"reset_after_copy": false,
-			"save_search_results": true,
-			"disable_hardware_acceleration": true,
-			"search_bar_filter": {
-				"name": true,
-				"description": false
-			}
-		},
-		"experimental":{
-			"sort": null,
-			"webcam": "null"
-		},
-		"security": {
-			"require_password": null,
-			"password": null,
-			"key": null
-		},
-		"shortcuts": {
-			"show": "CmdOrCtrl+q",
-			"settings": "CmdOrCtrl+s",
-			"exit": "CmdOrCtrl+w",
-			"zoom_reset": "CmdOrCtrl+0",
-			"zoom_in": "CmdOrCtrl+1",
-			"zoom_out": "CmdOrCtrl+2",
-			"edit": "CmdOrCtrl+t",
-			"import": "CmdOrCtrl+i",
-			"export": "CmdOrCtrl+e",
-			"release": "CmdOrCtrl+n",
-			"support": "CmdOrCtrl+p",
-			"docs": "CmdOrCtrl+d",
-			"licenses": "CmdOrCtrl+l",
-			"update": "CmdOrCtrl+u",
-			"info": "CmdOrCtrl+o"
-		},
-		"global_shortcuts": {
-			"show": "CmdOrCtrl+Shift+a",
-			"settings": "CmdOrCtrl+Shift+s",
-			"exit": "CmdOrCtrl+Shift+d"
-		},
-		"quick_shortcuts": {},
-		"search_history": {
-			"latest": null
-		},
-		"statistics": {
-			"opens": 0,
-			"rated": null,
-			"feedback": null
-		}
-	}`
+	},
+	experimental: {
+		sort: null,
+	},
+	security: {
+		require_password: null,
+		password: null,
+		key: null,
+	},
+	shortcuts: {
+		show: "CmdOrCtrl+q",
+		settings: "CmdOrCtrl+s",
+		exit: "CmdOrCtrl+w",
+		zoom_reset: "CmdOrCtrl+0",
+		zoom_in: "CmdOrCtrl+1",
+		zoom_out: "CmdOrCtrl+2",
+		edit: "CmdOrCtrl+t",
+		import: "CmdOrCtrl+i",
+		export: "CmdOrCtrl+e",
+		release: "CmdOrCtrl+n",
+		support: "CmdOrCtrl+p",
+		docs: "CmdOrCtrl+d",
+		licenses: "CmdOrCtrl+l",
+		update: "CmdOrCtrl+u",
+		info: "CmdOrCtrl+o",
+	},
+	global_shortcuts: {
+		show: "CmdOrCtrl+Shift+a",
+		settings: "CmdOrCtrl+Shift+s",
+		exit: "CmdOrCtrl+Shift+d",
+	},
+	quick_shortcuts: {},
+	search_history: {
+		latest: null,
+	},
+	statistics: {
+		opens: 0,
+		rated: null,
+		feedback: null,
+	},
+}
 
 // create settings if not exists
-if (!fs.existsSync(path.join(file_path, "settings.json"))) {
-	fs.writeFileSync(path.join(file_path, "settings.json"), settings)
+if (!fs.existsSync(path.join(folder_path, "settings", "settings.json"))) {
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings_file, null, "\t"))
 }
 
 /**
  * Read settings
  * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 // ? force dark mode
 nativeTheme.themeSource = "dark"
 
 // ? disable hardware acceleration
-if (file.settings.disable_hardware_acceleration === true) {
+if (settings.settings.disable_hardware_acceleration === true) {
 	app.disableHardwareAcceleration()
 }
 
@@ -260,11 +267,11 @@ const showAppFromTray = () => {
 		}
 	}
 
-	if (file.security.require_password === true && authenticated === true) {
+	if (settings.security.require_password === true && authenticated === true) {
 		toggle()
-	} else if (file.security.require_password === false) {
+	} else if (settings.security.require_password === false) {
 		toggle()
-	} else if (file.security.require_password === true) {
+	} else if (settings.security.require_password === true) {
 		if (confirm_shown === false) {
 			window_confirm.maximize()
 			window_confirm.show()
@@ -297,9 +304,9 @@ const settingsFromTray = () => {
 		}
 	}
 
-	if (file.security.require_password === true && authenticated === true) {
+	if (settings.security.require_password === true && authenticated === true) {
 		toggle()
-	} else if (file.security.require_password === false) {
+	} else if (settings.security.require_password === false) {
 		toggle()
 	}
 }
@@ -434,7 +441,7 @@ const createWindow = () => {
 	window_edit.loadFile("./app/edit/index.html")
 
 	// window states
-	if (file.security.require_password === null) {
+	if (settings.security.require_password === null) {
 		window_landing.on("ready-to-show", () => {
 			window_landing.maximize()
 		})
@@ -595,7 +602,7 @@ const createWindow = () => {
 				})
 		}
 
-		if (reload === false && file.settings.launch_on_startup === true && args[1] === "--hidden") {
+		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
 			application_shown = false
 
 			window_application.hide()
@@ -616,28 +623,28 @@ const createWindow = () => {
 	})
 
 	// ? global shortcuts
-	if (file.global_shortcuts.show !== "None") {
-		globalShortcut.register(file.global_shortcuts.show, () => {
+	if (settings.global_shortcuts.show !== "None") {
+		globalShortcut.register(settings.global_shortcuts.show, () => {
 			showAppFromTray()
 		})
 	}
 
-	if (file.global_shortcuts.settings !== "None") {
-		globalShortcut.register(file.global_shortcuts.settings, () => {
+	if (settings.global_shortcuts.settings !== "None") {
+		globalShortcut.register(settings.global_shortcuts.settings, () => {
 			settingsFromTray()
 		})
 	}
 
-	if (file.global_shortcuts.exit !== "None") {
-		globalShortcut.register(file.global_shortcuts.exit, () => {
+	if (settings.global_shortcuts.exit !== "None") {
+		globalShortcut.register(settings.global_shortcuts.exit, () => {
 			exitFromTray()
 		})
 	}
 
 	// ? statistics
-	let opens = file.statistics.opens
+	let opens = settings.statistics.opens
 	opens++
-	file.statistics.opens = opens
+	settings.statistics.opens = opens
 
 	saveSettings()
 
@@ -651,11 +658,11 @@ const createWindow = () => {
 		})
 	}
 
-	if (file.statistics.rate === true || file.statistics.feedback === true) {
+	if (settings.statistics.rate === true || settings.statistics.feedback === true) {
 		if (opens % 150 === 0) {
 			openInfo()
 		}
-	} else if (file.statistics.rate === true && file.statistics.feedback === true) {
+	} else if (settings.statistics.rate === true && settings.statistics.feedback === true) {
 		if (opens % 1000 === 0) {
 			openInfo()
 		}
@@ -719,7 +726,7 @@ contextmenu({
 // ? ipcs
 ipc.on("to_confirm", () => {
 	if (authenticated === false) {
-		if (file.security.require_password === null) {
+		if (settings.security.require_password === null) {
 			window_confirm.maximize()
 			window_confirm.show()
 			window_landing.hide()
@@ -731,7 +738,7 @@ ipc.on("to_confirm", () => {
 			})
 		}
 
-		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
@@ -751,7 +758,7 @@ ipc.on("to_application0", () => {
 
 		authenticated = true
 
-		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
@@ -759,7 +766,7 @@ ipc.on("to_application1", () => {
 	if (authenticated === false) {
 		window_landing.hide()
 
-		if (file.security.require_password === null) {
+		if (settings.security.require_password === null) {
 			setTimeout(() => {
 				window_application.maximize()
 				window_application.show()
@@ -781,7 +788,7 @@ ipc.on("to_application1", () => {
 
 		authenticated = true
 
-		file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
@@ -1017,7 +1024,7 @@ ipc.on("support", () => {
 ipc.on("rate_authme", () => {
 	shell.openExternal("https://github.com/Levminer/authme/")
 
-	file.statistics.rated = true
+	settings.statistics.rated = true
 
 	saveSettings()
 })
@@ -1025,7 +1032,7 @@ ipc.on("rate_authme", () => {
 ipc.on("provide_feedback", () => {
 	shell.openExternal("https://github.com/Levminer/authme/issues")
 
-	file.statistics.feedback = true
+	settings.statistics.feedback = true
 
 	saveSettings()
 })
@@ -1046,7 +1053,7 @@ ipc.on("request_password", (event) => {
 ipc.on("reload_application", () => {
 	window_application.reload()
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		window_application.webContents.executeJavaScript("loadCodes()")
 	}
 })
@@ -1079,7 +1086,7 @@ ipc.on("loggerError", (event, data) => {
 const logs = () => {
 	const log_path = logger.fileName()
 
-	shell.openPath(path.join(file_path, "logs", log_path))
+	shell.openPath(path.join(folder_path, "logs", log_path))
 }
 
 // ? about
@@ -1188,8 +1195,8 @@ app.whenReady()
 
 		// ? quick shortcuts
 		const quickShortcuts = () => {
-			const keys = Object.keys(file.quick_shortcuts)
-			const values = Object.values(file.quick_shortcuts)
+			const keys = Object.keys(settings.quick_shortcuts)
+			const values = Object.values(settings.quick_shortcuts)
 
 			for (let i = 0; i < keys.length; i++) {
 				globalShortcut.register(values[i], () => {
@@ -1264,7 +1271,7 @@ app.whenReady()
 				{ type: "separator" },
 				{
 					label: application_shown ? "Hide app" : "Show app",
-					accelerator: shortcuts ? "" : file.global_shortcuts.show,
+					accelerator: shortcuts ? "" : settings.global_shortcuts.show,
 					click: () => {
 						showAppFromTray()
 						createTray()
@@ -1274,7 +1281,7 @@ app.whenReady()
 				{ type: "separator" },
 				{
 					label: "Settings",
-					accelerator: shortcuts ? "" : file.global_shortcuts.settings,
+					accelerator: shortcuts ? "" : settings.global_shortcuts.settings,
 					click: () => {
 						settingsFromTray()
 					},
@@ -1282,7 +1289,7 @@ app.whenReady()
 				{ type: "separator" },
 				{
 					label: "Exit app",
-					accelerator: shortcuts ? "" : file.global_shortcuts.exit,
+					accelerator: shortcuts ? "" : settings.global_shortcuts.exit,
 					click: () => {
 						exitFromTray()
 					},
@@ -1303,7 +1310,7 @@ app.whenReady()
 					submenu: [
 						{
 							label: application_shown ? "Hide app" : "Show app",
-							accelerator: shortcuts ? "" : file.shortcuts.show,
+							accelerator: shortcuts ? "" : settings.shortcuts.show,
 							click: () => {
 								showAppFromTray()
 								createMenu()
@@ -1315,7 +1322,7 @@ app.whenReady()
 						},
 						{
 							label: "Settings",
-							accelerator: shortcuts ? "" : file.shortcuts.settings,
+							accelerator: shortcuts ? "" : settings.shortcuts.settings,
 							click: () => {
 								const toggle = () => {
 									if (settings_shown === false) {
@@ -1336,9 +1343,9 @@ app.whenReady()
 									}
 								}
 
-								if (file.security.require_password === true && authenticated === true) {
+								if (settings.security.require_password === true && authenticated === true) {
 									toggle()
-								} else if (file.security.require_password === false) {
+								} else if (settings.security.require_password === false) {
 									toggle()
 								}
 							},
@@ -1348,7 +1355,7 @@ app.whenReady()
 						},
 						{
 							label: "Exit",
-							accelerator: shortcuts ? "" : file.shortcuts.exit,
+							accelerator: shortcuts ? "" : settings.shortcuts.exit,
 							click: () => {
 								tray_minimized = false
 								app.exit()
@@ -1364,7 +1371,7 @@ app.whenReady()
 						{
 							label: "Reset",
 							role: "resetZoom",
-							accelerator: shortcuts ? "" : file.shortcuts.zoom_reset,
+							accelerator: shortcuts ? "" : settings.shortcuts.zoom_reset,
 						},
 						{
 							type: "separator",
@@ -1372,7 +1379,7 @@ app.whenReady()
 						{
 							label: "Zoom in",
 							role: "zoomIn",
-							accelerator: shortcuts ? "" : file.shortcuts.zoom_in,
+							accelerator: shortcuts ? "" : settings.shortcuts.zoom_in,
 						},
 						{
 							type: "separator",
@@ -1380,7 +1387,7 @@ app.whenReady()
 						{
 							label: "Zoom out",
 							role: "zoomOut",
-							accelerator: shortcuts ? "" : file.shortcuts.zoom_out,
+							accelerator: shortcuts ? "" : settings.shortcuts.zoom_out,
 						},
 					],
 				},
@@ -1389,7 +1396,7 @@ app.whenReady()
 					submenu: [
 						{
 							label: "Edit codes",
-							accelerator: shortcuts ? "" : file.shortcuts.edit,
+							accelerator: shortcuts ? "" : settings.shortcuts.edit,
 							click: () => {
 								const toggle = () => {
 									if (edit_shown === false) {
@@ -1410,9 +1417,9 @@ app.whenReady()
 									}
 								}
 
-								if (file.security.require_password === true && authenticated === true) {
+								if (settings.security.require_password === true && authenticated === true) {
 									toggle()
-								} else if (file.security.require_password === false) {
+								} else if (settings.security.require_password === false) {
 									toggle()
 								}
 							},
@@ -1422,7 +1429,7 @@ app.whenReady()
 						},
 						{
 							label: "Import",
-							accelerator: shortcuts ? "" : file.shortcuts.import,
+							accelerator: shortcuts ? "" : settings.shortcuts.import,
 							click: () => {
 								const toggle = () => {
 									if (import_shown === false) {
@@ -1443,9 +1450,9 @@ app.whenReady()
 									}
 								}
 
-								if (file.security.require_password === true && authenticated === true) {
+								if (settings.security.require_password === true && authenticated === true) {
 									toggle()
-								} else if (file.security.require_password === false) {
+								} else if (settings.security.require_password === false) {
 									toggle()
 								}
 							},
@@ -1455,7 +1462,7 @@ app.whenReady()
 						},
 						{
 							label: "Export",
-							accelerator: shortcuts ? "" : file.shortcuts.export,
+							accelerator: shortcuts ? "" : settings.shortcuts.export,
 							click: () => {
 								const toggle = () => {
 									if (export_shown === false) {
@@ -1476,9 +1483,9 @@ app.whenReady()
 									}
 								}
 
-								if (file.security.require_password === true && authenticated === true) {
+								if (settings.security.require_password === true && authenticated === true) {
 									toggle()
-								} else if (file.security.require_password === false) {
+								} else if (settings.security.require_password === false) {
 									toggle()
 								}
 							},
@@ -1490,7 +1497,7 @@ app.whenReady()
 					submenu: [
 						{
 							label: "Documentation",
-							accelerator: shortcuts ? "" : file.shortcuts.docs,
+							accelerator: shortcuts ? "" : settings.shortcuts.docs,
 							click: () => {
 								dialog
 									.showMessageBox({
@@ -1514,7 +1521,7 @@ app.whenReady()
 						},
 						{
 							label: "Release notes",
-							accelerator: shortcuts ? "" : file.shortcuts.release,
+							accelerator: shortcuts ? "" : settings.shortcuts.release,
 							click: () => {
 								releaseNotes()
 							},
@@ -1524,7 +1531,7 @@ app.whenReady()
 						},
 						{
 							label: "Support development",
-							accelerator: shortcuts ? "" : file.shortcuts.support,
+							accelerator: shortcuts ? "" : settings.shortcuts.support,
 							click: () => {
 								support()
 							},
@@ -1536,7 +1543,7 @@ app.whenReady()
 					submenu: [
 						{
 							label: "Show licenses",
-							accelerator: shortcuts ? "" : file.shortcuts.licenses,
+							accelerator: shortcuts ? "" : settings.shortcuts.licenses,
 							click: () => {
 								dialog
 									.showMessageBox({
@@ -1560,7 +1567,7 @@ app.whenReady()
 						},
 						{
 							label: "Update",
-							accelerator: shortcuts ? "" : file.shortcuts.update,
+							accelerator: shortcuts ? "" : settings.shortcuts.update,
 							click: () => {
 								axios
 									.get("https://api.levminer.com/api/v1/authme/releases")
@@ -1603,7 +1610,7 @@ app.whenReady()
 						},
 						{
 							label: "Info",
-							accelerator: shortcuts ? "" : file.shortcuts.info,
+							accelerator: shortcuts ? "" : settings.shortcuts.info,
 							click: () => {
 								about()
 							},
@@ -1632,22 +1639,22 @@ app.whenReady()
 			} else {
 				shortcuts = false
 
-				file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+				settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-				if (file.global_shortcuts.show !== "None") {
-					globalShortcut.register(file.global_shortcuts.show, () => {
+				if (settings.global_shortcuts.show !== "None") {
+					globalShortcut.register(settings.global_shortcuts.show, () => {
 						showAppFromTray()
 					})
 				}
 
-				if (file.global_shortcuts.settings !== "None") {
-					globalShortcut.register(file.global_shortcuts.settings, () => {
+				if (settings.global_shortcuts.settings !== "None") {
+					globalShortcut.register(settings.global_shortcuts.settings, () => {
 						settingsFromTray()
 					})
 				}
 
-				if (file.global_shortcuts.exit !== "None") {
-					globalShortcut.register(file.global_shortcuts.exit, () => {
+				if (settings.global_shortcuts.exit !== "None") {
+					globalShortcut.register(settings.global_shortcuts.exit, () => {
 						exitFromTray()
 					})
 				}

@@ -23,20 +23,32 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ?platform
-let folder
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
-// get platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
+/**
+ * Read settings
+ * @type {LibSettings}
+ */
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Refresh settings
+ */
+const settings_refresher = setInterval(() => {
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+	if (settings.security.require_password !== null || settings.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		logger.log("Settings refresh completed")
+	}
+}, 100)
 
 // ? show quick start
-if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
+if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
 	document.querySelector("#starting").style.display = "block"
 	document.querySelector("#choose").style.display = "block"
 }
@@ -50,29 +62,12 @@ const description_query = []
 const name_query = []
 let clear
 
-/**
- * Read settings
- * @type{LibSettings}
- */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+const name_state = settings.settings.show_2fa_names
+const copy_state = settings.settings.reset_after_copy
+const reveal_state = settings.settings.click_to_reveal
+const search_state = settings.settings.save_search_results
 
-// ? refresh settings
-const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
-
-	if (file.security.require_password !== null || file.security.password !== null) {
-		clearInterval(settings_refresher)
-
-		logger.log("Settings refresh completed")
-	}
-}, 100)
-
-const name_state = file.settings.show_2fa_names
-const copy_state = file.settings.reset_after_copy
-const reveal_state = file.settings.click_to_reveal
-const search_state = file.settings.save_search_results
-
-const sort_number = file.experimental.sort
+const sort_number = settings.experimental.sort
 
 /**
  * Load file first time from dialog
@@ -484,10 +479,10 @@ const go = (data) => {
 	generate()
 
 	// search history
-	const search_history = file.search_history.latest
+	const search_history = settings.search_history.latest
 
 	if (search_history !== null && search_history !== "" && search_state === true) {
-		document.querySelector("#search").value = file.search_history.latest
+		document.querySelector("#search").value = settings.search_history.latest
 
 		setTimeout(() => {
 			search()
@@ -519,8 +514,8 @@ const search = () => {
 
 	// save result
 	if (search_state === true) {
-		file.search_history.latest = input
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+		settings.search_history.latest = input
+		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 	}
 
 	// restart
@@ -536,7 +531,7 @@ const search = () => {
 
 	// search algorithm
 	name_query.forEach((result) => {
-		if (file.settings.search_bar_filter.name === true && file.settings.search_bar_filter.description === false) {
+		if (settings.settings.search_bar_filter.name === true && settings.settings.search_bar_filter.description === false) {
 			if (!result.startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -545,7 +540,7 @@ const search = () => {
 					no_results++
 				}
 			}
-		} else if (file.settings.search_bar_filter.description === true && file.settings.search_bar_filter.name === false) {
+		} else if (settings.settings.search_bar_filter.description === true && settings.settings.search_bar_filter.name === false) {
 			if (!description_query[i].startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -661,9 +656,9 @@ const saveCodes = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -695,7 +690,7 @@ const saveCodes = () => {
 		version: "3",
 	}
 
-	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
 
 	document.querySelector("#save").style.display = "none"
 
@@ -719,9 +714,9 @@ const loadCodes = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -739,7 +734,7 @@ const loadCodes = () => {
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 	}
 
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
 			logger.warn("The file codes.authme don't exists")
 
@@ -761,7 +756,7 @@ const loadCodes = () => {
 	})
 }
 
-if (file.security.require_password === false) {
+if (settings.security.require_password === false) {
 	loadCodes()
 }
 
@@ -785,28 +780,28 @@ const dropdown = () => {
 	}
 }
 
-document.querySelector("#checkbox0").checked = file.settings.search_bar_filter.name
-document.querySelector("#checkbox1").checked = file.settings.search_bar_filter.description
+document.querySelector("#checkbox0").checked = settings.settings.search_bar_filter.name
+document.querySelector("#checkbox1").checked = settings.settings.search_bar_filter.description
 
 // ? dropdown checkboxes
 document.querySelector("#checkbox0").addEventListener("click", () => {
-	if (file.settings.search_bar_filter.name === true) {
-		file.settings.search_bar_filter.name = false
+	if (settings.settings.search_bar_filter.name === true) {
+		settings.settings.search_bar_filter.name = false
 	} else {
-		file.settings.search_bar_filter.name = true
+		settings.settings.search_bar_filter.name = true
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
 document.querySelector("#checkbox1").addEventListener("click", () => {
-	if (file.settings.search_bar_filter.description === true) {
-		file.settings.search_bar_filter.description = false
+	if (settings.settings.search_bar_filter.description === true) {
+		settings.settings.search_bar_filter.description = false
 	} else {
-		file.settings.search_bar_filter.description = true
+		settings.settings.search_bar_filter.description = true
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
 // ? quick copy

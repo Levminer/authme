@@ -22,22 +22,16 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? os specific folders
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 if (settings.experimental.webcam === true) {
 	document.querySelector("#but2").style.display = "inline-block"

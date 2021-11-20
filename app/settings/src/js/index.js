@@ -33,32 +33,29 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? platform
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else if (process.platform === "darwin") {
-	folder = process.env.HOME
-} else {
-	folder = process.env.HOME
+// ? check if linux
+if (process.platform !== "win32" && process.platform !== "darwin") {
 	document.querySelector("#disable_screen_capture_div").style.display = "none"
 }
 
-// ? settings
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
@@ -89,7 +86,7 @@ const tgl8 = document.querySelector("#tgl8")
 const tgt8 = document.querySelector("#tgt8")
 
 // launch on startup
-let startup_state = file.settings.launch_on_startup
+let startup_state = settings.settings.launch_on_startup
 if (startup_state === true) {
 	tgt0.textContent = "On"
 	tgl0.checked = true
@@ -99,7 +96,7 @@ if (startup_state === true) {
 }
 
 // close to tray
-let tray_state = file.settings.close_to_tray
+let tray_state = settings.settings.close_to_tray
 if (tray_state === true) {
 	tgt1.textContent = "On"
 	tgl1.checked = true
@@ -113,7 +110,7 @@ if (tray_state === true) {
 }
 
 // names
-let names_state = file.settings.show_2fa_names
+let names_state = settings.settings.show_2fa_names
 if (names_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
@@ -123,7 +120,7 @@ if (names_state === true) {
 }
 
 // reveal
-let reveal_state = file.settings.click_to_reveal
+let reveal_state = settings.settings.click_to_reveal
 if (reveal_state === true) {
 	tgt4.textContent = "On"
 	tgl4.checked = true
@@ -133,7 +130,7 @@ if (reveal_state === true) {
 }
 
 // search
-let search_state = file.settings.save_search_results
+let search_state = settings.settings.save_search_results
 if (search_state === true) {
 	tgt5.textContent = "On"
 	tgl5.checked = true
@@ -143,7 +140,7 @@ if (search_state === true) {
 }
 
 // copy
-let copy_state = file.settings.reset_after_copy
+let copy_state = settings.settings.reset_after_copy
 if (copy_state === true) {
 	tgt6.textContent = "On"
 	tgl6.checked = true
@@ -153,7 +150,7 @@ if (copy_state === true) {
 }
 
 // sort
-const sort_number = file.experimental.sort
+const sort_number = settings.experimental.sort
 
 if (sort_number === 1) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -166,7 +163,7 @@ if (sort_number === 1) {
 }
 
 // hardware
-let hardware_state = file.settings.disable_hardware_acceleration
+let hardware_state = settings.settings.disable_hardware_acceleration
 if (hardware_state === true) {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
@@ -176,7 +173,7 @@ if (hardware_state === true) {
 }
 
 // webcam
-let webcam_state = file.experimental.webcam
+let webcam_state = settings.experimental.webcam
 
 if (webcam_state === true) {
 	tgt8.textContent = "On"
@@ -189,7 +186,7 @@ if (webcam_state === true) {
 // ? startup
 const startup = () => {
 	if (startup_state == true) {
-		file.settings.launch_on_startup = false
+		settings.settings.launch_on_startup = false
 
 		save()
 
@@ -200,7 +197,7 @@ const startup = () => {
 
 		ipc.send("disable_startup")
 	} else {
-		file.settings.launch_on_startup = true
+		settings.settings.launch_on_startup = true
 
 		save()
 
@@ -216,7 +213,7 @@ const startup = () => {
 // ? tray
 const tray = () => {
 	if (tray_state == true) {
-		file.settings.close_to_tray = false
+		settings.settings.close_to_tray = false
 
 		save()
 
@@ -225,7 +222,7 @@ const tray = () => {
 
 		ipc.send("disable_tray")
 	} else {
-		file.settings.close_to_tray = true
+		settings.settings.close_to_tray = true
 
 		save()
 
@@ -296,26 +293,8 @@ const reset = () => {
 					})
 					.then((result) => {
 						if (result.response === 0) {
-							// remove settings file
-							fs.unlink(path.join(file_path, "settings.json"), (err) => {
-								if (err && err.code === "ENOENT") {
-									return logger.error(`Error deleting settings.json - ${err}`)
-								} else {
-									logger.log("File settings.json deleted")
-								}
-							})
-
-							// remove hash file
-							fs.unlink(path.join(file_path, "hash.authme"), (err) => {
-								if (err && err.code === "ENOENT") {
-									return logger.error(`Error deleting hash.authme - ${err}`)
-								} else {
-									logger.log("File hash.authme deleted")
-								}
-							})
-
 							// clear codes
-							fs.rm(path.join(file_path, "codes"), { recursive: true }, (err) => {
+							fs.rm(path.join(folder_path, "codes"), { recursive: true, force: true }, (err) => {
 								if (err) {
 									return logger.error(`Error deleting codes - ${err}`)
 								} else {
@@ -323,8 +302,17 @@ const reset = () => {
 								}
 							})
 
+							// clear settings
+							fs.rm(path.join(folder_path, "settings"), { recursive: true, force: true }, (err) => {
+								if (err) {
+									return logger.error(`Error deleting settings - ${err}`)
+								} else {
+									logger.log("Settings deleted")
+								}
+							})
+
 							// clear logs
-							fs.rm(path.join(file_path, "logs"), { recursive: true }, (err) => {
+							fs.rm(path.join(folder_path, "logs"), { recursive: true, force: true }, (err) => {
 								if (err) {
 									return logger.error(`Error deleting logs - ${err}`)
 								} else {
@@ -332,12 +320,12 @@ const reset = () => {
 								}
 							})
 
-							// clear cache files
-							fs.rm(path.join(file_path, "cache"), { recursive: true }, (err) => {
+							// clear rollback
+							fs.rm(path.join(folder_path, "rollbacks"), { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error(`Error deleting caches - ${err}`)
+									return logger.error(`Error deleting rollback - ${err}`)
 								} else {
-									logger.log("Caches deleted")
+									logger.log("Rollback deleted")
 								}
 							})
 
@@ -365,7 +353,7 @@ const reset = () => {
 const names = () => {
 	const toggle = () => {
 		if (names_state === true) {
-			file.settings.show_2fa_names = false
+			settings.settings.show_2fa_names = false
 
 			save()
 
@@ -374,7 +362,7 @@ const names = () => {
 
 			names_state = false
 		} else {
-			file.settings.show_2fa_names = true
+			settings.settings.show_2fa_names = true
 
 			save()
 
@@ -393,7 +381,7 @@ const names = () => {
 const reveal = () => {
 	const toggle = () => {
 		if (reveal_state === true) {
-			file.settings.click_to_reveal = false
+			settings.settings.click_to_reveal = false
 
 			save()
 
@@ -402,7 +390,7 @@ const reveal = () => {
 
 			reveal_state = false
 		} else {
-			file.settings.click_to_reveal = true
+			settings.settings.click_to_reveal = true
 
 			save()
 
@@ -421,7 +409,7 @@ const reveal = () => {
 const results = () => {
 	const toggle = () => {
 		if (search_state === true) {
-			file.settings.save_search_results = false
+			settings.settings.save_search_results = false
 
 			save()
 
@@ -430,7 +418,7 @@ const results = () => {
 
 			search_state = false
 		} else {
-			file.settings.save_search_results = true
+			settings.settings.save_search_results = true
 
 			save()
 
@@ -449,7 +437,7 @@ const results = () => {
 const copy = () => {
 	const toggle = () => {
 		if (copy_state === true) {
-			file.settings.reset_after_copy = false
+			settings.settings.reset_after_copy = false
 
 			save()
 
@@ -458,7 +446,7 @@ const copy = () => {
 
 			copy_state = false
 		} else {
-			file.settings.reset_after_copy = true
+			settings.settings.reset_after_copy = true
 
 			save()
 
@@ -477,7 +465,7 @@ const copy = () => {
 const hardware = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
-			file.settings.disable_hardware_acceleration = false
+			settings.settings.disable_hardware_acceleration = false
 
 			save()
 
@@ -486,7 +474,7 @@ const hardware = () => {
 
 			hardware_state = false
 		} else {
-			file.settings.disable_hardware_acceleration = true
+			settings.settings.disable_hardware_acceleration = true
 
 			save()
 
@@ -549,7 +537,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 					 </svg> Default`
 
-				file.experimental.sort = null
+				settings.experimental.sort = null
 				break
 
 			case 1:
@@ -557,7 +545,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 					 </svg> A-Z`
 
-				file.experimental.sort = 1
+				settings.experimental.sort = 1
 				break
 
 			case 2:
@@ -565,7 +553,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 					</svg> Z-A`
 
-				file.experimental.sort = 2
+				settings.experimental.sort = 2
 				break
 		}
 	}
@@ -581,7 +569,7 @@ const dropdownChoose = (id) => {
 const webcam = () => {
 	const toggle = () => {
 		if (webcam_state === true) {
-			file.experimental.webcam = false
+			settings.experimental.webcam = false
 
 			save()
 
@@ -590,7 +578,7 @@ const webcam = () => {
 
 			webcam_state = false
 		} else {
-			file.experimental.webcam = true
+			settings.experimental.webcam = true
 
 			save()
 
@@ -625,7 +613,7 @@ const webcam = () => {
 
 // ? save settings
 const save = () => {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 }
 
 // ? release notes
@@ -670,7 +658,7 @@ const folder0 = () => {
 
 // ? settings folder
 const folder1 = () => {
-	shell.openPath(file_path)
+	shell.openPath(folder_path)
 }
 
 // ? support

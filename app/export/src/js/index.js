@@ -34,28 +34,24 @@ if (res.build_number.startsWith("alpha")) {
 const codes = []
 let file
 
-// ? os specific folders
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (settings.security.require_password !== null || settings.security.password !== null) {
+	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
@@ -208,7 +204,7 @@ const hide = () => {
 
 // ? error handling
 const error = () => {
-	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, content) => {
 		if (err) {
 			dialog.showMessageBox({
 				title: "Authme",
@@ -243,7 +239,7 @@ const exportCodes = () => {
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 	}
 
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
 			logger.warn("The file codes.authme don't exists")
 

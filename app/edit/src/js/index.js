@@ -21,14 +21,29 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? platform
-let folder
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
 
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
+/**
+ * Read settings
+ * @type {LibSettings}
+ */
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+/**
+ * Refresh settings
+ */
+const settings_refresher = setInterval(() => {
+	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+	if (file.security.require_password !== null || file.security.password !== null) {
+		clearInterval(settings_refresher)
+
+		logger.log("Settings refresh completed")
+	}
+}, 100)
 
 // ? build
 const res = ipc.sendSync("info")
@@ -38,28 +53,8 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? file path
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
-
-/**
- * Read settings
- * @type{LibSettings}
- */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
-
-// ? refresh settings
-const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
-
-	if (file.security.require_password !== null || file.security.password !== null) {
-		clearInterval(settings_refresher)
-
-		logger.log("Settings refresh completed")
-	}
-}, 100)
-
 // ? rollback
-const cache_path = path.join(file_path, "cache")
+const cache_path = path.join(folder_path, "rollbacks")
 const rollback_con = document.querySelector(".rollback")
 const rollback_text = document.querySelector("#rollbackText")
 let cache = true
@@ -105,7 +100,7 @@ const loadRollback = () => {
 					if (err) {
 						logger.error("Error reading hash file", err)
 					} else {
-						fs.writeFile(path.join(file_path, "codes", "codes.authme"), data, (err) => {
+						fs.writeFile(path.join(folder_path, "codes", "codes.authme"), data, (err) => {
 							if (err) {
 								logger.error("Failed to create codes.authme folder", err)
 							} else {
@@ -328,9 +323,9 @@ const saveModifications = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -362,7 +357,7 @@ const saveModifications = () => {
 		version: "3",
 	}
 
-	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
 
 	password.fill(0)
 	key.fill(0)
@@ -443,7 +438,7 @@ const addCodes = () => {
  * Create rollback.authme file
  */
 const createRollback = () => {
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
 			logger.error("Error reading hash file", err)
 		} else {
@@ -467,7 +462,7 @@ const createRollback = () => {
 
 // ? error handling
 const loadError = () => {
-	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
 			dialog.showMessageBox({
 				title: "Authme",
@@ -495,7 +490,7 @@ const loadCodes = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+				fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 					if (err) {
 						dialog.showMessageBox({
 							title: "Authme",
@@ -507,9 +502,9 @@ const loadCodes = () => {
 						let password
 						let key
 
-						if (file.security.require_password === true) {
+						if (settings.security.require_password === true) {
 							password = Buffer.from(ipc.sendSync("request_password"))
-							key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+							key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 						} else {
 							/**
 							 * Load storage
@@ -527,7 +522,7 @@ const loadCodes = () => {
 							key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 						}
 
-						fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+						fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
 							if (err) {
 								logger.warn("The file codes.authme don't exists")
 
@@ -603,17 +598,9 @@ const deleteCodes = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				// clear codes
-				fs.rm(path.join(file_path, "codes", "codes.authme"), (err) => {
+				fs.rm(path.join(folder_path, "codes", "codes.authme"), (err) => {
 					if (err) {
 						return logger.error(`Error deleting codes - ${err}`)
-					} else {
-						logger.log("Codes deleted")
-					}
-				})
-
-				fs.rm(path.join(file_path, "hash.authme"), (err) => {
-					if (err) {
-						return logger.warn(`Error deleting hash - ${err}`)
 					} else {
 						logger.log("Codes deleted")
 					}
