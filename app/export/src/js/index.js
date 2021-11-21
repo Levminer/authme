@@ -37,7 +37,7 @@ let file
 /**
  * Get Authme folder path
  */
-const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer", "Authme")
 
 /**
  * Read settings

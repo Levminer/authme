@@ -77,12 +77,9 @@ if (number.startsWith("alpha")) {
 // ? remote module
 remote.initialize()
 
-// ? folder
-const folder = process.env.APPDATA
-
-// init folders
-const full_path = path.join(folder, "Levminer")
-const folder_path = dev ? path.join(folder, "Levminer/Authme Dev") : path.join(folder, "Levminer/Authme")
+// ? init folders
+const full_path = path.join(process.env.APPDATA, "Levminer")
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer", "Authme")
 
 // check if folders exists
 if (!fs.existsSync(full_path)) {
