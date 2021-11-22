@@ -4,19 +4,19 @@ const path = require("path")
 const fs = require("fs")
 const ipc = electron.ipcRenderer
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
-let integrity = false
 
 if (app.isPackaged === false) {
 	dev = true
-	integrity = true
 }
 
 /**
  * Get Authme folder path
  */
-const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer")
+const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer", "Authme")
 
 /**
  * Read settings
@@ -24,37 +24,40 @@ const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev
  */
 const file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? local storage
+/**
+ * Load storage
+ * @type {LibStorage}
+ */
 let storage
 
-if (integrity === false) {
+if (dev === true) {
+	storage = JSON.parse(localStorage.getItem("dev_storage"))
+} else {
 	storage = JSON.parse(localStorage.getItem("storage"))
 }
 
-// ? controller
+/**
+ * App controller
+ */
 if (file.security.require_password === true && file.security.password !== null) {
 	ipc.send("to_confirm")
 } else if (file.security.require_password === false && file.security.password === null) {
-	if (integrity === false) {
-		if (storage === null) {
-			ipc.send("abort")
+	if (storage === null) {
+		ipc.send("abort")
 
-			console.error("Authme - Local storage not found in controller")
-		} else {
-			console.log("Authme - Local storage found in controller")
-		}
-
-		if (file.security.require_password === storage.require_password) {
-			console.log("Passwords match")
-
-			ipc.send("to_application1")
-		} else {
-			ipc.send("abort")
-
-			console.error("Authme - Local storage not found in controller")
-		}
+		console.error("Authme - Local storage not found in controller")
 	} else {
+		console.log("Authme - Local storage found in controller")
+	}
+
+	if (file.security.require_password === storage.require_password) {
+		console.log("Authme - Local storage passwords match")
+
 		ipc.send("to_application1")
+	} else {
+		ipc.send("abort")
+
+		console.error("Authme - Local storage not found in controller")
 	}
 } else if (file.security.require_password === null && file.security.password === null) {
 	console.log("Authme - First restart")
@@ -62,7 +65,9 @@ if (file.security.require_password === true && file.security.password !== null) 
 	ipc.send("to_confirm")
 }
 
-// ? prevent default shortcuts
+/**
+ * Prevent default shortcuts
+ */
 document.addEventListener("keydown", (event) => {
 	if (event.ctrlKey && event.code === "KeyA" && event.target.type !== "text" && event.target.type !== "number" && event.target.type !== "textarea" && event.target.type !== "password") {
 		event.preventDefault()
@@ -73,6 +78,8 @@ document.addEventListener("keydown", (event) => {
 	}
 })
 
-// prevent drag and drop
+/**
+ * Prevent drag and drop
+ */
 document.addEventListener("dragover", (event) => event.preventDefault())
 document.addEventListener("drop", (event) => event.preventDefault())
