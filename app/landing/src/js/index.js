@@ -28,7 +28,7 @@ if (app.isPackaged === false) {
 /**
  * Get Authme folder path
  */
-const folder_path = dev ? path.join(process.env.APPDATA, "Levminer", "Authme Dev") : path.join(process.env.APPDATA, "Levminer", "Authme")
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
