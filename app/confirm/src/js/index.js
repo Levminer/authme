@@ -70,8 +70,6 @@ const check_integrity = () => {
 
 	if (integrity == false) {
 		try {
-			logger.log(storage)
-
 			if (settings.security.password !== storage.password || settings.security.require_password !== storage.require_password) {
 				dialog
 					.showMessageBox({
