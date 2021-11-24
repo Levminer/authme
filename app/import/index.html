@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Authme</title>
+		<!-- meta -->
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:" />
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
@@ -11,15 +12,13 @@
 		<link rel="stylesheet" href="../.././src/dragonfly.css" />
 		<link rel="stylesheet" href="../../src/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
-		<!-- favicon -->
-		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build">
-			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
+		<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
+			<div class="container flex flex-row items-center justify-center py-2 mx-auto">
 				<div class="flex">
-					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
+					<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
 				</div>
 			</div>
 		</div>
@@ -127,7 +126,6 @@
 						</svg>
 						Stop
 					</button>
-					</div>
 				</div>
 			</div>
 		</div>
