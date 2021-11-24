@@ -12,118 +12,8 @@
 		<link rel="stylesheet" href="./src/css/index.css" />
 	</head>
 	<body>
-		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build hidden">
-			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
-				<div class="flex">
-					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- offline mode -->
-		<div class="w-full text-white bg-popup-red font-bold offline hidden">
-			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-
-					<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but you can't look for new updates!</p>
-				</div>
-				<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</a>
-			</div>
-		</div>
-
-		<!-- online mode -->
-		<div class="w-full text-white bg-popup-green font-bold online hidden">
-			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-
-					<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
-				</div>
-				<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</a>
-			</div>
-		</div>
-
-		<!-- update -->
-		<div class="w-full text-white bg-popup-blue font-bold update hidden">
-			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
-					</svg>
-
-					<p class="mx-3 flex flex-row relative top-3">
-						New Authme version available. Please update your app!
-						<button type="button" onclick="downloadUpdate()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
-							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-							</svg>
-							Download update
-						</button>
-						<button type="button" onclick="releaseNotes()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
-							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-							</svg>
-							Release notes
-						</button>
-					</p>
-				</div>
-				<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</a>
-			</div>
-		</div>
-
-		<!-- info -->
-		<div class="w-full text-white bg-popup-yellow font-bold info hidden">
-			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-				<div class="flex">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-
-					<p class="mx-3 flex flex-row relative top-3">
-						Enjoying Authme?
-						<button type="button" onclick="rateAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
-							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-							</svg>
-							Star on GitHub
-						</button>
-
-						<button type="button" onclick="provideFeedback()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
-							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-							</svg>
-							Provide feedback on GitHub
-						</button>
-					</p>
-				</div>
-				<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</a>
-			</div>
-		</div>
-
-		<!-- sidebar -->
 		<div class="h-screen flex">
+			<!-- sidebar -->
 			<div class="h-screen bg-gray-900 flex flex-col justify-between overflow-auto">
 				<div class="flex flex-col">
 					<div class="mb-1 mt-5 mr-4 ml-4">
@@ -180,7 +70,118 @@
 				</div>
 			</div>
 			<div class="flex-1 flex overflow-hidden">
+				<!-- page -->
 				<div class="flex-1 overflow-y-scroll w-4/5 bg-gray-800">
+					<!-- build number -->
+					<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
+						<div class="container flex flex-row items-center justify-center py-2 mx-auto">
+							<div class="flex">
+								<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
+							</div>
+						</div>
+					</div>
+
+					<!-- offline mode -->
+					<div class="w-full text-white bg-popup-red font-bold offline hidden">
+						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+							<div class="flex">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+
+								<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but you can't look for new updates!</p>
+							</div>
+							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</a>
+						</div>
+					</div>
+
+					<!-- online mode -->
+					<div class="w-full text-white bg-popup-green font-bold online hidden">
+						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+							<div class="flex">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+
+								<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
+							</div>
+							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</a>
+						</div>
+					</div>
+
+					<!-- update -->
+					<div class="w-full text-white bg-popup-blue font-bold update hidden">
+						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+							<div class="flex">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
+								</svg>
+
+								<p class="mx-3 flex flex-row relative top-3">
+									New Authme version available. Please update your app!
+									<button type="button" onclick="downloadUpdate()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+										</svg>
+										Download update
+									</button>
+									<button type="button" onclick="releaseNotes()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+										</svg>
+										Release notes
+									</button>
+								</p>
+							</div>
+							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</a>
+						</div>
+					</div>
+
+					<!-- info -->
+					<div class="w-full text-white bg-popup-yellow font-bold info hidden">
+						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+							<div class="flex">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+
+								<p class="mx-3 flex flex-row relative top-3">
+									Enjoying Authme?
+									<button type="button" onclick="rateAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+										</svg>
+										Star on GitHub
+									</button>
+
+									<button type="button" onclick="provideFeedback()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+										</svg>
+										Provide feedback on GitHub
+									</button>
+								</p>
+							</div>
+							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</a>
+						</div>
+					</div>
+
 					<!-- header -->
 					<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
 						<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
