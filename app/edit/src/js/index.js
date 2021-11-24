@@ -478,72 +478,129 @@ const loadError = () => {
  * Loads saved codes from disk
  */
 const loadCodes = () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "Cancel"],
-			defaultId: 1,
-			cancelId: 1,
-			type: "warning",
-			noLink: true,
-			message: "Are you sure you want to load your currently saved codes? \n\nThis will overwrite your latest rollback!",
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
-					if (err) {
-						dialog.showMessageBox({
-							title: "Authme",
-							buttons: ["Close"],
-							type: "error",
-							message: "No save file found. \n\nGo back to the main page and save your codes!",
-						})
-					} else {
-						let password
-						let key
+	const check = () => {}
 
-						if (settings.security.require_password === true) {
-							password = Buffer.from(ipc.sendSync("request_password"))
-							key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: ["Yes", "Cancel"],
+				defaultId: 1,
+				cancelId: 1,
+				type: "warning",
+				noLink: true,
+				message: "Are you sure you want to load your currently saved codes? \n\nThis will overwrite your latest rollback!",
+			})
+			.then((result) => {
+				if (result.response === 0) {
+					fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+						if (err) {
+							dialog.showMessageBox({
+								title: "Authme",
+								buttons: ["Close"],
+								type: "error",
+								message: "No save file found. \n\nGo back to the main page and save your codes!",
+							})
 						} else {
-							/**
-							 * Load storage
-							 * @type {LibStorage}
-							 */
-							let storage
+							let password
+							let key
 
-							if (dev === false) {
-								storage = JSON.parse(localStorage.getItem("storage"))
+							if (settings.security.require_password === true) {
+								password = Buffer.from(ipc.sendSync("request_password"))
+								key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 							} else {
-								storage = JSON.parse(localStorage.getItem("dev_storage"))
+								/**
+								 * Load storage
+								 * @type {LibStorage}
+								 */
+								let storage
+
+								if (dev === false) {
+									storage = JSON.parse(localStorage.getItem("storage"))
+								} else {
+									storage = JSON.parse(localStorage.getItem("dev_storage"))
+								}
+
+								password = Buffer.from(storage.password, "base64")
+								key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 							}
 
-							password = Buffer.from(storage.password, "base64")
-							key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+							fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+								if (err) {
+									logger.warn("The file codes.authme don't exists")
+
+									password.fill(0)
+									key.fill(0)
+								} else {
+									const codes_file = JSON.parse(content)
+
+									const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+									processdata(decrypted.toString())
+
+									decrypted.fill(0)
+									password.fill(0)
+									key.fill(0)
+								}
+							})
 						}
+					})
+				}
+			})
+	} else {
+		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+			if (err) {
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					type: "error",
+					message: "No save file found. \n\nGo back to the main page and save your codes!",
+				})
+			} else {
+				let password
+				let key
 
-						fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
-							if (err) {
-								logger.warn("The file codes.authme don't exists")
+				if (settings.security.require_password === true) {
+					password = Buffer.from(ipc.sendSync("request_password"))
+					key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+				} else {
+					/**
+					 * Load storage
+					 * @type {LibStorage}
+					 */
+					let storage
 
-								password.fill(0)
-								key.fill(0)
-							} else {
-								const codes_file = JSON.parse(content)
+					if (dev === false) {
+						storage = JSON.parse(localStorage.getItem("storage"))
+					} else {
+						storage = JSON.parse(localStorage.getItem("dev_storage"))
+					}
 
-								const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+					password = Buffer.from(storage.password, "base64")
+					key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+				}
 
-								processdata(decrypted.toString())
+				fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+					if (err) {
+						logger.warn("The file codes.authme don't exists")
 
-								decrypted.fill(0)
-								password.fill(0)
-								key.fill(0)
-							}
-						})
+						password.fill(0)
+						key.fill(0)
+					} else {
+						const codes_file = JSON.parse(content)
+
+						const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+						processdata(decrypted.toString())
+
+						decrypted.fill(0)
+						password.fill(0)
+						key.fill(0)
 					}
 				})
 			}
 		})
+	}
 }
 
 // ? hide window
