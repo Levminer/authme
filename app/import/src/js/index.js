@@ -33,11 +33,6 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
  */
 const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-if (settings.experimental.webcam === true) {
-	document.querySelector("#but2").style.display = "inline-block"
-	document.querySelector("#but3").style.display = "inline-block"
-}
-
 // ? check for webcam
 const checkWebcam = (callback) => {
 	const md = navigator.mediaDevices

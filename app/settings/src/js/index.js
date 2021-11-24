@@ -172,17 +172,6 @@ if (hardware_state === true) {
 	tgl7.checked = true
 }
 
-// webcam
-let webcam_state = settings.experimental.webcam
-
-if (webcam_state === true) {
-	tgt8.textContent = "On"
-	tgl8.checked = true
-} else {
-	tgt8.textContent = "Off"
-	tgl8.checked = false
-}
-
 // ? startup
 const startup = () => {
 	if (startup_state == true) {
@@ -563,52 +552,6 @@ const dropdownChoose = (id) => {
 	save()
 
 	ipc.send("reload_application")
-}
-
-// ? webcam
-const webcam = () => {
-	const toggle = () => {
-		if (webcam_state === true) {
-			settings.experimental.webcam = false
-
-			save()
-
-			tgt8.textContent = "Off"
-			tgl8.checked = false
-
-			webcam_state = false
-		} else {
-			settings.experimental.webcam = true
-
-			save()
-
-			tgt8.textContent = "On"
-			tgl8.checked = true
-
-			webcam_state = true
-		}
-	}
-
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
 }
 
 // ? save settings
