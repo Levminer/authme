@@ -1,18 +1,13 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, Notification } = require("electron")
-const contextmenu = require("electron-context-menu")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc } = require("electron")
 const logger = require("@levminer/lib/logger/main")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
-const { markdown } = require("@levminer/lib")
-const AutoLaunch = require("auto-launch")
 const debug = require("electron-debug")
-const electron = require("electron")
+const axios = require("axios").default
 const path = require("path")
 const fs = require("fs")
 const os = require("os")
-const axios = require("axios").default
-const ipc = electron.ipcMain
 
 // ? crash report
 process.on("uncaughtException", (error) => {
@@ -615,6 +610,9 @@ const createWindow = () => {
 		}
 	})
 
+	/**
+	 * Show animations and focus searchbar on windows focus
+	 */
 	window_application.on("focus", () => {
 		window_application.webContents.executeJavaScript("focusSearch()")
 	})
@@ -671,6 +669,8 @@ const createWindow = () => {
 }
 
 // ? init auto launch
+const AutoLaunch = require("auto-launch")
+
 const authme_launcher = new AutoLaunch({
 	name: "Authme",
 	path: app.getPath("exe"),
@@ -678,6 +678,8 @@ const authme_launcher = new AutoLaunch({
 })
 
 // ? context menu
+const contextmenu = require("electron-context-menu")
+
 contextmenu({
 	menu: (actions) => [
 		actions.separator(),
@@ -948,13 +950,14 @@ ipc.on("abort", () => {
 			}
 		})
 
-	window_landing.destroy()
 	window_application.destroy()
 	window_settings.destroy()
+	window_import.destroy()
 	window_export.destroy()
+	window_edit.destroy()
 
 	process.on("uncaughtException", (error) => {
-		logger.error("Execution aborted", error)
+		logger.error("Execution aborted", error.stack)
 	})
 })
 
@@ -1112,6 +1115,8 @@ const about = () => {
 
 // ? release notes
 const releaseNotes = () => {
+	const { markdown } = require("@levminer/lib")
+
 	axios
 		.get("https://api.levminer.com/api/v1/authme/releases")
 		.then((res) => {
@@ -1216,12 +1221,11 @@ app.whenReady()
 		})
 
 		window_splash.loadFile("./app/splash/index.html")
-
 		window_splash.setProgressBar(10)
 
-		window_splash.show()
-
 		window_splash.once("ready-to-show", () => {
+			window_splash.show()
+
 			if (dev === true) {
 				setTimeout(() => {
 					createWindow()
@@ -1235,11 +1239,11 @@ app.whenReady()
 				setTimeout(() => {
 					createWindow()
 					quickShortcuts()
-				}, 2000)
+				}, 1500)
 
 				setTimeout(() => {
 					window_splash.destroy()
-				}, 2500)
+				}, 2000)
 			}
 		})
 
