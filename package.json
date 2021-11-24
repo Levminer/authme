@@ -51,7 +51,7 @@
 		},
 		"linux": {
 			"target": [
-				"deb",
+				"appImage",
 				"zip"
 			],
 			"maintainer": "levminer@levminer.com",
@@ -63,8 +63,8 @@
 			},
 			"artifactName": "authme-${version}-linux-x64-portable.zip"
 		},
-		"deb": {
-			"artifactName": "authme-${version}-linux-x64-installer.deb"
+		"appImage": {
+			"artifactName": "authme-${version}-linux-x64-installer.appimage"
 		},
 		"mac": {
 			"target": [
