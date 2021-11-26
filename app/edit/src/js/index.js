@@ -205,8 +205,9 @@ const edit = (number) => {
 	const edit_but = document.querySelector(`#edit_but_${number}`)
 	const edit_inp = document.querySelector(`#edit_inp_${number}`)
 
-	document.querySelector(`#edit_inp_${number}`).value = `${edit_inp.value} `
 	edit_inp.focus()
+	const length = edit_inp.value.length
+	edit_inp.setSelectionRange(length, length)
 
 	if (edit_mode === false) {
 		edit_but.style.color = "green"
@@ -354,7 +355,7 @@ const saveModifications = () => {
 		encrypted: true,
 		codes: encrypted.toString("base64"),
 		date: time.timestamp(),
-		version: "3",
+		version: 3,
 	}
 
 	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
