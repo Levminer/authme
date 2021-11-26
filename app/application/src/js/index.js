@@ -687,7 +687,7 @@ const saveCodes = () => {
 		encrypted: true,
 		codes: encrypted.toString("base64"),
 		date: time.timestamp(),
-		version: "3",
+		version: 3,
 	}
 
 	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
@@ -743,15 +743,33 @@ const loadCodes = () => {
 		} else {
 			const codes_file = JSON.parse(content)
 
-			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+			if (codes_file.version === 3) {
+				const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-			prev = true
+				prev = true
 
-			processdata(decrypted.toString())
+				processdata(decrypted.toString())
 
-			decrypted.fill(0)
-			password.fill(0)
-			key.fill(0)
+				decrypted.fill(0)
+				password.fill(0)
+				key.fill(0)
+			} else {
+				dialog
+					.showMessageBox({
+						title: "Authme",
+						buttons: ["Close", "Migration guide"],
+						defaultId: 0,
+						cancelId: 0,
+						type: "error",
+						noLink: true,
+						message: "The saved codes are only compatible with Authme 2. \n\nPlease read the migration guide!",
+					})
+					.then((result) => {
+						if (result.response === 1) {
+							shell.openExternal("https://docs.authme.levminer.com/migration")
+						}
+					})
+			}
 		}
 	})
 }
