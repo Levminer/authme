@@ -69,6 +69,19 @@ if (number.startsWith("alpha")) {
 	pre_release = true
 }
 
+/**
+ * Get platform
+ */
+let platform
+
+if (process.platform === "win32") {
+	platform = "windows"
+} else if (process.platform === "darwin") {
+	platform = "mac"
+} else {
+	platform = "linux"
+}
+
 // ? remote module
 remote.initialize()
 
@@ -566,7 +579,9 @@ const createWindow = () => {
 	window_export.setContentProtection(true)
 	window_edit.setContentProtection(true)
 
-	// ? check for auto update
+	/**
+	 * Check for manual update
+	 */
 	window_application.on("show", () => {
 		const api = () => {
 			axios
@@ -579,18 +594,13 @@ const createWindow = () => {
 							window_settings.webContents.executeJavaScript("showUpdate()")
 						})
 
-						new Notification({
-							title: "Authme Update",
-							body: `Update available: Authme ${res.data.tag_name}`,
-						}).show()
-
-						logger.log("Auto update found!")
+						logger.log("Manual update found!")
 					} else {
-						logger.log("No auto update found!")
+						logger.log("No manual update found!")
 					}
 				})
 				.catch((error) => {
-					logger.error("Error during auto update", error.stack)
+					logger.error("Error during manual update", error.stack)
 				})
 		}
 
@@ -603,7 +613,7 @@ const createWindow = () => {
 			reload = true
 		}
 
-		if (update_seen == false) {
+		if (update_seen == false && platform !== "windows") {
 			api()
 
 			update_seen = true
@@ -981,18 +991,18 @@ ipc.on("offline", () => {
 	}
 })
 
-ipc.on("release_notes", () => {
+/**
+ * Display release notes
+ */
+ipc.on("releaseNotes", () => {
 	releaseNotes()
 })
 
-ipc.on("download_update", () => {
+ipc.on("manualUpdate", () => {
 	axios
 		.get("https://api.levminer.com/api/v1/authme/releases")
 		.then((res) => {
 			if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
-				const notes = markdown.convert(res.data.body).split("\n").slice(4).join("\n").split("Bug")[0]
-				const message = `Update available: Authme ${res.data.tag_name}\n\nYou currently running: Authme ${tag_name}\n\nNotable changes:\n\n${notes}Check out release note for all changes.`
-
 				dialog
 					.showMessageBox({
 						title: "Authme",
@@ -1001,7 +1011,7 @@ ipc.on("download_update", () => {
 						cancelId: 1,
 						noLink: true,
 						type: "info",
-						message: message,
+						message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
 					})
 					.then((result) => {
 						if (result.response === 0) {

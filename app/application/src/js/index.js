@@ -824,16 +824,6 @@ const quickCopy = (key) => {
 	}
 }
 
-// ? release notes
-const releaseNotes = () => {
-	ipc.send("release_notes")
-}
-
-// ? download update
-const downloadUpdate = () => {
-	ipc.send("download_update")
-}
-
 // ? rate
 const rateAuthme = () => {
 	ipc.send("rate_authme")
@@ -889,3 +879,17 @@ window.addEventListener("click", (event) => {
 		dropdown_state = false
 	}
 })
+
+/**
+ * Display release notes
+ */
+const releaseNotes = () => {
+	ipc.send("releaseNotes")
+}
+
+/**
+ * Download manual update
+ */
+const manualUpdate = () => {
+	ipc.send("manualUpdate")
+}
