@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc } = require("electron")
 const logger = require("@levminer/lib/logger/main")
+const { autoUpdater } = require("electron-updater")
 const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
@@ -625,6 +626,55 @@ const createWindow = () => {
 	 */
 	window_application.on("focus", () => {
 		window_application.webContents.executeJavaScript("focusSearch()")
+	})
+
+	// ? auto updater
+	if (dev === false) {
+		autoUpdater.checkForUpdates()
+	}
+
+	autoUpdater.on("checking-for-update", () => {
+		logger.log("Checking for auto update")
+	})
+
+	autoUpdater.on("update-available", () => {
+		logger.log("Auto update available")
+
+		window_application.webContents.executeJavaScript("updateAvailable()")
+	})
+
+	autoUpdater.on("update-not-available", () => {
+		logger.log("Auto update not available")
+	})
+
+	autoUpdater.on("update-downloaded", () => {
+		logger.log("Update downloaded")
+
+		window_application.webContents.executeJavaScript("updateDownloaded()")
+	})
+
+	autoUpdater.on("error", (error) => {
+		logger.error("Error during auto update", error.stack)
+	})
+
+	autoUpdater.on("download-progress", (progress) => {
+		const download_percent = Math.trunc(progress.percent)
+		const download_speed = (Math.round((progress.bytesPerSecond / 1000000) * 10) / 10).toFixed(1)
+		const download_transferred = Math.trunc(progress.transferred / 1000000)
+		const download_total = Math.trunc(progress.total / 1000000)
+
+		logger.log(`Downloading auto update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
+
+		window_application.webContents.send("updateInfo", {
+			download_percent: download_percent,
+			download_speed: download_speed,
+			download_transferred: download_transferred,
+			download_total: download_total,
+		})
+	})
+
+	ipc.on("updateRestart", () => {
+		autoUpdater.quitAndInstall(true, true)
 	})
 
 	// ? global shortcuts

@@ -862,3 +862,33 @@ const releaseNotes = () => {
 const manualUpdate = () => {
 	ipc.send("manualUpdate")
 }
+
+/**
+ * Display auto update download info
+ */
+ipc.on("updateInfo", (event, info) => {
+	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+})
+
+/**
+ * Display auto update popup if update available
+ */
+const updateAvailable = () => {
+	document.querySelector(".autoupdate").style.display = "block"
+}
+
+/**
+ * Display restart button if download finished
+ */
+const updateDownloaded = () => {
+	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateButton").style.display = "block"
+	document.querySelector("#updateClose").style.display = "block"
+}
+
+/**
+ * Restart app after the download finished
+ */
+const updateRestart = () => {
+	ipc.send("updateRestart")
+}
