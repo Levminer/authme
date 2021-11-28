@@ -584,34 +584,44 @@ const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
-// ? authme folder
-const folder0 = () => {
-	ipc.send("app_path")
-}
-
-// ? settings folder
-const folder1 = () => {
-	shell.openPath(folder_path)
-}
-
 // ? support
 const support = () => {
 	shell.openExternal("https://paypal.me/levminer")
 }
 
-// ? cache folder
-const folder2 = () => {
-	let cache_path
+/**
+ * Open Authme folder
+ */
+const authmeFolder = () => {
+	shell.showItemInFolder(app.getPath("exe"))
+}
 
-	if (process.platform === "win32") {
-		cache_path = path.join(process.env.APPDATA, "/Authme")
-	} else if (process.platform === "linux") {
-		cache_path = path.join(process.env.HOME, "/.config/Authme")
-	} else if (process.platform === "darwin") {
-		cache_path = path.join(process.env.HOME, "/Library/Application Support/Authme")
-	}
+/**
+ * Open setting folder
+ */
+const settingsFolder = () => {
+	shell.openPath(folder_path)
+}
 
-	shell.openPath(cache_path)
+/**
+ * Open cache folder
+ */
+const cacheFolder = () => {
+	shell.openPath(path.join(app.getPath("appData"), "Authme"))
+}
+
+/*
+ * Open latest log
+ */
+const latestLog = () => {
+	ipc.send("logs")
+}
+
+/**
+ * Open logs folder
+ */
+const logsFolder = () => {
+	shell.openPath(path.join(folder_path, "logs"))
 }
 
 // ? status api
@@ -775,10 +785,6 @@ const about = () => {
 // ? edit
 const edit = () => {
 	ipc.send("hide_edit")
-}
-// ? logs
-const logs = () => {
-	ipc.send("logs")
 }
 
 // ? build

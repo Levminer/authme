@@ -979,10 +979,6 @@ ipc.on("enable_tray", () => {
 	logger.log("Close to tray enabled")
 })
 
-ipc.on("app_path", () => {
-	shell.showItemInFolder(app.getPath("exe"))
-})
-
 ipc.on("logs", () => {
 	logs()
 })
