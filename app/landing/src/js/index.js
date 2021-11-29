@@ -4,7 +4,7 @@ const { app, dialog } = require("@electron/remote")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const { aes, rsa, sha } = require("@levminer/lib")
+const { aes, rsa, sha, password } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 
 // ? error in window
@@ -74,15 +74,20 @@ const comparePasswords = () => {
 		text.textContent = "Minimum password length is 8 characters!"
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
-			logger.log("Passwords match!")
+			if (!password.search(password_input1.toString())) {
+				logger.log("Passwords match!")
 
-			text.style.color = "#28A443"
-			text.textContent = "Passwords match! Please wait!"
+				text.style.color = "#28A443"
+				text.textContent = "Passwords match! Please wait!"
 
-			password_input1.fill(0)
-			password_input2.fill(0)
+				password_input1.fill(0)
+				password_input2.fill(0)
 
-			hashPasswords()
+				hashPasswords()
+			} else {
+				text.style.color = "#CC001B"
+				text.textContent = "This password is on the list of the top 1000 most common passwords. Please choose a more secure password!"
+			}
 		} else {
 			logger.warn("Passwords dont match!")
 
