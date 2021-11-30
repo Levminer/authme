@@ -45,6 +45,8 @@ let shortcuts = false
 let reload = false
 let tray_minimized = false
 let update_seen = false
+let tray = null
+let menu = null
 
 // ? development
 let dev = false
@@ -464,13 +466,13 @@ const createWindow = () => {
 	window_landing.on("close", () => {
 		app.exit()
 
-		logger.log("Landing closed")
+		logger.log("Application exited from landing window")
 	})
 
 	window_confirm.on("close", () => {
 		app.exit()
 
-		logger.log("Confirm closed")
+		logger.log("Application exited from confirm window")
 	})
 
 	// window closings
@@ -489,7 +491,7 @@ const createWindow = () => {
 
 				app.exit()
 
-				logger.log("Application exited")
+				logger.log("Application exited from application window")
 			} else {
 				event.preventDefault()
 				setTimeout(() => {
@@ -499,13 +501,16 @@ const createWindow = () => {
 				show_tray = true
 
 				application_shown = false
+
+				createTray()
+				createMenu()
 			}
 		}
 
 		logger.log("Application closed")
 	})
 
-	window_settings.on("close", async (event) => {
+	window_settings.on("close", (event) => {
 		if (dev === true) {
 			app.exit()
 		} else {
@@ -521,7 +526,7 @@ const createWindow = () => {
 		logger.log("Settings closed")
 	})
 
-	window_import.on("close", async (event) => {
+	window_import.on("close", (event) => {
 		if (dev === true) {
 			app.exit()
 		} else {
@@ -537,7 +542,7 @@ const createWindow = () => {
 		logger.log("Import closed")
 	})
 
-	window_export.on("close", async (event) => {
+	window_export.on("close", (event) => {
 		if (dev === true) {
 			app.exit()
 		} else {
@@ -553,7 +558,7 @@ const createWindow = () => {
 		logger.log("Export closed")
 	})
 
-	window_edit.on("close", async (event) => {
+	window_edit.on("close", (event) => {
 		if (dev === true) {
 			app.exit()
 		} else {
@@ -1305,7 +1310,7 @@ app.whenReady()
 
 		// ? create tray
 		const icon_path = path.join(__dirname, "img/tray.png")
-		const tray = new Tray(icon_path)
+		tray = new Tray(icon_path)
 
 		tray.on("click", () => {
 			showAppFromTray()
@@ -1313,418 +1318,8 @@ app.whenReady()
 			createMenu()
 		})
 
-		// generate tray
-		const createTray = () => {
-			const contextmenu = Menu.buildFromTemplate([
-				{
-					label: `Authme ${authme_version}`,
-					enabled: false,
-					icon: path.join(__dirname, "img/traymenu.png"),
-				},
-				{
-					label: pre_release ? `(${build_number})` : `(${release_date})`,
-					enabled: false,
-				},
-				{ type: "separator" },
-				{
-					label: application_shown ? "Hide app" : "Show app",
-					accelerator: shortcuts ? "" : settings.global_shortcuts.show,
-					click: () => {
-						showAppFromTray()
-						createTray()
-						createMenu()
-					},
-				},
-				{ type: "separator" },
-				{
-					label: "Settings",
-					accelerator: shortcuts ? "" : settings.global_shortcuts.settings,
-					click: () => {
-						settingsFromTray()
-					},
-				},
-				{ type: "separator" },
-				{
-					label: "Exit app",
-					accelerator: shortcuts ? "" : settings.global_shortcuts.exit,
-					click: () => {
-						exitFromTray()
-					},
-				},
-			])
-
-			tray.setToolTip("Authme")
-			tray.setContextMenu(contextmenu)
-		}
-
 		createTray()
-
-		// ? create menu
-		const createMenu = () => {
-			const template = [
-				{
-					label: "File",
-					submenu: [
-						{
-							label: application_shown ? "Hide app" : "Show app",
-							accelerator: shortcuts ? "" : settings.shortcuts.show,
-							click: () => {
-								showAppFromTray()
-								createMenu()
-								createTray()
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Settings",
-							accelerator: shortcuts ? "" : settings.shortcuts.settings,
-							click: () => {
-								const toggle = () => {
-									if (settings_shown === false) {
-										window_settings.maximize()
-										window_settings.show()
-
-										settings_shown = true
-
-										logger.log("Settings shown")
-									} else {
-										window_settings.hide()
-
-										window_application.focus()
-
-										settings_shown = false
-
-										logger.log("Settings hidden")
-									}
-								}
-
-								if (settings.security.require_password === true && authenticated === true) {
-									toggle()
-								} else if (settings.security.require_password === false) {
-									toggle()
-								}
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Exit",
-							accelerator: shortcuts ? "" : settings.shortcuts.exit,
-							click: () => {
-								tray_minimized = false
-								app.exit()
-
-								logger.log("App exited from menu")
-							},
-						},
-					],
-				},
-				{
-					label: "View",
-					submenu: [
-						{
-							label: "Reset",
-							role: "resetZoom",
-							accelerator: shortcuts ? "" : settings.shortcuts.zoom_reset,
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Zoom in",
-							role: "zoomIn",
-							accelerator: shortcuts ? "" : settings.shortcuts.zoom_in,
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Zoom out",
-							role: "zoomOut",
-							accelerator: shortcuts ? "" : settings.shortcuts.zoom_out,
-						},
-					],
-				},
-				{
-					label: "Advanced",
-					submenu: [
-						{
-							label: "Edit codes",
-							accelerator: shortcuts ? "" : settings.shortcuts.edit,
-							click: () => {
-								const toggle = () => {
-									if (edit_shown === false) {
-										window_edit.maximize()
-										window_edit.show()
-
-										edit_shown = true
-
-										logger.log("Edit shown")
-									} else {
-										window_edit.hide()
-
-										window_application.focus()
-
-										edit_shown = false
-
-										logger.log("Edit hidden")
-									}
-								}
-
-								if (settings.security.require_password === true && authenticated === true) {
-									toggle()
-								} else if (settings.security.require_password === false) {
-									toggle()
-								}
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Import",
-							accelerator: shortcuts ? "" : settings.shortcuts.import,
-							click: () => {
-								const toggle = () => {
-									if (import_shown === false) {
-										window_import.maximize()
-										window_import.show()
-
-										import_shown = true
-
-										logger.log("Import shown")
-									} else {
-										window_import.hide()
-
-										window_application.focus()
-
-										import_shown = false
-
-										logger.log("Import hidden")
-									}
-								}
-
-								if (settings.security.require_password === true && authenticated === true) {
-									toggle()
-								} else if (settings.security.require_password === false) {
-									toggle()
-								}
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Export",
-							accelerator: shortcuts ? "" : settings.shortcuts.export,
-							click: () => {
-								const toggle = () => {
-									if (export_shown === false) {
-										window_export.maximize()
-										window_export.show()
-
-										export_shown = true
-
-										logger.log("Export shown")
-									} else {
-										window_export.hide()
-
-										window_application.focus()
-
-										export_shown = false
-
-										logger.log("Export hidden")
-									}
-								}
-
-								if (settings.security.require_password === true && authenticated === true) {
-									toggle()
-								} else if (settings.security.require_password === false) {
-									toggle()
-								}
-							},
-						},
-					],
-				},
-				{
-					label: "Help",
-					submenu: [
-						{
-							label: "Documentation",
-							accelerator: shortcuts ? "" : settings.shortcuts.docs,
-							click: () => {
-								dialog
-									.showMessageBox({
-										title: "Authme",
-										buttons: ["Open", "Close"],
-										defaultId: 1,
-										cancelId: 1,
-										noLink: true,
-										type: "info",
-										message: "You can view the Authme Docs in the browser. \n\nClick open to view it in your browser!",
-									})
-									.then((result) => {
-										if (result.response === 0) {
-											shell.openExternal("https://docs.authme.levminer.com")
-										}
-									})
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Release notes",
-							accelerator: shortcuts ? "" : settings.shortcuts.release,
-							click: () => {
-								releaseNotes()
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Support development",
-							accelerator: shortcuts ? "" : settings.shortcuts.support,
-							click: () => {
-								support()
-							},
-						},
-					],
-				},
-				{
-					label: "About",
-					submenu: [
-						{
-							label: "Show licenses",
-							accelerator: shortcuts ? "" : settings.shortcuts.licenses,
-							click: () => {
-								dialog
-									.showMessageBox({
-										title: "Authme",
-										buttons: ["More", "Close"],
-										defaultId: 1,
-										cancelId: 1,
-										noLink: true,
-										type: "info",
-										message: "This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente",
-									})
-									.then((result) => {
-										if (result.response === 0) {
-											shell.openExternal("https://authme.levminer.com/licenses.html")
-										}
-									})
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Update",
-							accelerator: shortcuts ? "" : settings.shortcuts.update,
-							click: () => {
-								axios
-									.get("https://api.levminer.com/api/v1/authme/releases")
-									.then((res) => {
-										if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
-											dialog
-												.showMessageBox({
-													title: "Authme",
-													buttons: ["Yes", "No"],
-													defaultId: 0,
-													cancelId: 1,
-													type: "info",
-													message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
-												})
-												.then((result) => {
-													if (result.response === 0) {
-														shell.openExternal("https://authme.levminer.com#downloads")
-													}
-												})
-										} else {
-											dialog.showMessageBox({
-												title: "Authme",
-												buttons: ["Close"],
-												defaultId: 0,
-												cancelId: 1,
-												type: "info",
-												message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${tag_name}`,
-											})
-										}
-									})
-									.catch((error) => {
-										dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
-
-										logger.error("Error getting update manually", error.stack)
-									})
-							},
-						},
-						{
-							type: "separator",
-						},
-						{
-							label: "Info",
-							accelerator: shortcuts ? "" : settings.shortcuts.info,
-							click: () => {
-								about()
-							},
-						},
-					],
-				},
-			]
-
-			const menu = Menu.buildFromTemplate(template)
-			Menu.setApplicationMenu(menu)
-		}
-
 		createMenu()
-
-		ipc.on("shortcuts", () => {
-			if (shortcuts === false) {
-				shortcuts = true
-
-				globalShortcut.unregisterAll()
-
-				createTray()
-
-				createMenu()
-
-				logger.log("Shortcuts disabled")
-			} else {
-				shortcuts = false
-
-				settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
-
-				if (settings.global_shortcuts.show !== "None") {
-					globalShortcut.register(settings.global_shortcuts.show, () => {
-						showAppFromTray()
-					})
-				}
-
-				if (settings.global_shortcuts.settings !== "None") {
-					globalShortcut.register(settings.global_shortcuts.settings, () => {
-						settingsFromTray()
-					})
-				}
-
-				if (settings.global_shortcuts.exit !== "None") {
-					globalShortcut.register(settings.global_shortcuts.exit, () => {
-						exitFromTray()
-					})
-				}
-
-				quickShortcuts()
-
-				createTray()
-
-				createMenu()
-
-				logger.log("Shortcuts enabled")
-			}
-		})
 	})
 	.catch((error) => {
 		logger.error("Unknown error occurred", error.stack)
@@ -1747,3 +1342,419 @@ app.whenReady()
 				}
 			})
 	})
+
+/**
+ * Create tray menu
+ */
+const createTray = () => {
+	const contextmenu = Menu.buildFromTemplate([
+		{
+			label: `Authme ${authme_version}`,
+			enabled: false,
+			icon: path.join(__dirname, "img/traymenu.png"),
+		},
+		{
+			label: pre_release ? `(${build_number})` : `(${release_date})`,
+			enabled: false,
+		},
+		{ type: "separator" },
+		{
+			label: application_shown ? "Hide app" : "Show app",
+			accelerator: shortcuts ? "" : settings.global_shortcuts.show,
+			click: () => {
+				showAppFromTray()
+				createTray()
+				createMenu()
+			},
+		},
+		{ type: "separator" },
+		{
+			label: "Settings",
+			accelerator: shortcuts ? "" : settings.global_shortcuts.settings,
+			click: () => {
+				settingsFromTray()
+			},
+		},
+		{ type: "separator" },
+		{
+			label: "Exit app",
+			accelerator: shortcuts ? "" : settings.global_shortcuts.exit,
+			click: () => {
+				exitFromTray()
+			},
+		},
+	])
+
+	tray.setToolTip("Authme")
+	tray.setContextMenu(contextmenu)
+}
+
+/**
+ * Create application menu
+ */
+const createMenu = () => {
+	const template = [
+		{
+			label: "&File",
+			submenu: [
+				{
+					label: application_shown ? "Hide app" : "Show app",
+					accelerator: shortcuts ? "" : settings.shortcuts.show,
+					click: () => {
+						showAppFromTray()
+						createMenu()
+						createTray()
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Settings",
+					accelerator: shortcuts ? "" : settings.shortcuts.settings,
+					click: () => {
+						const toggle = () => {
+							if (settings_shown === false) {
+								window_settings.maximize()
+								window_settings.show()
+
+								settings_shown = true
+
+								logger.log("Settings shown")
+							} else {
+								window_settings.hide()
+
+								window_application.focus()
+
+								settings_shown = false
+
+								logger.log("Settings hidden")
+							}
+						}
+
+						if (settings.security.require_password === true && authenticated === true) {
+							toggle()
+						} else if (settings.security.require_password === false) {
+							toggle()
+						}
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Exit",
+					accelerator: shortcuts ? "" : settings.shortcuts.exit,
+					click: () => {
+						tray_minimized = false
+						app.exit()
+
+						logger.log("App exited from menu")
+					},
+				},
+			],
+		},
+		{
+			label: "&View",
+			submenu: [
+				{
+					label: "Reset",
+					role: "resetZoom",
+					accelerator: shortcuts ? "" : settings.shortcuts.zoom_reset,
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Zoom in",
+					role: "zoomIn",
+					accelerator: shortcuts ? "" : settings.shortcuts.zoom_in,
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Zoom out",
+					role: "zoomOut",
+					accelerator: shortcuts ? "" : settings.shortcuts.zoom_out,
+				},
+			],
+		},
+		{
+			label: "&Tools",
+			submenu: [
+				{
+					label: "Edit codes",
+					accelerator: shortcuts ? "" : settings.shortcuts.edit,
+					click: () => {
+						const toggle = () => {
+							if (edit_shown === false) {
+								window_edit.maximize()
+								window_edit.show()
+
+								edit_shown = true
+
+								logger.log("Edit shown")
+							} else {
+								window_edit.hide()
+
+								window_application.focus()
+
+								edit_shown = false
+
+								logger.log("Edit hidden")
+							}
+						}
+
+						if (settings.security.require_password === true && authenticated === true) {
+							toggle()
+						} else if (settings.security.require_password === false) {
+							toggle()
+						}
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Import",
+					accelerator: shortcuts ? "" : settings.shortcuts.import,
+					click: () => {
+						const toggle = () => {
+							if (import_shown === false) {
+								window_import.maximize()
+								window_import.show()
+
+								import_shown = true
+
+								logger.log("Import shown")
+							} else {
+								window_import.hide()
+
+								window_application.focus()
+
+								import_shown = false
+
+								logger.log("Import hidden")
+							}
+						}
+
+						if (settings.security.require_password === true && authenticated === true) {
+							toggle()
+						} else if (settings.security.require_password === false) {
+							toggle()
+						}
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Export",
+					accelerator: shortcuts ? "" : settings.shortcuts.export,
+					click: () => {
+						const toggle = () => {
+							if (export_shown === false) {
+								window_export.maximize()
+								window_export.show()
+
+								export_shown = true
+
+								logger.log("Export shown")
+							} else {
+								window_export.hide()
+
+								window_application.focus()
+
+								export_shown = false
+
+								logger.log("Export hidden")
+							}
+						}
+
+						if (settings.security.require_password === true && authenticated === true) {
+							toggle()
+						} else if (settings.security.require_password === false) {
+							toggle()
+						}
+					},
+				},
+			],
+		},
+		{
+			label: "&Help",
+			submenu: [
+				{
+					label: "Documentation",
+					accelerator: shortcuts ? "" : settings.shortcuts.docs,
+					click: () => {
+						dialog
+							.showMessageBox({
+								title: "Authme",
+								buttons: ["Open", "Close"],
+								defaultId: 1,
+								cancelId: 1,
+								noLink: true,
+								type: "info",
+								message: "You can view the Authme Docs in the browser. \n\nClick open to view it in your browser!",
+							})
+							.then((result) => {
+								if (result.response === 0) {
+									shell.openExternal("https://docs.authme.levminer.com")
+								}
+							})
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Release notes",
+					accelerator: shortcuts ? "" : settings.shortcuts.release,
+					click: () => {
+						releaseNotes()
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Support development",
+					accelerator: shortcuts ? "" : settings.shortcuts.support,
+					click: () => {
+						support()
+					},
+				},
+			],
+		},
+		{
+			label: "&About",
+			submenu: [
+				{
+					label: "Show licenses",
+					accelerator: shortcuts ? "" : settings.shortcuts.licenses,
+					click: () => {
+						dialog
+							.showMessageBox({
+								title: "Authme",
+								buttons: ["More", "Close"],
+								defaultId: 1,
+								cancelId: 1,
+								noLink: true,
+								type: "info",
+								message: "This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente",
+							})
+							.then((result) => {
+								if (result.response === 0) {
+									shell.openExternal("https://authme.levminer.com/licenses.html")
+								}
+							})
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Update",
+					accelerator: shortcuts ? "" : settings.shortcuts.update,
+					click: () => {
+						axios
+							.get("https://api.levminer.com/api/v1/authme/releases")
+							.then((res) => {
+								if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+									dialog
+										.showMessageBox({
+											title: "Authme",
+											buttons: ["Yes", "No"],
+											defaultId: 0,
+											cancelId: 1,
+											type: "info",
+											message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
+										})
+										.then((result) => {
+											if (result.response === 0) {
+												shell.openExternal("https://authme.levminer.com#downloads")
+											}
+										})
+								} else {
+									dialog.showMessageBox({
+										title: "Authme",
+										buttons: ["Close"],
+										defaultId: 0,
+										cancelId: 1,
+										type: "info",
+										message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${tag_name}`,
+									})
+								}
+							})
+							.catch((error) => {
+								dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
+
+								logger.error("Error getting update manually", error.stack)
+							})
+					},
+				},
+				{
+					type: "separator",
+				},
+				{
+					label: "Info",
+					accelerator: shortcuts ? "" : settings.shortcuts.info,
+					click: () => {
+						about()
+					},
+				},
+			],
+		},
+	]
+
+	menu = Menu.buildFromTemplate(template)
+	Menu.setApplicationMenu(menu)
+}
+
+/**
+ * Toggle shortcuts
+ */
+ipc.on("shortcuts", () => {
+	if (shortcuts === false) {
+		shortcuts = true
+
+		globalShortcut.unregisterAll()
+
+		createTray()
+
+		createMenu()
+
+		logger.log("Shortcuts disabled")
+	} else {
+		shortcuts = false
+
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+		if (settings.global_shortcuts.show !== "None") {
+			globalShortcut.register(settings.global_shortcuts.show, () => {
+				showAppFromTray()
+			})
+		}
+
+		if (settings.global_shortcuts.settings !== "None") {
+			globalShortcut.register(settings.global_shortcuts.settings, () => {
+				settingsFromTray()
+			})
+		}
+
+		if (settings.global_shortcuts.exit !== "None") {
+			globalShortcut.register(settings.global_shortcuts.exit, () => {
+				exitFromTray()
+			})
+		}
+
+		quickShortcuts()
+
+		createTray()
+
+		createMenu()
+
+		logger.log("Shortcuts enabled")
+	}
+})
