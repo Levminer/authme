@@ -49,7 +49,7 @@
 	}
 
 	summary {
-		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl w-max mx-auto;
 	}
 
 	a {
