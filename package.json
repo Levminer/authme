@@ -89,7 +89,7 @@
 		"bcryptjs": "^2.4.3",
 		"electron-context-menu": "^3.1.1",
 		"electron-debug": "^3.2.0",
-		"electron-updater": "^4.6.2",
+		"electron-updater": "^4.6.5",
 		"protons": "^2.0.3",
 		"qrcode-decoder": "^0.2.2",
 		"qrcode-generator": "^1.4.4"
@@ -97,7 +97,7 @@
 	"devDependencies": {
 		"@tailwindcss/forms": "^0.3.4",
 		"autoprefixer": "^10.4.0",
-		"electron": "^16.0.2",
+		"electron": "^16.0.3",
 		"electron-builder": "^22.14.5",
 		"eslint": "^8.3.0",
 		"eslint-config-node": "^4.1.0",
@@ -109,7 +109,7 @@
 		"eslint-plugin-promise": "^5.1.1",
 		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.5.0",
-		"sass": "^1.43.5",
+		"sass": "^1.44.0",
 		"tailwindcss": "^2.2.19"
 	},
 	"engines": {
