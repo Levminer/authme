@@ -1225,6 +1225,22 @@ const support = () => {
 		})
 }
 
+/**
+ * Register quick shortcuts
+ */
+const quickShortcuts = () => {
+	const keys = Object.keys(settings.quick_shortcuts)
+	const values = Object.values(settings.quick_shortcuts)
+
+	for (let i = 0; i < keys.length; i++) {
+		globalShortcut.register(values[i], () => {
+			window_application.webContents.executeJavaScript(`quickCopy("${keys[i]}")`)
+		})
+	}
+}
+
+
+
 // ? start app
 app.whenReady()
 	.then(() => {
@@ -1255,18 +1271,6 @@ app.whenReady()
 					}
 				})
 		})
-
-		// ? quick shortcuts
-		const quickShortcuts = () => {
-			const keys = Object.keys(settings.quick_shortcuts)
-			const values = Object.values(settings.quick_shortcuts)
-
-			for (let i = 0; i < keys.length; i++) {
-				globalShortcut.register(values[i], () => {
-					window_application.webContents.executeJavaScript(`quickCopy("${keys[i]}")`)
-				})
-			}
-		}
 
 		window_splash = new BrowserWindow({
 			width: 500,
