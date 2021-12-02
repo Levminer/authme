@@ -1374,6 +1374,7 @@ const createTray = () => {
 		{ type: "separator" },
 		{
 			label: "Settings",
+			enabled: authenticated,
 			accelerator: shortcuts ? "" : settings.global_shortcuts.settings,
 			click: () => {
 				settingsFromTray()
@@ -1415,6 +1416,7 @@ const createMenu = () => {
 				},
 				{
 					label: "Settings",
+					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.settings,
 					click: () => {
 						const toggle = () => {
@@ -1489,6 +1491,7 @@ const createMenu = () => {
 			submenu: [
 				{
 					label: "Edit codes",
+					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
 						const toggle = () => {
@@ -1522,6 +1525,7 @@ const createMenu = () => {
 				},
 				{
 					label: "Import",
+					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.import,
 					click: () => {
 						const toggle = () => {
@@ -1555,6 +1559,7 @@ const createMenu = () => {
 				},
 				{
 					label: "Export",
+					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.export,
 					click: () => {
 						const toggle = () => {
