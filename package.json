@@ -97,7 +97,7 @@
 	"devDependencies": {
 		"@tailwindcss/forms": "^0.3.4",
 		"autoprefixer": "^10.4.0",
-		"electron": "^16.0.3",
+		"electron": "^16.0.4",
 		"electron-builder": "^22.14.5",
 		"eslint": "^8.3.0",
 		"eslint-config-node": "^4.1.0",
