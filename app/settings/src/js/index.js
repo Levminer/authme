@@ -256,10 +256,12 @@ const toggleWindowCaptureSwitch = () => {
 	}
 }
 
-// ? reset
-const reset = () => {
+/**
+ * Clear all data
+ */
+const clearData = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: ["Yes", "No"],
 			defaultId: 1,
@@ -271,7 +273,7 @@ const reset = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
-					.showMessageBox({
+					.showMessageBox(currentWindow, {
 						title: "Authme",
 						buttons: ["Yes", "No"],
 						defaultId: 1,
@@ -705,6 +707,8 @@ const menu = (evt, name) => {
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
 		shortcut = true
 
 		ipc.send("shortcuts")
@@ -717,6 +721,8 @@ const menu = (evt, name) => {
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -733,6 +739,8 @@ const menu = (evt, name) => {
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
 		if (shortcut === true) {
 			ipc.send("shortcuts")
 
@@ -747,6 +755,8 @@ const menu = (evt, name) => {
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = true
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
