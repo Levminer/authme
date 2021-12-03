@@ -1,4 +1,4 @@
-const { shell, app, dialog } = require("@electron/remote")
+const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -61,6 +61,9 @@ const settings_refresher = setInterval(() => {
 		logger.log("Settings refresh completed")
 	}
 }, 100)
+
+// Get current window
+const currentWindow = BrowserWindow.getFocusedWindow()
 
 // ? elements
 const inp0 = document.querySelector("#inp0")
