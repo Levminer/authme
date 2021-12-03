@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power } = require("electron")
 const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
 const { version, tag } = require("./package.json")
@@ -1239,7 +1239,31 @@ const quickShortcuts = () => {
 	}
 }
 
+/**
+ * Lock Authme when PC goes to sleep or locked
+ */
+power.on("lock-screen", () => {
+	if (settings.security.require_password === true) {
+		window_application.hide()
+		window_settings.hide()
+		window_import.hide()
+		window_export.hide()
+		window_edit.hide()
 
+		application_shown = false
+		settings_shown = false
+		import_shown = false
+		export_shown = false
+		edit_shown = false
+
+		authenticated = false
+
+		createTray()
+		createMenu()
+
+		logger.log("Authme locked by sleep")
+	}
+})
 
 // ? start app
 app.whenReady()
