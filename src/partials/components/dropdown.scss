@@ -42,6 +42,7 @@
 }
 
 .dropdown-content a:hover {
+	transition: ease-in 0.2s;
 	background-color: rgb(30, 30, 30);
 	color: white;
 }
