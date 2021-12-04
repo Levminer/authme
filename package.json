@@ -13,9 +13,8 @@
 		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64",
 		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64",
 		"build:test": "node scripts/alpha-build.js && electron-builder --publish=never --x64 --dir -c scripts/test-build.json",
-		"build:df": "sass src/dragonfly.scss src/dragonfly.css --no-source-map --style compressed",
-		"build:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify",
-		"watch:df": "sass src/dragonfly.scss src/dragonfly.css --no-source-map --style compressed --watch",
+		"build:styles": "concurrently 'npm:watch:tw' 'npm:watch:gb'",
+		"watch:gb": "sass src/global.scss src/global.css --no-source-map --style compressed --watch",
 		"watch:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
@@ -97,6 +96,7 @@
 	"devDependencies": {
 		"@tailwindcss/forms": "^0.3.4",
 		"autoprefixer": "^10.4.0",
+		"concurrently": "^6.4.0",
 		"electron": "^16.0.4",
 		"electron-builder": "^22.14.5",
 		"eslint": "^8.3.0",

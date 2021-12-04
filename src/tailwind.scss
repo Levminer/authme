@@ -2,17 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-::before,
-::after {
-	border-width: 0;
-	border-style: solid;
-	border-color: theme("borderColor.default", currentColor);
-	user-select: none;
-	-webkit-user-drag: none;
-	-webkit-app-region: no-drag;
-}
-
 @layer components {
 	.checkbox {
 		@apply outline-none form-checkbox rounded-full relative border-2 -top-0.5 focus:ring-white text-black cursor-pointer transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
@@ -36,6 +25,14 @@
 
 	.input {
 		@apply bg-white text-black rounded-2xl border-2 border-white w-[220px] cursor-text px-8 py-[18px] text-lg text-center hover:bg-transparent hover:text-white transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+	}
+
+	.details {
+		@apply text-2xl;
+	}
+
+	.summary {
+		@apply font-bold cursor-pointer;
 	}
 }
 
@@ -67,63 +64,4 @@
 	h3 {
 		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
 	}
-}
-
-/* headings */
-h1 {
-	font-size: 64px;
-	font-weight: bold;
-	margin: 2rem;
-}
-
-h2 {
-	font-size: 48px;
-	font-weight: bold;
-	margin: 2rem;
-}
-
-h3 {
-	font-size: 32px;
-	font-weight: bold;
-	margin: 2rem;
-}
-
-h4 {
-	font-size: 24px;
-	margin: 2rem;
-	font-weight: normal;
-}
-
-h5 {
-	font-size: 18px;
-	margin: 2rem;
-	font-weight: normal;
-}
-
-/* hr */
-hr {
-	margin-top: 30px;
-	color: white;
-	border-width: 1px;
-}
-
-/* button */
-.buttoni > svg {
-	position: relative;
-	top: 4px;
-}
-
-.buttonc > svg {
-	position: relative;
-	top: 4px;
-}
-
-.buttonm > svg {
-	position: relative;
-	top: 4px;
-}
-
-.buttonmselected {
-	background-color: rgb(30, 30, 30);
-	border-color: rgb(30, 30, 30);
 }
