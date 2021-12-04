@@ -57,7 +57,7 @@ const gaLink = () => {
 
 // ? hide
 const hide = () => {
-	ipc.send("hide_import")
+	ipc.send("toggleImport")
 }
 
 // ? build

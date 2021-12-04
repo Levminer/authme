@@ -118,7 +118,7 @@ const loadRollback = () => {
 				})
 
 				reloadApplication()
-				reloadSettings()
+				reloadSettingsWindow()
 			}
 		})
 }
@@ -312,7 +312,7 @@ const createSave = () => {
 				}
 
 				reloadApplication()
-				reloadSettings()
+				reloadSettingsWindow()
 			}
 		})
 }
@@ -606,16 +606,16 @@ const loadCodes = () => {
 
 // ? hide window
 const hide = () => {
-	ipc.send("hide_edit")
+	ipc.send("toggleEdit")
 }
 
 // ? reloads
 const reloadApplication = () => {
-	ipc.send("reload_application")
+	ipc.send("reloadApplicationWindow")
 }
 
-const reloadSettings = () => {
-	ipc.send("reload_settings")
+const reloadSettingsWindow = () => {
+	ipc.send("reloadSettingsWindow")
 }
 
 /**
@@ -685,7 +685,7 @@ const deleteCodes = () => {
 				}
 
 				reloadApplication()
-				reloadSettings()
+				reloadSettingsWindow()
 
 				setTimeout(() => {
 					location.reload()

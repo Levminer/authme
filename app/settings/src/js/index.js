@@ -104,12 +104,12 @@ if (tray_state === true) {
 	tgt1.textContent = "On"
 	tgl1.checked = true
 
-	ipc.send("enable_tray")
+	ipc.send("enableTray")
 } else {
 	tgt1.textContent = "Off"
 	tgl1.checked = false
 
-	ipc.send("disable_tray")
+	ipc.send("disableTray")
 }
 
 // names
@@ -187,7 +187,7 @@ const startup = () => {
 
 		startup_state = false
 
-		ipc.send("disable_startup")
+		ipc.send("disableStartup")
 	} else {
 		settings.settings.launch_on_startup = true
 
@@ -198,7 +198,7 @@ const startup = () => {
 
 		startup_state = true
 
-		ipc.send("enable_startup")
+		ipc.send("enableStartup")
 	}
 }
 
@@ -212,7 +212,7 @@ const tray = () => {
 		tgt1.textContent = "Off"
 		tray_state = false
 
-		ipc.send("disable_tray")
+		ipc.send("disableTray")
 	} else {
 		settings.settings.close_to_tray = true
 
@@ -221,7 +221,7 @@ const tray = () => {
 		tgt1.textContent = "On"
 		tray_state = true
 
-		ipc.send("enable_tray")
+		ipc.send("enableTray")
 	}
 }
 
@@ -325,7 +325,7 @@ const clearData = () => {
 
 							// remove start shortcut
 							if (dev === false) {
-								ipc.send("disable_startup")
+								ipc.send("disableStartup")
 							}
 
 							// clear storage
@@ -556,7 +556,7 @@ const dropdownChoose = (id) => {
 	sort()
 	save()
 
-	ipc.send("reload_application")
+	ipc.send("reloadApplicationWindow")
 }
 
 // ? save settings
@@ -566,7 +566,7 @@ const save = () => {
 
 // ? rate
 const rateAuthme = () => {
-	ipc.send("rate_authme")
+	ipc.send("rateAuthme")
 }
 
 // ? feedback
@@ -681,7 +681,7 @@ const quickCopyShortcutsLink = () => {
 }
 
 const hide = () => {
-	ipc.send("hide_settings")
+	ipc.send("toggleSettings")
 }
 
 document.querySelector(".settings").disabled = true
@@ -797,7 +797,7 @@ const about = () => {
 
 // ? edit
 const edit = () => {
-	ipc.send("hide_edit")
+	ipc.send("toggleEdit")
 }
 
 // ? build
@@ -813,7 +813,7 @@ let online_closed = false
 
 // ? send reload
 const reload = () => {
-	ipc.send("reload_application")
+	ipc.send("reloadApplicationWindow")
 }
 
 const check_for_internet = () => {

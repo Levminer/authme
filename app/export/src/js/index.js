@@ -199,7 +199,7 @@ const saveQrCodes = () => {
 
 // ? hide
 const hide = () => {
-	ipc.send("hide_export")
+	ipc.send("toggleExport")
 }
 
 // ? error handling

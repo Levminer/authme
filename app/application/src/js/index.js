@@ -844,12 +844,12 @@ const quickCopy = (key) => {
 
 // ? rate
 const rateAuthme = () => {
-	ipc.send("rate_authme")
+	ipc.send("rateAuthme")
 }
 
 // ? feedback
 const provideFeedback = () => {
-	ipc.send("provide_feedback")
+	ipc.send("provideFeedback")
 }
 
 // ? build
@@ -862,11 +862,11 @@ if (res.build_number.startsWith("alpha")) {
 
 // ? buttons
 const createFile = () => {
-	ipc.send("hide_import")
+	ipc.send("toggleImport")
 }
 
 const configureSettings = () => {
-	ipc.send("hide_settings")
+	ipc.send("toggleSettings")
 }
 
 const supportDevelopment = () => {

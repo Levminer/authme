@@ -161,7 +161,7 @@ const hashPasswords = async () => {
 	setInterval(() => {
 		password_input.fill(0)
 
-		ipc.send("to_confirm")
+		ipc.send("toConfirm")
 
 		location.reload()
 	}, 1000)
@@ -228,7 +228,7 @@ const noPassword = () => {
 				setInterval(() => {
 					password.fill(0)
 
-					ipc.send("to_application1")
+					ipc.send("toConfirmFromLanding")
 
 					location.reload()
 				}, 1000)

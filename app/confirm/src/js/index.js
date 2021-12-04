@@ -124,7 +124,7 @@ const unhashPassword = async () => {
 		setInterval(() => {
 			password_input.fill(0)
 
-			ipc.send("to_application0")
+			ipc.send("toApplicationFromConfirm")
 
 			location.reload()
 		}, 1000)

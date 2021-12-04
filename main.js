@@ -788,7 +788,11 @@ contextmenu({
 })
 
 // ? ipcs
-ipc.on("to_confirm", () => {
+
+/**
+ * Navigate to confirm
+ */
+ipc.on("toConfirm", () => {
 	if (authenticated === false) {
 		if (settings.security.require_password === null) {
 			window_confirm.maximize()
@@ -798,7 +802,10 @@ ipc.on("to_confirm", () => {
 			window_confirm.on("ready-to-show", () => {
 				window_confirm.maximize()
 				window_confirm.show()
-				window_landing.hide()
+
+				try {
+					window_landing.hide()
+				} catch (error) {}
 			})
 		}
 
@@ -806,7 +813,10 @@ ipc.on("to_confirm", () => {
 	}
 })
 
-ipc.on("to_application0", () => {
+/**
+ * Navigate to application from confirm
+ */
+ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
 		window_confirm.hide()
 
@@ -816,17 +826,22 @@ ipc.on("to_application0", () => {
 		}, 300)
 
 		setTimeout(() => {
-			window_confirm.destroy()
 			window_landing.destroy()
 		}, 500)
 
 		authenticated = true
 
+		createTray()
+		createMenu()
+
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
-ipc.on("to_application1", () => {
+/**
+ * Navigate to confirm from landing
+ */
+ipc.on("toConfirmFromLanding", () => {
 	if (authenticated === false) {
 		window_landing.hide()
 
@@ -852,11 +867,17 @@ ipc.on("to_application1", () => {
 
 		authenticated = true
 
+		createTray()
+		createMenu()
+
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
-ipc.on("hide_settings", () => {
+/**
+ * Show/Hide settings
+ */
+ipc.on("toggleSettings", () => {
 	if (settings_shown == false) {
 		window_settings.maximize()
 		window_settings.show()
@@ -871,7 +892,10 @@ ipc.on("hide_settings", () => {
 	}
 })
 
-ipc.on("hide_import", () => {
+/**
+ * Show/Hide import
+ */
+ipc.on("toggleImport", () => {
 	if (import_shown == false) {
 		window_import.maximize()
 		window_import.show()
@@ -886,7 +910,10 @@ ipc.on("hide_import", () => {
 	}
 })
 
-ipc.on("hide_export", () => {
+/**
+ * Show/Hide export
+ */
+ipc.on("toggleExport", () => {
 	if (export_shown == false) {
 		window_export.maximize()
 		window_export.show()
@@ -901,7 +928,10 @@ ipc.on("hide_export", () => {
 	}
 })
 
-ipc.on("hide_edit", () => {
+/**
+ * Show/Hide edit
+ */
+ipc.on("toggleEdit", () => {
 	if (edit_shown == false) {
 		window_edit.maximize()
 		window_edit.show()
@@ -916,13 +946,19 @@ ipc.on("hide_edit", () => {
 	}
 })
 
-ipc.on("disable_startup", () => {
+/**
+ * Disable launch on startup
+ */
+ipc.on("disableStartup", () => {
 	authme_launcher.disable()
 
 	logger.log("Startup disabled")
 })
 
-ipc.on("enable_startup", () => {
+/**
+ * Enable launch on startup
+ */
+ipc.on("enableStartup", () => {
 	authme_launcher.enable()
 
 	logger.log("Startup enabled")
@@ -972,26 +1008,41 @@ ipc.on("enableWindowCapture", () => {
 	logger.log("Screen capture enabled")
 })
 
-ipc.on("disable_tray", () => {
+/**
+ * Disable close to tray
+ */
+ipc.on("disableTray", () => {
 	tray_minimized = false
 
 	logger.log("Close to tray disabled")
 })
 
-ipc.on("enable_tray", () => {
+/**
+ * Enable close to tray
+ */
+ipc.on("enableTray", () => {
 	tray_minimized = true
 
 	logger.log("Close to tray enabled")
 })
 
+/**
+ * Set logs path
+ */
 ipc.on("logs", () => {
 	logs()
 })
 
+/**
+ * Show about dialog
+ */
 ipc.on("about", () => {
 	about()
 })
 
+/**
+ * Abort execution
+ */
 ipc.on("abort", () => {
 	dialog
 		.showMessageBox({
@@ -1022,6 +1073,9 @@ ipc.on("abort", () => {
 	})
 })
 
+/**
+ * Offline mode
+ */
 ipc.on("offline", () => {
 	if (offline === false) {
 		setTimeout(() => {
@@ -1049,6 +1103,9 @@ ipc.on("releaseNotes", () => {
 	releaseNotes()
 })
 
+/**
+ * Look for manual update
+ */
 ipc.on("manualUpdate", () => {
 	axios
 		.get("https://api.levminer.com/api/v1/authme/releases")
@@ -1078,11 +1135,17 @@ ipc.on("manualUpdate", () => {
 		})
 })
 
+/**
+ * Show support Authme dialog
+ */
 ipc.on("support", () => {
 	support()
 })
 
-ipc.on("rate_authme", () => {
+/**
+ * Show rate Authme dialog
+ */
+ipc.on("rateAuthme", () => {
 	shell.openExternal("https://github.com/Levminer/authme/")
 
 	settings.statistics.rated = true
@@ -1090,7 +1153,10 @@ ipc.on("rate_authme", () => {
 	saveSettings()
 })
 
-ipc.on("provide_feedback", () => {
+/**
+ * Show provide feedback dialog
+ */
+ipc.on("provideFeedback", () => {
 	shell.openExternal("https://github.com/Levminer/authme/issues")
 
 	settings.statistics.feedback = true
@@ -1098,20 +1164,26 @@ ipc.on("provide_feedback", () => {
 	saveSettings()
 })
 
-// ? new encryption method
-let password_buffer
+/**
+ * Receive password from confirm page
+ */
 ipc.on("send_password", (event, data) => {
 	password_buffer = Buffer.from(data)
 
 	window_application.webContents.executeJavaScript("loadCodes()")
 })
 
+/**
+ * Send password to requesting page
+ */
 ipc.on("request_password", (event) => {
 	event.returnValue = password_buffer
 })
 
-// ? reload application window
-ipc.on("reload_application", () => {
+/**
+ * Reload application window
+ */
+ipc.on("reloadApplicationWindow", () => {
 	window_application.reload()
 
 	if (settings.security.require_password === true) {
@@ -1119,18 +1191,21 @@ ipc.on("reload_application", () => {
 	}
 })
 
-// ? reload settings window
-ipc.on("reload_settings", () => {
+/**
+ * Reload settings window
+ */
+ipc.on("reloadSettingsWindow", () => {
 	window_settings.reload()
 })
 
-// ? error in window
+/**
+ * Receive error from renderer
+ */
 ipc.on("rendererError", (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
 })
 
 // ? logger
-
 ipc.on("loggerLog", (event, data) => {
 	logger.rendererLog(data.id, data.message, data.log)
 })
@@ -1265,7 +1340,9 @@ power.on("lock-screen", () => {
 	}
 })
 
-// ? start app
+/**
+ * Start Authme when the app is ready
+ */
 app.whenReady()
 	.then(() => {
 		logger.log("Starting app")
@@ -1755,7 +1832,6 @@ ipc.on("shortcuts", () => {
 		globalShortcut.unregisterAll()
 
 		createTray()
-
 		createMenu()
 
 		logger.log("Shortcuts disabled")
@@ -1783,9 +1859,7 @@ ipc.on("shortcuts", () => {
 		}
 
 		quickShortcuts()
-
 		createTray()
-
 		createMenu()
 
 		logger.log("Shortcuts enabled")
