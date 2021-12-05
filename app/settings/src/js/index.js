@@ -67,7 +67,7 @@ const currentWindow = BrowserWindow.getFocusedWindow()
 
 // ? elements
 const inp0 = document.querySelector("#inp0")
-const drp0 = document.querySelector("#drp0")
+const drp0 = document.querySelector("#dropdownButton0")
 
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
@@ -504,7 +504,7 @@ const hardware = () => {
 let dropdown_state = false
 // ? dropdown
 const dropdown = (id) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
+	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
 		dropdown_content.style.visibility = "visible"
@@ -522,7 +522,7 @@ const dropdown = (id) => {
 }
 
 const dropdownChoose = (id) => {
-	const dropdown_button = document.querySelector(".dropdown-button")
+	const dropdown_button = document.querySelector("#dropdownButton0")
 
 	const sort = () => {
 		switch (id) {
@@ -853,10 +853,10 @@ setInterval(() => {
 
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
-	const dropdown_button = document.querySelector(".dropdown-button")
-	const sort_svg = document.querySelector("#sort_svg")
-	const sort_path = document.querySelector("#sort_path")
+	const dropdown_content = document.querySelector("#dropdownContent0")
+	const dropdown_button = document.querySelector("#dropdownButton0")
+	const sort_svg = document.querySelector("#sortSvg")
+	const sort_path = document.querySelector("#sortPath")
 	const link0 = document.querySelector("#link0")
 	const link1 = document.querySelector("#link1")
 	const link2 = document.querySelector("#link2")

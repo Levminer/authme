@@ -126,8 +126,8 @@ const go = (data) => {
 	document.querySelector(".content").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
-	document.querySelector("#search_icon").style.display = "inline-block"
-	document.querySelector("#filter_icon").style.display = "inline-block"
+	document.querySelector("#searchIcon").style.display = "inline-block"
+	document.querySelector("#filterIcon").style.display = "inline-block"
 
 	const names = data.names
 	const secrets = data.secrets
@@ -781,7 +781,7 @@ if (settings.security.require_password === false) {
 let dropdown_state = false
 // ? dropdown
 const dropdown = () => {
-	const dropdown_content = document.querySelector(".dropdown-content")
+	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
 		dropdown_content.style.visibility = "visible"
@@ -883,9 +883,9 @@ const sampleImport = () => {
 
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
-	const filter = document.querySelector("#filter_icon")
-	const filter_path = document.querySelector("#filter_path")
+	const dropdown_content = document.querySelector("#dropdownContent0")
+	const filter = document.querySelector("#filterIcon")
+	const filter_path = document.querySelector("#filterPath")
 	const checkbox0 = document.querySelector("#checkbox0")
 	const checkbox1 = document.querySelector("#checkbox1")
 	const link0 = document.querySelector("#link0")
