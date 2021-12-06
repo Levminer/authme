@@ -1,7 +1,6 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power } = require("electron")
 const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
-const { version, tag } = require("./package.json")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
 const debug = require("electron-debug")
@@ -45,6 +44,7 @@ let shortcuts = false
 let reload = false
 let tray_minimized = false
 let update_seen = false
+let manual_update = false
 let tray = null
 let menu = null
 
@@ -122,13 +122,12 @@ if (!fs.existsSync(path.join(folder_path, "rollbacks"))) {
 }
 
 // ? version and logs
-const authme_version = version
-const tag_name = tag
+const authme_version = app.getVersion()
 const release_date = date
 const build_number = number
 
 ipc.on("info", (event) => {
-	event.returnValue = { authme_version, release_date, tag_name, build_number }
+	event.returnValue = { authme_version, release_date, build_number }
 })
 
 const chrome_version = process.versions.chrome
@@ -172,7 +171,7 @@ const saveSettings = () => {
 
 const settings_file = {
 	version: {
-		tag: `${tag_name}`,
+		tag: `${authme_version}`,
 		build: `${build_number}`,
 	},
 	settings: {
@@ -285,10 +284,16 @@ const showAppFromTray = () => {
 			window_confirm.show()
 
 			confirm_shown = true
+			application_shown = true
+
+			createTray()
 		} else {
 			window_confirm.hide()
 
 			confirm_shown = false
+			application_shown = false
+
+			createTray()
 		}
 	}
 }
@@ -593,7 +598,7 @@ const createWindow = () => {
 			axios
 				.get("https://api.levminer.com/api/v1/authme/releases")
 				.then((res) => {
-					if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+					if (res.data.tag_name > verify && res.data.tag_name != undefined && res.data.prerelease != true) {
 						window_application.webContents.executeJavaScript("showUpdate()")
 
 						window_settings.on("show", () => {
@@ -634,7 +639,7 @@ const createWindow = () => {
 	})
 
 	// ? auto updater
-	if (dev === false) {
+	if (dev === false && platform === "windows") {
 		autoUpdater.checkForUpdates()
 	}
 
@@ -650,6 +655,19 @@ const createWindow = () => {
 
 	autoUpdater.on("update-not-available", () => {
 		logger.log("Auto update not available")
+
+		if (manual_update === true) {
+			dialog.showMessageBox({
+				title: "Authme",
+				buttons: ["Close"],
+				defaultId: 0,
+				cancelId: 1,
+				type: "info",
+				message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${authme_version}`,
+			})
+
+			manual_update = false
+		}
 	})
 
 	autoUpdater.on("update-downloaded", () => {
@@ -660,6 +678,8 @@ const createWindow = () => {
 
 	autoUpdater.on("error", (error) => {
 		logger.error("Error during auto update", error.stack)
+
+		dialog.showErrorBox("Authme", "Error during auto update. \n\nTry to restart Authme!")
 	})
 
 	autoUpdater.on("download-progress", (progress) => {
@@ -1110,7 +1130,7 @@ ipc.on("manualUpdate", () => {
 	axios
 		.get("https://api.levminer.com/api/v1/authme/releases")
 		.then((res) => {
-			if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
+			if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
 				dialog
 					.showMessageBox({
 						title: "Authme",
@@ -1119,7 +1139,7 @@ ipc.on("manualUpdate", () => {
 						cancelId: 1,
 						noLink: true,
 						type: "info",
-						message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
+						message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${authme_version}`,
 					})
 					.then((result) => {
 						if (result.response === 0) {
@@ -1768,40 +1788,48 @@ const createMenu = () => {
 					label: "Update",
 					accelerator: shortcuts ? "" : settings.shortcuts.update,
 					click: () => {
-						axios
-							.get("https://api.levminer.com/api/v1/authme/releases")
-							.then((res) => {
-								if (res.data.tag_name > tag_name && res.data.tag_name != undefined && res.data.prerelease != true) {
-									dialog
-										.showMessageBox({
+						if (platform === "windows") {
+							if (dev === false) {
+								manual_update = true
+
+								autoUpdater.checkForUpdates()
+							}
+						} else {
+							axios
+								.get("https://api.levminer.com/api/v1/authme/releases")
+								.then((res) => {
+									if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
+										dialog
+											.showMessageBox({
+												title: "Authme",
+												buttons: ["Yes", "No"],
+												defaultId: 0,
+												cancelId: 1,
+												type: "info",
+												message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${authme_version}`,
+											})
+											.then((result) => {
+												if (result.response === 0) {
+													shell.openExternal("https://authme.levminer.com#downloads")
+												}
+											})
+									} else {
+										dialog.showMessageBox({
 											title: "Authme",
-											buttons: ["Yes", "No"],
+											buttons: ["Close"],
 											defaultId: 0,
 											cancelId: 1,
 											type: "info",
-											message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${tag_name}`,
+											message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${authme_version}`,
 										})
-										.then((result) => {
-											if (result.response === 0) {
-												shell.openExternal("https://authme.levminer.com#downloads")
-											}
-										})
-								} else {
-									dialog.showMessageBox({
-										title: "Authme",
-										buttons: ["Close"],
-										defaultId: 0,
-										cancelId: 1,
-										type: "info",
-										message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${tag_name}`,
-									})
-								}
-							})
-							.catch((error) => {
-								dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
+									}
+								})
+								.catch((error) => {
+									dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
 
-								logger.error("Error getting update manually", error.stack)
-							})
+									logger.error("Error getting update manually", error.stack)
+								})
+						}
 					},
 				},
 				{

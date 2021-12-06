@@ -40,7 +40,7 @@ if (dev === true) {
  * App controller
  */
 if (file.security.require_password === true && file.security.password !== null) {
-	ipc.send("to_confirm")
+	ipc.send("toConfirm")
 } else if (file.security.require_password === false && file.security.password === null) {
 	if (storage === null) {
 		ipc.send("abort")
@@ -53,7 +53,7 @@ if (file.security.require_password === true && file.security.password !== null) 
 	if (file.security.require_password === storage.require_password) {
 		console.log("Authme - Local storage passwords match")
 
-		ipc.send("to_application1")
+		ipc.send("toConfirmFromLanding")
 	} else {
 		ipc.send("abort")
 
@@ -62,7 +62,7 @@ if (file.security.require_password === true && file.security.password !== null) 
 } else if (file.security.require_password === null && file.security.password === null) {
 	console.log("Authme - First restart")
 } else {
-	ipc.send("to_confirm")
+	ipc.send("toConfirm")
 }
 
 /**
