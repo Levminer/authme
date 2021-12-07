@@ -68,7 +68,7 @@ if (app.isPackaged === false) {
 
 // pre release
 let pre_release = false
-if (number.startsWith("alpha")) {
+if (number.startsWith("alpha") || number.startsWith("beta")) {
 	pre_release = true
 }
 

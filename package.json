@@ -7,9 +7,10 @@
 	"license": "GPL-3.0",
 	"scripts": {
 		"start": "node scripts/alpha-build.js && electron .",
-		"dev": "node scripts/release-build.js && electron .",
+		"dev": "node scripts/beta-build.js && electron .",
 		"build": "npm run build:release",
 		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64",
+		"build:beta": "node scripts/beta-build.js && electron-builder --publish=never --x64",
 		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64",
 		"build:test": "node scripts/alpha-build.js && electron-builder --publish=never --x64 --dir -c scripts/test-build.json",
 		"build:styles": "concurrently 'npm:watch:tw' 'npm:watch:gb'",

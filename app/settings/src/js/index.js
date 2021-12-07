@@ -18,8 +18,21 @@ window.onerror = (error) => {
 // ? choose settings
 document.querySelector("#setting").click()
 
-// ? get app infos
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
+
+/**
+ * Show build number if version is pre release
+ */
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
 
 // set app version
 document.querySelector("#but7").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -798,12 +811,6 @@ const about = () => {
 // ? edit
 const edit = () => {
 	ipc.send("toggleEdit")
-}
-
-// ? build
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
 }
 
 // ? offline mode
