@@ -298,47 +298,20 @@ const clearData = () => {
 						type: "warning",
 						message: "Are you absolutely sure? \n\nThere is no way back!",
 					})
-					.then((result) => {
+					.then(async (result) => {
 						if (result.response === 0) {
 							// clear codes
-							fs.rm(path.join(folder_path, "codes"), { recursive: true, force: true }, (err) => {
+							await fs.promises.rm(folder_path, { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error("Error deleting codes", err.stack)
+									return logger.error("Error deleting settings folder", err.stack)
 								} else {
-									logger.log("Codes deleted")
+									logger.log("Setting folder deleted")
 								}
 							})
 
-							// clear settings
-							fs.rm(path.join(folder_path, "settings"), { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting settings", err.stack)
-								} else {
-									logger.log("Settings deleted")
-								}
-							})
-
-							// clear logs
-							fs.rm(path.join(folder_path, "logs"), { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting logs", err.stack)
-								} else {
-									logger.log("Logs deleted")
-								}
-							})
-
-							// clear rollback
-							fs.rm(path.join(folder_path, "rollbacks"), { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting rollback", err.stack)
-								} else {
-									logger.log("Rollback deleted")
-								}
-							})
-
-							// remove start shortcut
+							// remove startup shortcut
 							if (dev === false) {
-								ipc.send("disableStartup")
+								ipc.sendSync("disableStartup")
 							}
 
 							// clear storage
@@ -348,8 +321,10 @@ const clearData = () => {
 								localStorage.removeItem("dev_storage")
 							}
 
-							// restart
-							restart()
+							// exit aoo
+							setTimeout(() => {
+								app.exit()
+							}, 300)
 						}
 					})
 			}
