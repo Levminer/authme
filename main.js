@@ -990,6 +990,9 @@ ipc.on("enableStartup", () => {
 ipc.on("disableWindowCapture", () => {
 	try {
 		window_landing.setContentProtection(true)
+	} catch (error) {}
+
+	try {
 		window_confirm.setContentProtection(true)
 	} catch (error) {}
 
@@ -1011,8 +1014,11 @@ ipc.on("disableWindowCapture", () => {
  */
 ipc.on("enableWindowCapture", () => {
 	try {
-		window_landing.setContentProtection(false)
-		window_confirm.setContentProtection(false)
+		window_landing.setContentProtection(true)
+	} catch (error) {}
+
+	try {
+		window_confirm.setContentProtection(true)
 	} catch (error) {}
 
 	window_application.setContentProtection(false)
