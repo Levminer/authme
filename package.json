@@ -1,13 +1,13 @@
 {
 	"name": "authme",
 	"productName": "Authme",
-	"version": "3.0.0",
+	"version": "3.0.0-beta.0",
 	"description": "Simple cross platform two-factor authentication app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
 	"scripts": {
 		"start": "node scripts/alpha-build.js && electron .",
-		"dev": "node scripts/beta-build.js && electron .",
+		"dev": "node scripts/release-build.js && electron .",
 		"build": "npm run build:release",
 		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64",
 		"build:beta": "node scripts/beta-build.js && electron-builder --publish=never --x64",
