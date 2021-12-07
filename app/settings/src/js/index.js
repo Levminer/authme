@@ -1,4 +1,4 @@
-const { shell, app, dialog } = require("@electron/remote")
+const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
 const fs = require("fs")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
@@ -18,8 +18,21 @@ window.onerror = (error) => {
 // ? choose settings
 document.querySelector("#setting").click()
 
-// ? get app infos
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
+
+/**
+ * Show build number if version is pre release
+ */
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
 
 // set app version
 document.querySelector("#but7").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,41 +46,41 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? platform
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else if (process.platform === "darwin") {
-	folder = process.env.HOME
-} else {
-	folder = process.env.HOME
+// ? check if linux
+if (process.platform !== "win32" && process.platform !== "darwin") {
 	document.querySelector("#disable_screen_capture_div").style.display = "none"
 }
 
-// ? settings
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
 	}
 }, 100)
 
+// Get current window
+const currentWindow = BrowserWindow.getFocusedWindow()
+
 // ? elements
 const inp0 = document.querySelector("#inp0")
-const drp0 = document.querySelector("#drp0")
+const drp0 = document.querySelector("#dropdownButton0")
 
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
@@ -89,7 +102,7 @@ const tgl8 = document.querySelector("#tgl8")
 const tgt8 = document.querySelector("#tgt8")
 
 // launch on startup
-let startup_state = file.settings.launch_on_startup
+let startup_state = settings.settings.launch_on_startup
 if (startup_state === true) {
 	tgt0.textContent = "On"
 	tgl0.checked = true
@@ -99,35 +112,21 @@ if (startup_state === true) {
 }
 
 // close to tray
-let tray_state = file.settings.close_to_tray
+let tray_state = settings.settings.close_to_tray
 if (tray_state === true) {
 	tgt1.textContent = "On"
 	tgl1.checked = true
 
-	ipc.send("enable_tray")
+	ipc.send("enableTray")
 } else {
 	tgt1.textContent = "Off"
 	tgl1.checked = false
 
-	ipc.send("disable_tray")
-}
-
-// capture
-let capture_state = file.settings.disable_window_capture
-if (capture_state === true) {
-	tgt2.textContent = "Off"
-	tgl2.checked = false
-
-	ipc.send("disable_capture")
-} else {
-	tgt2.textContent = "On"
-	tgl2.checked = true
-
-	ipc.send("enable_capture")
+	ipc.send("disableTray")
 }
 
 // names
-let names_state = file.settings.show_2fa_names
+let names_state = settings.settings.show_2fa_names
 if (names_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
@@ -137,7 +136,7 @@ if (names_state === true) {
 }
 
 // reveal
-let reveal_state = file.settings.click_to_reveal
+let reveal_state = settings.settings.click_to_reveal
 if (reveal_state === true) {
 	tgt4.textContent = "On"
 	tgl4.checked = true
@@ -147,7 +146,7 @@ if (reveal_state === true) {
 }
 
 // search
-let search_state = file.settings.save_search_results
+let search_state = settings.settings.save_search_results
 if (search_state === true) {
 	tgt5.textContent = "On"
 	tgl5.checked = true
@@ -157,7 +156,7 @@ if (search_state === true) {
 }
 
 // copy
-let copy_state = file.settings.reset_after_copy
+let copy_state = settings.settings.reset_after_copy
 if (copy_state === true) {
 	tgt6.textContent = "On"
 	tgl6.checked = true
@@ -167,7 +166,7 @@ if (copy_state === true) {
 }
 
 // sort
-const sort_number = file.experimental.sort
+const sort_number = settings.experimental.sort
 
 if (sort_number === 1) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,7 +179,7 @@ if (sort_number === 1) {
 }
 
 // hardware
-let hardware_state = file.settings.disable_hardware_acceleration
+let hardware_state = settings.settings.disable_hardware_acceleration
 if (hardware_state === true) {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
@@ -189,21 +188,10 @@ if (hardware_state === true) {
 	tgl7.checked = true
 }
 
-// webcam
-let webcam_state = file.experimental.webcam
-
-if (webcam_state === true) {
-	tgt8.textContent = "On"
-	tgl8.checked = true
-} else {
-	tgt8.textContent = "Off"
-	tgl8.checked = false
-}
-
 // ? startup
 const startup = () => {
 	if (startup_state == true) {
-		file.settings.launch_on_startup = false
+		settings.settings.launch_on_startup = false
 
 		save()
 
@@ -212,9 +200,9 @@ const startup = () => {
 
 		startup_state = false
 
-		ipc.send("disable_startup")
+		ipc.send("disableStartup")
 	} else {
-		file.settings.launch_on_startup = true
+		settings.settings.launch_on_startup = true
 
 		save()
 
@@ -223,64 +211,73 @@ const startup = () => {
 
 		startup_state = true
 
-		ipc.send("enable_startup")
+		ipc.send("enableStartup")
 	}
 }
 
 // ? tray
 const tray = () => {
 	if (tray_state == true) {
-		file.settings.close_to_tray = false
+		settings.settings.close_to_tray = false
 
 		save()
 
 		tgt1.textContent = "Off"
 		tray_state = false
 
-		ipc.send("disable_tray")
+		ipc.send("disableTray")
 	} else {
-		file.settings.close_to_tray = true
+		settings.settings.close_to_tray = true
 
 		save()
 
 		tgt1.textContent = "On"
 		tray_state = true
 
-		ipc.send("enable_tray")
+		ipc.send("enableTray")
 	}
 }
 
-// ? capture
-const capture = () => {
-	if (capture_state == true) {
-		file.settings.disable_window_capture = false
+/**
+ * Toggles window capture
+ */
+const toggleWindowCapture = () => {
+	const tgl2 = document.querySelector("#tgl2").checked
+	const tgt2 = document.querySelector("#tgt2")
 
-		save()
+	if (tgl2 == true) {
+		tgt2.textContent = "On"
 
+		ipc.send("enableWindowCapture")
+	} else {
+		tgt2.textContent = "Off"
+
+		ipc.send("disableWindowCapture")
+	}
+}
+
+/**
+ * Toggles window capture switch if this option is switched somewhere else
+ */
+const toggleWindowCaptureSwitch = () => {
+	const tgl2 = document.querySelector("#tgl2")
+	const tgt2 = document.querySelector("#tgt2")
+
+	if (tgl2.checked === false) {
 		tgt2.textContent = "On"
 		tgl2.checked = true
-
-		capture_state = false
-
-		ipc.send("enable_capture")
 	} else {
-		file.settings.disable_window_capture = true
-
-		save()
-
 		tgt2.textContent = "Off"
 		tgl2.checked = false
-
-		capture_state = true
-
-		ipc.send("disable_capture")
 	}
 }
 
-// ? reset
-const reset = () => {
+/**
+ * Clear all data
+ */
+const clearData = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: ["Yes", "No"],
 			defaultId: 1,
@@ -292,7 +289,7 @@ const reset = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
-					.showMessageBox({
+					.showMessageBox(currentWindow, {
 						title: "Authme",
 						buttons: ["Yes", "No"],
 						defaultId: 1,
@@ -303,54 +300,45 @@ const reset = () => {
 					})
 					.then((result) => {
 						if (result.response === 0) {
-							// remove settings file
-							fs.unlink(path.join(file_path, "settings.json"), (err) => {
-								if (err && err.code === "ENOENT") {
-									return logger.error(`Error deleting settings.json - ${err}`)
-								} else {
-									logger.log("File settings.json deleted")
-								}
-							})
-
-							// remove hash file
-							fs.unlink(path.join(file_path, "hash.authme"), (err) => {
-								if (err && err.code === "ENOENT") {
-									return logger.error(`Error deleting hash.authme - ${err}`)
-								} else {
-									logger.log("File hash.authme deleted")
-								}
-							})
-
 							// clear codes
-							fs.rm(path.join(file_path, "codes"), { recursive: true }, (err) => {
+							fs.rm(path.join(folder_path, "codes"), { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error(`Error deleting codes - ${err}`)
+									return logger.error("Error deleting codes", err.stack)
 								} else {
 									logger.log("Codes deleted")
 								}
 							})
 
-							// clear logs
-							fs.rm(path.join(file_path, "logs"), { recursive: true }, (err) => {
+							// clear settings
+							fs.rm(path.join(folder_path, "settings"), { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error(`Error deleting logs - ${err}`)
+									return logger.error("Error deleting settings", err.stack)
+								} else {
+									logger.log("Settings deleted")
+								}
+							})
+
+							// clear logs
+							fs.rm(path.join(folder_path, "logs"), { recursive: true, force: true }, (err) => {
+								if (err) {
+									return logger.error("Error deleting logs", err.stack)
 								} else {
 									logger.log("Logs deleted")
 								}
 							})
 
-							// clear cache files
-							fs.rm(path.join(file_path, "cache"), { recursive: true }, (err) => {
+							// clear rollback
+							fs.rm(path.join(folder_path, "rollbacks"), { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error(`Error deleting caches - ${err}`)
+									return logger.error("Error deleting rollback", err.stack)
 								} else {
-									logger.log("Caches deleted")
+									logger.log("Rollback deleted")
 								}
 							})
 
 							// remove start shortcut
 							if (dev === false) {
-								ipc.send("disable_startup")
+								ipc.send("disableStartup")
 							}
 
 							// clear storage
@@ -372,7 +360,7 @@ const reset = () => {
 const names = () => {
 	const toggle = () => {
 		if (names_state === true) {
-			file.settings.show_2fa_names = false
+			settings.settings.show_2fa_names = false
 
 			save()
 
@@ -381,7 +369,7 @@ const names = () => {
 
 			names_state = false
 		} else {
-			file.settings.show_2fa_names = true
+			settings.settings.show_2fa_names = true
 
 			save()
 
@@ -400,7 +388,7 @@ const names = () => {
 const reveal = () => {
 	const toggle = () => {
 		if (reveal_state === true) {
-			file.settings.click_to_reveal = false
+			settings.settings.click_to_reveal = false
 
 			save()
 
@@ -409,7 +397,7 @@ const reveal = () => {
 
 			reveal_state = false
 		} else {
-			file.settings.click_to_reveal = true
+			settings.settings.click_to_reveal = true
 
 			save()
 
@@ -428,7 +416,7 @@ const reveal = () => {
 const results = () => {
 	const toggle = () => {
 		if (search_state === true) {
-			file.settings.save_search_results = false
+			settings.settings.save_search_results = false
 
 			save()
 
@@ -437,7 +425,7 @@ const results = () => {
 
 			search_state = false
 		} else {
-			file.settings.save_search_results = true
+			settings.settings.save_search_results = true
 
 			save()
 
@@ -456,7 +444,7 @@ const results = () => {
 const copy = () => {
 	const toggle = () => {
 		if (copy_state === true) {
-			file.settings.reset_after_copy = false
+			settings.settings.reset_after_copy = false
 
 			save()
 
@@ -465,7 +453,7 @@ const copy = () => {
 
 			copy_state = false
 		} else {
-			file.settings.reset_after_copy = true
+			settings.settings.reset_after_copy = true
 
 			save()
 
@@ -484,7 +472,7 @@ const copy = () => {
 const hardware = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
-			file.settings.disable_hardware_acceleration = false
+			settings.settings.disable_hardware_acceleration = false
 
 			save()
 
@@ -493,7 +481,7 @@ const hardware = () => {
 
 			hardware_state = false
 		} else {
-			file.settings.disable_hardware_acceleration = true
+			settings.settings.disable_hardware_acceleration = true
 
 			save()
 
@@ -529,7 +517,7 @@ const hardware = () => {
 let dropdown_state = false
 // ? dropdown
 const dropdown = (id) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
+	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
 		dropdown_content.style.visibility = "visible"
@@ -547,7 +535,7 @@ const dropdown = (id) => {
 }
 
 const dropdownChoose = (id) => {
-	const dropdown_button = document.querySelector(".dropdown-button")
+	const dropdown_button = document.querySelector("#dropdownButton0")
 
 	const sort = () => {
 		switch (id) {
@@ -556,7 +544,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 					 </svg> Default`
 
-				file.experimental.sort = null
+				settings.experimental.sort = null
 				break
 
 			case 1:
@@ -564,7 +552,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 					 </svg> A-Z`
 
-				file.experimental.sort = 1
+				settings.experimental.sort = 1
 				break
 
 			case 2:
@@ -572,7 +560,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 					</svg> Z-A`
 
-				file.experimental.sort = 2
+				settings.experimental.sort = 2
 				break
 		}
 	}
@@ -581,73 +569,17 @@ const dropdownChoose = (id) => {
 	sort()
 	save()
 
-	ipc.send("reload_application")
-}
-
-// ? webcam
-const webcam = () => {
-	const toggle = () => {
-		if (webcam_state === true) {
-			file.experimental.webcam = false
-
-			save()
-
-			tgt8.textContent = "Off"
-			tgl8.checked = false
-
-			webcam_state = false
-		} else {
-			file.experimental.webcam = true
-
-			save()
-
-			tgt8.textContent = "On"
-			tgl8.checked = true
-
-			webcam_state = true
-		}
-	}
-
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
+	ipc.send("reloadApplicationWindow")
 }
 
 // ? save settings
 const save = () => {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
-}
-
-// ? release notes
-const releaseNotes = () => {
-	ipc.send("release_notes")
-}
-
-// ? download update
-const downloadUpdate = () => {
-	ipc.send("download_update")
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 }
 
 // ? rate
 const rateAuthme = () => {
-	ipc.send("rate_authme")
+	ipc.send("rateAuthme")
 }
 
 // ? feedback
@@ -670,34 +602,44 @@ const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
-// ? authme folder
-const folder0 = () => {
-	ipc.send("app_path")
-}
-
-// ? settings folder
-const folder1 = () => {
-	shell.openPath(file_path)
-}
-
 // ? support
 const support = () => {
 	shell.openExternal("https://paypal.me/levminer")
 }
 
-// ? cache folder
-const folder2 = () => {
-	let cache_path
+/**
+ * Open Authme folder
+ */
+const authmeFolder = () => {
+	shell.showItemInFolder(app.getPath("exe"))
+}
 
-	if (process.platform === "win32") {
-		cache_path = path.join(process.env.APPDATA, "/Authme")
-	} else if (process.platform === "linux") {
-		cache_path = path.join(process.env.HOME, "/.config/Authme")
-	} else if (process.platform === "darwin") {
-		cache_path = path.join(process.env.HOME, "/Library/Application Support/Authme")
-	}
+/**
+ * Open setting folder
+ */
+const settingsFolder = () => {
+	shell.openPath(folder_path)
+}
 
-	shell.openPath(cache_path)
+/**
+ * Open cache folder
+ */
+const cacheFolder = () => {
+	shell.openPath(path.join(app.getPath("appData"), "Authme"))
+}
+
+/*
+ * Open latest log
+ */
+const latestLog = () => {
+	ipc.send("logs")
+}
+
+/**
+ * Open logs folder
+ */
+const logsFolder = () => {
+	shell.openPath(path.join(folder_path, "logs"))
 }
 
 // ? status api
@@ -718,11 +660,11 @@ const api = () => {
 					  </svg> \n Some systems offline`
 				}
 			} catch (error) {
-				return logger.warn("Error loading API", error)
+				return logger.warn("Error loading API", error.stack)
 			}
 		})
 		.catch((error) => {
-			logger.warn("Can't connect to API", error)
+			logger.warn("Can't connect to API", error.stack)
 
 			status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
@@ -752,7 +694,7 @@ const quickCopyShortcutsLink = () => {
 }
 
 const hide = () => {
-	ipc.send("hide_settings")
+	ipc.send("toggleSettings")
 }
 
 document.querySelector(".settings").disabled = true
@@ -781,6 +723,8 @@ const menu = (evt, name) => {
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
 		shortcut = true
 
 		ipc.send("shortcuts")
@@ -793,6 +737,8 @@ const menu = (evt, name) => {
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -809,6 +755,8 @@ const menu = (evt, name) => {
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
 		if (shortcut === true) {
 			ipc.send("shortcuts")
 
@@ -823,6 +771,8 @@ const menu = (evt, name) => {
 		document.querySelector(".settings").disabled = false
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = true
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		if (shortcut === true) {
 			ipc.send("shortcuts")
@@ -860,17 +810,7 @@ const about = () => {
 
 // ? edit
 const edit = () => {
-	ipc.send("hide_edit")
-}
-// ? logs
-const logs = () => {
-	ipc.send("logs")
-}
-
-// ? build
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
+	ipc.send("toggleEdit")
 }
 
 // ? offline mode
@@ -880,7 +820,7 @@ let online_closed = false
 
 // ? send reload
 const reload = () => {
-	ipc.send("reload_application")
+	ipc.send("reloadApplicationWindow")
 }
 
 const check_for_internet = () => {
@@ -920,10 +860,10 @@ setInterval(() => {
 
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
-	const dropdown_button = document.querySelector(".dropdown-button")
-	const sort_svg = document.querySelector("#sort_svg")
-	const sort_path = document.querySelector("#sort_path")
+	const dropdown_content = document.querySelector("#dropdownContent0")
+	const dropdown_button = document.querySelector("#dropdownButton0")
+	const sort_svg = document.querySelector("#sortSvg")
+	const sort_path = document.querySelector("#sortPath")
 	const link0 = document.querySelector("#link0")
 	const link1 = document.querySelector("#link1")
 	const link2 = document.querySelector("#link2")
@@ -934,3 +874,47 @@ window.addEventListener("click", (event) => {
 		dropdown_state = false
 	}
 })
+
+/**
+ * Display release notes
+ */
+const releaseNotes = () => {
+	ipc.send("releaseNotes")
+}
+
+/**
+ * Download manual update
+ */
+const manualUpdate = () => {
+	ipc.send("manualUpdate")
+}
+
+/**
+ * Display auto update download info
+ */
+ipc.on("updateInfo", (event, info) => {
+	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+})
+
+/**
+ * Display auto update popup if update available
+ */
+const updateAvailable = () => {
+	document.querySelector(".autoupdate").style.display = "block"
+}
+
+/**
+ * Display restart button if download finished
+ */
+const updateDownloaded = () => {
+	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateButton").style.display = "block"
+	document.querySelector("#updateClose").style.display = "block"
+}
+
+/**
+ * Restart app after the download finished
+ */
+const updateRestart = () => {
+	ipc.send("updateRestart")
+}

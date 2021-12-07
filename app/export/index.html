@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Authme</title>
+		<!-- meta -->
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'" />
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
-		<script defer src="./src/js/export.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/dragonfly.css" />
+		<link rel="stylesheet" href="../.././src/global.css" />
 		<link rel="stylesheet" href="../.././src/tailwind.css" />
-		<!-- favicon -->
-		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build">
-			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
+		<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
+			<div class="container flex flex-row items-center justify-center py-2 mx-auto">
 				<div class="flex">
-					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
+					<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
 				</div>
 			</div>
 		</div>
@@ -26,7 +24,7 @@
 		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 mt-40 text-center">
 			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
 			<h2>Export</h2>
-			<h4>You can export everything form your saved config.</h4>
+			<h4>You can export the codes you saved.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -39,9 +37,9 @@
 		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center">
 			<!-- before export -->
 			<div class="before_export mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
-				<h2 class="pt-5">Export code(s)</h2>
-				<h3>If you saved your config you can export the secrets and the QR code(s).</h3>
-				<button class="buttoni but1 mb-5" id="but0" onclick="expChooser()">
+				<h2 class="pt-5">Export codes</h2>
+				<h3>If you saved your codes you can export the secrets and the saved QR codes.</h3>
+				<button class="buttoni but1 mb-5" id="but0" onclick="exportCodes()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
 					</svg>
@@ -51,27 +49,43 @@
 			<!-- after export -->
 			<div class="after_export hidden">
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
-					<h2 class="pt-5">Save exported code(s)</h2>
-					<h3>Save your exported data as a file to use it elsewhere.</h3>
+					<h2 class="pt-5">Save exported codes</h2>
+					<h3>Save your exported codes to use it elsewhere.</h3>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
 						<div>
-							<button class="buttoni" id="but1" onclick="saveFile()">
+							<button class="buttoni" id="but1" onclick="newSaveFile()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 								</svg>
-								Save as .txt
+								Export .authme file
 							</button>
-							<h5 class="text-3 m-3">Ideal to import for Authme or for Authme Web.</h5>
+							<h5 class="m-3">Ideal to import for Authme or for Authme Web.</h5>
 						</div>
 						<div>
 							<button class="buttoni" id="but2" onclick="saveQrCodes()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 								</svg>
-								Save as .html
+								Export .html file
 							</button>
 							<h5 class="m-3">Ideal for scanning QR codes or for security backup.</h5>
 						</div>
+					</div>
+
+					<!-- advanced -->
+					<div class="mx-auto p-3">
+						<details class="details mb-5 transform ease-in duration-200">
+							<summary class="summary font-bold mb-3 cursor-pointer">More options</summary>
+							<div>
+								<button class="buttoni" id="but1" onclick="saveFile()">
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+									</svg>
+									Export .txt file
+								</button>
+								<h5 class="m-3">The old way to import for Authme or for Authme Web.</h5>
+							</div>
+						</details>
 					</div>
 				</div>
 			</div>

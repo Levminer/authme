@@ -22,27 +22,16 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? os specific folders
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
-
-if (settings.experimental.webcam === true) {
-	document.querySelector("#but2").style.display = "inline-block"
-	document.querySelector("#but3").style.display = "inline-block"
-}
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 // ? check for webcam
 const checkWebcam = (callback) => {
@@ -68,7 +57,7 @@ const gaLink = () => {
 
 // ? hide
 const hide = () => {
-	ipc.send("hide_import")
+	ipc.send("toggleImport")
 }
 
 // ? build

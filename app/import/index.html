@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Authme</title>
+		<!-- meta -->
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'" />
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<script defer src="./src/js/qr.js"></script>
 		<script defer src="./src/js/ga.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/dragonfly.css" />
+		<link rel="stylesheet" href="../.././src/global.css" />
 		<link rel="stylesheet" href="../../src/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
-		<!-- favicon -->
-		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build">
-			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
+		<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
+			<div class="container flex flex-row items-center justify-center py-2 mx-auto">
 				<div class="flex">
-					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
+					<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
 				</div>
 			</div>
 		</div>
@@ -28,7 +27,7 @@
 		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
 			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
 			<h2>Import</h2>
-			<h4>You can import from QR code(s) and Google Authenticator QR code(s). You can use your webcam by turning on an experimental feature in settings.</h4>
+			<h4>You can create your import file from QR codes and Google Authenticator QR codes.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -41,21 +40,21 @@
 		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center">
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20 mt-20" id="choose">
 				<h2 class="pt-5">Instructions</h2>
-				<h3>If you don't know what to do please read the documentation and come back here!</h3>
+				<h3>You can create your import file here. For more information please read the documentation.</h3>
 				<button class="buttoni" id="but0" onclick="onlineDocs()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
 					</svg>
-					Read documentation
+					Documentation
 				</button>
 			</div>
 
 			<div class="choose">
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
 					<h2 class="pt-5">Import</h2>
-					<h3>QR code(s)</h3>
-					<details class="details1" id="dt">
-						<summary class="summary1">Instructions</summary>
+					<h3>QR code</h3>
+					<details class="details mb-8">
+						<summary class="summary">Instructions</summary>
 						<h4>
 							Just screenshot the QR code(s) you want to import, save them on your computer, and choose the image(s) you saved.
 							<br />
@@ -73,7 +72,7 @@
 							</svg>
 							Choose image(s)
 						</button>
-						<button class="buttoni hidden mb-5" id="but2" onclick="qrCamera()">
+						<button class="buttoni mb-5" id="but2" onclick="qrCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -92,11 +91,11 @@
 
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
 					<h2 class="pt-5">Advanced import</h2>
-					<h3>Google Authenticator QR code(s)</h3>
+					<h3>Google Authenticator QR code</h3>
 					<details class="details1" id="dt">
 						<summary class="summary1">Instructions</summary>
 						<h4>
-							Take a picture of the export QR code(s) in your Google Authenticator app, transfer them on your computer, and choose the image(s) you transferred.
+							Tap on the three dots on the top right corner of the screen and export your accounts, take a picture of the export QR code(s), and choose the image(s) you saved and transferred to your computer.
 							<br />
 							<br />
 							If you need more steps or help:
@@ -112,7 +111,7 @@
 							</svg>
 							Choose image(s)
 						</button>
-						<button class="buttoni hidden mb-5" id="but3" onclick="gaCamera()">
+						<button class="buttoni mb-5" id="but3" onclick="gaCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -127,7 +126,6 @@
 						</svg>
 						Stop
 					</button>
-					</div>
 				</div>
 			</div>
 		</div>

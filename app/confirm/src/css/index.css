@@ -1,9 +1,0 @@
-#password_input:hover ~ #show_pass_0 {
-	transition: 0.2s ease-in;
-	stroke: white;
-}
-
-#password_input:hover ~ #show_pass_01 {
-	transition: 0.2s ease-in;
-	stroke: white;
-}

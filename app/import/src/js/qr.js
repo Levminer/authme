@@ -91,16 +91,28 @@ const qrImport = () => {
 							.then(() => {
 								dialog
 									.showSaveDialog({
-										title: "Save import file",
-										filters: [{ name: "Text file", extensions: ["txt"] }],
-										defaultPath: "~/authme_import.txt",
+										title: "Save file",
+										filters: [{ name: "Authme file", extensions: ["authme"] }],
+										defaultPath: "~/import.authme",
 									})
 									.then((result) => {
 										canceled = result.canceled
 										output = result.filePath
 
+										/**
+										 * .authme import file
+										 * @type {LibAuthmeFile}
+										 */
+										const save_file = {
+											role: "import",
+											encrypted: false,
+											codes: Buffer.from(str).toString("base64"),
+											date: time.timestamp(),
+											version: 3,
+										}
+
 										if (canceled === false) {
-											fs.writeFile(output, str, (err) => {
+											fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
 												if (err) {
 													logger.error(`Error creating file - ${err}`)
 												} else {
@@ -194,16 +206,28 @@ const qrCamera = () => {
 							.then(() => {
 								dialog
 									.showSaveDialog({
-										title: "Save import file",
-										filters: [{ name: "Text file", extensions: ["txt"] }],
-										defaultPath: "~/authme_import.txt",
+										title: "Save file",
+										filters: [{ name: "Authme file", extensions: ["authme"] }],
+										defaultPath: "~/import.authme",
 									})
 									.then((result) => {
 										canceled = result.canceled
 										output = result.filePath
 
+										/**
+										 * .authme import file
+										 * @type {LibAuthmeFile}
+										 */
+										const save_file = {
+											role: "import",
+											encrypted: false,
+											codes: Buffer.from(str).toString("base64"),
+											date: time.timestamp(),
+											version: 3,
+										}
+
 										if (canceled === false) {
-											fs.writeFile(output, str, (err) => {
+											fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
 												if (err) {
 													logger.error(`Error creating file - ${err}`)
 												} else {

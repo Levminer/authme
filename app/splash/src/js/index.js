@@ -7,7 +7,7 @@ window.onerror = (error) => {
 
 // ? get version and release date
 const res = ipcRenderer.sendSync("info")
-if (res.build_number.startsWith("alpha")) {
+if (res.build_number.startsWith("alpha") || res.build_number.startsWith("beta")) {
 	document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${res.build_number})`
 } else {
 	document.querySelector("#ver").textContent = `Authme ${res.authme_version} (${res.release_date})`

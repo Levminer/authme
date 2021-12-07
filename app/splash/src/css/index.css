@@ -1,3 +1,15 @@
+.center {
+	background-color: rgb(20, 20, 20);
+	position: relative;
+	top: 200px;
+	text-align: center;
+	padding-top: 30px;
+	margin: 130px auto;
+	height: 300px;
+	width: 60%;
+	border-radius: 30px;
+}
+
 body {
 	overflow: hidden;
 	cursor: wait;

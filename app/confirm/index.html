@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Authme</title>
+		<!-- meta -->
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'" />
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/dragonfly.css" />
+		<link rel="stylesheet" href="../.././src/global.css" />
 		<link rel="stylesheet" href="../.././src/tailwind.css" />
-		<link rel="stylesheet" href="./src/css/index.css" />
-		<!-- favicon -->
-		<link rel="shortcut icon" href="../../img/icon.ico" type="image/x-icon" />
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build">
-			<div class="container flex flex-row items-center justify-center px-6 py-2 mx-auto">
+		<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
+			<div class="container flex flex-row items-center justify-center py-2 mx-auto">
 				<div class="flex">
-					<p class="mx-3 flex flex-row build-content">You are running a pre release version of Authme!</p>
+					<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
 				</div>
 			</div>
 		</div>
@@ -47,8 +45,8 @@
 						</button>
 					</div>
 					<div class="mx-auto pb-3">
-						<details class="mb-5 transform ease-in duration-200" onclick="showMoreOptions()">
-							<summary class="font-bold mb-3 cursor-pointer">More options</summary>
+						<details class="details mb-5 transform ease-in duration-200" onclick="showMoreOptions()">
+							<summary class="summary font-bold mb-3 cursor-pointer">More options</summary>
 						</details>
 					</div>
 				</div>
@@ -63,6 +61,18 @@
 						</svg>
 						Choose backup file
 					</button>
+
+					<hr />
+
+					<h3>Window capture</h3>
+					<h4>Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.</h4>
+					<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+						<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+							<input onclick="toggleWindowCapture()" id="tgl0" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
+							<label for="tgl0" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+						</div>
+						<span id="tgt0" class="text-black text-xl">Off</span>
+					</div>
 				</div>
 			</div>
 		</div>

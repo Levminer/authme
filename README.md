@@ -2,7 +2,7 @@
 
 -   Simple cross platform two-factor authentication app for desktop.
 
-[![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?style=for-the-badge)](https://github.com/Levminer/authme/releases)
+[![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?style=for-the-badge)](https://tooomm.github.io/github-release-stats/?username=Levminer&repository=authme)
 [![Support](https://img.shields.io/badge/Support-PayPal-blue?style=for-the-badge)](https://paypal.me/levminer)
 [![License](https://img.shields.io/github/license/levminer/authme?style=for-the-badge)](https://github.com/Levminer/authme/blob/main/LICENSE.md)
 

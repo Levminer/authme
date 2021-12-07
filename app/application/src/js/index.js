@@ -1,6 +1,6 @@
 const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
-const { aes, convert } = require("@levminer/lib")
+const { aes, convert, time } = require("@levminer/lib")
 const speakeasy = require("@levminer/speakeasy")
 const fs = require("fs")
 const path = require("path")
@@ -23,55 +23,51 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ?platform
-let folder
-
-// get platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
-
-// ? show quick start
-if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
-	document.querySelector("#starting").style.display = "block"
-	document.querySelector("#choose").style.display = "block"
-}
-
-// eslint-disable-next-line
-let prev = false
-let save_text
-const query = []
-const description_query = []
-const name_query = []
-let clear
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
 	}
 }, 100)
 
-const name_state = file.settings.show_2fa_names
-const copy_state = file.settings.reset_after_copy
-const reveal_state = file.settings.click_to_reveal
-const search_state = file.settings.save_search_results
+// ? show quick start
+if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
+	document.querySelector("#starting").style.display = "block"
+	document.querySelector("#choose").style.display = "block"
+}
 
-const sort_number = file.experimental.sort
+// eslint-disable-next-line
+let prev = false
+let text
+let save_text
+const query = []
+const description_query = []
+const name_query = []
+let clear
+
+const name_state = settings.settings.show_2fa_names
+const copy_state = settings.settings.reset_after_copy
+const reveal_state = settings.settings.click_to_reveal
+const search_state = settings.settings.save_search_results
+
+const sort_number = settings.experimental.sort
 
 /**
  * Load file first time from dialog
@@ -79,19 +75,33 @@ const sort_number = file.experimental.sort
 const loadFile = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme Import Text file",
+			title: "Import from Authme import file",
 			properties: ["openFile"],
-			filters: [{ name: "Text file", extensions: ["txt"] }],
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
 			filepath = result.filePaths
 
 			if (canceled === false) {
-				const text = fs.readFileSync(filepath.toString(), "utf-8")
-				save_text = text
+				const /** @type{LibAuthmeFile} */ loaded = JSON.parse(fs.readFileSync(filepath.toString(), "utf-8"))
 
-				processdata(text)
+				if (loaded.role === "import" || loaded.role === "export") {
+					text = Buffer.from(loaded.codes, "base64").toString()
+					save_text = text
+
+					processdata(text)
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						defaultId: 0,
+						cancelId: 0,
+						type: "error",
+						noLink: true,
+						message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+					})
+				}
 			}
 		})
 }
@@ -116,8 +126,8 @@ const go = (data) => {
 	document.querySelector(".content").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
-	document.querySelector("#search_icon").style.display = "inline-block"
-	document.querySelector("#filter_icon").style.display = "inline-block"
+	document.querySelector("#searchIcon").style.display = "inline-block"
+	document.querySelector("#filterIcon").style.display = "inline-block"
 
 	const names = data.names
 	const secrets = data.secrets
@@ -469,10 +479,10 @@ const go = (data) => {
 	generate()
 
 	// search history
-	const search_history = file.search_history.latest
+	const search_history = settings.search_history.latest
 
 	if (search_history !== null && search_history !== "" && search_state === true) {
-		document.querySelector("#search").value = file.search_history.latest
+		document.querySelector("#search").value = settings.search_history.latest
 
 		setTimeout(() => {
 			search()
@@ -504,8 +514,8 @@ const search = () => {
 
 	// save result
 	if (search_state === true) {
-		file.search_history.latest = input
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+		settings.search_history.latest = input
+		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 	}
 
 	// restart
@@ -521,7 +531,7 @@ const search = () => {
 
 	// search algorithm
 	name_query.forEach((result) => {
-		if (file.settings.search_bar_filter.name === true && file.settings.search_bar_filter.description === false) {
+		if (settings.settings.search_bar_filter.name === true && settings.settings.search_bar_filter.description === false) {
 			if (!result.startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -530,7 +540,7 @@ const search = () => {
 					no_results++
 				}
 			}
-		} else if (file.settings.search_bar_filter.description === true && file.settings.search_bar_filter.name === false) {
+		} else if (settings.settings.search_bar_filter.description === true && settings.settings.search_bar_filter.name === false) {
 			if (!description_query[i].startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -576,63 +586,6 @@ const search = () => {
 			const div = document.querySelector(`#grid${[i]}`)
 			div.style.display = "grid"
 		}
-	}
-}
-
-// ? block animations
-try {
-	setTimeout(() => {
-		ScrollOut({
-			onShown(el) {
-				el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
-			},
-		})
-	}, 500)
-} catch (error) {
-	logger.error("Block animations failed")
-}
-
-// ? animations
-let focus = true
-
-let diva0
-let diva1
-
-const animations = () => {
-	if (focus === true) {
-		setTimeout(() => {
-			const center = document.querySelector(".content")
-			center.classList.add("animate__animated", "animate__fadeIn")
-
-			const h1 = document.querySelector(".h1")
-			h1.classList.add("animate__animated", "animate__slideInDown")
-
-			const choose = document.querySelector("#choose")
-			choose.classList.add("animate__animated", "animate__slideInDown")
-
-			const starting = document.querySelector("#starting")
-			starting.classList.add("animate__animated", "animate__slideInDown")
-
-			const search = document.querySelector("#search")
-			search.classList.add("animate__animated", "animate__slideInDown")
-
-			if (clear == true) {
-				diva0 = document.querySelector(".diva0")
-				diva0.classList.add("animate__animated", "animate__zoomIn")
-
-				diva1 = document.querySelector(".diva1")
-				diva1.classList.add("animate__animated", "animate__zoomIn")
-			}
-
-			setTimeout(() => {
-				if (clear == true) {
-					diva0.classList.remove("animate__animated", "animate__zoomIn")
-					diva1.classList.remove("animate__animated", "animate__zoomIn")
-				}
-			}, 1500)
-
-			focus = false
-		}, 150)
 	}
 }
 
@@ -696,23 +649,16 @@ setInterval(() => {
 	check_for_internet()
 }, 5000)
 
-// ? save chooser
-const saveChooser = () => {
-	if (file.security.new_encryption === true) {
-		newSave()
-	} else {
-		save()
-	}
-}
-
-// new save method
-const newSave = () => {
+/**
+ * Save imported codes to disk
+ */
+const saveCodes = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -732,13 +678,19 @@ const newSave = () => {
 
 	const encrypted = aes.encrypt(save_text, key)
 
+	/**
+	 * Save codes
+	 * @type{LibAuthmeFile}
+	 * */
 	const codes = {
+		role: "codes",
+		encrypted: true,
 		codes: encrypted.toString("base64"),
-		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
-		version: "2",
+		date: time.timestamp(),
+		version: 3,
 	}
 
-	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
 
 	document.querySelector("#save").style.display = "none"
 
@@ -755,14 +707,16 @@ const newSave = () => {
 	key.fill(0)
 }
 
-// load save
-const loadSave = () => {
+/**
+ * Load saved codes from disk
+ */
+const loadCodes = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -780,7 +734,7 @@ const loadSave = () => {
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 	}
 
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
 			logger.warn("The file codes.authme don't exists")
 
@@ -789,27 +743,45 @@ const loadSave = () => {
 		} else {
 			const codes_file = JSON.parse(content)
 
-			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+			if (codes_file.version === 3) {
+				const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-			prev = true
+				prev = true
 
-			processdata(decrypted.toString())
+				processdata(decrypted.toString())
 
-			decrypted.fill(0)
-			password.fill(0)
-			key.fill(0)
+				decrypted.fill(0)
+				password.fill(0)
+				key.fill(0)
+			} else {
+				dialog
+					.showMessageBox({
+						title: "Authme",
+						buttons: ["Close", "Migration guide"],
+						defaultId: 0,
+						cancelId: 0,
+						type: "error",
+						noLink: true,
+						message: "The saved codes are only compatible with Authme 2. \n\nPlease read the migration guide!",
+					})
+					.then((result) => {
+						if (result.response === 1) {
+							shell.openExternal("https://docs.authme.levminer.com/migration")
+						}
+					})
+			}
 		}
 	})
 }
 
-if (file.security.require_password === false && file.security.new_encryption === true) {
-	loadSave()
+if (settings.security.require_password === false) {
+	loadCodes()
 }
 
 let dropdown_state = false
 // ? dropdown
 const dropdown = () => {
-	const dropdown_content = document.querySelector(".dropdown-content")
+	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
 		dropdown_content.style.visibility = "visible"
@@ -826,27 +798,28 @@ const dropdown = () => {
 	}
 }
 
-document.querySelector("#checkbox0").checked = file.settings.search_bar_filter.name
-document.querySelector("#checkbox1").checked = file.settings.search_bar_filter.description
+document.querySelector("#checkbox0").checked = settings.settings.search_bar_filter.name
+document.querySelector("#checkbox1").checked = settings.settings.search_bar_filter.description
+
 // ? dropdown checkboxes
 document.querySelector("#checkbox0").addEventListener("click", () => {
-	if (file.settings.search_bar_filter.name === true) {
-		file.settings.search_bar_filter.name = false
+	if (settings.settings.search_bar_filter.name === true) {
+		settings.settings.search_bar_filter.name = false
 	} else {
-		file.settings.search_bar_filter.name = true
+		settings.settings.search_bar_filter.name = true
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
 document.querySelector("#checkbox1").addEventListener("click", () => {
-	if (file.settings.search_bar_filter.description === true) {
-		file.settings.search_bar_filter.description = false
+	if (settings.settings.search_bar_filter.description === true) {
+		settings.settings.search_bar_filter.description = false
 	} else {
-		file.settings.search_bar_filter.description = true
+		settings.settings.search_bar_filter.description = true
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
 // ? quick copy
@@ -869,41 +842,39 @@ const quickCopy = (key) => {
 	}
 }
 
-// ? release notes
-const releaseNotes = () => {
-	ipc.send("release_notes")
-}
-
-// ? download update
-const downloadUpdate = () => {
-	ipc.send("download_update")
-}
-
 // ? rate
 const rateAuthme = () => {
-	ipc.send("rate_authme")
+	ipc.send("rateAuthme")
 }
 
 // ? feedback
 const provideFeedback = () => {
-	ipc.send("provide_feedback")
+	ipc.send("provideFeedback")
 }
 
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 
 // ? buttons
 const createFile = () => {
-	ipc.send("hide_import")
+	ipc.send("toggleImport")
 }
 
 const configureSettings = () => {
-	ipc.send("hide_settings")
+	ipc.send("toggleSettings")
 }
 
 const supportDevelopment = () => {
@@ -920,9 +891,9 @@ const sampleImport = () => {
 
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
-	const filter = document.querySelector("#filter_icon")
-	const filter_path = document.querySelector("#filter_path")
+	const dropdown_content = document.querySelector("#dropdownContent0")
+	const filter = document.querySelector("#filterIcon")
+	const filter_path = document.querySelector("#filterPath")
 	const checkbox0 = document.querySelector("#checkbox0")
 	const checkbox1 = document.querySelector("#checkbox1")
 	const link0 = document.querySelector("#link0")
@@ -934,3 +905,47 @@ window.addEventListener("click", (event) => {
 		dropdown_state = false
 	}
 })
+
+/**
+ * Display release notes
+ */
+const releaseNotes = () => {
+	ipc.send("releaseNotes")
+}
+
+/**
+ * Download manual update
+ */
+const manualUpdate = () => {
+	ipc.send("manualUpdate")
+}
+
+/**
+ * Display auto update download info
+ */
+ipc.on("updateInfo", (event, info) => {
+	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+})
+
+/**
+ * Display auto update popup if update available
+ */
+const updateAvailable = () => {
+	document.querySelector(".autoupdate").style.display = "block"
+}
+
+/**
+ * Display restart button if download finished
+ */
+const updateDownloaded = () => {
+	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateButton").style.display = "block"
+	document.querySelector("#updateClose").style.display = "block"
+}
+
+/**
+ * Restart app after the download finished
+ */
+const updateRestart = () => {
+	ipc.send("updateRestart")
+}

@@ -37,3 +37,7 @@
 
 1. Read Contributing rules
 1. Lint the code: `npm run lint`
+
+## Notes
+
+-   Changelog: `git log --pretty=format:'* [[%h](https://github.com/Levminer/authme/commit/%h)] %s (%cs)' --since=5.weeks > log.txt`

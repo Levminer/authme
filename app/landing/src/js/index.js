@@ -4,7 +4,7 @@ const { app, dialog } = require("@electron/remote")
 const electron = require("electron")
 const ipc = electron.ipcRenderer
 const path = require("path")
-const { aes, rsa, sha } = require("@levminer/lib")
+const { aes, rsa, sha, password } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 
 // ? error in window
@@ -25,21 +25,30 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-let folder
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
+/**
+ * Read settings
+ * @type {LibSettings}
+ */
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
-
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 
@@ -73,15 +82,20 @@ const comparePasswords = () => {
 		text.textContent = "Minimum password length is 8 characters!"
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
-			logger.log("Passwords match!")
+			if (!password.search(password_input1.toString())) {
+				logger.log("Passwords match!")
 
-			text.style.color = "#28A443"
-			text.textContent = "Passwords match! Please wait!"
+				text.style.color = "#28A443"
+				text.textContent = "Passwords match! Please wait!"
 
-			password_input1.fill(0)
-			password_input2.fill(0)
+				password_input1.fill(0)
+				password_input2.fill(0)
 
-			hashPasswords()
+				hashPasswords()
+			} else {
+				text.style.color = "#CC001B"
+				text.textContent = "This password is on the list of the top 1000 most common passwords. Please choose a more secure password!"
+			}
 		} else {
 			logger.warn("Passwords dont match!")
 
@@ -108,25 +122,19 @@ const hashPasswords = async () => {
 	}
 
 	const password_input = Buffer.from(document.querySelector("#password_input1").value)
-	const new_encryption = document.querySelector("#tgl0").checked
 
 	const salt = await bcrypt.genSalt(10)
-
 	const hashed = await bcrypt.hash(password_input.toString(), salt).then(logger.log("Hash completed!"))
 
 	/**
 	 * Read settings
 	 * @type {LibSettings}
 	 */
-	const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	file.security.require_password = true
-	file.security.password = hashed
-
-	if (new_encryption === true) {
-		file.security.new_encryption = true
-		file.security.key = aes.generateSalt().toString("base64")
-	}
+	settings.security.require_password = true
+	settings.security.password = hashed
+	settings.security.key = aes.generateSalt().toString("base64")
 
 	/**
 	 * Load storage
@@ -140,10 +148,9 @@ const hashPasswords = async () => {
 		storage = JSON.parse(localStorage.getItem("storage"))
 	}
 
-	storage.require_password = file.security.require_password
+	storage.require_password = settings.security.require_password
 	storage.password = hashed
-	storage.new_encryption = file.security.new_encryption
-	storage.key = file.security.key
+	storage.key = settings.security.key
 
 	if (storage.backup_key !== undefined) {
 		const encrypted = rsa.encrypt(Buffer.from(storage.backup_key, "base64").toString(), password_input.toString("base64"))
@@ -157,12 +164,12 @@ const hashPasswords = async () => {
 		localStorage.setItem("storage", JSON.stringify(storage))
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
 	setInterval(() => {
 		password_input.fill(0)
 
-		ipc.send("to_confirm")
+		ipc.send("toConfirm")
 
 		location.reload()
 	}, 1000)
@@ -182,8 +189,6 @@ const noPassword = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				const new_encryption = document.querySelector("#tgl0").checked
-
 				text.style.color = "#28A443"
 				text.textContent = "Please wait!"
 
@@ -191,18 +196,12 @@ const noPassword = () => {
 				 * Read settings
 				 * @type{LibSettings}
 				 */
-				const file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+				settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 				const salt = aes.generateSalt().toString("base64")
 				const password = Buffer.from(aes.generateRandomKey(salt))
 
-				file.security.require_password = false
-
-				if (new_encryption === true) {
-					file.security.new_encryption = true
-				} else {
-					file.security.new_encryption = false
-				}
+				settings.security.require_password = false
 
 				/**
 				 * Load storage
@@ -216,9 +215,8 @@ const noPassword = () => {
 					storage = JSON.parse(localStorage.getItem("storage"))
 				}
 
-				storage.require_password = file.security.require_password
+				storage.require_password = settings.security.require_password
 				storage.password = password.toString("base64")
-				storage.new_encryption = file.security.new_encryption
 				storage.key = salt.toString("base64")
 
 				if (storage.backup_key !== undefined) {
@@ -233,29 +231,17 @@ const noPassword = () => {
 					localStorage.setItem("storage", JSON.stringify(storage))
 				}
 
-				fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+				fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
 				setInterval(() => {
 					password.fill(0)
 
-					ipc.send("to_application1")
+					ipc.send("toConfirmFromLanding")
 
 					location.reload()
 				}, 1000)
 			}
 		})
-}
-
-// ? encryption method toggle
-const encryptionMethodToggle = () => {
-	const tgl0 = document.querySelector("#tgl0").checked
-	const tgt0 = document.querySelector("#tgt0")
-
-	if (tgl0 === false) {
-		tgt0.textContent = "Off"
-	} else {
-		tgt0.textContent = "On"
-	}
 }
 
 /**
@@ -386,5 +372,21 @@ const showMoreOptions = () => {
 		more_options.style.display = "none"
 
 		more_options_shown = false
+	}
+}
+
+/**
+ * Toggles window capture state
+ */
+const toggleWindowCapture = () => {
+	const tgl0 = document.querySelector("#tgl0").checked
+	const tgt0 = document.querySelector("#tgt0")
+
+	if (tgl0 === false) {
+		ipc.send("disableWindowCapture")
+		tgt0.textContent = "Off"
+	} else {
+		tgt0.textContent = "On"
+		ipc.send("enableWindowCapture")
 	}
 }

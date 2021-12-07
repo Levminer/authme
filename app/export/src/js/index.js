@@ -4,7 +4,7 @@ const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const fs = require("fs")
 const path = require("path")
-const qrcode = require("qrcode")
+const qrcode = require("qrcode-generator")
 const ipc = electron.ipcRenderer
 
 // ? error in window
@@ -22,11 +22,19 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
 
@@ -34,28 +42,24 @@ if (res.build_number.startsWith("alpha")) {
 const codes = []
 let file
 
-// ? os specific folders
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (settings.security.require_password !== null || settings.security.password !== null) {
+	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
@@ -82,21 +86,20 @@ const go = (data) => {
 	const issuers = data.issuers
 
 	for (let i = 0; i < names.length; i++) {
-		qrcode.toDataURL(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`, (err, data) => {
-			if (err) {
-				logger.error(`Failed to generate QR code - ${err}`)
-			}
+		const qr = qrcode(10, "M")
 
-			qr_data = data
+		qr.addData(`otpauth://totp/${names[i]}?secret=${secrets[i]}&issuer=${issuers[i]}`)
+		qr.make()
 
-			const text = `
-			<div data-scroll class="qr">
-				<img class="img" src="${data}">
-				<h2>${issuers[i]}</h2>
+		const qr_src = qr.createDataURL(3, 3)
+
+		const text = `
+			<div>
+				<img class="img" src="${qr_src}">
+				<h1 style=font-family:Arial;>${issuers[i]}</h1>
 			</div>`
 
-			codes.push(text)
-		})
+		codes.push(text)
 
 		document.querySelector(".before_export").style.display = "none"
 		document.querySelector(".after_export").style.display = "block"
@@ -117,6 +120,45 @@ const saveFile = () => {
 
 			if (canceled === false) {
 				fs.writeFile(output, file, (err) => {
+					if (err) {
+						return logger.error(`Error creating file - ${err}`)
+					} else {
+						return logger.log("Text file created")
+					}
+				})
+			}
+		})
+		.catch((err) => {
+			logger.error(`Failed to save - ${err}`)
+		})
+}
+
+// ? new save file
+const newSaveFile = () => {
+	dialog
+		.showSaveDialog({
+			title: "Save as Authme file",
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
+			defaultPath: "~/export.authme",
+		})
+		.then((result) => {
+			canceled = result.canceled
+			output = result.filePath
+
+			/**
+			 * .authme export file
+			 * @type {LibAuthmeFile}
+			 */
+			const save_file = {
+				role: "export",
+				encrypted: false,
+				codes: Buffer.from(file).toString("base64"),
+				date: time.timestamp(),
+				version: 3,
+			}
+
+			if (canceled === false) {
+				fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
 					if (err) {
 						return logger.error(`Error creating file - ${err}`)
 					} else {
@@ -165,12 +207,12 @@ const saveQrCodes = () => {
 
 // ? hide
 const hide = () => {
-	ipc.send("hide_export")
+	ipc.send("toggleExport")
 }
 
 // ? error handling
 const error = () => {
-	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, content) => {
 		if (err) {
 			dialog.showMessageBox({
 				title: "Authme",
@@ -182,16 +224,10 @@ const error = () => {
 	})
 }
 
-// ? new encryption method
-const expChooser = () => {
-	if (settings.security.new_encryption === true) {
-		newExp()
-	} else {
-		exp()
-	}
-}
-
-const newExp = () => {
+/**
+ * Export codes save to the disk
+ */
+const exportCodes = () => {
 	let password
 	let key
 
@@ -211,7 +247,7 @@ const newExp = () => {
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 	}
 
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
 			logger.warn("The file codes.authme don't exists")
 
