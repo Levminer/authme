@@ -16,7 +16,7 @@
 	}
 
 	.buttonm {
-		@apply text-white bg-black rounded-2xl text-left border-2 border-black w-60 cursor-pointer px-8 py-[16.5px] text-xl hover:bg-gray-700 hover:border-gray-700 transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+		@apply text-white bg-black rounded-2xl text-left border-2 border-black w-60 cursor-pointer px-8 py-[16.5px] text-xl hover:!bg-gray-700 hover:!border-gray-700 transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
 	}
 
 	.buttonr {

@@ -189,6 +189,7 @@ const settings_file = {
 	},
 	experimental: {
 		sort: null,
+		screen_capture: false,
 	},
 	security: {
 		require_password: null,

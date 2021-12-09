@@ -1,4 +1,4 @@
-const { app, dialog, shell } = require("@electron/remote")
+const { app, dialog, shell, desktopCapturer, BrowserWindow } = require("@electron/remote")
 const QrcodeDecoder = require("qrcode-decoder").default
 const logger = require("@levminer/lib/logger/renderer")
 const electron = require("electron")
@@ -21,6 +21,9 @@ let dev = false
 if (app.isPackaged === false) {
 	dev = true
 }
+
+// Get current window
+const currentWindow = BrowserWindow.getFocusedWindow()
 
 /**
  * Get Authme folder path
@@ -60,10 +63,25 @@ const hide = () => {
 	ipc.send("toggleImport")
 }
 
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
+/**
+ * Show experimental import screen capture
+ */
+if (settings.experimental.screen_capture === true) {
+	document.querySelector(".screenCapture").style.display = "block"
 }
