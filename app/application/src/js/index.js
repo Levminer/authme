@@ -871,12 +871,17 @@ const quickCopy = (key) => {
 
 // ? release notes
 const releaseNotes = () => {
-	ipc.send("release_notes")
+	shell.openExternal("https://github.com/Levminer/authme/releases/latest")
 }
 
 // ? download update
 const downloadUpdate = () => {
-	ipc.send("download_update")
+	shell.openExternal("https://authme.levminer.com/#downloads")
+}
+
+// ? migration guide
+const migrationGuide = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/migration")
 }
 
 // ? rate
@@ -934,3 +939,11 @@ window.addEventListener("click", (event) => {
 		dropdown_state = false
 	}
 })
+
+const date = new Date()
+const release = new Date("2021-12-29")
+
+if (date > release) {
+	document.querySelector(".deprecation").style.display = "block"
+	document.querySelector(".deprecationNotice").style.display = "none"
+}

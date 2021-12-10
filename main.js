@@ -678,8 +678,6 @@ const createWindow = () => {
 		}
 
 		if (update_seen == false) {
-			api()
-
 			update_seen = true
 		}
 	})
