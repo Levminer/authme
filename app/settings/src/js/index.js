@@ -360,8 +360,8 @@ const reset = () => {
 								localStorage.removeItem("dev_storage")
 							}
 
-							// restart
-							restart()
+							// exit app
+							app.exit()
 						}
 					})
 			}
