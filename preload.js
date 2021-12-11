@@ -1,5 +1,5 @@
-const { app } = require("@electron/remote")
-const electron = require("electron")
+const { app, Menu, getCurrentWindow } = require("@electron/remote")
+const Titlebar = require("@6c65726f79/custom-titlebar")
 const path = require("path")
 const fs = require("fs")
 const ipc = electron.ipcRenderer
@@ -83,3 +83,18 @@ document.addEventListener("keydown", (event) => {
  */
 document.addEventListener("dragover", (event) => event.preventDefault())
 document.addEventListener("drop", (event) => event.preventDefault())
+
+/**
+ * Title bar
+ */
+const currentWindow = getCurrentWindow()
+let titlebar
+
+if (process.platform === "win32") {
+	currentWindow.webContents.once("dom-ready", () => {
+		titlebar = new Titlebar({
+			menu: Menu.getApplicationMenu(),
+			browserWindow: currentWindow,
+			backgroundColor: "#000000",
+			icon: "../../img/icon.png",
+			unfocusEffect: false,
