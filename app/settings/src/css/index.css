@@ -6,3 +6,7 @@ body {
 .tabcontent {
 	animation: fadeEffect 1s;
 }
+
+.custom-titlebar-container {
+	overflow: hidden !important;
+}

@@ -379,6 +379,10 @@ const go = (data) => {
 			// set div in html
 			document.querySelector(".content").appendChild(element)
 
+			if (i == names.length - 1) {
+				element.style.paddingBottom = "8px"
+			}
+
 			// elements
 			const name = document.querySelector(`#name${counter}`)
 			const code = document.querySelector(`#code${counter}`)

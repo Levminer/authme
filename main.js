@@ -337,13 +337,31 @@ const exitFromTray = () => {
 const createWindow = () => {
 	logger.log("Started creating windows")
 
-	// ? create windows
+	/**
+	 * Window Controls Overlay
+	 */
+	let wco = false
+
+	if (platform === "windows") {
+		wco = true
+	}
+
+	/**
+	 * Create windows
+	 */
 	window_landing = new BrowserWindow({
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -358,6 +376,13 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -372,6 +397,13 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -386,6 +418,13 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -400,6 +439,13 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -414,6 +460,13 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -428,6 +481,13 @@ const createWindow = () => {
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -1528,7 +1588,7 @@ const createTray = () => {
 const createMenu = () => {
 	const template = [
 		{
-			label: "&File",
+			label: "File",
 			submenu: [
 				{
 					label: application_shown ? "Hide app" : "Show app",
@@ -1589,7 +1649,7 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&View",
+			label: "View",
 			submenu: [
 				{
 					label: "Reset",
@@ -1615,7 +1675,7 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&Tools",
+			label: "Tools",
 			submenu: [
 				{
 					label: "Edit codes",
@@ -1719,7 +1779,7 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&Help",
+			label: "Help",
 			submenu: [
 				{
 					label: "Documentation",
@@ -1765,7 +1825,7 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&About",
+			label: "About",
 			submenu: [
 				{
 					label: "Show licenses",
