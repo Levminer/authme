@@ -1,8 +1,8 @@
 const { app, Menu, getCurrentWindow } = require("@electron/remote")
 const Titlebar = require("@6c65726f79/custom-titlebar")
+const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const ipc = electron.ipcRenderer
 
 /**
  * Check if running in development
@@ -98,3 +98,13 @@ if (process.platform === "win32") {
 			backgroundColor: "#000000",
 			icon: "../../img/icon.png",
 			unfocusEffect: false,
+		})
+	})
+}
+
+/**
+ * Refresh title bar
+ */
+ipc.on("refreshMenu", () => {
+	titlebar.updateMenu(Menu.getApplicationMenu())
+})

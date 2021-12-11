@@ -1444,7 +1444,7 @@ app.whenReady()
 			dialog
 				.showMessageBox({
 					title: "Authme",
-					buttons: ["Report", "Close"],
+					buttons: ["Report", "Close", "Exit"],
 					defaultId: 0,
 					cancelId: 1,
 					noLink: true,
@@ -1454,7 +1454,7 @@ app.whenReady()
 				.then((result) => {
 					if (result.response === 0) {
 						shell.openExternal("https://github.com/Levminer/authme/issues/")
-					} else if (result.response === 1) {
+					} else if (result.response === 2) {
 						app.exit()
 					}
 				})
@@ -1586,6 +1586,14 @@ const createTray = () => {
  * Create application menu
  */
 const createMenu = () => {
+	if (window_application !== undefined) {
+		window_application.webContents.send("refreshMenu")
+		window_settings.webContents.send("refreshMenu")
+		window_import.webContents.send("refreshMenu")
+		window_export.webContents.send("refreshMenu")
+		window_edit.webContents.send("refreshMenu")
+	}
+
 	const template = [
 		{
 			label: "File",
