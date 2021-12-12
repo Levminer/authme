@@ -1551,7 +1551,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: application_shown ? "Hide app" : "Show app",
+			label: application_shown ? "Hide App" : "Show App",
 			accelerator: shortcuts ? "" : settings.global_shortcuts.show,
 			click: () => {
 				showAppFromTray()
@@ -1570,7 +1570,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: "Exit app",
+			label: "Exit App",
 			accelerator: shortcuts ? "" : settings.global_shortcuts.exit,
 			click: () => {
 				exitFromTray()
@@ -1591,7 +1591,7 @@ const createMenu = () => {
 			label: "File",
 			submenu: [
 				{
-					label: application_shown ? "Hide app" : "Show app",
+					label: application_shown ? "Hide App" : "Show App",
 					accelerator: shortcuts ? "" : settings.shortcuts.show,
 					click: () => {
 						showAppFromTray()
@@ -1653,23 +1653,23 @@ const createMenu = () => {
 			submenu: [
 				{
 					label: "Reset",
-					role: "resetZoom",
+					role: shortcuts ? "" : "resetZoom",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_reset,
 				},
 				{
 					type: "separator",
 				},
 				{
-					label: "Zoom in",
-					role: "zoomIn",
+					label: "Zoom In",
+					role: shortcuts ? "" : "zoomIn",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_in,
 				},
 				{
 					type: "separator",
 				},
 				{
-					label: "Zoom out",
-					role: "zoomOut",
+					label: "Zoom Out",
+					role: shortcuts ? "" : "zoomOut",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_out,
 				},
 			],
@@ -1678,7 +1678,7 @@ const createMenu = () => {
 			label: "Tools",
 			submenu: [
 				{
-					label: "Edit codes",
+					label: "Edit Codes",
 					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
@@ -1806,7 +1806,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Release notes",
+					label: "Release Notes",
 					accelerator: shortcuts ? "" : settings.shortcuts.release,
 					click: () => {
 						releaseNotes()
@@ -1816,7 +1816,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Support development",
+					label: "Support Development",
 					accelerator: shortcuts ? "" : settings.shortcuts.support,
 					click: () => {
 						support()
@@ -1828,7 +1828,7 @@ const createMenu = () => {
 			label: "About",
 			submenu: [
 				{
-					label: "Show licenses",
+					label: "Show Licenses",
 					accelerator: shortcuts ? "" : settings.shortcuts.licenses,
 					click: () => {
 						dialog
