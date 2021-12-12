@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power, screen } = require("electron")
 const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
 const { number, date } = require("./build.json")
@@ -186,6 +186,7 @@ const settings_file = {
 			name: true,
 			description: false,
 		},
+		default_display: 1,
 	},
 	experimental: {
 		sort: null,
@@ -347,9 +348,30 @@ const createWindow = () => {
 	}
 
 	/**
+	 * Open Authme on selected display
+	 */
+	const displays = screen.getAllDisplays()
+	const primary_display = screen.getPrimaryDisplay()
+
+	// Remove primary display
+	for (let i = 0; i < displays.length; i++) {
+		if (displays.id === primary_display.id) {
+			displays[i].pop()
+		}
+	}
+
+	// Add primary display
+	displays.splice(0, 0, primary_display)
+
+	// Get selected display
+	const display = displays[settings.settings.default_display - 1]
+
+	/**
 	 * Create windows
 	 */
 	window_landing = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -371,6 +393,8 @@ const createWindow = () => {
 	})
 
 	window_confirm = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -392,6 +416,8 @@ const createWindow = () => {
 	})
 
 	window_application = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -413,6 +439,8 @@ const createWindow = () => {
 	})
 
 	window_settings = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -434,6 +462,8 @@ const createWindow = () => {
 	})
 
 	window_import = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -455,6 +485,8 @@ const createWindow = () => {
 	})
 
 	window_export = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -476,6 +508,8 @@ const createWindow = () => {
 	})
 
 	window_edit = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,

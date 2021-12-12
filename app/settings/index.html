@@ -275,6 +275,21 @@
 								</div>
 								<hr />
 							</div>
+							<h3>Default display</h3>
+							<h4>Choose which display should Authme open by default. Authme will fall back to the primary display if the chosen one is not available.</h4>
+							<div class="relative inline-block">
+								<button id="dropdownButton1" class="buttoni" onclick="display()">
+									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+									</svg>
+									Display #1
+								</button>
+
+								<div id="dropdownContent1" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
+									<!-- displays -->
+								</div>
+							</div>
+							<hr />
 							<h3>Clear data</h3>
 							<h4>Clear password, 2FA codes and all other settings. Be careful.</h4>
 							<button class="buttoni" id="but1" onclick="clearData()">
@@ -323,11 +338,6 @@
 									Logs folder
 								</button>
 							</div>
-
-							<hr />
-							<h3>Status</h3>
-							<h4>Current status of the API, used for updates only. Click for all the status information.</h4>
-							<button class="buttoni" id="but6" onclick="statusLink()">-</button>
 							<hr />
 							<h3>Version</h3>
 							<h4>Your current Authme version. Click for more info about Authme.</h4>
