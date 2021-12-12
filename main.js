@@ -1586,14 +1586,6 @@ const createTray = () => {
  * Create application menu
  */
 const createMenu = () => {
-	if (window_application !== undefined) {
-		window_application.webContents.send("refreshMenu")
-		window_settings.webContents.send("refreshMenu")
-		window_import.webContents.send("refreshMenu")
-		window_export.webContents.send("refreshMenu")
-		window_edit.webContents.send("refreshMenu")
-	}
-
 	const template = [
 		{
 			label: "File",
@@ -1921,8 +1913,18 @@ const createMenu = () => {
 		},
 	]
 
+	// Set menu
 	menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
+
+	// Reload menu
+	if (window_application !== undefined && platform === "windows") {
+		window_application.webContents.send("refreshMenu")
+		window_settings.webContents.send("refreshMenu")
+		window_import.webContents.send("refreshMenu")
+		window_export.webContents.send("refreshMenu")
+		window_edit.webContents.send("refreshMenu")
+	}
 }
 
 /**

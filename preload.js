@@ -89,6 +89,7 @@ document.addEventListener("drop", (event) => event.preventDefault())
  */
 const currentWindow = getCurrentWindow()
 let titlebar
+let loaded = false
 
 if (process.platform === "win32") {
 	currentWindow.webContents.once("dom-ready", () => {
@@ -99,6 +100,8 @@ if (process.platform === "win32") {
 			icon: "../../img/icon.png",
 			unfocusEffect: false,
 		})
+
+		loaded = true
 	})
 }
 
@@ -106,5 +109,7 @@ if (process.platform === "win32") {
  * Refresh title bar
  */
 ipc.on("refreshMenu", () => {
-	titlebar.updateMenu(Menu.getApplicationMenu())
+	if (loaded === true) {
+		titlebar.updateMenu(Menu.getApplicationMenu())
+	}
 })
