@@ -941,7 +941,7 @@ window.addEventListener("click", (event) => {
 })
 
 const date = new Date()
-const release = new Date("2021-12-29")
+const release = new Date("2021-12-30")
 
 if (date > release) {
 	document.querySelector(".deprecation").style.display = "block"
