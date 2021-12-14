@@ -47,6 +47,7 @@ let update_seen = false
 let manual_update = false
 let tray = null
 let menu = null
+let display = null
 
 // ? development
 let dev = false
@@ -346,25 +347,6 @@ const createWindow = () => {
 	if (platform === "windows") {
 		wco = true
 	}
-
-	/**
-	 * Open Authme on selected display
-	 */
-	const displays = screen.getAllDisplays()
-	const primary_display = screen.getPrimaryDisplay()
-
-	// Remove primary display
-	for (let i = 0; i < displays.length; i++) {
-		if (displays.id === primary_display.id) {
-			displays[i].pop()
-		}
-	}
-
-	// Add primary display
-	displays.splice(0, 0, primary_display)
-
-	// Get selected display
-	const display = displays[settings.settings.default_display - 1]
 
 	/**
 	 * Create windows
@@ -1473,7 +1455,7 @@ app.whenReady()
 		}
 
 		process.on("uncaughtException", (error) => {
-			logger.error("Unknown error occurred", error.stack)
+			logger.error("Error occurred while starting", error.stack)
 
 			dialog
 				.showMessageBox({
@@ -1483,7 +1465,7 @@ app.whenReady()
 					cancelId: 1,
 					noLink: true,
 					type: "error",
-					message: `Unknown error occurred! \n\n${error.stack}`,
+					message: `Error occurred while starting Authme! \n\n${error.stack}`,
 				})
 				.then((result) => {
 					if (result.response === 0) {
@@ -1494,7 +1476,31 @@ app.whenReady()
 				})
 		})
 
+		/**
+		 * Open Authme on selected display
+		 */
+		const displays = screen.getAllDisplays()
+		const primary_display = screen.getPrimaryDisplay()
+
+		// Remove primary display
+		for (let i = 0; i < displays.length; i++) {
+			if (displays[i].id === primary_display.id) {
+				displays.splice(i, 1)
+			}
+		}
+
+		// Add primary display
+		displays.splice(0, 0, primary_display)
+
+		// Get selected display
+		display = displays[settings.settings.default_display - 1]
+
+		/**
+		 * Splash window
+		 */
 		window_splash = new BrowserWindow({
+			x: display.bounds.x,
+			y: display.bounds.y,
 			width: 500,
 			height: 550,
 			transparent: true,
@@ -1507,9 +1513,14 @@ app.whenReady()
 			},
 		})
 
+		window_splash.center()
+
 		window_splash.loadFile("./app/splash/index.html")
 		window_splash.setProgressBar(10)
 
+		/**
+		 * Close splash window and create the app window
+		 */
 		window_splash.once("ready-to-show", () => {
 			window_splash.show()
 
@@ -1534,7 +1545,9 @@ app.whenReady()
 			}
 		})
 
-		// ? create tray
+		/**
+		 * Create tray icon
+		 */
 		const icon_path = path.join(__dirname, "img/tray.png")
 		tray = new Tray(icon_path)
 
@@ -1548,7 +1561,7 @@ app.whenReady()
 		createMenu()
 	})
 	.catch((error) => {
-		logger.error("Unknown error occurred", error.stack)
+		logger.error("Error occurred while starting", error.stack)
 
 		dialog
 			.showMessageBox({
@@ -1558,7 +1571,7 @@ app.whenReady()
 				cancelId: 1,
 				noLink: true,
 				type: "error",
-				message: `Unknown error occurred! \n\n${error.stack}`,
+				message: `Error occurred while starting Authme! \n\n${error.stack}`,
 			})
 			.then((result) => {
 				if (result.response === 0) {
