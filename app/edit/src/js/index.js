@@ -397,16 +397,6 @@ const addCodes = () => {
 							const /** @type{LibAuthmeFile} */ loaded = JSON.parse(input.toString())
 
 							if (loaded.role === "import" || loaded.role === "export") {
-								dialog.showMessageBox({
-									title: "Authme",
-									buttons: ["Close"],
-									defaultId: 0,
-									cancelId: 0,
-									type: "info",
-									noLink: true,
-									message: "Code(s) added! \n\nScroll down to view them!",
-								})
-
 								data = []
 
 								const container = document.querySelector(".codes_container")
@@ -439,6 +429,16 @@ const addCodes = () => {
 						}
 					})
 				}
+
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					defaultId: 0,
+					cancelId: 0,
+					type: "info",
+					noLink: true,
+					message: "Code(s) added! \n\nScroll down to view them!",
+				})
 			}
 		})
 }

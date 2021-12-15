@@ -137,7 +137,7 @@ if (tray_state === true) {
 }
 
 // names
-let names_state = settings.settings.show_2fa_names
+let names_state = settings.settings.code_description
 if (names_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
@@ -147,7 +147,7 @@ if (names_state === true) {
 }
 
 // reveal
-let reveal_state = settings.settings.click_to_reveal
+let reveal_state = settings.settings.blur_codes
 if (reveal_state === true) {
 	tgt4.textContent = "On"
 	tgl4.checked = true
@@ -157,7 +157,7 @@ if (reveal_state === true) {
 }
 
 // search
-let search_state = settings.settings.save_search_results
+let search_state = settings.settings.search_history
 if (search_state === true) {
 	tgt5.textContent = "On"
 	tgl5.checked = true
@@ -198,7 +198,7 @@ drp1.innerHTML = `
 	`
 
 // hardware
-let hardware_state = settings.settings.disable_hardware_acceleration
+let hardware_state = settings.settings.hardware_acceleration
 if (hardware_state === true) {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
@@ -354,7 +354,7 @@ const clearData = () => {
 const names = () => {
 	const toggle = () => {
 		if (names_state === true) {
-			settings.settings.show_2fa_names = false
+			settings.settings.code_description = false
 
 			save()
 
@@ -363,7 +363,7 @@ const names = () => {
 
 			names_state = false
 		} else {
-			settings.settings.show_2fa_names = true
+			settings.settings.code_description = true
 
 			save()
 
@@ -382,7 +382,7 @@ const names = () => {
 const reveal = () => {
 	const toggle = () => {
 		if (reveal_state === true) {
-			settings.settings.click_to_reveal = false
+			settings.settings.blur_codes = false
 
 			save()
 
@@ -391,7 +391,7 @@ const reveal = () => {
 
 			reveal_state = false
 		} else {
-			settings.settings.click_to_reveal = true
+			settings.settings.blur_codes = true
 
 			save()
 
@@ -410,7 +410,7 @@ const reveal = () => {
 const results = () => {
 	const toggle = () => {
 		if (search_state === true) {
-			settings.settings.save_search_results = false
+			settings.settings.search_history = false
 
 			save()
 
@@ -419,7 +419,7 @@ const results = () => {
 
 			search_state = false
 		} else {
-			settings.settings.save_search_results = true
+			settings.settings.search_history = true
 
 			save()
 
@@ -466,7 +466,7 @@ const copy = () => {
 const hardware = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
-			settings.settings.disable_hardware_acceleration = false
+			settings.settings.hardware_acceleration = false
 
 			save()
 
@@ -475,7 +475,7 @@ const hardware = () => {
 
 			hardware_state = false
 		} else {
-			settings.settings.disable_hardware_acceleration = true
+			settings.settings.hardware_acceleration = true
 
 			save()
 

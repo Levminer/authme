@@ -62,10 +62,10 @@ const description_query = []
 const name_query = []
 let clear
 
-const name_state = settings.settings.show_2fa_names
+const name_state = settings.settings.code_description
 const copy_state = settings.settings.reset_after_copy
-const reveal_state = settings.settings.click_to_reveal
-const search_state = settings.settings.save_search_results
+const reveal_state = settings.settings.blur_codes
+const search_state = settings.settings.search_history
 
 const sort_number = settings.experimental.sort
 
@@ -554,7 +554,7 @@ const search = () => {
 
 	// search algorithm
 	name_query.forEach((result) => {
-		if (settings.settings.search_bar_filter.name === true && settings.settings.search_bar_filter.description === false) {
+		if (settings.settings.search_filter.name === true && settings.settings.search_filter.description === false) {
 			if (!result.startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -563,7 +563,7 @@ const search = () => {
 					no_results++
 				}
 			}
-		} else if (settings.settings.search_bar_filter.description === true && settings.settings.search_bar_filter.name === false) {
+		} else if (settings.settings.search_filter.description === true && settings.settings.search_filter.name === false) {
 			if (!description_query[i].startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -780,25 +780,25 @@ const dropdown = () => {
 	}
 }
 
-document.querySelector("#checkbox0").checked = settings.settings.search_bar_filter.name
-document.querySelector("#checkbox1").checked = settings.settings.search_bar_filter.description
+document.querySelector("#checkbox0").checked = settings.settings.search_filter.name
+document.querySelector("#checkbox1").checked = settings.settings.search_filter.description
 
 // ? dropdown checkboxes
 document.querySelector("#checkbox0").addEventListener("click", () => {
-	if (settings.settings.search_bar_filter.name === true) {
-		settings.settings.search_bar_filter.name = false
+	if (settings.settings.search_filter.name === true) {
+		settings.settings.search_filter.name = false
 	} else {
-		settings.settings.search_bar_filter.name = true
+		settings.settings.search_filter.name = true
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
 document.querySelector("#checkbox1").addEventListener("click", () => {
-	if (settings.settings.search_bar_filter.description === true) {
-		settings.settings.search_bar_filter.description = false
+	if (settings.settings.search_filter.description === true) {
+		settings.settings.search_filter.description = false
 	} else {
-		settings.settings.search_bar_filter.description = true
+		settings.settings.search_filter.description = true
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))

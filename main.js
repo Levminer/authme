@@ -39,7 +39,6 @@ let edit_shown = false
 
 // ? other states
 let authenticated = false
-let offline = false
 let shortcuts = false
 let reload = false
 let tray_minimized = false
@@ -178,12 +177,12 @@ const settings_file = {
 	settings: {
 		launch_on_startup: true,
 		close_to_tray: true,
-		show_2fa_names: false,
-		click_to_reveal: false,
+		code_description: false,
+		blur_codes: false,
 		reset_after_copy: false,
-		save_search_results: true,
-		disable_hardware_acceleration: true,
-		search_bar_filter: {
+		search_history: true,
+		hardware_acceleration: true,
+		search_filter: {
 			name: true,
 			description: false,
 		},
@@ -246,7 +245,7 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 nativeTheme.themeSource = "dark"
 
 // ? disable hardware acceleration
-if (settings.settings.disable_hardware_acceleration === true) {
+if (settings.settings.hardware_acceleration === true) {
 	app.disableHardwareAcceleration()
 }
 
