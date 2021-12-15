@@ -756,7 +756,14 @@ const createWindow = () => {
 	autoUpdater.on("error", (error) => {
 		logger.error("Error during auto update", error.stack)
 
-		dialog.showErrorBox("Authme", "Error during auto update. \n\nTry to restart Authme!")
+		dialog.showMessageBox({
+			title: "Authme",
+			buttons: ["Close"],
+			defaultId: 0,
+			cancelId: 1,
+			type: "error",
+			message: `Error during auto update. \n\nTry to restart Authme and check your network connection! \n\n${error.stack}`,
+		})
 	})
 
 	autoUpdater.on("download-progress", (progress) => {
@@ -1174,29 +1181,6 @@ ipc.on("abort", () => {
 	process.on("uncaughtException", (error) => {
 		logger.error("Execution aborted", error.stack)
 	})
-})
-
-/**
- * Offline mode
- */
-ipc.on("offline", () => {
-	if (offline === false) {
-		setTimeout(() => {
-			window_application.setTitle("Authme (Offline)")
-			window_settings.setTitle("Authme (Offline)")
-		}, 1000)
-		offline = true
-
-		logger.warn("Running in offline mode")
-	} else {
-		setTimeout(() => {
-			window_application.setTitle("Authme")
-			window_settings.setTitle("Authme ")
-		}, 1000)
-		offline = false
-
-		logger.log("Running in online mode")
-	}
 })
 
 /**

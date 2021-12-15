@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src https://api.levminer.com" />
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' />
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
@@ -81,43 +81,7 @@
 						</div>
 					</div>
 
-					<!-- offline mode -->
-					<div class="w-full text-white bg-popup-red font-bold offline hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-
-								<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but you can't look for new updates!</p>
-							</div>
-							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</a>
-						</div>
-					</div>
-
-					<!-- online mode -->
-					<div class="w-full text-white bg-popup-green font-bold online hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-
-								<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
-							</div>
-							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</a>
-						</div>
-					</div>
-
-					<!-- update -->
+					<!-- manual update -->
 					<div class="w-full text-white bg-popup-blue font-bold update hidden">
 						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 							<div class="flex">
@@ -837,7 +801,7 @@
 							<br />
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Show/Hide app</h3>
+									<h3>Show/Hide App</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk100_input" />
@@ -891,7 +855,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Exit app</h3>
+									<h3>Exit App</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk102_input" />

@@ -770,49 +770,10 @@ const edit = () => {
 	ipc.send("toggleEdit")
 }
 
-// ? offline mode
-let offline_mode = false
-let offline_closed = false
-let online_closed = false
-
 // ? send reload
 const reload = () => {
 	ipc.send("reloadApplicationWindow")
 }
-
-const check_for_internet = () => {
-	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
-			document.querySelector(".online").style.display = "none"
-			document.querySelector(".offline").style.display = "block"
-
-			offline_mode = true
-			offline_closed = true
-
-			logger.warn("Can't connect to the internet")
-		} else if (err === null && offline_mode === true && online_closed === false) {
-			document.querySelector(".online").style.display = "block"
-			document.querySelector(".offline").style.display = "none"
-
-			offline_mode = false
-			online_closed = true
-
-			logger.log("Connected to the internet")
-		} else if ((online_closed === true || offline_closed === true) && err === null) {
-			offline_mode = false
-			offline_closed = false
-			online_closed = false
-
-			logger.log("Connection restored")
-		}
-	})
-}
-
-check_for_internet()
-
-setInterval(() => {
-	check_for_internet()
-}, 10000)
 
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
