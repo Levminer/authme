@@ -180,7 +180,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -206,7 +206,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -233,7 +233,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -258,7 +258,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -286,7 +286,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -312,7 +312,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -339,7 +339,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -400,73 +400,19 @@ const go = (data) => {
 				text.textContent = names[i]
 			}
 
-			// interval0
-			const int0 = setInterval(() => {
-				// generate token
-				const token = speakeasy.totp({
-					secret: secrets[i],
-					encoding: "base32",
-				})
-
-				// time
-				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-
-				name.textContent = issuers[i]
-				code.textContent = token
-				time.textContent = remaining
-			}, 100)
-
-			// interval1
-			const int1 = setInterval(() => {
-				// generate token
-				const token = speakeasy.totp({
-					secret: secrets[i],
-					encoding: "base32",
-				})
-
-				// time
-				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-
-				// setting elements
-				name.textContent = issuers[i]
-				code.textContent = token
-				time.textContent = remaining
-
-				clearInterval(int0)
-			}, 500)
-
-			// copy
-			copy.addEventListener("click", () => {
-				navigator.clipboard.writeText(code.textContent)
-
-				copy.innerHTML = `
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-			 	 </svg>
-				Copied
-				`
-
-				setTimeout(() => {
-					copy.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					`
-
-					setTimeout(() => {
-						if (copy_state === true) {
-							for (let i = 0; i < names.length; i++) {
-								const div = document.querySelector(`#grid${[i]}`)
-								div.style.display = "grid"
-							}
-
-							document.querySelector("#search").value = ""
-							document.getElementById("search").focus()
-						}
-					}, 1200)
-				}, 1000)
+			// generate token
+			const token = speakeasy.totp({
+				secret: secrets[i],
+				encoding: "base32",
 			})
+
+			// time
+			const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+			// set content
+			name.textContent = issuers[i]
+			code.textContent = token
+			time.textContent = remaining
 
 			if (name_state === true) {
 				const grid = document.querySelector(`#grid${i}`)
@@ -481,6 +427,10 @@ const go = (data) => {
 	}
 
 	generate()
+
+	setInterval(() => {
+		refreshCodes(secrets)
+	}, 500)
 
 	// search history
 	const search_history = settings.search_history.latest
@@ -509,7 +459,76 @@ const go = (data) => {
 	}
 }
 
-// ? search
+/**
+ * Refresh codes every 500ms
+ * @param {Number} secrets
+ */
+const refreshCodes = (secrets) => {
+	for (let i = 0; i < secrets.length; i++) {
+		const code = document.querySelector(`#code${i}`)
+		const time = document.querySelector(`#time${i}`)
+
+		// generate token
+		const token = speakeasy.totp({
+			secret: secrets[i],
+			encoding: "base32",
+		})
+
+		// generate time
+		const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+		// set content
+		code.textContent = token
+		time.textContent = remaining
+	}
+}
+
+/**
+ * Copy 2FA code
+ * @param {Number} id
+ */
+const copyCode = (id) => {
+	const button = document.querySelector(`#copy${id}`)
+	const code = document.querySelector(`#code${id}`)
+
+	// copy code
+	navigator.clipboard.writeText(code.textContent)
+
+	// copied button
+	button.innerHTML = `
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+			 	 </svg>
+				Copied
+				`
+
+	// copy button
+	setTimeout(() => {
+		button.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					`
+
+		// reset search bar
+		setTimeout(() => {
+			if (copy_state === true) {
+				for (let i = 0; i < names.length; i++) {
+					const div = document.querySelector(`#grid${[i]}`)
+					div.style.display = "grid"
+				}
+
+				document.querySelector("#search").value = ""
+				document.getElementById("search").focus()
+			}
+		}, 1200)
+	}, 1000)
+}
+
+/**
+ * Search codes
+ */
 const search = () => {
 	const search = document.querySelector("#search")
 	const input = search.value.toLowerCase()
@@ -593,7 +612,9 @@ const search = () => {
 	}
 }
 
-// ? focus search bar
+/**
+ * Focus searchbar
+ */
 const focusSearch = () => {
 	setTimeout(() => {
 		document.getElementById("search").focus()
