@@ -494,7 +494,7 @@ const generateCodes = () => {
 		const element = `
 		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 		<div class="flex justify-center items-center">
-		<h3>${issuers[i]}</h3>
+		<h3 id="issuers${i}">Shortcut</h3>
 		</div>
 		<div class="flex justify-center items-center">
 		<input class="input" disabled type="text" id="qs${i}_input" value="${content}"/>
@@ -517,6 +517,8 @@ const generateCodes = () => {
 		const div = document.createElement("div")
 		div.innerHTML = element
 		document.querySelector(".quick").appendChild(div)
+
+		document.querySelector(`#issuers${i}`).textContent = `${issuers[i]}`
 	}
 }
 
