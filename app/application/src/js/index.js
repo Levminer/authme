@@ -594,13 +594,15 @@ const search = () => {
 		<div class="flex justify-center">
 		<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
 		<h3 class="pt-3">No results found!</h3>
-		<h4>Not found search results for "${document.querySelector("#search").value}".</h4>
+		<h4 id="searchResult">Not found search results.</h4>
 		</div>
 		</div>
 		`
 
 		element.setAttribute("id", "noResult")
 		document.querySelector(".content").appendChild(element)
+
+		document.querySelector("#searchResult").textContent = `Not found search results for "${document.querySelector("#search").value}".`
 	}
 
 	// if search empty
