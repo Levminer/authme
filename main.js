@@ -170,14 +170,15 @@ const saveSettings = () => {
 }
 
 const settings_file = {
-	version: {
-		tag: `${authme_version}`,
+	info: {
+		version: `${authme_version}`,
 		build: `${build_number}`,
+		date: `${release_date}`,
 	},
 	settings: {
 		launch_on_startup: true,
 		close_to_tray: true,
-		code_description: false,
+		codes_description: false,
 		blur_codes: false,
 		reset_after_copy: false,
 		search_history: true,

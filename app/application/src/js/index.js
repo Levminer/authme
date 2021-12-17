@@ -62,7 +62,7 @@ const description_query = []
 const name_query = []
 let clear
 
-const name_state = settings.settings.code_description
+const name_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
 const reveal_state = settings.settings.blur_codes
 const search_state = settings.settings.search_history

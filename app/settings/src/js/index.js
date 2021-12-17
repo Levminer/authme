@@ -137,7 +137,7 @@ if (tray_state === true) {
 }
 
 // names
-let names_state = settings.settings.code_description
+let names_state = settings.settings.codes_description
 if (names_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
@@ -354,7 +354,7 @@ const clearData = () => {
 const names = () => {
 	const toggle = () => {
 		if (names_state === true) {
-			settings.settings.code_description = false
+			settings.settings.codes_description = false
 
 			save()
 
@@ -363,7 +363,7 @@ const names = () => {
 
 			names_state = false
 		} else {
-			settings.settings.code_description = true
+			settings.settings.codes_description = true
 
 			save()
 
