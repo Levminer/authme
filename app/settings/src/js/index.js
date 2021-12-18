@@ -1,11 +1,9 @@
 const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const path = require("path")
-const dns = require("dns")
-const { typedef } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
+const { ipcRenderer: ipc } = require("electron")
+const { convert } = require("@levminer/lib")
+const path = require("path")
+const fs = require("fs")
 
 // ? logger
 logger.getWindow("settings")
@@ -683,6 +681,8 @@ const menu = (evt, name) => {
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		shortcut = true
+
+		checkForIssuers()
 
 		ipc.send("shortcuts")
 	} else if (name === "setting") {
