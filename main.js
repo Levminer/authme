@@ -20,7 +20,6 @@ process.on("uncaughtException", (error) => {
 })
 
 // ? windows
-let /** @type{BrowserWindow} */ window_splash
 let /** @type{BrowserWindow} */ window_landing
 let /** @type{BrowserWindow} */ window_confirm
 let /** @type{BrowserWindow} */ window_application
@@ -46,7 +45,6 @@ let update_seen = false
 let manual_update = false
 let tray = null
 let menu = null
-let display = null
 
 // ? development
 let dev = false
@@ -347,6 +345,25 @@ const createWindow = () => {
 	if (platform === "windows") {
 		wco = true
 	}
+
+	/**
+	 * Open Authme on selected display
+	 */
+	const displays = screen.getAllDisplays()
+	const primary_display = screen.getPrimaryDisplay()
+
+	// Remove primary display
+	for (let i = 0; i < displays.length; i++) {
+		if (displays[i].id === primary_display.id) {
+			displays.splice(i, 1)
+		}
+	}
+
+	// Add primary display
+	displays.splice(0, 0, primary_display)
+
+	// Get selected display
+	const display = displays[settings.settings.default_display - 1]
 
 	/**
 	 * Create windows
@@ -1434,10 +1451,6 @@ app.whenReady()
 	.then(() => {
 		logger.log("Starting app")
 
-		if (dev === false) {
-			app.setAppUserModelId("Authme")
-		}
-
 		process.on("uncaughtException", (error) => {
 			logger.error("Error occurred while starting", error.stack)
 
@@ -1460,77 +1473,16 @@ app.whenReady()
 				})
 		})
 
-		/**
-		 * Open Authme on selected display
-		 */
-		const displays = screen.getAllDisplays()
-		const primary_display = screen.getPrimaryDisplay()
-
-		// Remove primary display
-		for (let i = 0; i < displays.length; i++) {
-			if (displays[i].id === primary_display.id) {
-				displays.splice(i, 1)
-			}
+		// Set application Id
+		if (dev === false) {
+			app.setAppUserModelId("Authme")
 		}
 
-		// Add primary display
-		displays.splice(0, 0, primary_display)
-
-		// Get selected display
-		display = displays[settings.settings.default_display - 1]
+		// Create windows
+		createWindows()
 
 		/**
-		 * Splash window
-		 */
-		window_splash = new BrowserWindow({
-			x: display.bounds.x,
-			y: display.bounds.y,
-			width: 500,
-			height: 550,
-			transparent: true,
-			frame: false,
-			alwaysOnTop: true,
-			resizable: false,
-			webPreferences: {
-				nodeIntegration: true,
-				contextIsolation: false,
-			},
-		})
-
-		window_splash.center()
-
-		window_splash.loadFile("./app/splash/index.html")
-		window_splash.setProgressBar(10)
-
-		/**
-		 * Close splash window and create the app window
-		 */
-		window_splash.once("ready-to-show", () => {
-			window_splash.show()
-
-			if (dev === true) {
-				setTimeout(() => {
-					createWindow()
-					quickShortcuts()
-				}, 500)
-
-				setTimeout(() => {
-					window_splash.destroy()
-				}, 1000)
-			} else {
-				setTimeout(() => {
-					createWindow()
-					quickShortcuts()
-				}, 1500)
-
-				setTimeout(() => {
-					window_splash.destroy()
-				}, 2000)
-			}
-		})
-
-		/**
-		 * Create tray icon
+		 * Create tray and menu
 		 */
 		const icon_path = path.join(__dirname, "img/tray.png")
 		tray = new Tray(icon_path)
