@@ -32,11 +32,11 @@ const default_shortcuts = {
  */
 let storage
 
-/**
- * Get issuers
- * @type {string[]}
- */
-let issuers
+if (dev === false) {
+	storage = JSON.parse(localStorage.getItem("storage"))
+} else {
+	storage = JSON.parse(localStorage.getItem("dev_storage"))
+}
 
 /**
  * Edit, reset, delete codes
@@ -499,8 +499,9 @@ const hk_reset = (value) => {
 
 /**
  * Generate quick shortcut menus
+ * @param {string[]} issuers
  */
-const generateQuickShortcuts = () => {
+const generateQuickShortcuts = (issuers) => {
 	for (let i = 0; i < issuers.length; i++) {
 		let content = "None"
 
@@ -549,8 +550,10 @@ const checkForIssuers = () => {
 		storage = JSON.parse(localStorage.getItem("dev_storage"))
 	}
 
+	const issuers = storage.issuers
+
 	if (issuers !== undefined) {
-		generateQuickShortcuts()
+		generateQuickShortcuts(issuers)
 	} else {
 		document.querySelector(".quick").innerHTML = `
 		<div class="mx-auto rounded-2xl bg-gray-800 w-2/3">
@@ -571,6 +574,7 @@ const checkForIssuers = () => {
  * @param {Number} value
  */
 const qsEdit = (value) => {
+	const issuers = storage.issuers
 	id = value
 	inp_name = document.querySelector(`#qs${value}_input`)
 	btn_name = document.querySelector(`#qs${value}_button_edit`)
@@ -620,6 +624,7 @@ const qsEdit = (value) => {
  * @param {Number} value
  */
 const qsDelete = (value) => {
+	const issuers = storage.issuers
 	inp_name = document.querySelector(`#qs${value}_input`)
 	btn_name = document.querySelector(`#qs${value}_button_delete`)
 	svg_name = document.querySelector(`#qs${value}_svg_delete`)
