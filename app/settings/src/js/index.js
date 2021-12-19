@@ -197,7 +197,7 @@ drp1.innerHTML = `
 
 // hardware
 let hardware_state = settings.settings.hardware_acceleration
-if (hardware_state === true) {
+if (hardware_state === false) {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
 } else {

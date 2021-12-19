@@ -9,7 +9,9 @@ const path = require("path")
 const fs = require("fs")
 const os = require("os")
 
-// ? crash report
+/**
+ * Catch crash
+ */
 process.on("uncaughtException", (error) => {
 	logger.error("Error on load", error.stack)
 	dialog.showErrorBox("Authme", `Authme crashed, exiting now. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
@@ -19,7 +21,9 @@ process.on("uncaughtException", (error) => {
 	process.crash()
 })
 
-// ? windows
+/**
+ * Windows
+ */
 let /** @type{BrowserWindow} */ window_landing
 let /** @type{BrowserWindow} */ window_confirm
 let /** @type{BrowserWindow} */ window_application
@@ -28,7 +32,10 @@ let /** @type{BrowserWindow} */ window_import
 let /** @type{BrowserWindow} */ window_export
 let /** @type{BrowserWindow} */ window_edit
 
-// ? window states
+/**
+ * Window states
+ */
+let landing_shown = false
 let confirm_shown = false
 let application_shown = true
 let settings_shown = false
@@ -36,7 +43,9 @@ let import_shown = false
 let export_shown = false
 let edit_shown = false
 
-// ? other states
+/**
+ * Other states
+ */
 let authenticated = false
 let shortcuts = false
 let reload = false
@@ -46,7 +55,9 @@ let manual_update = false
 let tray = null
 let menu = null
 
-// ? development
+/**
+ * Check if running in development mode
+ */
 let dev = false
 
 if (app.isPackaged === false) {
@@ -64,7 +75,9 @@ if (app.isPackaged === false) {
 	}
 }
 
-// pre release
+/**
+ * Check if the build is pre release
+ */
 let pre_release = false
 if (number.startsWith("alpha") || number.startsWith("beta")) {
 	pre_release = true
@@ -83,47 +96,55 @@ if (process.platform === "win32") {
 	platform = "linux"
 }
 
-// ? remote module
+/**
+ * Initialize remote module
+ */
 remote.initialize()
 
-// ? init folders
+/**
+ * Check for folders
+ */
 const full_path = path.join(app.getPath("appData"), "Levminer")
 const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
-// check if folders exists
+// Check if /Levminer path exists
 if (!fs.existsSync(full_path)) {
 	fs.mkdirSync(path.join(full_path))
 }
 
+// Check if /Authme path exists
 if (!fs.existsSync(folder_path)) {
 	fs.mkdirSync(folder_path)
 }
 
-// codes folder
+// Check if codes folder exists
 if (!fs.existsSync(path.join(folder_path, "codes"))) {
 	fs.mkdirSync(path.join(folder_path, "codes"))
 }
 
-// settings folder
+// Check settings folder exists
 if (!fs.existsSync(path.join(folder_path, "settings"))) {
 	fs.mkdirSync(path.join(folder_path, "settings"))
 }
 
-// logs folder
+// Check logs folder exists
 if (!fs.existsSync(path.join(folder_path, "logs"))) {
 	fs.mkdirSync(path.join(folder_path, "logs"))
 }
 
-// rollbacks folder
+// Check rollbacks folder exists
 if (!fs.existsSync(path.join(folder_path, "rollbacks"))) {
 	fs.mkdirSync(path.join(folder_path, "rollbacks"))
 }
 
-// ? version and logs
+/**
+ * Version and logging
+ */
 const authme_version = app.getVersion()
 const release_date = date
 const build_number = number
 
+// Send Authme info to renderer
 ipc.on("info", (event) => {
 	event.returnValue = { authme_version, release_date, build_number }
 })
@@ -138,13 +159,15 @@ const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() /
 	.replaceAll("(TM)", "")
 	.replace(/ +(?= )/g, "")
 
-// logs
+// Logging
 logger.createFile(folder_path, "authme")
 logger.log(`Authme ${authme_version} ${build_number}`)
 logger.log(`System ${os_version}`)
 logger.log(`Hardware ${os_info}`)
 
-// ? single instance
+/**
+ * Only allow single Authme instance
+ */
 if (dev === false) {
 	const lock = app.requestSingleInstanceLock()
 
@@ -162,11 +185,9 @@ if (dev === false) {
 	}
 }
 
-// ? settings
-const saveSettings = () => {
-	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
-}
-
+/**
+ * Settings
+ */
 const settings_file = {
 	info: {
 		version: `${authme_version}`,
@@ -180,7 +201,7 @@ const settings_file = {
 		blur_codes: false,
 		reset_after_copy: false,
 		search_history: true,
-		hardware_acceleration: true,
+		hardware_acceleration: false,
 		search_filter: {
 			name: true,
 			description: false,
@@ -229,9 +250,14 @@ const settings_file = {
 	},
 }
 
-// create settings if not exists
+// Create settings if not exists
 if (!fs.existsSync(path.join(folder_path, "settings", "settings.json"))) {
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings_file, null, "\t"))
+}
+
+// Save settings
+const saveSettings = () => {
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 }
 
 /**
@@ -240,15 +266,21 @@ if (!fs.existsSync(path.join(folder_path, "settings", "settings.json"))) {
  */
 let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? force dark mode
+/**
+ * Force dark mode
+ */
 nativeTheme.themeSource = "dark"
 
-// ? disable hardware acceleration
-if (settings.settings.hardware_acceleration === true) {
+/**
+ * Disable hardware acceleration if turned off
+ */
+if (settings.settings.hardware_acceleration === false) {
 	app.disableHardwareAcceleration()
 }
 
-// ? open app from tray
+/**
+ * Show application window from tray
+ */
 const showAppFromTray = () => {
 	const toggle = () => {
 		if (application_shown === false) {
@@ -299,7 +331,9 @@ const showAppFromTray = () => {
 	}
 }
 
-// ? open settings from tray
+/**
+ * Show settings window from tray
+ */
 const settingsFromTray = () => {
 	const toggle = () => {
 		if (settings_shown === false) {
@@ -325,16 +359,20 @@ const settingsFromTray = () => {
 	}
 }
 
-// ? exit app from tray
+/**
+ * Exit app from tray
+ */
 const exitFromTray = () => {
 	tray_minimized = false
-	app.exit()
 
 	logger.log("Exited from tray")
+	app.exit()
 }
 
-// ? create window
-const createWindow = () => {
+/**
+ * Create application windows
+ */
+const createWindows = () => {
 	logger.log("Started creating windows")
 
 	/**
@@ -529,7 +567,7 @@ const createWindow = () => {
 		},
 	})
 
-	// remote module
+	// Enable remote module
 	remote.enable(window_landing.webContents)
 	remote.enable(window_confirm.webContents)
 	remote.enable(window_application.webContents)
@@ -538,7 +576,7 @@ const createWindow = () => {
 	remote.enable(window_export.webContents)
 	remote.enable(window_edit.webContents)
 
-	// load window files
+	// Load window files
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
@@ -547,21 +585,9 @@ const createWindow = () => {
 	window_export.loadFile("./app/export/index.html")
 	window_edit.loadFile("./app/edit/index.html")
 
-	// window states
-	if (settings.security.require_password === null) {
-		window_landing.on("ready-to-show", () => {
-			window_landing.maximize()
-		})
-
-		/* window_landing.maximize() */
-
-		logger.warn("First start")
-
-		if (dev === false) {
-			authme_launcher.enable()
-		}
-	}
-
+	/**
+	 * Window states
+	 */
 	window_landing.on("close", () => {
 		app.exit()
 
@@ -574,7 +600,6 @@ const createWindow = () => {
 		logger.log("Application exited from confirm window")
 	})
 
-	// window closings
 	window_application.on("close", async (event) => {
 		if (dev === true) {
 			try {
@@ -685,7 +710,7 @@ const createWindow = () => {
 	window_edit.setContentProtection(true)
 
 	/**
-	 * Check for manual update
+	 * Event when application window opens
 	 */
 	window_application.on("show", () => {
 		const api = () => {
@@ -709,19 +734,33 @@ const createWindow = () => {
 				})
 		}
 
+		// Hide window if launch on startup on
 		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
 			application_shown = false
 
 			window_application.hide()
-			window_confirm.hide()
 
 			reload = true
 		}
 
+		// Check for manual update
 		if (update_seen == false && platform !== "windows") {
 			api()
 
 			update_seen = true
+		}
+	})
+
+	/**
+	 * Event when landing window opens
+	 */
+	window_confirm.on("show", () => {
+		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+			confirm_shown = false
+
+			window_confirm.hide()
+
+			reload = true
 		}
 	})
 
@@ -732,7 +771,9 @@ const createWindow = () => {
 		window_application.webContents.executeJavaScript("focusSearch()")
 	})
 
-	// ? auto updater
+	/**
+	 * Auto update on Windows
+	 */
 	if (dev === false && platform === "windows") {
 		autoUpdater.checkForUpdates()
 	}
@@ -803,7 +844,9 @@ const createWindow = () => {
 		autoUpdater.quitAndInstall(true, true)
 	})
 
-	// ? global shortcuts
+	/**
+	 * Create global shortcuts
+	 */
 	if (settings.global_shortcuts.show !== "None") {
 		globalShortcut.register(settings.global_shortcuts.show, () => {
 			showAppFromTray()
@@ -822,7 +865,9 @@ const createWindow = () => {
 		})
 	}
 
-	// ? statistics
+	/**
+	 * Local statistics
+	 */
 	let opens = settings.statistics.opens
 	opens++
 	settings.statistics.opens = opens
@@ -854,7 +899,9 @@ const createWindow = () => {
 	}
 }
 
-// ? init auto launch
+/**
+ * Auto launch Authme on system start
+ */
 const AutoLaunch = require("auto-launch")
 
 const authme_launcher = new AutoLaunch({
@@ -863,7 +910,9 @@ const authme_launcher = new AutoLaunch({
 	isHidden: true,
 })
 
-// ? context menu
+/**
+ * Application context menu
+ */
 const contextmenu = require("electron-context-menu")
 
 contextmenu({
@@ -908,29 +957,21 @@ contextmenu({
 	],
 })
 
-// ? ipcs
-
 /**
  * Navigate to confirm
  */
 ipc.on("toConfirm", () => {
 	if (authenticated === false) {
-		if (settings.security.require_password === null) {
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+		setTimeout(() => {
 			window_confirm.maximize()
 			window_confirm.show()
-			window_landing.hide()
-		} else {
-			window_confirm.on("ready-to-show", () => {
-				window_confirm.maximize()
-				window_confirm.show()
 
-				try {
-					window_landing.hide()
-				} catch (error) {}
-			})
-		}
-
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+			setTimeout(() => {
+				window_landing.destroy()
+			}, 100)
+		}, 100)
 	}
 })
 
@@ -939,59 +980,46 @@ ipc.on("toConfirm", () => {
  */
 ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
-		window_confirm.hide()
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 		setTimeout(() => {
 			window_application.maximize()
 			window_application.show()
-		}, 300)
 
-		setTimeout(() => {
-			window_landing.destroy()
-		}, 500)
+			setTimeout(() => {
+				window_confirm.hide()
+			}, 100)
+		}, 100)
 
 		authenticated = true
 
 		createTray()
 		createMenu()
-
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
 /**
  * Navigate to confirm from landing
  */
-ipc.on("toConfirmFromLanding", () => {
+ipc.on("toApplicationFromLanding", () => {
 	if (authenticated === false) {
-		window_landing.hide()
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		if (settings.security.require_password === null) {
-			setTimeout(() => {
-				window_application.maximize()
-				window_application.show()
-			}, 300)
+		setTimeout(() => {
+			window_application.maximize()
+			window_application.show()
 
 			setTimeout(() => {
-				window_confirm.destroy()
-				window_landing.destroy()
-			}, 500)
-		} else {
-			window_application.on("ready-to-show", () => {
-				window_application.maximize()
-				window_application.show()
-
-				window_confirm.destroy()
-				window_landing.destroy()
-			})
-		}
+				setTimeout(() => {
+					window_landing.destroy()
+				}, 100)
+			}, 100)
+		}, 100)
 
 		authenticated = true
 
 		createTray()
 		createMenu()
-
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
@@ -1309,7 +1337,9 @@ ipc.on("rendererError", (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
 })
 
-// ? logger
+/**
+ * Logger events
+ */
 ipc.on("loggerLog", (event, data) => {
 	logger.rendererLog(data.id, data.message, data.log)
 })
@@ -1322,14 +1352,18 @@ ipc.on("loggerError", (event, data) => {
 	logger.rendererError(data.id, data.message, data.error)
 })
 
-// ? logs
+/**
+ * Logger path
+ */
 const logs = () => {
 	const log_path = logger.fileName()
 
 	shell.openPath(path.join(folder_path, "logs", log_path))
 }
 
-// ? about
+/**
+ * About dialog
+ */
 const about = () => {
 	const message = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
@@ -1353,7 +1387,9 @@ const about = () => {
 		})
 }
 
-// ? release notes
+/**
+ * Release notes dialog
+ */
 const releaseNotes = () => {
 	const { markdown } = require("@levminer/lib")
 
@@ -1383,14 +1419,16 @@ const releaseNotes = () => {
 		})
 }
 
-// ? support
+/**
+ * Support dialog
+ */
 const support = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["PayPal", /* "OpenCollective", */ "Close"],
-			defaultId: 2,
-			cancelId: 2,
+			buttons: ["PayPal", "Close"],
+			defaultId: 1,
+			cancelId: 1,
 			noLink: true,
 			type: "info",
 			message: "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
@@ -1398,9 +1436,7 @@ const support = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				shell.openExternal("https://paypal.me/levminer")
-			} /* else if (result.response === 1) {
-				shell.openExternal("https://opencollective.com/authme")
-			} */
+			}
 		})
 }
 
@@ -1495,6 +1531,70 @@ app.whenReady()
 
 		createTray()
 		createMenu()
+
+		/**
+		 * App controller
+		 */
+		if (settings.security.require_password === null) {
+			window_landing.on("ready-to-show", () => {
+				if (authenticated === false) {
+					if (landing_shown === false) {
+						setTimeout(() => {
+							window_landing.maximize()
+							window_landing.show()
+						}, 100)
+
+						landing_shown = true
+					}
+
+					logger.warn("First start")
+
+					if (dev === false) {
+						authme_launcher.enable()
+					}
+				}
+			})
+		}
+
+		if (settings.security.require_password === true) {
+			window_confirm.on("ready-to-show", () => {
+				if (authenticated === false) {
+					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+					setTimeout(() => {
+						window_confirm.maximize()
+						window_confirm.show()
+
+						setTimeout(() => {
+							window_landing.destroy()
+						}, 100)
+					}, 100)
+				}
+			})
+		}
+
+		if (settings.security.require_password === false) {
+			window_application.on("ready-to-show", () => {
+				if (authenticated === false) {
+					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+					setTimeout(() => {
+						window_application.maximize()
+						window_application.show()
+
+						setTimeout(() => {
+							window_confirm.destroy()
+							window_landing.destroy()
+						}, 100)
+					}, 100)
+
+					authenticated = true
+
+					createTray()
+					createMenu()
+				}
+			})
+		}
 	})
 	.catch((error) => {
 		logger.error("Error occurred while starting", error.stack)
