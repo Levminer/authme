@@ -1,5 +1,7 @@
 ### Authme 3.0.0-beta.1 (2021. December 21.)
 
+* [[0661ded](https://github.com/Levminer/authme/commit/0661ded)] Update screenshots (2021-12-20)
+* [[cb16f05](https://github.com/Levminer/authme/commit/cb16f05)] Update changelog (2021-12-20)
 * [[608e367](https://github.com/Levminer/authme/commit/608e367)] Update security policy (2021-12-20)
 * [[9b2edd7](https://github.com/Levminer/authme/commit/9b2edd7)] Bump version (2021-12-20)
 * [[8e33247](https://github.com/Levminer/authme/commit/8e33247)] Merge branch 'beta' into dev (2021-12-20)
