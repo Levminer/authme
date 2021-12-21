@@ -236,7 +236,7 @@ const noPassword = () => {
 				setInterval(() => {
 					password.fill(0)
 
-					ipc.send("toConfirmFromLanding")
+					ipc.send("toApplicationFromLanding")
 
 					location.reload()
 				}, 1000)

@@ -25,7 +25,7 @@
 [![Mac Download](https://img.shields.io/badge/Mac-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/mac)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 
-<img src="https://raw.githubusercontent.com/Levminer/authme/main/screenshots/screenshot.png?raw=true">
+<img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
 
 ## Features
 

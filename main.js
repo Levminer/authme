@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power, screen } = require("electron")
 const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
 const { number, date } = require("./build.json")
@@ -9,7 +9,9 @@ const path = require("path")
 const fs = require("fs")
 const os = require("os")
 
-// ? crash report
+/**
+ * Catch crash
+ */
 process.on("uncaughtException", (error) => {
 	logger.error("Error on load", error.stack)
 	dialog.showErrorBox("Authme", `Authme crashed, exiting now. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
@@ -19,8 +21,9 @@ process.on("uncaughtException", (error) => {
 	process.crash()
 })
 
-// ? windows
-let /** @type{BrowserWindow} */ window_splash
+/**
+ * Windows
+ */
 let /** @type{BrowserWindow} */ window_landing
 let /** @type{BrowserWindow} */ window_confirm
 let /** @type{BrowserWindow} */ window_application
@@ -29,7 +32,10 @@ let /** @type{BrowserWindow} */ window_import
 let /** @type{BrowserWindow} */ window_export
 let /** @type{BrowserWindow} */ window_edit
 
-// ? window states
+/**
+ * Window states
+ */
+let landing_shown = false
 let confirm_shown = false
 let application_shown = true
 let settings_shown = false
@@ -37,9 +43,10 @@ let import_shown = false
 let export_shown = false
 let edit_shown = false
 
-// ? other states
+/**
+ * Other states
+ */
 let authenticated = false
-let offline = false
 let shortcuts = false
 let reload = false
 let tray_minimized = false
@@ -48,7 +55,9 @@ let manual_update = false
 let tray = null
 let menu = null
 
-// ? development
+/**
+ * Check if running in development mode
+ */
 let dev = false
 
 if (app.isPackaged === false) {
@@ -66,7 +75,9 @@ if (app.isPackaged === false) {
 	}
 }
 
-// pre release
+/**
+ * Check if the build is pre release
+ */
 let pre_release = false
 if (number.startsWith("alpha") || number.startsWith("beta")) {
 	pre_release = true
@@ -85,47 +96,55 @@ if (process.platform === "win32") {
 	platform = "linux"
 }
 
-// ? remote module
+/**
+ * Initialize remote module
+ */
 remote.initialize()
 
-// ? init folders
+/**
+ * Check for folders
+ */
 const full_path = path.join(app.getPath("appData"), "Levminer")
 const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
-// check if folders exists
+// Check if /Levminer path exists
 if (!fs.existsSync(full_path)) {
 	fs.mkdirSync(path.join(full_path))
 }
 
+// Check if /Authme path exists
 if (!fs.existsSync(folder_path)) {
 	fs.mkdirSync(folder_path)
 }
 
-// codes folder
+// Check if codes folder exists
 if (!fs.existsSync(path.join(folder_path, "codes"))) {
 	fs.mkdirSync(path.join(folder_path, "codes"))
 }
 
-// settings folder
+// Check settings folder exists
 if (!fs.existsSync(path.join(folder_path, "settings"))) {
 	fs.mkdirSync(path.join(folder_path, "settings"))
 }
 
-// logs folder
+// Check logs folder exists
 if (!fs.existsSync(path.join(folder_path, "logs"))) {
 	fs.mkdirSync(path.join(folder_path, "logs"))
 }
 
-// rollbacks folder
+// Check rollbacks folder exists
 if (!fs.existsSync(path.join(folder_path, "rollbacks"))) {
 	fs.mkdirSync(path.join(folder_path, "rollbacks"))
 }
 
-// ? version and logs
+/**
+ * Version and logging
+ */
 const authme_version = app.getVersion()
 const release_date = date
 const build_number = number
 
+// Send Authme info to renderer
 ipc.on("info", (event) => {
 	event.returnValue = { authme_version, release_date, build_number }
 })
@@ -140,13 +159,15 @@ const os_info = `${os.cpus()[0].model.split("@")[0]} ${Math.ceil(os.totalmem() /
 	.replaceAll("(TM)", "")
 	.replace(/ +(?= )/g, "")
 
-// logs
+// Logging
 logger.createFile(folder_path, "authme")
 logger.log(`Authme ${authme_version} ${build_number}`)
 logger.log(`System ${os_version}`)
 logger.log(`Hardware ${os_info}`)
 
-// ? single instance
+/**
+ * Only allow single Authme instance
+ */
 if (dev === false) {
 	const lock = app.requestSingleInstanceLock()
 
@@ -164,31 +185,32 @@ if (dev === false) {
 	}
 }
 
-// ? settings
-const saveSettings = () => {
-	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
-}
-
+/**
+ * Settings
+ */
 const settings_file = {
-	version: {
-		tag: `${authme_version}`,
+	info: {
+		version: `${authme_version}`,
 		build: `${build_number}`,
+		date: `${release_date}`,
 	},
 	settings: {
 		launch_on_startup: true,
 		close_to_tray: true,
-		show_2fa_names: false,
-		click_to_reveal: false,
+		codes_description: false,
+		blur_codes: false,
 		reset_after_copy: false,
-		save_search_results: true,
-		disable_hardware_acceleration: true,
-		search_bar_filter: {
+		search_history: true,
+		hardware_acceleration: false,
+		search_filter: {
 			name: true,
 			description: false,
 		},
+		default_display: 1,
 	},
 	experimental: {
 		sort: null,
+		screen_capture: false,
 	},
 	security: {
 		require_password: null,
@@ -228,9 +250,14 @@ const settings_file = {
 	},
 }
 
-// create settings if not exists
+// Create settings if not exists
 if (!fs.existsSync(path.join(folder_path, "settings", "settings.json"))) {
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings_file, null, "\t"))
+}
+
+// Save settings
+const saveSettings = () => {
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 }
 
 /**
@@ -239,15 +266,21 @@ if (!fs.existsSync(path.join(folder_path, "settings", "settings.json"))) {
  */
 let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? force dark mode
+/**
+ * Force dark mode
+ */
 nativeTheme.themeSource = "dark"
 
-// ? disable hardware acceleration
-if (settings.settings.disable_hardware_acceleration === true) {
+/**
+ * Disable hardware acceleration if turned off
+ */
+if (settings.settings.hardware_acceleration === false) {
 	app.disableHardwareAcceleration()
 }
 
-// ? open app from tray
+/**
+ * Show application window from tray
+ */
 const showAppFromTray = () => {
 	const toggle = () => {
 		if (application_shown === false) {
@@ -298,7 +331,9 @@ const showAppFromTray = () => {
 	}
 }
 
-// ? open settings from tray
+/**
+ * Show settings window from tray
+ */
 const settingsFromTray = () => {
 	const toggle = () => {
 		if (settings_shown === false) {
@@ -324,25 +359,68 @@ const settingsFromTray = () => {
 	}
 }
 
-// ? exit app from tray
+/**
+ * Exit app from tray
+ */
 const exitFromTray = () => {
 	tray_minimized = false
-	app.exit()
 
 	logger.log("Exited from tray")
+	app.exit()
 }
 
-// ? create window
-const createWindow = () => {
+/**
+ * Create application windows
+ */
+const createWindows = () => {
 	logger.log("Started creating windows")
 
-	// ? create windows
+	/**
+	 * Window Controls Overlay
+	 */
+	let wco = false
+
+	if (platform === "windows") {
+		wco = true
+	}
+
+	/**
+	 * Open Authme on selected display
+	 */
+	const displays = screen.getAllDisplays()
+	const primary_display = screen.getPrimaryDisplay()
+
+	// Remove primary display
+	for (let i = 0; i < displays.length; i++) {
+		if (displays[i].id === primary_display.id) {
+			displays.splice(i, 1)
+		}
+	}
+
+	// Add primary display
+	displays.splice(0, 0, primary_display)
+
+	// Get selected display
+	const display = displays[settings.settings.default_display - 1]
+
+	/**
+	 * Create windows
+	 */
 	window_landing = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -352,11 +430,20 @@ const createWindow = () => {
 	})
 
 	window_confirm = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -366,11 +453,20 @@ const createWindow = () => {
 	})
 
 	window_application = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -380,11 +476,20 @@ const createWindow = () => {
 	})
 
 	window_settings = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -394,11 +499,20 @@ const createWindow = () => {
 	})
 
 	window_import = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -408,11 +522,20 @@ const createWindow = () => {
 	})
 
 	window_export = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -422,11 +545,20 @@ const createWindow = () => {
 	})
 
 	window_edit = new BrowserWindow({
+		x: display.bounds.x,
+		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
+		titleBarStyle: wco ? "hidden" : null,
+		titleBarOverlay: wco
+			? {
+					color: "black",
+					symbolColor: "white",
+			  }
+			: null,
 		backgroundColor: "#0A0A0A",
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -435,7 +567,7 @@ const createWindow = () => {
 		},
 	})
 
-	// remote module
+	// Enable remote module
 	remote.enable(window_landing.webContents)
 	remote.enable(window_confirm.webContents)
 	remote.enable(window_application.webContents)
@@ -444,7 +576,7 @@ const createWindow = () => {
 	remote.enable(window_export.webContents)
 	remote.enable(window_edit.webContents)
 
-	// load window files
+	// Load window files
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
@@ -453,21 +585,9 @@ const createWindow = () => {
 	window_export.loadFile("./app/export/index.html")
 	window_edit.loadFile("./app/edit/index.html")
 
-	// window states
-	if (settings.security.require_password === null) {
-		window_landing.on("ready-to-show", () => {
-			window_landing.maximize()
-		})
-
-		/* window_landing.maximize() */
-
-		logger.warn("First start")
-
-		if (dev === false) {
-			authme_launcher.enable()
-		}
-	}
-
+	/**
+	 * Window states
+	 */
 	window_landing.on("close", () => {
 		app.exit()
 
@@ -480,7 +600,6 @@ const createWindow = () => {
 		logger.log("Application exited from confirm window")
 	})
 
-	// window closings
 	window_application.on("close", async (event) => {
 		if (dev === true) {
 			try {
@@ -591,7 +710,7 @@ const createWindow = () => {
 	window_edit.setContentProtection(true)
 
 	/**
-	 * Check for manual update
+	 * Event when application window opens
 	 */
 	window_application.on("show", () => {
 		const api = () => {
@@ -615,19 +734,33 @@ const createWindow = () => {
 				})
 		}
 
+		// Hide window if launch on startup on
 		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
 			application_shown = false
 
 			window_application.hide()
-			window_confirm.hide()
 
 			reload = true
 		}
 
+		// Check for manual update
 		if (update_seen == false && platform !== "windows") {
 			api()
 
 			update_seen = true
+		}
+	})
+
+	/**
+	 * Event when landing window opens
+	 */
+	window_confirm.on("show", () => {
+		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+			confirm_shown = false
+
+			window_confirm.hide()
+
+			reload = true
 		}
 	})
 
@@ -638,7 +771,9 @@ const createWindow = () => {
 		window_application.webContents.executeJavaScript("focusSearch()")
 	})
 
-	// ? auto updater
+	/**
+	 * Auto update on Windows
+	 */
 	if (dev === false && platform === "windows") {
 		autoUpdater.checkForUpdates()
 	}
@@ -679,7 +814,14 @@ const createWindow = () => {
 	autoUpdater.on("error", (error) => {
 		logger.error("Error during auto update", error.stack)
 
-		dialog.showErrorBox("Authme", "Error during auto update. \n\nTry to restart Authme!")
+		dialog.showMessageBox({
+			title: "Authme",
+			buttons: ["Close"],
+			defaultId: 0,
+			cancelId: 1,
+			type: "error",
+			message: `Error during auto update. \n\nTry to restart Authme and check your network connection! \n\n${error.stack}`,
+		})
 	})
 
 	autoUpdater.on("download-progress", (progress) => {
@@ -702,7 +844,9 @@ const createWindow = () => {
 		autoUpdater.quitAndInstall(true, true)
 	})
 
-	// ? global shortcuts
+	/**
+	 * Create global shortcuts
+	 */
 	if (settings.global_shortcuts.show !== "None") {
 		globalShortcut.register(settings.global_shortcuts.show, () => {
 			showAppFromTray()
@@ -721,7 +865,9 @@ const createWindow = () => {
 		})
 	}
 
-	// ? statistics
+	/**
+	 * Local statistics
+	 */
 	let opens = settings.statistics.opens
 	opens++
 	settings.statistics.opens = opens
@@ -753,7 +899,9 @@ const createWindow = () => {
 	}
 }
 
-// ? init auto launch
+/**
+ * Auto launch Authme on system start
+ */
 const AutoLaunch = require("auto-launch")
 
 const authme_launcher = new AutoLaunch({
@@ -762,7 +910,9 @@ const authme_launcher = new AutoLaunch({
 	isHidden: true,
 })
 
-// ? context menu
+/**
+ * Application context menu
+ */
 const contextmenu = require("electron-context-menu")
 
 contextmenu({
@@ -807,29 +957,21 @@ contextmenu({
 	],
 })
 
-// ? ipcs
-
 /**
  * Navigate to confirm
  */
 ipc.on("toConfirm", () => {
 	if (authenticated === false) {
-		if (settings.security.require_password === null) {
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+		setTimeout(() => {
 			window_confirm.maximize()
 			window_confirm.show()
-			window_landing.hide()
-		} else {
-			window_confirm.on("ready-to-show", () => {
-				window_confirm.maximize()
-				window_confirm.show()
 
-				try {
-					window_landing.hide()
-				} catch (error) {}
-			})
-		}
-
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+			setTimeout(() => {
+				window_landing.destroy()
+			}, 100)
+		}, 100)
 	}
 })
 
@@ -838,59 +980,46 @@ ipc.on("toConfirm", () => {
  */
 ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
-		window_confirm.hide()
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 		setTimeout(() => {
 			window_application.maximize()
 			window_application.show()
-		}, 300)
 
-		setTimeout(() => {
-			window_landing.destroy()
-		}, 500)
+			setTimeout(() => {
+				window_confirm.hide()
+			}, 100)
+		}, 100)
 
 		authenticated = true
 
 		createTray()
 		createMenu()
-
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
 /**
  * Navigate to confirm from landing
  */
-ipc.on("toConfirmFromLanding", () => {
+ipc.on("toApplicationFromLanding", () => {
 	if (authenticated === false) {
-		window_landing.hide()
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		if (settings.security.require_password === null) {
-			setTimeout(() => {
-				window_application.maximize()
-				window_application.show()
-			}, 300)
+		setTimeout(() => {
+			window_application.maximize()
+			window_application.show()
 
 			setTimeout(() => {
-				window_confirm.destroy()
-				window_landing.destroy()
-			}, 500)
-		} else {
-			window_application.on("ready-to-show", () => {
-				window_application.maximize()
-				window_application.show()
-
-				window_confirm.destroy()
-				window_landing.destroy()
-			})
-		}
+				setTimeout(() => {
+					window_landing.destroy()
+				}, 100)
+			}, 100)
+		}, 100)
 
 		authenticated = true
 
 		createTray()
 		createMenu()
-
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 	}
 })
 
@@ -990,6 +1119,9 @@ ipc.on("enableStartup", () => {
 ipc.on("disableWindowCapture", () => {
 	try {
 		window_landing.setContentProtection(true)
+	} catch (error) {}
+
+	try {
 		window_confirm.setContentProtection(true)
 	} catch (error) {}
 
@@ -1011,8 +1143,11 @@ ipc.on("disableWindowCapture", () => {
  */
 ipc.on("enableWindowCapture", () => {
 	try {
-		window_landing.setContentProtection(false)
-		window_confirm.setContentProtection(false)
+		window_landing.setContentProtection(true)
+	} catch (error) {}
+
+	try {
+		window_confirm.setContentProtection(true)
 	} catch (error) {}
 
 	window_application.setContentProtection(false)
@@ -1091,29 +1226,6 @@ ipc.on("abort", () => {
 	process.on("uncaughtException", (error) => {
 		logger.error("Execution aborted", error.stack)
 	})
-})
-
-/**
- * Offline mode
- */
-ipc.on("offline", () => {
-	if (offline === false) {
-		setTimeout(() => {
-			window_application.setTitle("Authme (Offline)")
-			window_settings.setTitle("Authme (Offline)")
-		}, 1000)
-		offline = true
-
-		logger.warn("Running in offline mode")
-	} else {
-		setTimeout(() => {
-			window_application.setTitle("Authme")
-			window_settings.setTitle("Authme ")
-		}, 1000)
-		offline = false
-
-		logger.log("Running in online mode")
-	}
 })
 
 /**
@@ -1225,7 +1337,9 @@ ipc.on("rendererError", (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
 })
 
-// ? logger
+/**
+ * Logger events
+ */
 ipc.on("loggerLog", (event, data) => {
 	logger.rendererLog(data.id, data.message, data.log)
 })
@@ -1238,14 +1352,18 @@ ipc.on("loggerError", (event, data) => {
 	logger.rendererError(data.id, data.message, data.error)
 })
 
-// ? logs
+/**
+ * Logger path
+ */
 const logs = () => {
 	const log_path = logger.fileName()
 
 	shell.openPath(path.join(folder_path, "logs", log_path))
 }
 
-// ? about
+/**
+ * About dialog
+ */
 const about = () => {
 	const message = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
@@ -1269,7 +1387,9 @@ const about = () => {
 		})
 }
 
-// ? release notes
+/**
+ * Release notes dialog
+ */
 const releaseNotes = () => {
 	const { markdown } = require("@levminer/lib")
 
@@ -1299,14 +1419,16 @@ const releaseNotes = () => {
 		})
 }
 
-// ? support
+/**
+ * Support dialog
+ */
 const support = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["PayPal", /* "OpenCollective", */ "Close"],
-			defaultId: 2,
-			cancelId: 2,
+			buttons: ["PayPal", "Close"],
+			defaultId: 1,
+			cancelId: 1,
 			noLink: true,
 			type: "info",
 			message: "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
@@ -1314,9 +1436,7 @@ const support = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				shell.openExternal("https://paypal.me/levminer")
-			} /* else if (result.response === 1) {
-				shell.openExternal("https://opencollective.com/authme")
-			} */
+			}
 		})
 }
 
@@ -1367,73 +1487,39 @@ app.whenReady()
 	.then(() => {
 		logger.log("Starting app")
 
-		if (dev === false) {
-			app.setAppUserModelId("Authme")
-		}
-
 		process.on("uncaughtException", (error) => {
-			logger.error("Unknown error occurred", error.stack)
+			logger.error("Error occurred while starting", error.stack)
 
 			dialog
 				.showMessageBox({
 					title: "Authme",
-					buttons: ["Report", "Close"],
+					buttons: ["Report", "Close", "Exit"],
 					defaultId: 0,
 					cancelId: 1,
 					noLink: true,
 					type: "error",
-					message: `Unknown error occurred! \n\n${error.stack}`,
+					message: `Error occurred while starting Authme! \n\n${error.stack}`,
 				})
 				.then((result) => {
 					if (result.response === 0) {
 						shell.openExternal("https://github.com/Levminer/authme/issues/")
-					} else if (result.response === 1) {
+					} else if (result.response === 2) {
 						app.exit()
 					}
 				})
 		})
 
-		window_splash = new BrowserWindow({
-			width: 500,
-			height: 550,
-			transparent: true,
-			frame: false,
-			alwaysOnTop: true,
-			resizable: false,
-			webPreferences: {
-				nodeIntegration: true,
-				contextIsolation: false,
-			},
-		})
+		// Set application Id
+		if (dev === false) {
+			app.setAppUserModelId("Authme")
+		}
 
-		window_splash.loadFile("./app/splash/index.html")
-		window_splash.setProgressBar(10)
+		// Create windows
+		createWindows()
 
-		window_splash.once("ready-to-show", () => {
-			window_splash.show()
-
-			if (dev === true) {
-				setTimeout(() => {
-					createWindow()
-					quickShortcuts()
-				}, 500)
-
-				setTimeout(() => {
-					window_splash.destroy()
-				}, 1000)
-			} else {
-				setTimeout(() => {
-					createWindow()
-					quickShortcuts()
-				}, 1500)
-
-				setTimeout(() => {
-					window_splash.destroy()
-				}, 2000)
-			}
-		})
-
-		// ? create tray
+		/**
+		 * Create tray and menu
+		 */
 		const icon_path = path.join(__dirname, "img/tray.png")
 		tray = new Tray(icon_path)
 
@@ -1445,9 +1531,73 @@ app.whenReady()
 
 		createTray()
 		createMenu()
+
+		/**
+		 * App controller
+		 */
+		if (settings.security.require_password === null) {
+			window_landing.on("ready-to-show", () => {
+				if (authenticated === false) {
+					if (landing_shown === false) {
+						setTimeout(() => {
+							window_landing.maximize()
+							window_landing.show()
+						}, 100)
+
+						landing_shown = true
+					}
+
+					logger.warn("First start")
+
+					if (dev === false) {
+						authme_launcher.enable()
+					}
+				}
+			})
+		}
+
+		if (settings.security.require_password === true) {
+			window_confirm.on("ready-to-show", () => {
+				if (authenticated === false) {
+					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+					setTimeout(() => {
+						window_confirm.maximize()
+						window_confirm.show()
+
+						setTimeout(() => {
+							window_landing.destroy()
+						}, 100)
+					}, 100)
+				}
+			})
+		}
+
+		if (settings.security.require_password === false) {
+			window_application.on("ready-to-show", () => {
+				if (authenticated === false) {
+					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+					setTimeout(() => {
+						window_application.maximize()
+						window_application.show()
+
+						setTimeout(() => {
+							window_confirm.destroy()
+							window_landing.destroy()
+						}, 100)
+					}, 100)
+
+					authenticated = true
+
+					createTray()
+					createMenu()
+				}
+			})
+		}
 	})
 	.catch((error) => {
-		logger.error("Unknown error occurred", error.stack)
+		logger.error("Error occurred while starting", error.stack)
 
 		dialog
 			.showMessageBox({
@@ -1457,7 +1607,7 @@ app.whenReady()
 				cancelId: 1,
 				noLink: true,
 				type: "error",
-				message: `Unknown error occurred! \n\n${error.stack}`,
+				message: `Error occurred while starting Authme! \n\n${error.stack}`,
 			})
 			.then((result) => {
 				if (result.response === 0) {
@@ -1484,7 +1634,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: application_shown ? "Hide app" : "Show app",
+			label: application_shown ? "Hide App" : "Show App",
 			accelerator: shortcuts ? "" : settings.global_shortcuts.show,
 			click: () => {
 				showAppFromTray()
@@ -1503,7 +1653,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: "Exit app",
+			label: "Exit App",
 			accelerator: shortcuts ? "" : settings.global_shortcuts.exit,
 			click: () => {
 				exitFromTray()
@@ -1521,10 +1671,10 @@ const createTray = () => {
 const createMenu = () => {
 	const template = [
 		{
-			label: "&File",
+			label: "File",
 			submenu: [
 				{
-					label: application_shown ? "Hide app" : "Show app",
+					label: application_shown ? "Hide App" : "Show App",
 					accelerator: shortcuts ? "" : settings.shortcuts.show,
 					click: () => {
 						showAppFromTray()
@@ -1582,36 +1732,36 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&View",
+			label: "View",
 			submenu: [
 				{
 					label: "Reset",
-					role: "resetZoom",
+					role: shortcuts ? "" : "resetZoom",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_reset,
 				},
 				{
 					type: "separator",
 				},
 				{
-					label: "Zoom in",
-					role: "zoomIn",
+					label: "Zoom In",
+					role: shortcuts ? "" : "zoomIn",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_in,
 				},
 				{
 					type: "separator",
 				},
 				{
-					label: "Zoom out",
-					role: "zoomOut",
+					label: "Zoom Out",
+					role: shortcuts ? "" : "zoomOut",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_out,
 				},
 			],
 		},
 		{
-			label: "&Tools",
+			label: "Tools",
 			submenu: [
 				{
-					label: "Edit codes",
+					label: "Edit Codes",
 					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
@@ -1712,7 +1862,7 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&Help",
+			label: "Help",
 			submenu: [
 				{
 					label: "Documentation",
@@ -1739,7 +1889,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Release notes",
+					label: "Release Notes",
 					accelerator: shortcuts ? "" : settings.shortcuts.release,
 					click: () => {
 						releaseNotes()
@@ -1749,7 +1899,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Support development",
+					label: "Support Development",
 					accelerator: shortcuts ? "" : settings.shortcuts.support,
 					click: () => {
 						support()
@@ -1758,10 +1908,10 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "&About",
+			label: "About",
 			submenu: [
 				{
-					label: "Show licenses",
+					label: "Show Licenses",
 					accelerator: shortcuts ? "" : settings.shortcuts.licenses,
 					click: () => {
 						dialog
@@ -1846,8 +1996,18 @@ const createMenu = () => {
 		},
 	]
 
+	// Set menu
 	menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
+
+	// Reload menu
+	if (window_application !== undefined && platform === "windows") {
+		window_application.webContents.send("refreshMenu")
+		window_settings.webContents.send("refreshMenu")
+		window_import.webContents.send("refreshMenu")
+		window_export.webContents.send("refreshMenu")
+		window_edit.webContents.send("refreshMenu")
+	}
 }
 
 /**

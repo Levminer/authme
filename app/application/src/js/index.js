@@ -62,10 +62,10 @@ const description_query = []
 const name_query = []
 let clear
 
-const name_state = settings.settings.show_2fa_names
+const name_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
-const reveal_state = settings.settings.click_to_reveal
-const search_state = settings.settings.save_search_results
+const reveal_state = settings.settings.blur_codes
+const search_state = settings.settings.search_history
 
 const sort_number = settings.experimental.sort
 
@@ -180,7 +180,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -206,7 +206,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -233,7 +233,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -258,7 +258,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -286,7 +286,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -312,7 +312,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -339,7 +339,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -379,6 +379,10 @@ const go = (data) => {
 			// set div in html
 			document.querySelector(".content").appendChild(element)
 
+			if (i == names.length - 1) {
+				element.style.paddingBottom = "8px"
+			}
+
 			// elements
 			const name = document.querySelector(`#name${counter}`)
 			const code = document.querySelector(`#code${counter}`)
@@ -396,73 +400,19 @@ const go = (data) => {
 				text.textContent = names[i]
 			}
 
-			// interval0
-			const int0 = setInterval(() => {
-				// generate token
-				const token = speakeasy.totp({
-					secret: secrets[i],
-					encoding: "base32",
-				})
-
-				// time
-				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-
-				name.textContent = issuers[i]
-				code.textContent = token
-				time.textContent = remaining
-			}, 100)
-
-			// interval1
-			const int1 = setInterval(() => {
-				// generate token
-				const token = speakeasy.totp({
-					secret: secrets[i],
-					encoding: "base32",
-				})
-
-				// time
-				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-
-				// setting elements
-				name.textContent = issuers[i]
-				code.textContent = token
-				time.textContent = remaining
-
-				clearInterval(int0)
-			}, 500)
-
-			// copy
-			copy.addEventListener("click", () => {
-				navigator.clipboard.writeText(code.textContent)
-
-				copy.innerHTML = `
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-			 	 </svg>
-				Copied
-				`
-
-				setTimeout(() => {
-					copy.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					`
-
-					setTimeout(() => {
-						if (copy_state === true) {
-							for (let i = 0; i < names.length; i++) {
-								const div = document.querySelector(`#grid${[i]}`)
-								div.style.display = "grid"
-							}
-
-							document.querySelector("#search").value = ""
-							document.getElementById("search").focus()
-						}
-					}, 1200)
-				}, 1000)
+			// generate token
+			const token = speakeasy.totp({
+				secret: secrets[i],
+				encoding: "base32",
 			})
+
+			// time
+			const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+			// set content
+			name.textContent = issuers[i]
+			code.textContent = token
+			time.textContent = remaining
 
 			if (name_state === true) {
 				const grid = document.querySelector(`#grid${i}`)
@@ -477,6 +427,10 @@ const go = (data) => {
 	}
 
 	generate()
+
+	setInterval(() => {
+		refreshCodes(secrets)
+	}, 500)
 
 	// search history
 	const search_history = settings.search_history.latest
@@ -505,7 +459,76 @@ const go = (data) => {
 	}
 }
 
-// ? search
+/**
+ * Refresh codes every 500ms
+ * @param {Number} secrets
+ */
+const refreshCodes = (secrets) => {
+	for (let i = 0; i < secrets.length; i++) {
+		const code = document.querySelector(`#code${i}`)
+		const time = document.querySelector(`#time${i}`)
+
+		// generate token
+		const token = speakeasy.totp({
+			secret: secrets[i],
+			encoding: "base32",
+		})
+
+		// generate time
+		const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+		// set content
+		code.textContent = token
+		time.textContent = remaining
+	}
+}
+
+/**
+ * Copy 2FA code
+ * @param {Number} id
+ */
+const copyCode = (id) => {
+	const button = document.querySelector(`#copy${id}`)
+	const code = document.querySelector(`#code${id}`)
+
+	// copy code
+	navigator.clipboard.writeText(code.textContent)
+
+	// copied button
+	button.innerHTML = `
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+			 	 </svg>
+				Copied
+				`
+
+	// copy button
+	setTimeout(() => {
+		button.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					`
+
+		// reset search bar
+		setTimeout(() => {
+			if (copy_state === true) {
+				for (let i = 0; i < names.length; i++) {
+					const div = document.querySelector(`#grid${[i]}`)
+					div.style.display = "grid"
+				}
+
+				document.querySelector("#search").value = ""
+				document.getElementById("search").focus()
+			}
+		}, 1200)
+	}, 1000)
+}
+
+/**
+ * Search codes
+ */
 const search = () => {
 	const search = document.querySelector("#search")
 	const input = search.value.toLowerCase()
@@ -531,7 +554,7 @@ const search = () => {
 
 	// search algorithm
 	name_query.forEach((result) => {
-		if (settings.settings.search_bar_filter.name === true && settings.settings.search_bar_filter.description === false) {
+		if (settings.settings.search_filter.name === true && settings.settings.search_filter.description === false) {
 			if (!result.startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -540,7 +563,7 @@ const search = () => {
 					no_results++
 				}
 			}
-		} else if (settings.settings.search_bar_filter.description === true && settings.settings.search_bar_filter.name === false) {
+		} else if (settings.settings.search_filter.description === true && settings.settings.search_filter.name === false) {
 			if (!description_query[i].startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -571,13 +594,15 @@ const search = () => {
 		<div class="flex justify-center">
 		<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
 		<h3 class="pt-3">No results found!</h3>
-		<h4>Not found search results for "${document.querySelector("#search").value}".</h4>
+		<h4 id="searchResult">Not found search results.</h4>
 		</div>
 		</div>
 		`
 
 		element.setAttribute("id", "noResult")
 		document.querySelector(".content").appendChild(element)
+
+		document.querySelector("#searchResult").textContent = `Not found search results for "${document.querySelector("#search").value}".`
 	}
 
 	// if search empty
@@ -589,7 +614,9 @@ const search = () => {
 	}
 }
 
-// ? focus search bar
+/**
+ * Focus searchbar
+ */
 const focusSearch = () => {
 	setTimeout(() => {
 		document.getElementById("search").focus()
@@ -605,49 +632,6 @@ const showUpdate = () => {
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }
-
-// ? offline mode
-let offline_mode = false
-let offline_closed = false
-let online_closed = false
-
-const check_for_internet = () => {
-	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
-			document.querySelector(".online").style.display = "none"
-			document.querySelector(".offline").style.display = "block"
-
-			offline_mode = true
-			offline_closed = true
-
-			ipc.send("offline")
-
-			logger.warn("Can't connect to the internet")
-		} else if (err === null && offline_mode === true && online_closed === false) {
-			document.querySelector(".online").style.display = "block"
-			document.querySelector(".offline").style.display = "none"
-
-			offline_mode = false
-			online_closed = true
-
-			ipc.send("offline")
-
-			logger.warn("Connected to the internet")
-		} else if ((online_closed === true || offline_closed === true) && err === null) {
-			offline_mode = false
-			offline_closed = false
-			online_closed = false
-
-			logger.warn("Connection restored")
-		}
-	})
-}
-
-check_for_internet()
-
-setInterval(() => {
-	check_for_internet()
-}, 5000)
 
 /**
  * Save imported codes to disk
@@ -798,25 +782,25 @@ const dropdown = () => {
 	}
 }
 
-document.querySelector("#checkbox0").checked = settings.settings.search_bar_filter.name
-document.querySelector("#checkbox1").checked = settings.settings.search_bar_filter.description
+document.querySelector("#checkbox0").checked = settings.settings.search_filter.name
+document.querySelector("#checkbox1").checked = settings.settings.search_filter.description
 
 // ? dropdown checkboxes
 document.querySelector("#checkbox0").addEventListener("click", () => {
-	if (settings.settings.search_bar_filter.name === true) {
-		settings.settings.search_bar_filter.name = false
+	if (settings.settings.search_filter.name === true) {
+		settings.settings.search_filter.name = false
 	} else {
-		settings.settings.search_bar_filter.name = true
+		settings.settings.search_filter.name = true
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
 document.querySelector("#checkbox1").addEventListener("click", () => {
-	if (settings.settings.search_bar_filter.description === true) {
-		settings.settings.search_bar_filter.description = false
+	if (settings.settings.search_filter.description === true) {
+		settings.settings.search_filter.description = false
 	} else {
-		settings.settings.search_bar_filter.description = true
+		settings.settings.search_filter.description = true
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))

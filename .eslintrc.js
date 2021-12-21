@@ -12,7 +12,7 @@ module.exports = {
 		ecmaVersion: 12,
 	},
 	rules: {
-		indent: ["error", "tab", { SwitchCase: 1 }],
+		indent: ["off", "tab", { SwitchCase: 1 }],
 		quotes: ["error", "double"],
 		semi: ["error", "never"],
 		eqeqeq: ["off"],

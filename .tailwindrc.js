@@ -1,9 +1,6 @@
 module.exports = {
 	mode: "jit",
-	purge: {
-		enabled: true,
-		content: ["./app/**/*.html", "./app/**/*.js"],
-	},
+	content: ["./app/**/*.html", "./app/**/*.js"],
 	theme: {
 		extend: {
 			inset: {

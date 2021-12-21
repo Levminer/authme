@@ -1,52 +1,24 @@
 /* titlebar */
-.window-title {
-	display: none;
+.custom-titlebar {
+	font-family: Arial, Helvetica, sans-serif;
+	color: white !important;
 }
 
-body > div.titlebar.cet-windows > div.window-controls-container {
-	display: none;
+/* controls */
+.custom-titlebar-controls {
+	display: none !important;
 }
 
-body > div.titlebar.cet-windows > div.menubar > div.menubar-menu-button.open > ul > li > a {
-	text-decoration: none !important;
+/* submenu */
+.custom-titlebar-submenu {
+	background-color: rgb(0, 0, 0) !important;
+	border: 1px solid rgb(40, 40, 40);
+	text-transform: capitalize !important;
 }
 
-.focused {
-	background-color: rgb(30, 30, 30);
-}
-
-body > div.titlebar.cet-windows > div.menubar > div:hover {
-	background-color: rgb(30, 30, 30);
-}
-
-body > div.titlebar.cet-windows > div.menubar > div.menubar-menu-button.open > ul > li > a > span.keybinding {
-	text-transform: capitalize;
-}
-
-body > div.titlebar.cet-windows > div.menubar > div.menubar-menu-button.open > ul > li > a {
-	margin-left: 0;
-	margin-right: 0;
-}
-
-.separator {
-	border-color: rgb(40, 40, 40) !important;
+/* separator */
+.custom-titlebar-separator {
+	margin: 8px 0px !important;
+	background-color: rgb(40, 40, 40) !important;
 	opacity: 1 !important;
-}
-
-.menubar-menu-container {
-	border: 1px rgb(40, 40, 40) solid !important;
-}
-
-.menu-item-icon {
-	width: 0 !important;
-	height: 0 !important;
-}
-
-.menubar-menu-container {
-	padding: 0.2em 0 !important;
-}
-
-body > div.titlebar.cet-windows > div.menubar > div.menubar-menu-button.open > ul > li:nth-child(3) {
-	margin-top: 1px;
-	margin-bottom: 1px;
 }

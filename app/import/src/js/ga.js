@@ -154,7 +154,7 @@ const gaCamera = () => {
 
 			return logger.error("Not found webcam")
 		} else {
-			const video = document.querySelector("#gaCamera")
+			const video = document.querySelector("#gaVideo")
 			const button = document.querySelector("#gaStop")
 
 			const reader = new QrcodeDecoder()

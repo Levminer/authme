@@ -37,11 +37,11 @@
 		</div>
 
 		<!-- content -->
-		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center">
+		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center p-1">
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20 mt-20" id="choose">
 				<h2 class="pt-5">Instructions</h2>
 				<h3>You can create your import file here. For more information please read the documentation.</h3>
-				<button class="buttoni" id="but0" onclick="onlineDocs()">
+				<button class="buttoni mb-8" onclick="onlineDocs()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
 					</svg>
@@ -61,26 +61,31 @@
 							<br />
 							If you need more steps or help:
 							<br />
-							<br />
-							<a href="#qrLink" onclick="qrLink()">Detailed steps</a>
+							<a class="link" href="#qrLink" onclick="qrLink()">Detailed steps</a>
 						</h4>
 					</details>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
-						<button class="buttoni" id="but0" onclick="qrImport()">
+						<button class="buttoni mb-5" onclick="qrImport()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
 							</svg>
 							Choose image(s)
 						</button>
-						<button class="buttoni mb-5" id="but2" onclick="qrCamera()">
+						<button class="buttoni mb-5" onclick="qrCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
 							</svg>
 							Use webcam
 						</button>
+						<button class="buttoni mb-5 screenCapture hidden" onclick="qrScreen()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+							</svg>
+							Screen capture
+						</button>
 					</div>
-					<video id="qrCamera" class="hidden mx-auto" autoplay></video>
+					<video id="qrVideo" class="hidden mx-auto" autoplay></video>
 					<button class="buttoni mb-5 mt-5 hidden" id="qrStop">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -92,26 +97,25 @@
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
 					<h2 class="pt-5">Advanced import</h2>
 					<h3>Google Authenticator QR code</h3>
-					<details class="details1" id="dt">
-						<summary class="summary1">Instructions</summary>
+					<details class="details mb-8">
+						<summary class="summary">Instructions</summary>
 						<h4>
 							Tap on the three dots on the top right corner of the screen and export your accounts, take a picture of the export QR code(s), and choose the image(s) you saved and transferred to your computer.
 							<br />
 							<br />
 							If you need more steps or help:
 							<br />
-							<br />
-							<a href="#gaLink" onclick="gaLink()">Detailed steps</a>
+							<a class="link" href="#gaLink" onclick="gaLink()">Detailed steps</a>
 						</h4>
 					</details>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
-						<button class="buttoni" id="but1" onclick="gaImport()">
+						<button class="buttoni mb-5" onclick="gaImport()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
 							</svg>
 							Choose image(s)
 						</button>
-						<button class="buttoni mb-5" id="but3" onclick="gaCamera()">
+						<button class="buttoni mb-5" onclick="gaCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -119,7 +123,7 @@
 							Use webcam
 						</button>
 					</div>
-					<video id="gaCamera" class="hidden mx-auto" autoplay></video>
+					<video id="gaVideo" class="hidden mx-auto" autoplay></video>
 					<button class="buttoni mb-5 mt-5 hidden" id="gaStop">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />

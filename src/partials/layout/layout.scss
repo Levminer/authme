@@ -10,8 +10,6 @@
 	border-style: solid;
 	border-color: theme("borderColor.default", currentColor);
 	user-select: none;
-	-webkit-user-drag: none;
-	-webkit-app-region: no-drag;
 }
 
 /* body */
@@ -41,11 +39,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: rgb(30, 30, 30);
+	background-color: rgb(40, 40, 40);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background-color: rgb(40, 40, 40);
+	background-color: rgb(50, 50, 50);
 }
 
 ::-webkit-scrollbar-corner {

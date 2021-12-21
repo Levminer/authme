@@ -178,7 +178,7 @@ const go = () => {
 		div.innerHTML = `
 		<div id="grid${[counter]}" class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 		<div class="flex justify-center items-center">
-		<h2>${issuers[counter]}</h2>
+		<h2 id="names${[counter]}">Name</h2>
 		</div>
 		<div class="flex justify-center items-center">
 		<input class="input w-[320px]" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
@@ -200,6 +200,8 @@ const go = () => {
 
 		div.setAttribute("id", counter)
 		codes_container.appendChild(div)
+
+		document.querySelector(`#names${[counter]}`).textContent = `${issuers[counter]}`
 
 		counter++
 	}
@@ -397,16 +399,6 @@ const addCodes = () => {
 							const /** @type{LibAuthmeFile} */ loaded = JSON.parse(input.toString())
 
 							if (loaded.role === "import" || loaded.role === "export") {
-								dialog.showMessageBox({
-									title: "Authme",
-									buttons: ["Close"],
-									defaultId: 0,
-									cancelId: 0,
-									type: "info",
-									noLink: true,
-									message: "Code(s) added! \n\nScroll down to view them!",
-								})
-
 								data = []
 
 								const container = document.querySelector(".codes_container")
@@ -439,6 +431,16 @@ const addCodes = () => {
 						}
 					})
 				}
+
+				dialog.showMessageBox({
+					title: "Authme",
+					buttons: ["Close"],
+					defaultId: 0,
+					cancelId: 0,
+					type: "info",
+					noLink: true,
+					message: "Code(s) added! \n\nScroll down to view them!",
+				})
 			}
 		})
 }

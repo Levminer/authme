@@ -1,4 +1,6 @@
-// ? settings
+/**
+ * Default shortcuts
+ */
 const default_shortcuts = {
 	shortcuts: {
 		show: "CmdOrCtrl+q",
@@ -36,9 +38,10 @@ if (dev === false) {
 	storage = JSON.parse(localStorage.getItem("dev_storage"))
 }
 
-// ? shortcuts
+/**
+ * Edit, reset, delete codes
+ */
 let modify = true
-
 let inp_name
 let svg_name
 let id
@@ -81,6 +84,10 @@ hk100.value = settings.global_shortcuts.show
 hk101.value = settings.global_shortcuts.settings
 hk102.value = settings.global_shortcuts.exit
 
+/**
+ * Detect pressed keys
+ * @param {KeyboardEvent} event
+ */
 const call = (event) => {
 	if (event.ctrlKey === true) {
 		inp_name.value = `CmdOrCtrl+${event.key.toLowerCase()}`
@@ -107,6 +114,10 @@ const call = (event) => {
 	}
 }
 
+/**
+ * Edit selected shortcut
+ * @param {Number} value
+ */
 const hk_edit = (value) => {
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
@@ -228,7 +239,7 @@ const hk_edit = (value) => {
 				break
 		}
 
-		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(file, null, "\t"))
+		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 
 		modify = true
 	} else {
@@ -242,7 +253,10 @@ const hk_edit = (value) => {
 	}
 }
 
-// ? delete shortcut
+/**
+ * Delete selected shortcut
+ * @param {Number} value
+ */
 const hk_delete = (value) => {
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
@@ -359,10 +373,13 @@ const hk_delete = (value) => {
 			break
 	}
 
-	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(file, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 }
 
-// ? reset shortcut
+/**
+ * Reset selected shortcut to its default value
+ * @param {Number} value
+ */
 const hk_reset = (value) => {
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
@@ -477,13 +494,14 @@ const hk_reset = (value) => {
 			break
 	}
 
-	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(file, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 }
 
-// ? quick shortcuts
-const issuers = storage.issuers
-
-const generateCodes = () => {
+/**
+ * Generate quick shortcut menus
+ * @param {string[]} issuers
+ */
+const generateQuickShortcuts = (issuers) => {
 	for (let i = 0; i < issuers.length; i++) {
 		let content = "None"
 
@@ -494,7 +512,7 @@ const generateCodes = () => {
 		const element = `
 		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 		<div class="flex justify-center items-center">
-		<h3>${issuers[i]}</h3>
+		<h3 id="issuers${i}">Shortcut</h3>
 		</div>
 		<div class="flex justify-center items-center">
 		<input class="input" disabled type="text" id="qs${i}_input" value="${content}"/>
@@ -517,26 +535,46 @@ const generateCodes = () => {
 		const div = document.createElement("div")
 		div.innerHTML = element
 		document.querySelector(".quick").appendChild(div)
+
+		document.querySelector(`#issuers${i}`).textContent = `${issuers[i]}`
 	}
 }
 
-if (issuers !== undefined) {
-	generateCodes()
-} else {
-	document.querySelector(".quick").innerHTML = `
-	<div class="mx-auto rounded-2xl bg-gray-800 w-2/3">
-	<h3 class="pt-5">Please save your codes on the main page and click reload to be able to create quick shortcuts!</h3>
-	<button class="buttoni mb-8" onclick="location.reload()">
-	<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-  	</svg>
-	Reload
-	</button>
-	</div>
-	`
+/**
+ * Check if codes saved on main page
+ */
+const checkForIssuers = () => {
+	if (dev === false) {
+		storage = JSON.parse(localStorage.getItem("storage"))
+	} else {
+		storage = JSON.parse(localStorage.getItem("dev_storage"))
+	}
+
+	const issuers = storage.issuers
+
+	if (issuers !== undefined) {
+		generateQuickShortcuts(issuers)
+	} else {
+		document.querySelector(".quick").innerHTML = `
+		<div class="mx-auto rounded-2xl bg-gray-800 w-2/3">
+		<h3 class="pt-5">Please save your codes on the main page and click reload to be able to create quick shortcuts!</h3>
+		<button class="buttoni mb-8" onclick="location.reload()">
+		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+		  </svg>
+		Reload
+		</button>
+		</div>
+		`
+	}
 }
 
+/**
+ * Edit selected quick shortcuts
+ * @param {Number} value
+ */
 const qsEdit = (value) => {
+	const issuers = storage.issuers
 	id = value
 	inp_name = document.querySelector(`#qs${value}_input`)
 	btn_name = document.querySelector(`#qs${value}_button_edit`)
@@ -581,7 +619,12 @@ const qsEdit = (value) => {
 	}
 }
 
+/**
+ * Delete selected quick shortcut
+ * @param {Number} value
+ */
 const qsDelete = (value) => {
+	const issuers = storage.issuers
 	inp_name = document.querySelector(`#qs${value}_input`)
 	btn_name = document.querySelector(`#qs${value}_button_delete`)
 	svg_name = document.querySelector(`#qs${value}_svg_delete`)

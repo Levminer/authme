@@ -1,11 +1,9 @@
-const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const path = require("path")
-const dns = require("dns")
-const { typedef } = require("@levminer/lib")
+const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
+const { ipcRenderer: ipc } = require("electron")
+const { convert } = require("@levminer/lib")
+const path = require("path")
+const fs = require("fs")
 
 // ? logger
 logger.getWindow("settings")
@@ -81,6 +79,7 @@ const currentWindow = BrowserWindow.getFocusedWindow()
 // ? elements
 const inp0 = document.querySelector("#inp0")
 const drp0 = document.querySelector("#dropdownButton0")
+const drp1 = document.querySelector("#dropdownButton1")
 
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
@@ -100,6 +99,16 @@ const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
 const tgl8 = document.querySelector("#tgl8")
 const tgt8 = document.querySelector("#tgt8")
+
+// import screen capture
+let screen_capture_state = settings.experimental.screen_capture
+if (screen_capture_state === true) {
+	tgt8.textContent = "On"
+	tgl8.checked = true
+} else {
+	tgt8.textContent = "Off"
+	tgl8.checked = false
+}
 
 // launch on startup
 let startup_state = settings.settings.launch_on_startup
@@ -126,7 +135,7 @@ if (tray_state === true) {
 }
 
 // names
-let names_state = settings.settings.show_2fa_names
+let names_state = settings.settings.codes_description
 if (names_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
@@ -136,7 +145,7 @@ if (names_state === true) {
 }
 
 // reveal
-let reveal_state = settings.settings.click_to_reveal
+let reveal_state = settings.settings.blur_codes
 if (reveal_state === true) {
 	tgt4.textContent = "On"
 	tgl4.checked = true
@@ -146,7 +155,7 @@ if (reveal_state === true) {
 }
 
 // search
-let search_state = settings.settings.save_search_results
+let search_state = settings.settings.search_history
 if (search_state === true) {
 	tgt5.textContent = "On"
 	tgl5.checked = true
@@ -178,9 +187,17 @@ if (sort_number === 1) {
 	</svg> Z-A`
 }
 
+// display
+drp1.innerHTML = `
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	</svg>
+	Display #${settings.settings.default_display}
+	`
+
 // hardware
-let hardware_state = settings.settings.disable_hardware_acceleration
-if (hardware_state === true) {
+let hardware_state = settings.settings.hardware_acceleration
+if (hardware_state === false) {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
 } else {
@@ -298,47 +315,20 @@ const clearData = () => {
 						type: "warning",
 						message: "Are you absolutely sure? \n\nThere is no way back!",
 					})
-					.then((result) => {
+					.then(async (result) => {
 						if (result.response === 0) {
 							// clear codes
-							fs.rm(path.join(folder_path, "codes"), { recursive: true, force: true }, (err) => {
+							await fs.promises.rm(folder_path, { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error("Error deleting codes", err.stack)
+									return logger.error("Error deleting settings folder", err.stack)
 								} else {
-									logger.log("Codes deleted")
+									logger.log("Setting folder deleted")
 								}
 							})
 
-							// clear settings
-							fs.rm(path.join(folder_path, "settings"), { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting settings", err.stack)
-								} else {
-									logger.log("Settings deleted")
-								}
-							})
-
-							// clear logs
-							fs.rm(path.join(folder_path, "logs"), { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting logs", err.stack)
-								} else {
-									logger.log("Logs deleted")
-								}
-							})
-
-							// clear rollback
-							fs.rm(path.join(folder_path, "rollbacks"), { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting rollback", err.stack)
-								} else {
-									logger.log("Rollback deleted")
-								}
-							})
-
-							// remove start shortcut
+							// remove startup shortcut
 							if (dev === false) {
-								ipc.send("disableStartup")
+								ipc.sendSync("disableStartup")
 							}
 
 							// clear storage
@@ -348,8 +338,10 @@ const clearData = () => {
 								localStorage.removeItem("dev_storage")
 							}
 
-							// restart
-							restart()
+							// exit aoo
+							setTimeout(() => {
+								app.exit()
+							}, 300)
 						}
 					})
 			}
@@ -360,7 +352,7 @@ const clearData = () => {
 const names = () => {
 	const toggle = () => {
 		if (names_state === true) {
-			settings.settings.show_2fa_names = false
+			settings.settings.codes_description = false
 
 			save()
 
@@ -369,7 +361,7 @@ const names = () => {
 
 			names_state = false
 		} else {
-			settings.settings.show_2fa_names = true
+			settings.settings.codes_description = true
 
 			save()
 
@@ -388,7 +380,7 @@ const names = () => {
 const reveal = () => {
 	const toggle = () => {
 		if (reveal_state === true) {
-			settings.settings.click_to_reveal = false
+			settings.settings.blur_codes = false
 
 			save()
 
@@ -397,7 +389,7 @@ const reveal = () => {
 
 			reveal_state = false
 		} else {
-			settings.settings.click_to_reveal = true
+			settings.settings.blur_codes = true
 
 			save()
 
@@ -416,7 +408,7 @@ const reveal = () => {
 const results = () => {
 	const toggle = () => {
 		if (search_state === true) {
-			settings.settings.save_search_results = false
+			settings.settings.search_history = false
 
 			save()
 
@@ -425,7 +417,7 @@ const results = () => {
 
 			search_state = false
 		} else {
-			settings.settings.save_search_results = true
+			settings.settings.search_history = true
 
 			save()
 
@@ -472,7 +464,7 @@ const copy = () => {
 const hardware = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
-			settings.settings.disable_hardware_acceleration = false
+			settings.settings.hardware_acceleration = false
 
 			save()
 
@@ -481,7 +473,7 @@ const hardware = () => {
 
 			hardware_state = false
 		} else {
-			settings.settings.disable_hardware_acceleration = true
+			settings.settings.hardware_acceleration = true
 
 			save()
 
@@ -516,7 +508,7 @@ const hardware = () => {
 
 let dropdown_state = false
 // ? dropdown
-const dropdown = (id) => {
+const dropdown = () => {
 	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
@@ -642,43 +634,6 @@ const logsFolder = () => {
 	shell.openPath(path.join(folder_path, "logs"))
 }
 
-// ? status api
-const status = document.querySelector("#but6")
-
-const api = () => {
-	fetch("https://api.levminer.com/api/v1/status/all")
-		.then((res) => res.json())
-		.then((data) => {
-			try {
-				if (data.state === "up") {
-					status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
-					  </svg> \n All systems online`
-				} else {
-					status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
-					  </svg> \n Some systems offline`
-				}
-			} catch (error) {
-				return logger.warn("Error loading API", error.stack)
-			}
-		})
-		.catch((error) => {
-			logger.warn("Can't connect to API", error.stack)
-
-			status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
-			  </svg> \n Can't connect to API`
-		})
-}
-
-api()
-
-// ? open status
-const statusLink = () => {
-	shell.openExternal("https://status.levminer.com")
-}
-
 // ? shortcuts docs
 const shortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
@@ -726,6 +681,8 @@ const menu = (evt, name) => {
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		shortcut = true
+
+		checkForIssuers()
 
 		ipc.send("shortcuts")
 	} else if (name === "setting") {
@@ -813,50 +770,10 @@ const edit = () => {
 	ipc.send("toggleEdit")
 }
 
-// ? offline mode
-let offline_mode = false
-let offline_closed = false
-let online_closed = false
-
 // ? send reload
 const reload = () => {
 	ipc.send("reloadApplicationWindow")
 }
-
-const check_for_internet = () => {
-	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
-			document.querySelector(".online").style.display = "none"
-			document.querySelector(".offline").style.display = "block"
-
-			offline_mode = true
-			offline_closed = true
-
-			logger.warn("Can't connect to the internet")
-		} else if (err === null && offline_mode === true && online_closed === false) {
-			document.querySelector(".online").style.display = "block"
-			document.querySelector(".offline").style.display = "none"
-
-			offline_mode = false
-			online_closed = true
-
-			logger.log("Connected to the internet")
-		} else if ((online_closed === true || offline_closed === true) && err === null) {
-			offline_mode = false
-			offline_closed = false
-			online_closed = false
-
-			logger.log("Connection restored")
-		}
-	})
-}
-
-check_for_internet()
-
-setInterval(() => {
-	check_for_internet()
-	api()
-}, 10000)
 
 // ? dismiss dialog on click outside
 window.addEventListener("click", (event) => {
@@ -917,4 +834,132 @@ const updateDownloaded = () => {
  */
 const updateRestart = () => {
 	ipc.send("updateRestart")
+}
+
+/**
+ * Toggle import screen capture
+ */
+const screenCapture = () => {
+	const toggle = () => {
+		if (screen_capture_state === true) {
+			settings.experimental.screen_capture = false
+
+			save()
+
+			tgt8.textContent = "Off"
+			tgl8.checked = false
+
+			screen_capture_state = false
+		} else {
+			settings.experimental.screen_capture = true
+
+			save()
+
+			tgt8.textContent = "On"
+			tgl8.checked = true
+
+			screen_capture_state = true
+		}
+	}
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
+}
+
+/**
+ * Get screens
+ */
+const displays = screen.getAllDisplays()
+const displayChooser = document.querySelector("#dropdownContent1")
+
+for (let i = 1; i < displays.length + 1; i++) {
+	const element = document.createElement("a")
+
+	element.innerHTML = `
+	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	</svg>
+	Display #${i}
+	</a>
+	`
+
+	displayChooser.appendChild(element)
+}
+
+/**
+ * Toggle display dropdown
+ */
+let display_state = false
+const display = () => {
+	const dropdown_content = document.querySelector("#dropdownContent1")
+
+	if (display_state === false) {
+		dropdown_content.style.visibility = "visible"
+
+		setTimeout(() => {
+			dropdown_content.style.display = "block"
+		}, 10)
+
+		display_state = true
+	} else {
+		dropdown_content.style.display = ""
+
+		display_state = false
+	}
+}
+
+const displayChoose = (id) => {
+	const toggle = () => {
+		drp1.innerHTML = `
+		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+		</svg>
+		Display #${id}
+		`
+
+		settings.settings.default_display = id
+		save()
+
+		display()
+	}
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src https://api.levminer.com" />
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'" />
 		<meta charset="UTF-8" />
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
@@ -14,7 +14,7 @@
 	<body>
 		<div class="h-screen flex">
 			<!-- sidebar -->
-			<div class="h-screen bg-gray-900 flex flex-col justify-between overflow-auto">
+			<div class="h-screen bg-gray-900 flex flex-col justify-between overflow-visible">
 				<div class="flex flex-col">
 					<div class="mb-1 mt-5 mr-4 ml-4">
 						<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
@@ -59,7 +59,7 @@
 							Feedback
 						</button>
 					</div>
-					<div class="mb-5 mt-1 mr-4 ml-4">
+					<div class="mb-12 mt-1 mr-4 ml-4">
 						<button class="buttonm" onclick="about()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -81,43 +81,7 @@
 						</div>
 					</div>
 
-					<!-- offline mode -->
-					<div class="w-full text-white bg-popup-red font-bold offline hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-
-								<p class="mx-3 relative top-1">Authme runs in offline mode. The app will work fine, but you can't look for new updates!</p>
-							</div>
-							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</a>
-						</div>
-					</div>
-
-					<!-- online mode -->
-					<div class="w-full text-white bg-popup-green font-bold online hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
-							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-
-								<p class="mx-3 relative top-1">Authme runs in online mode. The app reconnected to the internet, you can look for new updates!</p>
-							</div>
-							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</a>
-						</div>
-					</div>
-
-					<!-- update -->
+					<!-- manual update -->
 					<div class="w-full text-white bg-popup-blue font-bold update hidden">
 						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 							<div class="flex">
@@ -275,6 +239,21 @@
 								</div>
 								<hr />
 							</div>
+							<h3>Default display</h3>
+							<h4>Choose which display should Authme open by default. Authme will fall back to the primary display if the chosen one is not available.</h4>
+							<div class="relative inline-block">
+								<button id="dropdownButton1" class="buttoni" onclick="display()">
+									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+									</svg>
+									Display #1
+								</button>
+
+								<div id="dropdownContent1" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
+									<!-- displays -->
+								</div>
+							</div>
+							<hr />
 							<h3>Clear data</h3>
 							<h4>Clear password, 2FA codes and all other settings. Be careful.</h4>
 							<button class="buttoni" id="but1" onclick="clearData()">
@@ -323,11 +302,6 @@
 									Logs folder
 								</button>
 							</div>
-
-							<hr />
-							<h3>Status</h3>
-							<h4>Current status of the API, used for updates only. Click for all the status information.</h4>
-							<button class="buttoni" id="but6" onclick="statusLink()">-</button>
 							<hr />
 							<h3>Version</h3>
 							<h4>Your current Authme version. Click for more info about Authme.</h4>
@@ -336,8 +310,8 @@
 
 						<!-- codes -->
 						<div id="codes" class="tabcontent part hidden">
-							<h3>Show 2FA descriptions</h3>
-							<h4>The saved 2FA descriptions will be visible. You can copy it after clicking it.</h4>
+							<h3>Codes description</h3>
+							<h4>The saved codes description will be visible. You can copy it after clicking it.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="names()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -349,7 +323,7 @@
 							<br />
 							<hr />
 							<h3>Blur codes</h3>
-							<h4>Blurs the 2FA codes. You can still copy it or hover over it to reveal.</h4>
+							<h4>Blur the saved codes. You can still copy it or hover over it to reveal.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="reveal()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -360,8 +334,8 @@
 							</div>
 							<br />
 							<hr />
-							<h3>Save search history</h3>
-							<h4>Keep your search history. Works even after restart.</h4>
+							<h3>Search history</h3>
+							<h4>Save the latest code you searched for. Works even after restart.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="results()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -513,7 +487,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Zoom in</h3>
+									<h3>Zoom In</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk13_input" />
@@ -540,7 +514,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Zoom out</h3>
+									<h3>Zoom Out</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk14_input" />
@@ -567,7 +541,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Edit codes</h3>
+									<h3>Edit Codes</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk3_input" />
@@ -675,7 +649,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Release notes</h3>
+									<h3>Release Notes</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk6_input" />
@@ -702,7 +676,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Support development</h3>
+									<h3>Support Development</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk7_input" />
@@ -729,7 +703,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Show licenses</h3>
+									<h3>Show Licenses</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk9_input" />
@@ -827,7 +801,7 @@
 							<br />
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Show/Hide app</h3>
+									<h3>Show/Hide App</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk100_input" />
@@ -881,7 +855,7 @@
 							</div>
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
-									<h3>Exit app</h3>
+									<h3>Exit App</h3>
 								</div>
 								<div class="flex justify-center items-center">
 									<input class="input" disabled type="text" id="hk102_input" />
@@ -963,11 +937,25 @@
 							</div>
 
 							<h4 class="text-popup-yellow font-bold mb-0">This feature is WIP! It might be unstable or buggy!</h4>
-							<!-- 
+
 							<br />
 							<hr />
-							<h4 class="text-popup-red font-bold mb-0">This feature is WIP! Use it at your own risk!</h4> 
-							-->
+
+							<div class="relative inline-block">
+								<h3>Import screen capture</h3>
+								<h4>You can turn on Import screen capture. You can scan QR codes from your screen.</h4>
+							</div>
+
+							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+								<a href="#" onclick="screenCapture()">
+									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+										<input tabindex="-1" id="tgl8" type="checkbox" class="toggle" />
+										<label for="tgl8" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+								></a>
+								<span id="tgt8" class="text-black text-xl">-</span>
+							</div>
+
+							<h4 class="text-popup-red font-bold mb-0">This feature is WIP! Use it at your own risk!</h4>
 						</div>
 					</div>
 				</div>
