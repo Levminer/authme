@@ -1,22 +1,26 @@
 const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
 const { aes, convert, time } = require("@levminer/lib")
+const { ipcRenderer: ipc } = require("electron")
 const speakeasy = require("@levminer/speakeasy")
-const fs = require("fs")
 const path = require("path")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const dns = require("dns")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "application", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("application")
 
-// ? if development
+/**
+ * If running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
@@ -47,7 +51,9 @@ const settings_refresher = setInterval(() => {
 	}
 }, 100)
 
-// ? show quick start
+/**
+ * Show quick start div
+ */
 if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
 	document.querySelector("#starting").style.display = "block"
 	document.querySelector("#choose").style.display = "block"
@@ -60,7 +66,6 @@ let save_text
 const query = []
 const description_query = []
 const name_query = []
-let clear
 
 const name_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
@@ -163,9 +168,8 @@ const go = (data) => {
 
 			// set div elements
 			if (reveal_state === true && name_state === true) {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
 					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
@@ -189,37 +193,9 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			} else if (reveal_state === true) {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
 					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
@@ -242,36 +218,9 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			} else if (name_state === true) {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
 					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
@@ -295,37 +244,9 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			} else {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
 					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
@@ -348,32 +269,6 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			}
 
 			// set div in html
@@ -422,8 +317,6 @@ const go = (data) => {
 			// add one to counter
 			counter++
 		}
-
-		clear = true
 	}
 
 	generate()
@@ -461,7 +354,7 @@ const go = (data) => {
 
 /**
  * Refresh codes every 500ms
- * @param {Number} secrets
+ * @param {number} secrets
  */
 const refreshCodes = (secrets) => {
 	for (let i = 0; i < secrets.length; i++) {
@@ -623,12 +516,16 @@ const focusSearch = () => {
 	}, 150)
 }
 
-// ? show update
+/**
+ * Show manual update popup
+ */
 const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
-// ? show info
+/**
+ * Show info popup
+ */
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }
@@ -762,8 +659,11 @@ if (settings.security.require_password === false) {
 	loadCodes()
 }
 
+/**
+ * Dropdown
+ */
 let dropdown_state = false
-// ? dropdown
+
 const dropdown = () => {
 	const dropdown_content = document.querySelector("#dropdownContent0")
 
@@ -785,7 +685,6 @@ const dropdown = () => {
 document.querySelector("#checkbox0").checked = settings.settings.search_filter.name
 document.querySelector("#checkbox1").checked = settings.settings.search_filter.description
 
-// ? dropdown checkboxes
 document.querySelector("#checkbox0").addEventListener("click", () => {
 	if (settings.settings.search_filter.name === true) {
 		settings.settings.search_filter.name = false
@@ -806,7 +705,10 @@ document.querySelector("#checkbox1").addEventListener("click", () => {
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 })
 
-// ? quick copy
+/**
+ * Quick copy shortcuts
+ * @param {string} key
+ */
 const quickCopy = (key) => {
 	for (let i = 0; i < name_query.length; i++) {
 		if (key.toLowerCase() === name_query[i]) {
@@ -826,16 +728,6 @@ const quickCopy = (key) => {
 	}
 }
 
-// ? rate
-const rateAuthme = () => {
-	ipc.send("rateAuthme")
-}
-
-// ? feedback
-const provideFeedback = () => {
-	ipc.send("provideFeedback")
-}
-
 /**
  * Get app information
  */
@@ -852,7 +744,17 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? buttons
+/**
+ * Buttons
+ */
+const rateAuthme = () => {
+	ipc.send("rateAuthme")
+}
+
+const provideFeedback = () => {
+	ipc.send("provideFeedback")
+}
+
 const createFile = () => {
 	ipc.send("toggleImport")
 }
@@ -870,10 +772,12 @@ const readDocs = () => {
 }
 
 const sampleImport = () => {
-	shell.openExternal("https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true")
+	shell.openExternal("https://github.com/Levminer/authme/blob/dev/samples/authme/authme_import_sample.zip?raw=true")
 }
 
-// ? dismiss dialog on click outside
+/**
+ * Dismiss dialog of clicking outside of it
+ */
 window.addEventListener("click", (event) => {
 	const dropdown_content = document.querySelector("#dropdownContent0")
 	const filter = document.querySelector("#filterIcon")
