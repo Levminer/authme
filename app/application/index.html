@@ -121,9 +121,9 @@
 		<!-- content -->
 		<div class="bg-gray-700 w-3/5 mx-auto mt-20 mb-60 rounded-2xl relative text-center content p-1">
 			<h1 class="h1 mb-5">Authme</h1>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="choose">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5" id="choose">
 				<h3 class="pt-3">Please choose your import file!</h3>
-				<h4>If you don't have an import file please create one!</h4>
+				<h4>If you don't have an import file containing your 2FA codes please create one!</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
 					<button class="buttoni" id="input" onclick="loadFile()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,10 +138,24 @@
 						Create import file
 					</button>
 				</div>
-				<br />
 			</div>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3" id="starting">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5" id="starting">
 				<h3 class="pt-3">Getting started</h3>
+				<h4>Importing files</h4>
+				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
+					<button class="buttoni" onclick="readDocs()">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+						</svg>
+						Read online docs
+					</button>
+					<button class="buttoni" onclick="sampleImport()">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+						</svg>
+						Sample import file
+					</button>
+				</div>
 				<h4>Useful options</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
 					<button class="buttoni" onclick="configureSettings()">
@@ -158,43 +172,24 @@
 						Support development
 					</button>
 				</div>
-				<h4>Importing files</h4>
-				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
-					<button class="buttoni" onclick="readDocs()">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-						</svg>
-						Read online docs
-					</button>
-					<button class="buttoni" onclick="sampleImport()">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-						</svg>
-						Sample import file
-					</button>
-				</div>
-				<br />
 			</div>
-			<br />
 			<div class="save_container flex justify-center" id="save">
-				<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
-					<h3 class="pt-3">Save code(s)</h3>
-					<h4>Save your code(s) to your computer for future use.</h4>
+				<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3 pb-5">
+					<h3 class="pt-3">Save codes</h3>
+					<h4>Save your 2FA codes to your computer for future use.</h4>
 					<div class="flex flex-row items-center justify-center">
 						<div class="gap-3">
 							<button class="buttoni" onclick="saveCodes()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 								</svg>
-								Save code(s)
+								Save codes
 							</button>
 						</div>
 					</div>
-					<br />
 				</div>
 			</div>
-			<br />
-			<div class="search_container relative inline-block">
+			<div class="search_container relative inline-block pt-8">
 				<input name="search" spellcheck="false" id="search" class="input w-80 hidden text-2xl mb-1" onkeyup="search()" onkeydown="search()" />
 				<!-- search icon -->
 				<svg id="searchIcon" xmlns="http://www.w3.org/2000/svg" class="hidden searchIcon h-6 w-6 relative top-[-50px] right-[150px] pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="black">
