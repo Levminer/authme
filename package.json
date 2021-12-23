@@ -16,6 +16,7 @@
 		"build:styles": "concurrently 'npm:watch:tw' 'npm:watch:gb'",
 		"watch:gb": "sass src/global.scss src/global.css --no-source-map --style compressed --watch",
 		"watch:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
+		"test": "npx playwright test",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
 	},
