@@ -1,7 +1,5 @@
-body {
-	overflow-y: scroll;
-	margin: 0;
-	padding: 0;
+.custom-titlebar-container {
+	overflow-y: scroll !important;
 }
 
 h4 {

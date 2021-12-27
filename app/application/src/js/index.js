@@ -69,7 +69,7 @@ const name_query = []
 
 const name_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
-const reveal_state = settings.settings.blur_codes
+const blur_state = settings.settings.blur_codes
 const search_state = settings.settings.search_history
 
 const sort_number = settings.experimental.sort
@@ -167,12 +167,12 @@ const go = (data) => {
 			const element = document.createElement("div")
 
 			// set div elements
-			if (reveal_state === true && name_state === true) {
+			if (blur_state === true && name_state === true) {
 				element.innerHTML = `
 					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -193,12 +193,12 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-			} else if (reveal_state === true) {
+			} else if (blur_state === true) {
 				element.innerHTML = `
 					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -223,7 +223,7 @@ const go = (data) => {
 					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -249,7 +249,7 @@ const go = (data) => {
 					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -283,7 +283,6 @@ const go = (data) => {
 			const code = document.querySelector(`#code${counter}`)
 			const time = document.querySelector(`#time${counter}`)
 			const text = document.querySelector(`#text${counter}`)
-			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
 			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
@@ -301,13 +300,13 @@ const go = (data) => {
 				encoding: "base32",
 			})
 
-			// time
-			const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+			// remaining time
+			const remaining_time = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
 
 			// set content
 			name.textContent = issuers[i]
 			code.textContent = token
-			time.textContent = remaining
+			time.textContent = remaining_time
 
 			if (name_state === true) {
 				const grid = document.querySelector(`#grid${i}`)
@@ -407,7 +406,7 @@ const copyCode = (id) => {
 		// reset search bar
 		setTimeout(() => {
 			if (copy_state === true) {
-				for (let i = 0; i < names.length; i++) {
+				for (let i = 0; i < query.length; i++) {
 					const div = document.querySelector(`#grid${[i]}`)
 					div.style.display = "grid"
 				}
@@ -581,7 +580,7 @@ const saveCodes = () => {
 		defaultId: 0,
 		cancelId: 1,
 		type: "info",
-		message: "Code(s) saved! \n\nIf you want to add more code(s) or delete code(s) go to Edit codes!",
+		message: "Your 2FA codes saved! \n\nIf you want to add more codes or delete codes go to Edit codes under Tools!",
 	})
 
 	password.fill(0)
@@ -693,6 +692,10 @@ document.querySelector("#checkbox0").addEventListener("click", () => {
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
+
+	setTimeout(() => {
+		search()
+	}, 100)
 })
 
 document.querySelector("#checkbox1").addEventListener("click", () => {
@@ -703,6 +706,10 @@ document.querySelector("#checkbox1").addEventListener("click", () => {
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
+
+	setTimeout(() => {
+		search()
+	}, 100)
 })
 
 /**
