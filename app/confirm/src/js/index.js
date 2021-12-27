@@ -1,21 +1,25 @@
-const { app, dialog, clipboard } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
+const { app, dialog } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 const bcrypt = require("bcryptjs")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const { sha, rsa } = require("@levminer/lib")
 const path = require("path")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "confirm", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("confirm")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 let integrity = false
 
@@ -53,9 +57,14 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? init
+/**
+ * Get info text
+ */
 const text = document.querySelector("#text")
 
+/**
+ * Confirm password on enter press
+ */
 document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	if (e.key === "Enter") {
 		if (integrity === false) {
@@ -68,7 +77,9 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	}
 })
 
-// ? check integrity
+/**
+ * Check files integrity
+ */
 const check_integrity = () => {
 	// read settings
 	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
@@ -109,7 +120,9 @@ const check_integrity = () => {
 	}
 }
 
-// ? compare
+/**
+ * Compare passwords
+ */
 const unhashPassword = async () => {
 	if (integrity === false) {
 		check_integrity()
@@ -144,100 +157,16 @@ const unhashPassword = async () => {
 	}
 }
 
-// ? forgot password
-const forgotPassword = () => {
-	dialog
-		.showOpenDialog({
-			title: "Choose backup file",
-			properties: ["openFile"],
-			filters: [{ name: "Key file", extensions: ["key"] }],
-		})
-		.then((result) => {
-			canceled = result.canceled
-			filepath = result.filePaths
-
-			const loaded_key = Buffer.from(fs.readFileSync(filepath[0]))
-
-			if (loaded_key.toString().startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
-				/**
-				 * Load storage
-				 * @type {LibStorage}
-				 */
-				let storage
-
-				if (dev === true) {
-					storage = JSON.parse(localStorage.getItem("dev_storage"))
-				} else {
-					storage = JSON.parse(localStorage.getItem("storage"))
-				}
-
-				const hash = Buffer.from(sha.generateHash(loaded_key.toString("base64")))
-
-				if (hash.toString() === storage.hash) {
-					const encrypted = Buffer.from(rsa.decrypt(loaded_key.toString(), Buffer.from(storage.backup_string, "base64")), "base64")
-
-					dialog
-						.showMessageBox({
-							title: "Authme",
-							buttons: ["Copy"],
-							defaultId: 0,
-							noLink: true,
-							type: "info",
-							message: "Backup key successfully decrypted! \n\nThe password is copied to your clipboard!",
-						})
-						.then((result) => {
-							clipboard.writeText(encrypted.toString())
-
-							if (result.response === 0) {
-								clipboard.writeText(encrypted.toString())
-							}
-
-							loaded_key.fill(0)
-							hash.fill()
-							encrypted.fill(0)
-						})
-				} else {
-					dialog.showMessageBox({
-						title: "Authme",
-						buttons: ["Close"],
-						type: "error",
-						message: "This is not a matching backup key! \n\nThis backup key is not matching with the your backup key!",
-					})
-
-					loaded_key.fill(0)
-					hash.fill(0)
-				}
-			} else {
-				dialog.showMessageBox({
-					title: "Authme",
-					buttons: ["Close"],
-					type: "error",
-					message: "This is not a backup key! \n\nPlease choose another file!",
-				})
-			}
-		})
-}
-
-// ? show password
-document.querySelector("#show_pass_0").addEventListener("click", () => {
-	document.querySelector("#password_input").setAttribute("type", "text")
-
-	document.querySelector("#show_pass_0").style.display = "none"
-	document.querySelector("#show_pass_01").style.display = "flex"
-})
-
-document.querySelector("#show_pass_01").addEventListener("click", () => {
-	document.querySelector("#password_input").setAttribute("type", "password")
-
-	document.querySelector("#show_pass_0").style.display = "flex"
-	document.querySelector("#show_pass_01").style.display = "none"
-})
-
-let more_options_shown = false
+/**
+ * Forget password
+ */
+const forgotPassword = () => {}
 
 /**
  * Show more options div
  */
+let more_options_shown = false
+
 const showMoreOptions = () => {
 	const more_options = document.querySelector("#more_options")
 
@@ -271,3 +200,20 @@ const toggleWindowCapture = () => {
 		ipc.send("enableWindowCapture")
 	}
 }
+
+/**
+ * Show passwords
+ */
+document.querySelector("#show_pass_0").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "text")
+
+	document.querySelector("#show_pass_0").style.display = "none"
+	document.querySelector("#show_pass_01").style.display = "flex"
+})
+
+document.querySelector("#show_pass_01").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "password")
+
+	document.querySelector("#show_pass_0").style.display = "flex"
+	document.querySelector("#show_pass_01").style.display = "none"
+})
