@@ -198,7 +198,7 @@
 							<h4>Start Authme after your computer started. Authme will start on the system tray.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-									<input id="tgl0" onclick="startup()" type="checkbox" class="toggle" />
+									<input id="tgl0" onclick="launchStartup()" type="checkbox" class="toggle" />
 									<label for="tgl0" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
 								</div>
 								<span id="tgt0" class="text-black text-xl">-</span>
@@ -208,7 +208,7 @@
 							<h4>When closing Authme the app will not quit. You can open Authme from the system tray.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
-									<input id="tgl1" onclick="tray()" type="checkbox" class="toggle" />
+									<input id="tgl1" onclick="closeTray()" type="checkbox" class="toggle" />
 									<label for="tgl1" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
 								</div>
 								<span id="tgt1" class="text-black text-xl">-</span>
@@ -230,7 +230,7 @@
 								<h3>Hardware acceleration</h3>
 								<h4>Uses GPU for smoother experience. Enable this option if you experience frame drops or lags.</h4>
 								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-									<a href="#" onclick="hardware()">
+									<a href="#" onclick="hardwareAcceleration()">
 										<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 											<input tabindex="-1" id="tgl7" type="checkbox" class="toggle" />
 											<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
@@ -256,7 +256,7 @@
 							<hr />
 							<h3>Clear data</h3>
 							<h4>Clear password, 2FA codes and all other settings. Be careful.</h4>
-							<button class="buttoni" id="but1" onclick="clearData()">
+							<button class="buttoni" onclick="clearData()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 								</svg>
@@ -305,7 +305,7 @@
 							<hr />
 							<h3>Version</h3>
 							<h4>Your current Authme version. Click for more info about Authme.</h4>
-							<button class="buttoni" id="but7" onclick="about()">-</button>
+							<button class="buttoni about" onclick="about()">-</button>
 						</div>
 
 						<!-- codes -->
@@ -313,7 +313,7 @@
 							<h3>Codes description</h3>
 							<h4>The saved codes description will be visible. You can copy it after clicking it.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-								<a href="#" onclick="names()">
+								<a href="#" onclick="codesDescription()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl3" type="checkbox" class="toggle" />
 										<label for="tgl3" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
@@ -325,7 +325,7 @@
 							<h3>Blur codes</h3>
 							<h4>Blur the saved codes. You can still copy it or hover over it to reveal.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-								<a href="#" onclick="reveal()">
+								<a href="#" onclick="blurCodes()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl4" type="checkbox" class="toggle" />
 										<label for="tgl4" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
@@ -337,7 +337,7 @@
 							<h3>Search history</h3>
 							<h4>Save the latest code you searched for. Works even after restart.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-								<a href="#" onclick="results()">
+								<a href="#" onclick="searchHistory()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl5" type="checkbox" class="toggle" />
 										<label for="tgl5" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
@@ -349,7 +349,7 @@
 							<h3>Reset search after copy</h3>
 							<h4>Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-								<a href="#" onclick="copy()">
+								<a href="#" onclick="resetCopy()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 										<input tabindex="-1" id="tgl6" type="checkbox" class="toggle" />
 										<label for="tgl6" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div

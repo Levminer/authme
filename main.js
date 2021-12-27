@@ -1289,7 +1289,7 @@ ipc.on("rateAuthme", () => {
  * Show provide feedback dialog
  */
 ipc.on("provideFeedback", () => {
-	shell.openExternal("https://github.com/Levminer/authme/issues")
+	feedback()
 
 	settings.statistics.feedback = true
 
@@ -1436,6 +1436,29 @@ const support = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				shell.openExternal("https://paypal.me/levminer")
+			}
+		})
+}
+
+/**
+ * Open feedback dialog
+ */
+const feedback = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["GitHub", "Email", "Close"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "info",
+			message: "Thank you for providing feedback! \n\nPlease report issues on GitHub or by Email.",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				shell.openExternal("https://github.com/Levminer/authme/issues")
+			} else if (result.response === 1) {
+				shell.openExternal("mailto:authme@levminer.com?subject=Authme feedback")
 			}
 		})
 }

@@ -5,16 +5,17 @@ const { convert } = require("@levminer/lib")
 const path = require("path")
 const fs = require("fs")
 
-// ? logger
-logger.getWindow("settings")
-
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "settings", error: error })
 }
 
-// ? choose settings
-document.querySelector("#setting").click()
+/**
+ * Start logger
+ */
+logger.getWindow("application")
 
 /**
  * Get app information
@@ -33,18 +34,20 @@ if (res.build_number.startsWith("alpha")) {
 }
 
 // set app version
-document.querySelector("#but7").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+document.querySelector(".about").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 </svg> Authme ${res.authme_version}`
 
-// ? if development
+/**
+ * If running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? check if linux
+// check if running on linux
 if (process.platform !== "win32" && process.platform !== "darwin") {
 	document.querySelector("#disable_screen_capture_div").style.display = "none"
 }
@@ -76,8 +79,9 @@ const settings_refresher = setInterval(() => {
 // Get current window
 const currentWindow = BrowserWindow.getFocusedWindow()
 
-// ? elements
-const inp0 = document.querySelector("#inp0")
+/**
+ * Elements
+ */
 const drp0 = document.querySelector("#dropdownButton0")
 const drp1 = document.querySelector("#dropdownButton1")
 
@@ -85,8 +89,6 @@ const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
 const tgl1 = document.querySelector("#tgl1")
 const tgt1 = document.querySelector("#tgt1")
-const tgl2 = document.querySelector("#tgl2")
-const tgt2 = document.querySelector("#tgt2")
 const tgl3 = document.querySelector("#tgl3")
 const tgt3 = document.querySelector("#tgt3")
 const tgl4 = document.querySelector("#tgl4")
@@ -111,8 +113,8 @@ if (screen_capture_state === true) {
 }
 
 // launch on startup
-let startup_state = settings.settings.launch_on_startup
-if (startup_state === true) {
+let launch_startup_state = settings.settings.launch_on_startup
+if (launch_startup_state === true) {
 	tgt0.textContent = "On"
 	tgl0.checked = true
 } else {
@@ -121,8 +123,8 @@ if (startup_state === true) {
 }
 
 // close to tray
-let tray_state = settings.settings.close_to_tray
-if (tray_state === true) {
+let close_tray_state = settings.settings.close_to_tray
+if (close_tray_state === true) {
 	tgt1.textContent = "On"
 	tgl1.checked = true
 
@@ -134,9 +136,9 @@ if (tray_state === true) {
 	ipc.send("disableTray")
 }
 
-// names
-let names_state = settings.settings.codes_description
-if (names_state === true) {
+// codes description
+let codes_description_state = settings.settings.codes_description
+if (codes_description_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
 } else {
@@ -144,9 +146,9 @@ if (names_state === true) {
 	tgl3.checked = false
 }
 
-// reveal
-let reveal_state = settings.settings.blur_codes
-if (reveal_state === true) {
+// blur codes
+let blur_codes_state = settings.settings.blur_codes
+if (blur_codes_state === true) {
 	tgt4.textContent = "On"
 	tgl4.checked = true
 } else {
@@ -154,7 +156,7 @@ if (reveal_state === true) {
 	tgl4.checked = false
 }
 
-// search
+// search history
 let search_state = settings.settings.search_history
 if (search_state === true) {
 	tgt5.textContent = "On"
@@ -164,9 +166,9 @@ if (search_state === true) {
 	tgl5.checked = false
 }
 
-// copy
-let copy_state = settings.settings.reset_after_copy
-if (copy_state === true) {
+// reset after copy
+let reset_copy_state = settings.settings.reset_after_copy
+if (reset_copy_state === true) {
 	tgt6.textContent = "On"
 	tgl6.checked = true
 } else {
@@ -205,9 +207,11 @@ if (hardware_state === false) {
 	tgl7.checked = true
 }
 
-// ? startup
-const startup = () => {
-	if (startup_state == true) {
+/**
+ * Launch Authme on system startup
+ */
+const launchStartup = () => {
+	if (launch_startup_state == true) {
 		settings.settings.launch_on_startup = false
 
 		save()
@@ -215,7 +219,7 @@ const startup = () => {
 		tgt0.textContent = "Off"
 		tgl0.checked = false
 
-		startup_state = false
+		launch_startup_state = false
 
 		ipc.send("disableStartup")
 	} else {
@@ -226,21 +230,23 @@ const startup = () => {
 		tgt0.textContent = "On"
 		tgl0.checked = true
 
-		startup_state = true
+		launch_startup_state = true
 
 		ipc.send("enableStartup")
 	}
 }
 
-// ? tray
-const tray = () => {
-	if (tray_state == true) {
+/**
+ * Close Authme to tray when closing the window
+ */
+const closeTray = () => {
+	if (close_tray_state == true) {
 		settings.settings.close_to_tray = false
 
 		save()
 
 		tgt1.textContent = "Off"
-		tray_state = false
+		close_tray_state = false
 
 		ipc.send("disableTray")
 	} else {
@@ -249,7 +255,7 @@ const tray = () => {
 		save()
 
 		tgt1.textContent = "On"
-		tray_state = true
+		close_tray_state = true
 
 		ipc.send("enableTray")
 	}
@@ -348,10 +354,12 @@ const clearData = () => {
 		})
 }
 
-// ? show 2fa names
-const names = () => {
+/**
+ * Codes description state
+ */
+const codesDescription = () => {
 	const toggle = () => {
-		if (names_state === true) {
+		if (codes_description_state === true) {
 			settings.settings.codes_description = false
 
 			save()
@@ -359,7 +367,7 @@ const names = () => {
 			tgt3.textContent = "Off"
 			tgl3.checked = false
 
-			names_state = false
+			codes_description_state = false
 		} else {
 			settings.settings.codes_description = true
 
@@ -368,7 +376,7 @@ const names = () => {
 			tgt3.textContent = "On"
 			tgl3.checked = true
 
-			names_state = true
+			codes_description_state = true
 		}
 	}
 
@@ -376,10 +384,12 @@ const names = () => {
 	reload()
 }
 
-// ? blur codes
-const reveal = () => {
+/**
+ * Blur codes
+ */
+const blurCodes = () => {
 	const toggle = () => {
-		if (reveal_state === true) {
+		if (blur_codes_state === true) {
 			settings.settings.blur_codes = false
 
 			save()
@@ -387,7 +397,7 @@ const reveal = () => {
 			tgt4.textContent = "Off"
 			tgl4.checked = false
 
-			reveal_state = false
+			blur_codes_state = false
 		} else {
 			settings.settings.blur_codes = true
 
@@ -396,7 +406,7 @@ const reveal = () => {
 			tgt4.textContent = "On"
 			tgl4.checked = true
 
-			reveal_state = true
+			blur_codes_state = true
 		}
 	}
 
@@ -404,8 +414,10 @@ const reveal = () => {
 	reload()
 }
 
-// ? save search results
-const results = () => {
+/**
+ * Save search results
+ */
+const searchHistory = () => {
 	const toggle = () => {
 		if (search_state === true) {
 			settings.settings.search_history = false
@@ -432,10 +444,12 @@ const results = () => {
 	reload()
 }
 
-// ? reset search after copy
-const copy = () => {
+/**
+ * Reset search after copy
+ */
+const resetCopy = () => {
 	const toggle = () => {
-		if (copy_state === true) {
+		if (reset_copy_state === true) {
 			settings.settings.reset_after_copy = false
 
 			save()
@@ -443,7 +457,7 @@ const copy = () => {
 			tgt6.textContent = "Off"
 			tgl6.checked = false
 
-			copy_state = false
+			reset_copy_state = false
 		} else {
 			settings.settings.reset_after_copy = true
 
@@ -452,7 +466,7 @@ const copy = () => {
 			tgt6.textContent = "On"
 			tgl6.checked = true
 
-			copy_state = true
+			reset_copy_state = true
 		}
 	}
 
@@ -460,8 +474,10 @@ const copy = () => {
 	reload()
 }
 
-// ? hardware acceleration
-const hardware = () => {
+/**
+ * Turn on hardware acceleration
+ */
+const hardwareAcceleration = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
 			settings.settings.hardware_acceleration = false
@@ -506,8 +522,12 @@ const hardware = () => {
 		})
 }
 
+/**
+ * Sort codes dropdown
+ */
 let dropdown_state = false
-// ? dropdown
+
+// show dropdown
 const dropdown = () => {
 	const dropdown_content = document.querySelector("#dropdownContent0")
 
@@ -526,6 +546,7 @@ const dropdown = () => {
 	}
 }
 
+// choose option
 const dropdownChoose = (id) => {
 	const dropdown_button = document.querySelector("#dropdownButton0")
 
@@ -564,39 +585,39 @@ const dropdownChoose = (id) => {
 	ipc.send("reloadApplicationWindow")
 }
 
-// ? save settings
+/**
+ * Save settings to disk
+ */
 const save = () => {
-	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 }
 
-// ? rate
+/**
+ * Rate Authme
+ */
 const rateAuthme = () => {
 	ipc.send("rateAuthme")
 }
 
-// ? feedback
+/**
+ * Send feedback
+ */
 const provideFeedback = () => {
-	shell.openExternal("https://github.com/levminer/authme/issues")
+	ipc.send("provideFeedback")
 }
 
-// ? docs
-const onlineDocs = () => {
-	shell.openExternal("https://docs.authme.levminer.com")
-}
-
-// ? show info
+/**
+ * Hide info dialog
+ */
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }
 
-// ? show update
+/**
+ * Hide update dialog
+ */
 const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
-}
-
-// ? support
-const support = () => {
-	shell.openExternal("https://paypal.me/levminer")
 }
 
 /**
@@ -634,12 +655,13 @@ const logsFolder = () => {
 	shell.openPath(path.join(folder_path, "logs"))
 }
 
-// ? shortcuts docs
+/**
+ * Shortcut links
+ */
 const shortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
 }
 
-// ? shortcuts docs
 const globalShortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
 }
@@ -648,13 +670,23 @@ const quickCopyShortcutsLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=quick-copy-shortcuts")
 }
 
+/**
+ * Hide window
+ */
 const hide = () => {
 	ipc.send("toggleSettings")
 }
 
+/**
+ * Menu
+ */
 document.querySelector(".settings").disabled = true
 document.querySelector(".settings").classList.add("buttonmselected")
+let shortcut = false
 
+/**
+ * Remove menu button styles
+ */
 const removeButtonStyles = () => {
 	document.querySelector(".shortcuts").classList.remove("buttonmselected")
 	document.querySelector(".settings").classList.remove("buttonmselected")
@@ -662,9 +694,7 @@ const removeButtonStyles = () => {
 	document.querySelector(".codes").classList.remove("buttonmselected")
 }
 
-// ? menu
-let shortcut = false
-
+// control menu
 const menu = (evt, name) => {
 	let i
 
@@ -752,7 +782,9 @@ const menu = (evt, name) => {
 	evt.currentTarget.className += " active"
 }
 
-// ? restart
+/**
+ * Restart Authme
+ */
 const restart = () => {
 	setTimeout(() => {
 		app.relaunch()
@@ -760,35 +792,44 @@ const restart = () => {
 	}, 300)
 }
 
-// ? about
+/**
+ * Show About dialog
+ */
 const about = () => {
 	ipc.send("about")
 }
 
-// ? edit
-const edit = () => {
-	ipc.send("toggleEdit")
-}
-
-// ? send reload
+/**
+ * Reload application window
+ */
 const reload = () => {
 	ipc.send("reloadApplicationWindow")
 }
 
-// ? dismiss dialog on click outside
+/**
+ * Dismiss dialog on click outside
+ */
 window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector("#dropdownContent0")
-	const dropdown_button = document.querySelector("#dropdownButton0")
+	const dropdown_content0 = document.querySelector("#dropdownContent0")
+	const dropdown_button0 = document.querySelector("#dropdownButton0")
+	const dropdown_content1 = document.querySelector("#dropdownContent1")
+	const dropdown_button1 = document.querySelector("#dropdownButton1")
 	const sort_svg = document.querySelector("#sortSvg")
 	const sort_path = document.querySelector("#sortPath")
 	const link0 = document.querySelector("#link0")
 	const link1 = document.querySelector("#link1")
 	const link2 = document.querySelector("#link2")
 
-	if (event.target != dropdown_button && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
-		dropdown_content.style.display = ""
+	if (event.target != dropdown_button0 && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
+		dropdown_content0.style.display = ""
 
 		dropdown_state = false
+	}
+
+	if (event.target != dropdown_content1 && event.target != dropdown_button1) {
+		dropdown_content1.style.display = ""
+
+		display_state = false
 	}
 })
 
