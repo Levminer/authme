@@ -1,21 +1,26 @@
-const electron = require("electron")
-const { app, dialog, shell } = require("@electron/remote")
 const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
-const fs = require("fs")
-const path = require("path")
+const { app, dialog } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 const qrcode = require("qrcode-generator")
-const ipc = electron.ipcRenderer
+const path = require("path")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "export", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("export")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
@@ -38,7 +43,9 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? init codes for save to qr codes
+/**
+ * Init codes for save to qr codes
+ */
 const codes = []
 let file
 
@@ -106,7 +113,9 @@ const go = (data) => {
 	}
 }
 
-// ? save file
+/**
+ * Save .txt file
+ */
 const saveFile = () => {
 	dialog
 		.showSaveDialog({
@@ -133,7 +142,9 @@ const saveFile = () => {
 		})
 }
 
-// ? new save file
+/**
+ * Save .authme file
+ */
 const newSaveFile = () => {
 	dialog
 		.showSaveDialog({
@@ -172,7 +183,9 @@ const newSaveFile = () => {
 		})
 }
 
-// ? save qr codes
+/**
+ * Save .html file
+ */
 const saveQrCodes = () => {
 	dialog
 		.showSaveDialog({
@@ -205,12 +218,16 @@ const saveQrCodes = () => {
 		})
 }
 
-// ? hide
+/**
+ * Hide window
+ */
 const hide = () => {
 	ipc.send("toggleExport")
 }
 
-// ? error handling
+/**
+ * No saved codes found
+ */
 const error = () => {
 	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, content) => {
 		if (err) {
