@@ -1,21 +1,26 @@
 const { app, dialog, shell, desktopCapturer, BrowserWindow } = require("@electron/remote")
-const QrcodeDecoder = require("qrcode-decoder").default
+const { qrcodeConverter, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
-const electron = require("electron")
+const QrcodeDecoder = require("qrcode-decoder").default
+const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { qrcodeConverter, time } = require("@levminer/lib")
-const ipc = electron.ipcRenderer
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "import", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("import")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
@@ -36,7 +41,9 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
  */
 const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? check for webcam
+/**
+ * Check for available webcam
+ */
 const checkWebcam = (callback) => {
 	const md = navigator.mediaDevices
 	if (!md || !md.enumerateDevices) return callback(false)
@@ -45,20 +52,20 @@ const checkWebcam = (callback) => {
 	})
 }
 
-// ? link
-const onlineDocs = () => {
+/**
+ * Links
+ */
+const qrLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")
 }
 
-const qrLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/import?id=qr-codes")
-}
-
 const gaLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/import?id=google-authenticator")
+	shell.openExternal("https://docs.authme.levminer.com/#/import?id=advanced-import")
 }
 
-// ? hide
+/**
+ * Hide window
+ */
 const hide = () => {
 	ipc.send("toggleImport")
 }
