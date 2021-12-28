@@ -407,6 +407,7 @@ const createWindows = () => {
 	 * Create windows
 	 */
 	window_landing = new BrowserWindow({
+		title: `Authme ${authme_version}`,
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -430,6 +431,7 @@ const createWindows = () => {
 	})
 
 	window_confirm = new BrowserWindow({
+		title: `Authme ${authme_version}`,
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -453,6 +455,7 @@ const createWindows = () => {
 	})
 
 	window_application = new BrowserWindow({
+		title: `Authme ${authme_version}`,
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -476,6 +479,7 @@ const createWindows = () => {
 	})
 
 	window_settings = new BrowserWindow({
+		title: "Authme Settings",
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -499,6 +503,7 @@ const createWindows = () => {
 	})
 
 	window_import = new BrowserWindow({
+		title: "Authme Import",
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -522,6 +527,7 @@ const createWindows = () => {
 	})
 
 	window_export = new BrowserWindow({
+		title: "Authme Export",
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -545,6 +551,7 @@ const createWindows = () => {
 	})
 
 	window_edit = new BrowserWindow({
+		title: "Authme Edit codes",
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,

@@ -27,7 +27,6 @@
 			"!screenshots",
 			"!samples",
 			"!scripts",
-			"!tests",
 			"!**/*.scss",
 			"!.*"
 		],
