@@ -1,20 +1,25 @@
-const { app, dialog } = require("@electron/remote")
 const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
+const { app, dialog } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "edit", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("edit")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
@@ -61,7 +66,9 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build").style.display = "block"
 }
 
-// ? rollback
+/**
+ * Check for latest rollback
+ */
 const cache_path = path.join(folder_path, "rollbacks")
 const rollback_con = document.querySelector(".rollback")
 const rollback_text = document.querySelector("#rollbackText")
@@ -131,7 +138,9 @@ const loadRollback = () => {
 		})
 }
 
-// ? separate value
+/**
+ * Init arrays
+ */
 const names = []
 const secrets = []
 const issuers = []
@@ -178,7 +187,7 @@ const go = () => {
 		div.innerHTML = `
 		<div id="grid${[counter]}" class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 		<div class="flex justify-center items-center">
-		<h2 id="names${[counter]}">Name</h2>
+		<h3 id="names${[counter]}">Name</h3>
 		</div>
 		<div class="flex justify-center items-center">
 		<input class="input w-[320px]" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
@@ -209,8 +218,11 @@ const go = () => {
 	save_text = ""
 }
 
-// ? edit
+/**
+ * Edit mode
+ */
 let edit_mode = false
+
 const edit = (number) => {
 	const edit_but = document.querySelector(`#edit_but_${number}`)
 	const edit_inp = document.querySelector(`#edit_inp_${number}`)
@@ -242,7 +254,9 @@ const edit = (number) => {
 	}
 }
 
-// ? delete
+/**
+ * Delete specified code
+ */
 const del = (number) => {
 	const del_but = document.querySelector(`#del_but_${number}`)
 
@@ -278,7 +292,9 @@ const del = (number) => {
 		})
 }
 
-// ? create save
+/**
+ * Confirm saving modifications
+ */
 let save_text = ""
 
 const createSave = () => {
@@ -471,7 +487,9 @@ const createRollback = () => {
 	})
 }
 
-// ? error handling
+/**
+ * No saved codes found
+ */
 const loadError = () => {
 	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
@@ -614,12 +632,16 @@ const loadCodes = () => {
 	}
 }
 
-// ? hide window
+/**
+ * Hide window
+ */
 const hide = () => {
 	ipc.send("toggleEdit")
 }
 
-// ? reloads
+/**
+ * Send reload events
+ */
 const reloadApplication = () => {
 	ipc.send("reloadApplicationWindow")
 }
