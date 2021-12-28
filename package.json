@@ -1,8 +1,7 @@
 {
 	"name": "authme",
 	"productName": "Authme",
-	"version": "2.7.4",
-	"tag": "2.7.4",
+	"version": "3.0.0",
 	"description": "Simple cross platform two-factor authentication app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -11,12 +10,13 @@
 		"dev": "node scripts/release-build.js && electron .",
 		"build": "npm run build:release",
 		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64",
+		"build:beta": "node scripts/beta-build.js && electron-builder --publish=never --x64",
 		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64",
 		"build:test": "node scripts/alpha-build.js && electron-builder --publish=never --x64 --dir -c scripts/test-build.json",
-		"build:df": "sass src/dragonfly.scss src/dragonfly.css --no-source-map --style compressed",
-		"build:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify",
-		"watch:df": "sass src/dragonfly.scss src/dragonfly.css --no-source-map --style compressed --watch",
+		"build:styles": "concurrently 'npm:watch:tw' 'npm:watch:gb'",
+		"watch:gb": "sass src/global.scss src/global.css --no-source-map --style compressed --watch",
 		"watch:tw": "tailwindcss build -i src/tailwind.scss -o src/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
+		"test": "npx playwright test",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
 	},
@@ -25,10 +25,9 @@
 		"appId": "com.levminer.authme",
 		"files": [
 			"!screenshots",
-			"!sample",
+			"!samples",
 			"!scripts",
 			"!**/*.scss",
-			"!**/*.ts",
 			"!.*"
 		],
 		"win": {
@@ -51,7 +50,7 @@
 		},
 		"linux": {
 			"target": [
-				"deb",
+				"appImage",
 				"zip"
 			],
 			"maintainer": "levminer@levminer.com",
@@ -63,8 +62,8 @@
 			},
 			"artifactName": "authme-${version}-linux-x64-portable.zip"
 		},
-		"deb": {
-			"artifactName": "authme-${version}-linux-x64-installer.deb"
+		"appImage": {
+			"artifactName": "authme-${version}-linux-x64-installer.appimage"
 		},
 		"mac": {
 			"target": [
@@ -80,37 +79,38 @@
 		}
 	},
 	"dependencies": {
+		"@6c65726f79/custom-titlebar": "^0.5.6",
 		"@electron/remote": "^2.0.1",
 		"@levminer/lib": "file:lib",
 		"@levminer/speakeasy": "^1.3.1",
-		"@sentry/electron": "^3.0.0-beta.1",
 		"auto-launch": "^5.0.5",
 		"axios": "^0.24.0",
 		"bcryptjs": "^2.4.3",
-		"cryptr": "^6.0.2",
 		"electron-context-menu": "^3.1.1",
 		"electron-debug": "^3.2.0",
+		"electron-updater": "^4.6.5",
 		"protons": "^2.0.3",
-		"qrcode": "^1.4.4",
-		"qrcode-decoder": "^0.2.2"
+		"qrcode-decoder": "^0.2.2",
+		"qrcode-generator": "^1.4.4"
 	},
 	"devDependencies": {
-		"@tailwindcss/forms": "^0.3.4",
+		"@tailwindcss/forms": "^0.4.0",
 		"autoprefixer": "^10.4.0",
-		"electron": "^15.3.3",
+		"concurrently": "^6.5.1",
+		"electron": "^16.0.5",
 		"electron-builder": "^22.14.5",
-		"eslint": "^8.1.0",
+		"eslint": "^8.5.0",
 		"eslint-config-node": "^4.1.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-config-promise": "^2.0.2",
 		"eslint-config-standard": "^16.0.3",
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-prettier": "^4.0.0",
-		"eslint-plugin-promise": "^5.1.1",
+		"eslint-plugin-promise": "^6.0.0",
 		"eslint-plugin-standard": "^5.0.0",
-		"prettier": "^2.4.1",
-		"sass": "^1.43.4",
-		"tailwindcss": "^2.2.19"
+		"prettier": "^2.5.1",
+		"sass": "^1.45.1",
+		"tailwindcss": "^3.0.7"
 	},
 	"engines": {
 		"node": ">=15.0.0",

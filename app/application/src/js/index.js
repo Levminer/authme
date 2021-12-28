@@ -1,77 +1,78 @@
 const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
-const { aes, convert } = require("@levminer/lib")
+const { aes, convert, time } = require("@levminer/lib")
+const { ipcRenderer: ipc } = require("electron")
 const speakeasy = require("@levminer/speakeasy")
-const fs = require("fs")
 const path = require("path")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const dns = require("dns")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "application", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("application")
 
-// ? if development
+/**
+ * If running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
 	dev = true
 }
 
-// ?platform
-let folder
-
-// get platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
-
-// ? show quick start
-if (!fs.existsSync(path.join(file_path, "hash.authme"))) {
-	document.querySelector("#starting").style.display = "block"
-	document.querySelector("#choose").style.display = "block"
-}
-
-// eslint-disable-next-line
-let prev = false
-let save_text
-const query = []
-const description_query = []
-const name_query = []
-let clear
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
 	}
 }, 100)
 
-const name_state = file.settings.show_2fa_names
-const copy_state = file.settings.reset_after_copy
-const reveal_state = file.settings.click_to_reveal
-const search_state = file.settings.save_search_results
+/**
+ * Show quick start div
+ */
+if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
+	document.querySelector("#starting").style.display = "block"
+	document.querySelector("#choose").style.display = "block"
+}
 
-const sort_number = file.experimental.sort
+// eslint-disable-next-line
+let prev = false
+let text
+let save_text
+const query = []
+const description_query = []
+const name_query = []
+
+const name_state = settings.settings.codes_description
+const copy_state = settings.settings.reset_after_copy
+const blur_state = settings.settings.blur_codes
+const search_state = settings.settings.search_history
+
+const sort_number = settings.experimental.sort
 
 /**
  * Load file first time from dialog
@@ -79,19 +80,33 @@ const sort_number = file.experimental.sort
 const loadFile = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme Import Text file",
+			title: "Import from Authme import file",
 			properties: ["openFile"],
-			filters: [{ name: "Text file", extensions: ["txt"] }],
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
 			filepath = result.filePaths
 
 			if (canceled === false) {
-				const text = fs.readFileSync(filepath.toString(), "utf-8")
-				save_text = text
+				const /** @type{LibAuthmeFile} */ loaded = JSON.parse(fs.readFileSync(filepath.toString(), "utf-8"))
 
-				processdata(text)
+				if (loaded.role === "import" || loaded.role === "export") {
+					text = Buffer.from(loaded.codes, "base64").toString()
+					save_text = text
+
+					processdata(text)
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: ["Close"],
+						defaultId: 0,
+						cancelId: 0,
+						type: "error",
+						noLink: true,
+						message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+					})
+				}
 			}
 		})
 }
@@ -116,8 +131,8 @@ const go = (data) => {
 	document.querySelector(".content").style.top = "80px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
-	document.querySelector("#search_icon").style.display = "inline-block"
-	document.querySelector("#filter_icon").style.display = "inline-block"
+	document.querySelector("#searchIcon").style.display = "inline-block"
+	document.querySelector("#filterIcon").style.display = "inline-block"
 
 	const names = data.names
 	const secrets = data.secrets
@@ -152,13 +167,12 @@ const go = (data) => {
 			const element = document.createElement("div")
 
 			// set div elements
-			if (reveal_state === true && name_state === true) {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+			if (blur_state === true && name_state === true) {
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -170,7 +184,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -179,12 +193,12 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
+			} else if (blur_state === true) {
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -195,8 +209,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -205,66 +218,12 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				}
-			} else if (reveal_state === true) {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			} else if (name_state === true) {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -276,7 +235,7 @@ const go = (data) => {
 					</div>
 					<div class="div4">
 					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -285,40 +244,12 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button class="buttoni w-[194px] -mt-1" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			} else {
-				if (i < 2) {
-					element.innerHTML = `
-					<div class="grid diva${i}" id="grid${counter}">
+				element.innerHTML = `
+					<div class="grid" id="grid${counter}">
 					<div class="div1">
 					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Code</p>
+					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
 					</div>
 					<div class="div2">
 					<h3>Code</h3>
@@ -329,7 +260,7 @@ const go = (data) => {
 					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
 					</div>
 					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
+					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
@@ -338,43 +269,20 @@ const go = (data) => {
 					</div>
 					</div>
 					`
-				} else {
-					element.innerHTML = `
-					<div data-scroll class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11" id="name${counter}">Name</p>
-					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
-					</div>
-					</div>
-					`
-				}
 			}
 
 			// set div in html
 			document.querySelector(".content").appendChild(element)
+
+			if (i == names.length - 1) {
+				element.style.paddingBottom = "8px"
+			}
 
 			// elements
 			const name = document.querySelector(`#name${counter}`)
 			const code = document.querySelector(`#code${counter}`)
 			const time = document.querySelector(`#time${counter}`)
 			const text = document.querySelector(`#text${counter}`)
-			const copy = document.querySelector(`#copy${counter}`)
 
 			// add to query
 			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
@@ -386,73 +294,19 @@ const go = (data) => {
 				text.textContent = names[i]
 			}
 
-			// interval0
-			const int0 = setInterval(() => {
-				// generate token
-				const token = speakeasy.totp({
-					secret: secrets[i],
-					encoding: "base32",
-				})
-
-				// time
-				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-
-				name.textContent = issuers[i]
-				code.textContent = token
-				time.textContent = remaining
-			}, 100)
-
-			// interval1
-			const int1 = setInterval(() => {
-				// generate token
-				const token = speakeasy.totp({
-					secret: secrets[i],
-					encoding: "base32",
-				})
-
-				// time
-				const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
-
-				// setting elements
-				name.textContent = issuers[i]
-				code.textContent = token
-				time.textContent = remaining
-
-				clearInterval(int0)
-			}, 500)
-
-			// copy
-			copy.addEventListener("click", () => {
-				navigator.clipboard.writeText(code.textContent)
-
-				copy.innerHTML = `
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-			 	 </svg>
-				Copied
-				`
-
-				setTimeout(() => {
-					copy.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					`
-
-					setTimeout(() => {
-						if (copy_state === true) {
-							for (let i = 0; i < names.length; i++) {
-								const div = document.querySelector(`#grid${[i]}`)
-								div.style.display = "grid"
-							}
-
-							document.querySelector("#search").value = ""
-							document.getElementById("search").focus()
-						}
-					}, 1200)
-				}, 1000)
+			// generate token
+			const token = speakeasy.totp({
+				secret: secrets[i],
+				encoding: "base32",
 			})
+
+			// remaining time
+			const remaining_time = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+			// set content
+			name.textContent = issuers[i]
+			code.textContent = token
+			time.textContent = remaining_time
 
 			if (name_state === true) {
 				const grid = document.querySelector(`#grid${i}`)
@@ -462,17 +316,19 @@ const go = (data) => {
 			// add one to counter
 			counter++
 		}
-
-		clear = true
 	}
 
 	generate()
 
+	setInterval(() => {
+		refreshCodes(secrets)
+	}, 500)
+
 	// search history
-	const search_history = file.search_history.latest
+	const search_history = settings.search_history.latest
 
 	if (search_history !== null && search_history !== "" && search_state === true) {
-		document.querySelector("#search").value = file.search_history.latest
+		document.querySelector("#search").value = settings.search_history.latest
 
 		setTimeout(() => {
 			search()
@@ -495,7 +351,76 @@ const go = (data) => {
 	}
 }
 
-// ? search
+/**
+ * Refresh codes every 500ms
+ * @param {number} secrets
+ */
+const refreshCodes = (secrets) => {
+	for (let i = 0; i < secrets.length; i++) {
+		const code = document.querySelector(`#code${i}`)
+		const time = document.querySelector(`#time${i}`)
+
+		// generate token
+		const token = speakeasy.totp({
+			secret: secrets[i],
+			encoding: "base32",
+		})
+
+		// generate time
+		const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+		// set content
+		code.textContent = token
+		time.textContent = remaining
+	}
+}
+
+/**
+ * Copy 2FA code
+ * @param {Number} id
+ */
+const copyCode = (id) => {
+	const button = document.querySelector(`#copy${id}`)
+	const code = document.querySelector(`#code${id}`)
+
+	// copy code
+	navigator.clipboard.writeText(code.textContent)
+
+	// copied button
+	button.innerHTML = `
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+			 	 </svg>
+				Copied
+				`
+
+	// copy button
+	setTimeout(() => {
+		button.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+					</svg>
+					Copy
+					`
+
+		// reset search bar
+		setTimeout(() => {
+			if (copy_state === true) {
+				for (let i = 0; i < query.length; i++) {
+					const div = document.querySelector(`#grid${[i]}`)
+					div.style.display = "grid"
+				}
+
+				document.querySelector("#search").value = ""
+				document.getElementById("search").focus()
+			}
+		}, 1200)
+	}, 1000)
+}
+
+/**
+ * Search codes
+ */
 const search = () => {
 	const search = document.querySelector("#search")
 	const input = search.value.toLowerCase()
@@ -504,8 +429,8 @@ const search = () => {
 
 	// save result
 	if (search_state === true) {
-		file.search_history.latest = input
-		fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+		settings.search_history.latest = input
+		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 	}
 
 	// restart
@@ -521,7 +446,7 @@ const search = () => {
 
 	// search algorithm
 	name_query.forEach((result) => {
-		if (file.settings.search_bar_filter.name === true && file.settings.search_bar_filter.description === false) {
+		if (settings.settings.search_filter.name === true && settings.settings.search_filter.description === false) {
 			if (!result.startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -530,7 +455,7 @@ const search = () => {
 					no_results++
 				}
 			}
-		} else if (file.settings.search_bar_filter.description === true && file.settings.search_bar_filter.name === false) {
+		} else if (settings.settings.search_filter.description === true && settings.settings.search_filter.name === false) {
 			if (!description_query[i].startsWith(input)) {
 				const div = document.querySelector(`#grid${[i]}`)
 				div.style.display = "none"
@@ -561,13 +486,15 @@ const search = () => {
 		<div class="flex justify-center">
 		<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
 		<h3 class="pt-3">No results found!</h3>
-		<h4>Not found search results for "${document.querySelector("#search").value}".</h4>
+		<h4 id="searchResult">Not found search results.</h4>
 		</div>
 		</div>
 		`
 
 		element.setAttribute("id", "noResult")
 		document.querySelector(".content").appendChild(element)
+
+		document.querySelector("#searchResult").textContent = `Not found search results for "${document.querySelector("#search").value}".`
 	}
 
 	// if search empty
@@ -579,140 +506,39 @@ const search = () => {
 	}
 }
 
-// ? block animations
-try {
-	setTimeout(() => {
-		ScrollOut({
-			onShown(el) {
-				el.classList.add("animate__animated", "animate__zoomIn", "animate__faster")
-			},
-		})
-	}, 500)
-} catch (error) {
-	logger.error("Block animations failed")
-}
-
-// ? animations
-let focus = true
-
-let diva0
-let diva1
-
-const animations = () => {
-	if (focus === true) {
-		setTimeout(() => {
-			const center = document.querySelector(".content")
-			center.classList.add("animate__animated", "animate__fadeIn")
-
-			const h1 = document.querySelector(".h1")
-			h1.classList.add("animate__animated", "animate__slideInDown")
-
-			const choose = document.querySelector("#choose")
-			choose.classList.add("animate__animated", "animate__slideInDown")
-
-			const starting = document.querySelector("#starting")
-			starting.classList.add("animate__animated", "animate__slideInDown")
-
-			const search = document.querySelector("#search")
-			search.classList.add("animate__animated", "animate__slideInDown")
-
-			if (clear == true) {
-				diva0 = document.querySelector(".diva0")
-				diva0.classList.add("animate__animated", "animate__zoomIn")
-
-				diva1 = document.querySelector(".diva1")
-				diva1.classList.add("animate__animated", "animate__zoomIn")
-			}
-
-			setTimeout(() => {
-				if (clear == true) {
-					diva0.classList.remove("animate__animated", "animate__zoomIn")
-					diva1.classList.remove("animate__animated", "animate__zoomIn")
-				}
-			}, 1500)
-
-			focus = false
-		}, 150)
-	}
-}
-
-// ? focus search bar
+/**
+ * Focus searchbar
+ */
 const focusSearch = () => {
 	setTimeout(() => {
 		document.getElementById("search").focus()
 	}, 150)
 }
 
-// ? show update
+/**
+ * Show manual update popup
+ */
 const showUpdate = () => {
 	document.querySelector(".update").style.display = "block"
 }
 
-// ? show info
+/**
+ * Show info popup
+ */
 const showInfo = () => {
 	document.querySelector(".info").style.display = "block"
 }
 
-// ? offline mode
-let offline_mode = false
-let offline_closed = false
-let online_closed = false
-
-const check_for_internet = () => {
-	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
-			document.querySelector(".online").style.display = "none"
-			document.querySelector(".offline").style.display = "block"
-
-			offline_mode = true
-			offline_closed = true
-
-			ipc.send("offline")
-
-			logger.warn("Can't connect to the internet")
-		} else if (err === null && offline_mode === true && online_closed === false) {
-			document.querySelector(".online").style.display = "block"
-			document.querySelector(".offline").style.display = "none"
-
-			offline_mode = false
-			online_closed = true
-
-			ipc.send("offline")
-
-			logger.warn("Connected to the internet")
-		} else if ((online_closed === true || offline_closed === true) && err === null) {
-			offline_mode = false
-			offline_closed = false
-			online_closed = false
-
-			logger.warn("Connection restored")
-		}
-	})
-}
-
-check_for_internet()
-
-setInterval(() => {
-	check_for_internet()
-}, 5000)
-
-// ? save chooser
-const saveChooser = () => {
-	if (file.security.new_encryption === true) {
-		newSave()
-	} else {
-		save()
-	}
-}
-
-// new save method
-const newSave = () => {
+/**
+ * Save imported codes to disk
+ */
+const saveCodes = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -732,13 +558,19 @@ const newSave = () => {
 
 	const encrypted = aes.encrypt(save_text, key)
 
+	/**
+	 * Save codes
+	 * @type{LibAuthmeFile}
+	 * */
 	const codes = {
+		role: "codes",
+		encrypted: true,
 		codes: encrypted.toString("base64"),
-		date: new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19),
-		version: "2",
+		date: time.timestamp(),
+		version: 3,
 	}
 
-	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
 
 	document.querySelector("#save").style.display = "none"
 
@@ -748,21 +580,23 @@ const newSave = () => {
 		defaultId: 0,
 		cancelId: 1,
 		type: "info",
-		message: "Code(s) saved! \n\nIf you want to add more code(s) or delete code(s) go to Edit codes!",
+		message: "Your 2FA codes saved! \n\nIf you want to add more codes or delete codes go to Edit codes under Tools!",
 	})
 
 	password.fill(0)
 	key.fill(0)
 }
 
-// load save
-const loadSave = () => {
+/**
+ * Load saved codes from disk
+ */
+const loadCodes = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -780,7 +614,7 @@ const loadSave = () => {
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 	}
 
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
 		if (err) {
 			logger.warn("The file codes.authme don't exists")
 
@@ -789,27 +623,48 @@ const loadSave = () => {
 		} else {
 			const codes_file = JSON.parse(content)
 
-			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+			if (codes_file.version === 3) {
+				const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-			prev = true
+				prev = true
 
-			processdata(decrypted.toString())
+				processdata(decrypted.toString())
 
-			decrypted.fill(0)
-			password.fill(0)
-			key.fill(0)
+				decrypted.fill(0)
+				password.fill(0)
+				key.fill(0)
+			} else {
+				dialog
+					.showMessageBox({
+						title: "Authme",
+						buttons: ["Close", "Migration guide"],
+						defaultId: 0,
+						cancelId: 0,
+						type: "error",
+						noLink: true,
+						message: "The saved codes are only compatible with Authme 2. \n\nPlease read the migration guide!",
+					})
+					.then((result) => {
+						if (result.response === 1) {
+							shell.openExternal("https://docs.authme.levminer.com/migration")
+						}
+					})
+			}
 		}
 	})
 }
 
-if (file.security.require_password === false && file.security.new_encryption === true) {
-	loadSave()
+if (settings.security.require_password === false) {
+	loadCodes()
 }
 
+/**
+ * Dropdown
+ */
 let dropdown_state = false
-// ? dropdown
+
 const dropdown = () => {
-	const dropdown_content = document.querySelector(".dropdown-content")
+	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
 		dropdown_content.style.visibility = "visible"
@@ -826,30 +681,41 @@ const dropdown = () => {
 	}
 }
 
-document.querySelector("#checkbox0").checked = file.settings.search_bar_filter.name
-document.querySelector("#checkbox1").checked = file.settings.search_bar_filter.description
-// ? dropdown checkboxes
+document.querySelector("#checkbox0").checked = settings.settings.search_filter.name
+document.querySelector("#checkbox1").checked = settings.settings.search_filter.description
+
 document.querySelector("#checkbox0").addEventListener("click", () => {
-	if (file.settings.search_bar_filter.name === true) {
-		file.settings.search_bar_filter.name = false
+	if (settings.settings.search_filter.name === true) {
+		settings.settings.search_filter.name = false
 	} else {
-		file.settings.search_bar_filter.name = true
+		settings.settings.search_filter.name = true
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
+
+	setTimeout(() => {
+		search()
+	}, 100)
 })
 
 document.querySelector("#checkbox1").addEventListener("click", () => {
-	if (file.settings.search_bar_filter.description === true) {
-		file.settings.search_bar_filter.description = false
+	if (settings.settings.search_filter.description === true) {
+		settings.settings.search_filter.description = false
 	} else {
-		file.settings.search_bar_filter.description = true
+		settings.settings.search_filter.description = true
 	}
 
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, 4))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
+
+	setTimeout(() => {
+		search()
+	}, 100)
 })
 
-// ? quick copy
+/**
+ * Quick copy shortcuts
+ * @param {string} key
+ */
 const quickCopy = (key) => {
 	for (let i = 0; i < name_query.length; i++) {
 		if (key.toLowerCase() === name_query[i]) {
@@ -869,46 +735,39 @@ const quickCopy = (key) => {
 	}
 }
 
-// ? release notes
-const releaseNotes = () => {
-	shell.openExternal("https://github.com/Levminer/authme/releases/latest")
-}
-
-// ? download update
-const downloadUpdate = () => {
-	shell.openExternal("https://authme.levminer.com/#downloads")
-}
-
-// ? migration guide
-const migrationGuide = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/migration")
-}
-
-// ? rate
-const rateAuthme = () => {
-	ipc.send("rate_authme")
-}
-
-// ? feedback
-const provideFeedback = () => {
-	ipc.send("provide_feedback")
-}
-
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
 }
 
-// ? buttons
+/**
+ * Buttons
+ */
+const rateAuthme = () => {
+	ipc.send("rateAuthme")
+}
+
+const provideFeedback = () => {
+	ipc.send("provideFeedback")
+}
+
 const createFile = () => {
-	ipc.send("hide_import")
+	ipc.send("toggleImport")
 }
 
 const configureSettings = () => {
-	ipc.send("hide_settings")
+	ipc.send("toggleSettings")
 }
 
 const supportDevelopment = () => {
@@ -920,14 +779,16 @@ const readDocs = () => {
 }
 
 const sampleImport = () => {
-	shell.openExternal("https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true")
+	shell.openExternal("https://github.com/Levminer/authme/blob/dev/samples/authme/authme_import_sample.zip?raw=true")
 }
 
-// ? dismiss dialog on click outside
+/**
+ * Dismiss dialog of clicking outside of it
+ */
 window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
-	const filter = document.querySelector("#filter_icon")
-	const filter_path = document.querySelector("#filter_path")
+	const dropdown_content = document.querySelector("#dropdownContent0")
+	const filter = document.querySelector("#filterIcon")
+	const filter_path = document.querySelector("#filterPath")
 	const checkbox0 = document.querySelector("#checkbox0")
 	const checkbox1 = document.querySelector("#checkbox1")
 	const link0 = document.querySelector("#link0")
@@ -940,10 +801,46 @@ window.addEventListener("click", (event) => {
 	}
 })
 
-const date = new Date()
-const release = new Date("2021-12-30")
+/**
+ * Display release notes
+ */
+const releaseNotes = () => {
+	ipc.send("releaseNotes")
+}
 
-if (date > release) {
-	document.querySelector(".deprecation").style.display = "block"
-	document.querySelector(".deprecationNotice").style.display = "none"
+/**
+ * Download manual update
+ */
+const manualUpdate = () => {
+	ipc.send("manualUpdate")
+}
+
+/**
+ * Display auto update download info
+ */
+ipc.on("updateInfo", (event, info) => {
+	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+})
+
+/**
+ * Display auto update popup if update available
+ */
+const updateAvailable = () => {
+	document.querySelector(".autoupdate").style.display = "block"
+}
+
+/**
+ * Display restart button if download finished
+ */
+const updateDownloaded = () => {
+	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateButton").style.display = "block"
+	document.querySelector("#updateClose").style.display = "block"
+}
+
+/**
+ * Restart app after the download finished
+ */
+const updateRestart = () => {
+	ipc.send("updateRestart")
 }

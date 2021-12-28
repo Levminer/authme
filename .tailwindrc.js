@@ -1,9 +1,6 @@
 module.exports = {
 	mode: "jit",
-	purge: {
-		enabled: true,
-		content: ["./app/**/*.html", "./app/**/*.js"],
-	},
+	content: ["./app/**/*.html", "./app/**/*.js"],
 	theme: {
 		extend: {
 			inset: {
@@ -41,6 +38,10 @@ module.exports = {
 			screens: {
 				lg: "1400px",
 			},
+
+			stroke: (theme) => ({
+				black: theme("colors.gray.900"),
+			}),
 		},
 	},
 	corePlugins: {

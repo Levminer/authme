@@ -1,50 +1,49 @@
-const { app, dialog, shell } = require("@electron/remote")
-const QrcodeDecoder = require("qrcode-decoder").default
+const { app, dialog, shell, desktopCapturer, BrowserWindow } = require("@electron/remote")
+const { qrcodeConverter, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
-const electron = require("electron")
+const QrcodeDecoder = require("qrcode-decoder").default
+const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { qrcodeConverter, time } = require("@levminer/lib")
-const ipc = electron.ipcRenderer
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "import", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("import")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? os specific folders
-let folder
+// Get current window
+const currentWindow = BrowserWindow.getFocusedWindow()
 
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-if (settings.experimental.webcam === true) {
-	document.querySelector("#but2").style.display = "inline-block"
-	document.querySelector("#but3").style.display = "inline-block"
-}
-
-// ? check for webcam
+/**
+ * Check for available webcam
+ */
 const checkWebcam = (callback) => {
 	const md = navigator.mediaDevices
 	if (!md || !md.enumerateDevices) return callback(false)
@@ -53,28 +52,43 @@ const checkWebcam = (callback) => {
 	})
 }
 
-// ? link
-const onlineDocs = () => {
+/**
+ * Links
+ */
+const qrLink = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import?id=import")
 }
 
-const qrLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/import?id=qr-codes")
-}
-
 const gaLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/import?id=google-authenticator")
+	shell.openExternal("https://docs.authme.levminer.com/#/import?id=advanced-import")
 }
 
-// ? hide
+/**
+ * Hide window
+ */
 const hide = () => {
-	ipc.send("hide_import")
+	ipc.send("toggleImport")
 }
 
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
+/**
+ * Show experimental import screen capture
+ */
+if (settings.experimental.screen_capture === true) {
+	document.querySelector(".screenCapture").style.display = "block"
 }

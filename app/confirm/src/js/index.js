@@ -1,21 +1,25 @@
-const { app, dialog, clipboard } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
+const { app, dialog } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 const bcrypt = require("bcryptjs")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const { sha, rsa } = require("@levminer/lib")
 const path = require("path")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "confirm", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("confirm")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 let integrity = false
 
@@ -26,29 +30,41 @@ if (app.isPackaged === false) {
 	integrity = true
 }
 
-// ? platform
-let folder
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
-// get platform
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
+/**
+ * Read settings
+ * @type {LibSettings}
+ */
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
-
-// ? build
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
 if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
 }
 
-// ? init
+/**
+ * Get info text
+ */
 const text = document.querySelector("#text")
 
+/**
+ * Confirm password on enter press
+ */
 document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	if (e.key === "Enter") {
 		if (integrity === false) {
@@ -61,28 +77,19 @@ document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	}
 })
 
-// ? check integrity
+/**
+ * Check files integrity
+ */
 const check_integrity = () => {
 	// read settings
-	// ? read settings
-	const file = JSON.parse(
-		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
-			if (err) {
-				return logger.warn(`Error reading settings.json - ${err}`)
-			} else {
-				return logger.warn("Successfully readed settings.json")
-			}
-		})
-	)
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 	// check integrity
 	const storage = JSON.parse(localStorage.getItem("storage"))
 
 	if (integrity == false) {
 		try {
-			logger.log(storage)
-
-			if (file.security.password !== storage.password || file.security.require_password !== storage.require_password) {
+			if (settings.security.password !== storage.password || settings.security.require_password !== storage.require_password) {
 				dialog
 					.showMessageBox({
 						title: "Authme",
@@ -113,33 +120,24 @@ const check_integrity = () => {
 	}
 }
 
-// ? compare
+/**
+ * Compare passwords
+ */
 const unhashPassword = async () => {
 	if (integrity === false) {
 		check_integrity()
 	}
 
 	// read settings
-	// ? read settings
-	const file = JSON.parse(
-		fs.readFileSync(path.join(file_path, "settings.json"), "utf-8", async (err, data) => {
-			if (err) {
-				return logger.warn(`Error reading settings.json - ${err}`)
-			} else {
-				return logger.log("Successfully readed settings.json")
-			}
-		})
-	)
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 	// compare
 	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input.toString(), file.security.password).then(logger.log("Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), settings.security.password).then(logger.log("Passwords compared!"))
 
 	if (compare == true) {
-		if (file.security.new_encryption === true) {
-			ipc.send("send_password", password_input)
-		}
+		ipc.send("send_password", password_input)
 
 		text.style.color = "#28A443"
 		text.textContent = "Passwords match! Please wait!"
@@ -147,7 +145,7 @@ const unhashPassword = async () => {
 		setInterval(() => {
 			password_input.fill(0)
 
-			ipc.send("to_application0")
+			ipc.send("toApplicationFromConfirm")
 
 			location.reload()
 		}, 1000)
@@ -159,100 +157,16 @@ const unhashPassword = async () => {
 	}
 }
 
-// ? forgot password
-const forgotPassword = () => {
-	dialog
-		.showOpenDialog({
-			title: "Choose backup file",
-			properties: ["openFile"],
-			filters: [{ name: "Key file", extensions: ["key"] }],
-		})
-		.then((result) => {
-			canceled = result.canceled
-			filepath = result.filePaths
-
-			const loaded_key = Buffer.from(fs.readFileSync(filepath[0]))
-
-			if (loaded_key.toString().startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
-				/**
-				 * Load storage
-				 * @type {LibStorage}
-				 */
-				let storage
-
-				if (dev === true) {
-					storage = JSON.parse(localStorage.getItem("dev_storage"))
-				} else {
-					storage = JSON.parse(localStorage.getItem("storage"))
-				}
-
-				const hash = Buffer.from(sha.generateHash(loaded_key.toString("base64")))
-
-				if (hash.toString() === storage.hash) {
-					const encrypted = Buffer.from(rsa.decrypt(loaded_key.toString(), Buffer.from(storage.backup_string, "base64")), "base64")
-
-					dialog
-						.showMessageBox({
-							title: "Authme",
-							buttons: ["Copy"],
-							defaultId: 0,
-							noLink: true,
-							type: "info",
-							message: "Backup key successfully decrypted! \n\nThe password is copied to your clipboard!",
-						})
-						.then((result) => {
-							clipboard.writeText(encrypted.toString())
-
-							if (result.response === 0) {
-								clipboard.writeText(encrypted.toString())
-							}
-
-							loaded_key.fill(0)
-							hash.fill()
-							encrypted.fill(0)
-						})
-				} else {
-					dialog.showMessageBox({
-						title: "Authme",
-						buttons: ["Close"],
-						type: "error",
-						message: "This is not a matching backup key! \n\nThis backup key is not matching with the your backup key!",
-					})
-
-					loaded_key.fill(0)
-					hash.fill(0)
-				}
-			} else {
-				dialog.showMessageBox({
-					title: "Authme",
-					buttons: ["Close"],
-					type: "error",
-					message: "This is not a backup key! \n\nPlease choose another file!",
-				})
-			}
-		})
-}
-
-// ? show password
-document.querySelector("#show_pass_0").addEventListener("click", () => {
-	document.querySelector("#password_input").setAttribute("type", "text")
-
-	document.querySelector("#show_pass_0").style.display = "none"
-	document.querySelector("#show_pass_01").style.display = "flex"
-})
-
-document.querySelector("#show_pass_01").addEventListener("click", () => {
-	document.querySelector("#password_input").setAttribute("type", "password")
-
-	document.querySelector("#show_pass_0").style.display = "flex"
-	document.querySelector("#show_pass_01").style.display = "none"
-})
-
-let more_options_shown = false
+/**
+ * Forget password
+ */
+const forgotPassword = () => {}
 
 /**
  * Show more options div
  */
+let more_options_shown = false
+
 const showMoreOptions = () => {
 	const more_options = document.querySelector("#more_options")
 
@@ -270,3 +184,36 @@ const showMoreOptions = () => {
 		more_options_shown = false
 	}
 }
+
+/**
+ * Toggles window capture state
+ */
+const toggleWindowCapture = () => {
+	const tgl0 = document.querySelector("#tgl0").checked
+	const tgt0 = document.querySelector("#tgt0")
+
+	if (tgl0 === false) {
+		ipc.send("disableWindowCapture")
+		tgt0.textContent = "Off"
+	} else {
+		tgt0.textContent = "On"
+		ipc.send("enableWindowCapture")
+	}
+}
+
+/**
+ * Show passwords
+ */
+document.querySelector("#show_pass_0").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "text")
+
+	document.querySelector("#show_pass_0").style.display = "none"
+	document.querySelector("#show_pass_01").style.display = "flex"
+})
+
+document.querySelector("#show_pass_01").addEventListener("click", () => {
+	document.querySelector("#password_input").setAttribute("type", "password")
+
+	document.querySelector("#show_pass_0").style.display = "flex"
+	document.querySelector("#show_pass_01").style.display = "none"
+})

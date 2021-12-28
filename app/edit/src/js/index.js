@@ -1,55 +1,47 @@
-const { app, dialog } = require("@electron/remote")
 const { aes, convert, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
+const { app, dialog } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
+const fs = require("fs")
 
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "edit", error: error })
 }
 
-// ? logger
+/**
+ * Start logger
+ */
 logger.getWindow("edit")
 
-// ? if development
+/**
+ * Check if running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? platform
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else {
-	folder = process.env.HOME
-}
-
-// ? build
-const res = ipc.sendSync("info")
-
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-}
-
-// ? file path
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
@@ -58,13 +50,31 @@ const settings_refresher = setInterval(() => {
 	}
 }, 100)
 
-// ? rollback
-const cache_path = path.join(file_path, "cache")
+/**
+ * Get app information
+ */
+const res = ipc.sendSync("info")
+
+/**
+ * Show build number if version is pre release
+ */
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
+/**
+ * Check for latest rollback
+ */
+const cache_path = path.join(folder_path, "rollbacks")
 const rollback_con = document.querySelector(".rollback")
 const rollback_text = document.querySelector("#rollbackText")
 let cache = true
 
-fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
+fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
 	if (err) {
 		logger.warn("Cache file don't exist")
 	} else {
@@ -85,7 +95,10 @@ fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) =>
 	}
 })
 
-const rollback = () => {
+/**
+ * Rollback to the latest save
+ */
+const loadRollback = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
@@ -98,37 +111,36 @@ const rollback = () => {
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				fs.readFile(path.join(cache_path, "latest.authmecache"), "utf-8", (err, data) => {
+				fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
 					if (err) {
 						logger.error("Error reading hash file", err)
 					} else {
-						if (file.security.new_encryption === true) {
-							fs.writeFile(path.join(file_path, "codes", "codes.authme"), data, (err) => {
-								if (err) {
-									logger.error("Failed to create codes.authme folder", err)
-								} else {
-									logger.log("codes.authme file created")
-								}
-							})
-						} else {
-							fs.writeFile(path.join(file_path, "hash.authme"), data, (err) => {
-								if (err) {
-									logger.error("Failed to create hash.authme", err)
-								} else {
-									logger.log("hash.authme file created")
-								}
-							})
-						}
+						fs.writeFile(path.join(folder_path, "codes", "codes.authme"), data, (err) => {
+							if (err) {
+								logger.error("Failed to create codes.authme folder", err)
+							} else {
+								logger.log("rollback successful, codes.authme file created")
+
+								dialog.showMessageBox({
+									title: "Authme",
+									buttons: ["Close"],
+									type: "info",
+									message: "Rollback successful! \n\nGo back to the main page to check out the changes!",
+								})
+							}
+						})
 					}
 				})
 
 				reloadApplication()
-				reloadSettings()
+				reloadSettingsWindow()
 			}
 		})
 }
 
-// ? separate value
+/**
+ * Init arrays
+ */
 const names = []
 const secrets = []
 const issuers = []
@@ -159,7 +171,7 @@ const go = () => {
 	document.querySelector(".codes_container").innerHTML = ""
 
 	if (cache === true) {
-		createCache()
+		createRollback()
 		cache = false
 	}
 
@@ -175,10 +187,10 @@ const go = () => {
 		div.innerHTML = `
 		<div id="grid${[counter]}" class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 		<div class="flex justify-center items-center">
-		<h2>${issuers[counter]}</h2>
+		<h3 id="names${[counter]}">Name</h3>
 		</div>
 		<div class="flex justify-center items-center">
-		<input class="input" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
+		<input class="input w-[320px]" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
 		</div>
 		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
 		<button class="buttonr button" id="edit_but_${[counter]}" onclick="edit(${[counter]})">
@@ -198,17 +210,26 @@ const go = () => {
 		div.setAttribute("id", counter)
 		codes_container.appendChild(div)
 
+		document.querySelector(`#names${[counter]}`).textContent = `${issuers[counter]}`
+
 		counter++
 	}
 
 	save_text = ""
 }
 
-// ? edit
+/**
+ * Edit mode
+ */
 let edit_mode = false
+
 const edit = (number) => {
 	const edit_but = document.querySelector(`#edit_but_${number}`)
 	const edit_inp = document.querySelector(`#edit_inp_${number}`)
+
+	edit_inp.focus()
+	const length = edit_inp.value.length
+	edit_inp.setSelectionRange(length, length)
 
 	if (edit_mode === false) {
 		edit_but.style.color = "green"
@@ -233,7 +254,9 @@ const edit = (number) => {
 	}
 }
 
-// ? delete
+/**
+ * Delete specified code
+ */
 const del = (number) => {
 	const del_but = document.querySelector(`#del_but_${number}`)
 
@@ -247,7 +270,7 @@ const del = (number) => {
 			title: "Authme",
 			buttons: ["Yes", "Cancel"],
 			type: "warning",
-			message: "Are you sure you want to delete this code? \n\nIf you want to revert this don't save and restart the app!",
+			message: "Are you sure you want to delete this code? \n\nIf you want to revert this, click more options and revert changes.",
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -269,7 +292,9 @@ const del = (number) => {
 		})
 }
 
-// ? create save
+/**
+ * Confirm saving modifications
+ */
 let save_text = ""
 
 const createSave = () => {
@@ -290,11 +315,7 @@ const createSave = () => {
 					save_text += substr
 				}
 
-				if (file.security.new_encryption === true) {
-					newSaveCodes()
-				} else {
-					saveCodes()
-				}
+				saveModifications()
 
 				/**
 				 * Load storage
@@ -317,18 +338,21 @@ const createSave = () => {
 				}
 
 				reloadApplication()
-				reloadSettings()
+				reloadSettingsWindow()
 			}
 		})
 }
 
-const newSaveCodes = () => {
+/**
+ * Saves the modifications made to the codes
+ */
+const saveModifications = () => {
 	let password
 	let key
 
-	if (file.security.require_password === true) {
+	if (settings.security.require_password === true) {
 		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
 		 * Load storage
@@ -348,31 +372,82 @@ const newSaveCodes = () => {
 
 	const encrypted = aes.encrypt(save_text, key)
 
+	/**
+	 * Save codes
+	 * @type{LibAuthmeFile}
+	 * */
 	const codes = {
+		role: "codes",
+		encrypted: true,
 		codes: encrypted.toString("base64"),
 		date: time.timestamp(),
-		version: "2",
+		version: 3,
 	}
 
-	fs.writeFileSync(path.join(file_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
+	fs.writeFileSync(path.join(folder_path, "codes", "codes.authme"), JSON.stringify(codes, null, "\t"))
 
 	password.fill(0)
 	key.fill(0)
 }
 
-// ? load more
-const addMore = () => {
+/**
+ * Add more codes to existing ones
+ */
+const addCodes = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme Import Text file",
+			title: "Import from Authme file",
 			properties: ["openFile", "multiSelections"],
-			filters: [{ name: "Authme import/export file", extensions: ["authme", "txt"] }],
+			filters: [{ name: "Authme file", extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
 			files = result.filePaths
 
 			if (canceled === false) {
+				for (let i = 0; i < files.length; i++) {
+					fs.readFile(files[i], (err, input) => {
+						if (err) {
+							logger.error("Error loading file")
+						} else {
+							logger.log("File readed")
+
+							const /** @type{LibAuthmeFile} */ loaded = JSON.parse(input.toString())
+
+							if (loaded.role === "import" || loaded.role === "export") {
+								data = []
+
+								const container = document.querySelector(".codes_container")
+								container.innerHTML = ""
+
+								counter = 0
+
+								const codes = Buffer.from(loaded.codes, "base64")
+
+								const /** @type{LibImportFile} */ imported = convert.fromText(codes.toString(), 0)
+
+								for (let i = 0; i < imported.names.length; i++) {
+									names.push(imported.names[i])
+									secrets.push(imported.secrets[i])
+									issuers.push(imported.issuers[i])
+								}
+
+								go()
+							} else {
+								dialog.showMessageBox({
+									title: "Authme",
+									buttons: ["Close"],
+									defaultId: 0,
+									cancelId: 0,
+									type: "error",
+									noLink: true,
+									message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+								})
+							}
+						}
+					})
+				}
+
 				dialog.showMessageBox({
 					title: "Authme",
 					buttons: ["Close"],
@@ -382,81 +457,41 @@ const addMore = () => {
 					noLink: true,
 					message: "Code(s) added! \n\nScroll down to view them!",
 				})
-
-				for (let i = 0; i < files.length; i++) {
-					fs.readFile(files[i], (err, input) => {
-						if (err) {
-							logger.error("Error loading file")
-						} else {
-							logger.log("File readed")
-
-							data = []
-
-							const container = document.querySelector(".codes_container")
-							container.innerHTML = ""
-
-							counter = 0
-
-							const /** @type{LibImportFile} */ imported = convert.fromText(input.toString(), 0)
-
-							for (let i = 0; i < imported.names.length; i++) {
-								names.push(imported.names[i])
-								secrets.push(imported.secrets[i])
-								issuers.push(imported.issuers[i])
-							}
-
-							go()
-						}
-					})
-				}
 			}
 		})
 }
 
-// ? create cache
-const createCache = () => {
-	if (file.security.new_encryption === true) {
-		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
-			if (err) {
-				logger.error("Error reading hash file", err)
-			} else {
-				if (!fs.existsSync(cache_path)) {
-					fs.mkdirSync(cache_path)
-				}
-
-				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
-					if (err) {
-						logger.error("Failed to create cache folder", err)
-					} else {
-						logger.log("Cache file created")
-					}
-				})
+/**
+ * Create rollback.authme file
+ */
+const createRollback = () => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+		if (err) {
+			logger.error("Error reading hash file", err)
+		} else {
+			if (!fs.existsSync(cache_path)) {
+				fs.mkdirSync(cache_path)
 			}
-		})
-	} else {
-		fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
-			if (err) {
-				logger.error("Error reading hash file", err)
-			} else {
-				if (!fs.existsSync(cache_path)) {
-					fs.mkdirSync(cache_path)
-				}
 
-				fs.writeFile(path.join(cache_path, "latest.authmecache"), data, (err) => {
-					if (err) {
-						logger.error("Failed to create cache folder", err)
-					} else {
-						logger.log("Cache file created")
-					}
-				})
-			}
-		})
-	}
+			const loaded = JSON.parse(data)
+			loaded.role = "rollback"
+
+			fs.writeFile(path.join(cache_path, "rollback.authme"), convert.fromJSON(loaded), (err) => {
+				if (err) {
+					logger.error("Failed to create cache folder", err)
+				} else {
+					logger.log("Rollback file created")
+				}
+			})
+		}
+	})
 }
 
-// ? error handling
+/**
+ * No saved codes found
+ */
 const loadError = () => {
-	fs.readFile(path.join(file_path, "hash.authme"), "utf-8", (err, data) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
 			dialog.showMessageBox({
 				title: "Authme",
@@ -468,10 +503,81 @@ const loadError = () => {
 	})
 }
 
-// ? new encryption method
-const loadChooser = () => {
-	if (file.security.new_encryption === true) {
-		fs.readFile(path.join(file_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+/**
+ * Loads saved codes from disk
+ */
+const loadCodes = () => {
+	const check = () => {}
+
+	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: ["Yes", "Cancel"],
+				defaultId: 1,
+				cancelId: 1,
+				type: "warning",
+				noLink: true,
+				message: "Are you sure you want to load your currently saved codes? \n\nThis will overwrite your latest rollback!",
+			})
+			.then((result) => {
+				if (result.response === 0) {
+					fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+						if (err) {
+							dialog.showMessageBox({
+								title: "Authme",
+								buttons: ["Close"],
+								type: "error",
+								message: "No save file found. \n\nGo back to the main page and save your codes!",
+							})
+						} else {
+							let password
+							let key
+
+							if (settings.security.require_password === true) {
+								password = Buffer.from(ipc.sendSync("request_password"))
+								key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+							} else {
+								/**
+								 * Load storage
+								 * @type {LibStorage}
+								 */
+								let storage
+
+								if (dev === false) {
+									storage = JSON.parse(localStorage.getItem("storage"))
+								} else {
+									storage = JSON.parse(localStorage.getItem("dev_storage"))
+								}
+
+								password = Buffer.from(storage.password, "base64")
+								key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+							}
+
+							fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+								if (err) {
+									logger.warn("The file codes.authme don't exists")
+
+									password.fill(0)
+									key.fill(0)
+								} else {
+									const codes_file = JSON.parse(content)
+
+									const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+									processdata(decrypted.toString())
+
+									decrypted.fill(0)
+									password.fill(0)
+									key.fill(0)
+								}
+							})
+						}
+					})
+				}
+			})
+	} else {
+		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 			if (err) {
 				dialog.showMessageBox({
 					title: "Authme",
@@ -480,70 +586,68 @@ const loadChooser = () => {
 					message: "No save file found. \n\nGo back to the main page and save your codes!",
 				})
 			} else {
-				newLoad()
+				let password
+				let key
+
+				if (settings.security.require_password === true) {
+					password = Buffer.from(ipc.sendSync("request_password"))
+					key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+				} else {
+					/**
+					 * Load storage
+					 * @type {LibStorage}
+					 */
+					let storage
+
+					if (dev === false) {
+						storage = JSON.parse(localStorage.getItem("storage"))
+					} else {
+						storage = JSON.parse(localStorage.getItem("dev_storage"))
+					}
+
+					password = Buffer.from(storage.password, "base64")
+					key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+				}
+
+				fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+					if (err) {
+						logger.warn("The file codes.authme don't exists")
+
+						password.fill(0)
+						key.fill(0)
+					} else {
+						const codes_file = JSON.parse(content)
+
+						const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+						processdata(decrypted.toString())
+
+						decrypted.fill(0)
+						password.fill(0)
+						key.fill(0)
+					}
+				})
 			}
 		})
-	} else {
-		loadCodes()
 	}
 }
 
-const newLoad = () => {
-	let password
-	let key
-
-	if (file.security.require_password === true) {
-		password = Buffer.from(ipc.sendSync("request_password"))
-		key = Buffer.from(aes.generateKey(password, Buffer.from(file.security.key, "base64")))
-	} else {
-		/**
-		 * Load storage
-		 * @type {LibStorage}
-		 */
-		let storage
-
-		if (dev === false) {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		}
-
-		password = Buffer.from(storage.password, "base64")
-		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
-	}
-
-	fs.readFile(path.join(file_path, "codes", "codes.authme"), (err, content) => {
-		if (err) {
-			logger.warn("The file codes.authme don't exists")
-
-			password.fill(0)
-			key.fill(0)
-		} else {
-			const codes_file = JSON.parse(content)
-
-			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
-
-			processdata(decrypted.toString())
-
-			decrypted.fill(0)
-			password.fill(0)
-			key.fill(0)
-		}
-	})
-}
-
-// ? hide window
+/**
+ * Hide window
+ */
 const hide = () => {
-	ipc.send("hide_edit")
+	ipc.send("toggleEdit")
 }
 
-// ? reloads
+/**
+ * Send reload events
+ */
 const reloadApplication = () => {
-	ipc.send("reload_application")
+	ipc.send("reloadApplicationWindow")
 }
 
-const reloadSettings = () => {
-	ipc.send("reload_settings")
+const reloadSettingsWindow = () => {
+	ipc.send("reloadSettingsWindow")
 }
 
 /**
@@ -563,6 +667,61 @@ const revertChanges = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				location.reload()
+			}
+		})
+}
+
+/**
+ * Delete all codes
+ */
+const deleteCodes = () => {
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "Cancel"],
+			defaultId: 1,
+			cancelId: 1,
+			type: "warning",
+			noLink: true,
+			message: "Are you sure you want to delete all codes? \n\nYou can revert this with a rollback.",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				// clear codes
+				fs.rm(path.join(folder_path, "codes", "codes.authme"), (err) => {
+					if (err) {
+						return logger.error(`Error deleting codes - ${err}`)
+					} else {
+						logger.log("Codes deleted")
+					}
+				})
+
+				/**
+				 * Load storage
+				 * @type {LibStorage}
+				 */
+				let storage
+
+				if (dev === false) {
+					storage = JSON.parse(localStorage.getItem("storage"))
+
+					storage.issuers = undefined
+
+					localStorage.setItem("storage", JSON.stringify(storage))
+				} else {
+					storage = JSON.parse(localStorage.getItem("dev_storage"))
+
+					storage.issuers = undefined
+
+					localStorage.setItem("dev_storage", JSON.stringify(storage))
+				}
+
+				reloadApplication()
+				reloadSettingsWindow()
+
+				setTimeout(() => {
+					location.reload()
+				}, 100)
 			}
 		})
 }

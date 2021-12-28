@@ -2,30 +2,31 @@
 
 -   Simple cross platform two-factor authentication app for desktop.
 
-[![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?style=for-the-badge)](https://github.com/Levminer/authme/releases)
-[![Support](https://img.shields.io/badge/Support-PayPal-blue?style=for-the-badge)](https://paypal.me/levminer)
-[![License](https://img.shields.io/github/license/levminer/authme?style=for-the-badge)](https://github.com/Levminer/authme/blob/main/LICENSE.md)
+[![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?label=Downloads)](https://tooomm.github.io/github-release-stats/?username=Levminer&repository=authme)
+[![Support](https://img.shields.io/badge/Support-PayPal-blue)](https://paypal.me/levminer)
+[![License](https://img.shields.io/github/license/levminer/authme?label=License)](https://github.com/Levminer/authme/blob/main/LICENSE.md)
 
 ## Latest Release
 
 -   Latest release version for standard users.
 
-[![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release&style=for-the-badge)](https://github.com/Levminer/authme/releases)
-[![Windows Download](https://img.shields.io/badge/Windows-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/release/windows)
-[![Linux Download](https://img.shields.io/badge/Linux-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/release/linux)
-[![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/releases)
+[![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release)](https://github.com/Levminer/authme/releases)
+[![Windows Download](https://img.shields.io/badge/Windows-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/windows)
+[![Linux Download](https://img.shields.io/badge/Linux-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/linux)
+[![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/mac)
+[![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/releases)
 
 ## Latest Alpha
 
 -   Latest alpha version for advanced users.
 
-[![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
-[![Windows Download](https://img.shields.io/badge/Windows-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/windows)
-[![Linux Download](https://img.shields.io/badge/Linux-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/linux)
-[![Mac Download](https://img.shields.io/badge/Mac-Download-brightgreen?style=for-the-badge)](https://api.levminer.com/api/v1/authme/alpha/mac)
-[![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated&style=for-the-badge)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
+[![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&color=blue)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
+[![Windows Download](https://img.shields.io/badge/Windows-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/windows)
+[![Linux Download](https://img.shields.io/badge/Linux-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/linux)
+[![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/mac)
+[![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 
-<img src="https://raw.githubusercontent.com/Levminer/authme/main/screenshots/screenshot.png?raw=true">
+<img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
 
 ## Features
 
@@ -47,16 +48,6 @@
 
 -   Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
 -   Read before contributing: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
-
-## Project board
-
--   You can check out all the issues in progress at the project board!
--   Check out at: [Projects](https://github.com/Levminer/authme/projects/1)
-
-## Authme Web
-
--   Authme is now available as a web app. It's a PWA app to, so you can install it on your Android or IOS phone.
--   Try it out and give feedback: [Authme Web](https://github.com/levminer/authme-web)
 
 ## License
 

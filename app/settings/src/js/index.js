@@ -1,80 +1,94 @@
-const { shell, app, dialog } = require("@electron/remote")
-const fs = require("fs")
-const electron = require("electron")
-const ipc = electron.ipcRenderer
-const path = require("path")
-const dns = require("dns")
-const { typedef } = require("@levminer/lib")
+const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
+const { ipcRenderer: ipc } = require("electron")
+const { convert } = require("@levminer/lib")
+const path = require("path")
+const fs = require("fs")
 
-// ? logger
-logger.getWindow("settings")
-
-// ? error in window
+/**
+ * Send error to main process
+ */
 window.onerror = (error) => {
 	ipc.send("rendererError", { renderer: "settings", error: error })
 }
 
-// ? choose settings
-document.querySelector("#setting").click()
+/**
+ * Start logger
+ */
+logger.getWindow("application")
 
-// ? get app infos
+/**
+ * Get app information
+ */
 const res = ipc.sendSync("info")
 
+/**
+ * Show build number if version is pre release
+ */
+if (res.build_number.startsWith("alpha")) {
+	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+} else if (res.build_number.startsWith("beta")) {
+	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
+	document.querySelector(".build").style.display = "block"
+}
+
 // set app version
-document.querySelector("#but7").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+document.querySelector(".about").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 </svg> Authme ${res.authme_version}`
 
-// ? if development
+/**
+ * If running in development
+ */
 let dev = false
 
 if (app.isPackaged === false) {
 	dev = true
 }
 
-// ? platform
-let folder
-
-if (process.platform === "win32") {
-	folder = process.env.APPDATA
-} else if (process.platform === "darwin") {
-	folder = process.env.HOME
-} else {
-	folder = process.env.HOME
+// check if running on linux
+if (process.platform !== "win32" && process.platform !== "darwin") {
 	document.querySelector("#disable_screen_capture_div").style.display = "none"
 }
 
-// ? settings
-const file_path = dev ? path.join(folder, "Levminer", "Authme Dev") : path.join(folder, "Levminer", "Authme")
+/**
+ * Get Authme folder path
+ */
+const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme Dev") : path.join(app.getPath("appData"), "Levminer", "Authme")
 
 /**
  * Read settings
- * @type{LibSettings}
+ * @type {LibSettings}
  */
-let file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-// ? refresh settings
+/**
+ * Refresh settings
+ */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(file_path, "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
 	}
 }, 100)
 
-// ? elements
-const inp0 = document.querySelector("#inp0")
-const drp0 = document.querySelector("#drp0")
+// Get current window
+const currentWindow = BrowserWindow.getFocusedWindow()
+
+/**
+ * Elements
+ */
+const drp0 = document.querySelector("#dropdownButton0")
+const drp1 = document.querySelector("#dropdownButton1")
 
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
 const tgl1 = document.querySelector("#tgl1")
 const tgt1 = document.querySelector("#tgt1")
-const tgl2 = document.querySelector("#tgl2")
-const tgt2 = document.querySelector("#tgt2")
 const tgl3 = document.querySelector("#tgl3")
 const tgt3 = document.querySelector("#tgt3")
 const tgl4 = document.querySelector("#tgl4")
@@ -88,9 +102,19 @@ const tgt7 = document.querySelector("#tgt7")
 const tgl8 = document.querySelector("#tgl8")
 const tgt8 = document.querySelector("#tgt8")
 
+// import screen capture
+let screen_capture_state = settings.experimental.screen_capture
+if (screen_capture_state === true) {
+	tgt8.textContent = "On"
+	tgl8.checked = true
+} else {
+	tgt8.textContent = "Off"
+	tgl8.checked = false
+}
+
 // launch on startup
-let startup_state = file.settings.launch_on_startup
-if (startup_state === true) {
+let launch_startup_state = settings.settings.launch_on_startup
+if (launch_startup_state === true) {
 	tgt0.textContent = "On"
 	tgl0.checked = true
 } else {
@@ -99,36 +123,22 @@ if (startup_state === true) {
 }
 
 // close to tray
-let tray_state = file.settings.close_to_tray
-if (tray_state === true) {
+let close_tray_state = settings.settings.close_to_tray
+if (close_tray_state === true) {
 	tgt1.textContent = "On"
 	tgl1.checked = true
 
-	ipc.send("enable_tray")
+	ipc.send("enableTray")
 } else {
 	tgt1.textContent = "Off"
 	tgl1.checked = false
 
-	ipc.send("disable_tray")
+	ipc.send("disableTray")
 }
 
-// capture
-let capture_state = file.settings.disable_window_capture
-if (capture_state === true) {
-	tgt2.textContent = "Off"
-	tgl2.checked = false
-
-	ipc.send("disable_capture")
-} else {
-	tgt2.textContent = "On"
-	tgl2.checked = true
-
-	ipc.send("enable_capture")
-}
-
-// names
-let names_state = file.settings.show_2fa_names
-if (names_state === true) {
+// codes description
+let codes_description_state = settings.settings.codes_description
+if (codes_description_state === true) {
 	tgt3.textContent = "On"
 	tgl3.checked = true
 } else {
@@ -136,9 +146,9 @@ if (names_state === true) {
 	tgl3.checked = false
 }
 
-// reveal
-let reveal_state = file.settings.click_to_reveal
-if (reveal_state === true) {
+// blur codes
+let blur_codes_state = settings.settings.blur_codes
+if (blur_codes_state === true) {
 	tgt4.textContent = "On"
 	tgl4.checked = true
 } else {
@@ -146,8 +156,8 @@ if (reveal_state === true) {
 	tgl4.checked = false
 }
 
-// search
-let search_state = file.settings.save_search_results
+// search history
+let search_state = settings.settings.search_history
 if (search_state === true) {
 	tgt5.textContent = "On"
 	tgl5.checked = true
@@ -156,9 +166,9 @@ if (search_state === true) {
 	tgl5.checked = false
 }
 
-// copy
-let copy_state = file.settings.reset_after_copy
-if (copy_state === true) {
+// reset after copy
+let reset_copy_state = settings.settings.reset_after_copy
+if (reset_copy_state === true) {
 	tgt6.textContent = "On"
 	tgl6.checked = true
 } else {
@@ -167,7 +177,7 @@ if (copy_state === true) {
 }
 
 // sort
-const sort_number = file.experimental.sort
+const sort_number = settings.experimental.sort
 
 if (sort_number === 1) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,9 +189,17 @@ if (sort_number === 1) {
 	</svg> Z-A`
 }
 
+// display
+drp1.innerHTML = `
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	</svg>
+	Display #${settings.settings.default_display}
+	`
+
 // hardware
-let hardware_state = file.settings.disable_hardware_acceleration
-if (hardware_state === true) {
+let hardware_state = settings.settings.hardware_acceleration
+if (hardware_state === false) {
 	tgt7.textContent = "Off"
 	tgl7.checked = false
 } else {
@@ -189,98 +207,100 @@ if (hardware_state === true) {
 	tgl7.checked = true
 }
 
-// webcam
-let webcam_state = file.experimental.webcam
-
-if (webcam_state === true) {
-	tgt8.textContent = "On"
-	tgl8.checked = true
-} else {
-	tgt8.textContent = "Off"
-	tgl8.checked = false
-}
-
-// ? startup
-const startup = () => {
-	if (startup_state == true) {
-		file.settings.launch_on_startup = false
+/**
+ * Launch Authme on system startup
+ */
+const launchStartup = () => {
+	if (launch_startup_state == true) {
+		settings.settings.launch_on_startup = false
 
 		save()
 
 		tgt0.textContent = "Off"
 		tgl0.checked = false
 
-		startup_state = false
+		launch_startup_state = false
 
-		ipc.send("disable_startup")
+		ipc.send("disableStartup")
 	} else {
-		file.settings.launch_on_startup = true
+		settings.settings.launch_on_startup = true
 
 		save()
 
 		tgt0.textContent = "On"
 		tgl0.checked = true
 
-		startup_state = true
+		launch_startup_state = true
 
-		ipc.send("enable_startup")
+		ipc.send("enableStartup")
 	}
 }
 
-// ? tray
-const tray = () => {
-	if (tray_state == true) {
-		file.settings.close_to_tray = false
+/**
+ * Close Authme to tray when closing the window
+ */
+const closeTray = () => {
+	if (close_tray_state == true) {
+		settings.settings.close_to_tray = false
 
 		save()
 
 		tgt1.textContent = "Off"
-		tray_state = false
+		close_tray_state = false
 
-		ipc.send("disable_tray")
+		ipc.send("disableTray")
 	} else {
-		file.settings.close_to_tray = true
+		settings.settings.close_to_tray = true
 
 		save()
 
 		tgt1.textContent = "On"
-		tray_state = true
+		close_tray_state = true
 
-		ipc.send("enable_tray")
+		ipc.send("enableTray")
 	}
 }
 
-// ? capture
-const capture = () => {
-	if (capture_state == true) {
-		file.settings.disable_window_capture = false
+/**
+ * Toggles window capture
+ */
+const toggleWindowCapture = () => {
+	const tgl2 = document.querySelector("#tgl2").checked
+	const tgt2 = document.querySelector("#tgt2")
 
-		save()
+	if (tgl2 == true) {
+		tgt2.textContent = "On"
 
+		ipc.send("enableWindowCapture")
+	} else {
+		tgt2.textContent = "Off"
+
+		ipc.send("disableWindowCapture")
+	}
+}
+
+/**
+ * Toggles window capture switch if this option is switched somewhere else
+ */
+const toggleWindowCaptureSwitch = () => {
+	const tgl2 = document.querySelector("#tgl2")
+	const tgt2 = document.querySelector("#tgt2")
+
+	if (tgl2.checked === false) {
 		tgt2.textContent = "On"
 		tgl2.checked = true
-
-		capture_state = false
-
-		ipc.send("enable_capture")
 	} else {
-		file.settings.disable_window_capture = true
-
-		save()
-
 		tgt2.textContent = "Off"
 		tgl2.checked = false
-
-		capture_state = true
-
-		ipc.send("disable_capture")
 	}
 }
 
-// ? reset
-const reset = () => {
+/**
+ * Clear all data
+ */
+const clearData = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: ["Yes", "No"],
 			defaultId: 1,
@@ -292,7 +312,7 @@ const reset = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
-					.showMessageBox({
+					.showMessageBox(currentWindow, {
 						title: "Authme",
 						buttons: ["Yes", "No"],
 						defaultId: 1,
@@ -301,56 +321,20 @@ const reset = () => {
 						type: "warning",
 						message: "Are you absolutely sure? \n\nThere is no way back!",
 					})
-					.then((result) => {
+					.then(async (result) => {
 						if (result.response === 0) {
-							// remove settings file
-							fs.unlink(path.join(file_path, "settings.json"), (err) => {
-								if (err && err.code === "ENOENT") {
-									return logger.error(`Error deleting settings.json - ${err}`)
-								} else {
-									logger.log("File settings.json deleted")
-								}
-							})
-
-							// remove hash file
-							fs.unlink(path.join(file_path, "hash.authme"), (err) => {
-								if (err && err.code === "ENOENT") {
-									return logger.error(`Error deleting hash.authme - ${err}`)
-								} else {
-									logger.log("File hash.authme deleted")
-								}
-							})
-
 							// clear codes
-							fs.rm(path.join(file_path, "codes"), { recursive: true }, (err) => {
+							await fs.promises.rm(folder_path, { recursive: true, force: true }, (err) => {
 								if (err) {
-									return logger.error(`Error deleting codes - ${err}`)
+									return logger.error("Error deleting settings folder", err.stack)
 								} else {
-									logger.log("Codes deleted")
+									logger.log("Setting folder deleted")
 								}
 							})
 
-							// clear logs
-							fs.rm(path.join(file_path, "logs"), { recursive: true }, (err) => {
-								if (err) {
-									return logger.error(`Error deleting logs - ${err}`)
-								} else {
-									logger.log("Logs deleted")
-								}
-							})
-
-							// clear cache files
-							fs.rm(path.join(file_path, "cache"), { recursive: true }, (err) => {
-								if (err) {
-									return logger.error(`Error deleting caches - ${err}`)
-								} else {
-									logger.log("Caches deleted")
-								}
-							})
-
-							// remove start shortcut
+							// remove startup shortcut
 							if (dev === false) {
-								ipc.send("disable_startup")
+								ipc.sendSync("disableStartup")
 							}
 
 							// clear storage
@@ -360,35 +344,39 @@ const reset = () => {
 								localStorage.removeItem("dev_storage")
 							}
 
-							// exit app
-							app.exit()
+							// exit aoo
+							setTimeout(() => {
+								app.exit()
+							}, 300)
 						}
 					})
 			}
 		})
 }
 
-// ? show 2fa names
-const names = () => {
+/**
+ * Codes description state
+ */
+const codesDescription = () => {
 	const toggle = () => {
-		if (names_state === true) {
-			file.settings.show_2fa_names = false
+		if (codes_description_state === true) {
+			settings.settings.codes_description = false
 
 			save()
 
 			tgt3.textContent = "Off"
 			tgl3.checked = false
 
-			names_state = false
+			codes_description_state = false
 		} else {
-			file.settings.show_2fa_names = true
+			settings.settings.codes_description = true
 
 			save()
 
 			tgt3.textContent = "On"
 			tgl3.checked = true
 
-			names_state = true
+			codes_description_state = true
 		}
 	}
 
@@ -396,27 +384,29 @@ const names = () => {
 	reload()
 }
 
-// ? blur codes
-const reveal = () => {
+/**
+ * Blur codes
+ */
+const blurCodes = () => {
 	const toggle = () => {
-		if (reveal_state === true) {
-			file.settings.click_to_reveal = false
+		if (blur_codes_state === true) {
+			settings.settings.blur_codes = false
 
 			save()
 
 			tgt4.textContent = "Off"
 			tgl4.checked = false
 
-			reveal_state = false
+			blur_codes_state = false
 		} else {
-			file.settings.click_to_reveal = true
+			settings.settings.blur_codes = true
 
 			save()
 
 			tgt4.textContent = "On"
 			tgl4.checked = true
 
-			reveal_state = true
+			blur_codes_state = true
 		}
 	}
 
@@ -424,11 +414,13 @@ const reveal = () => {
 	reload()
 }
 
-// ? save search results
-const results = () => {
+/**
+ * Save search results
+ */
+const searchHistory = () => {
 	const toggle = () => {
 		if (search_state === true) {
-			file.settings.save_search_results = false
+			settings.settings.search_history = false
 
 			save()
 
@@ -437,7 +429,7 @@ const results = () => {
 
 			search_state = false
 		} else {
-			file.settings.save_search_results = true
+			settings.settings.search_history = true
 
 			save()
 
@@ -452,27 +444,29 @@ const results = () => {
 	reload()
 }
 
-// ? reset search after copy
-const copy = () => {
+/**
+ * Reset search after copy
+ */
+const resetCopy = () => {
 	const toggle = () => {
-		if (copy_state === true) {
-			file.settings.reset_after_copy = false
+		if (reset_copy_state === true) {
+			settings.settings.reset_after_copy = false
 
 			save()
 
 			tgt6.textContent = "Off"
 			tgl6.checked = false
 
-			copy_state = false
+			reset_copy_state = false
 		} else {
-			file.settings.reset_after_copy = true
+			settings.settings.reset_after_copy = true
 
 			save()
 
 			tgt6.textContent = "On"
 			tgl6.checked = true
 
-			copy_state = true
+			reset_copy_state = true
 		}
 	}
 
@@ -480,11 +474,13 @@ const copy = () => {
 	reload()
 }
 
-// ? hardware acceleration
-const hardware = () => {
+/**
+ * Turn on hardware acceleration
+ */
+const hardwareAcceleration = () => {
 	const toggle = () => {
 		if (hardware_state === true) {
-			file.settings.disable_hardware_acceleration = false
+			settings.settings.hardware_acceleration = false
 
 			save()
 
@@ -493,7 +489,7 @@ const hardware = () => {
 
 			hardware_state = false
 		} else {
-			file.settings.disable_hardware_acceleration = true
+			settings.settings.hardware_acceleration = true
 
 			save()
 
@@ -526,10 +522,14 @@ const hardware = () => {
 		})
 }
 
+/**
+ * Sort codes dropdown
+ */
 let dropdown_state = false
-// ? dropdown
-const dropdown = (id) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
+
+// show dropdown
+const dropdown = () => {
+	const dropdown_content = document.querySelector("#dropdownContent0")
 
 	if (dropdown_state === false) {
 		dropdown_content.style.visibility = "visible"
@@ -546,8 +546,9 @@ const dropdown = (id) => {
 	}
 }
 
+// choose option
 const dropdownChoose = (id) => {
-	const dropdown_button = document.querySelector(".dropdown-button")
+	const dropdown_button = document.querySelector("#dropdownButton0")
 
 	const sort = () => {
 		switch (id) {
@@ -556,7 +557,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 					 </svg> Default`
 
-				file.experimental.sort = null
+				settings.experimental.sort = null
 				break
 
 			case 1:
@@ -564,7 +565,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 					 </svg> A-Z`
 
-				file.experimental.sort = 1
+				settings.experimental.sort = 1
 				break
 
 			case 2:
@@ -572,7 +573,7 @@ const dropdownChoose = (id) => {
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 					</svg> Z-A`
 
-				file.experimental.sort = 2
+				settings.experimental.sort = 2
 				break
 		}
 	}
@@ -581,30 +582,324 @@ const dropdownChoose = (id) => {
 	sort()
 	save()
 
-	ipc.send("reload_application")
+	ipc.send("reloadApplicationWindow")
 }
 
-// ? webcam
-const webcam = () => {
+/**
+ * Save settings to disk
+ */
+const save = () => {
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
+}
+
+/**
+ * Rate Authme
+ */
+const rateAuthme = () => {
+	ipc.send("rateAuthme")
+}
+
+/**
+ * Send feedback
+ */
+const provideFeedback = () => {
+	ipc.send("provideFeedback")
+}
+
+/**
+ * Hide info dialog
+ */
+const showInfo = () => {
+	document.querySelector(".info").style.display = "block"
+}
+
+/**
+ * Hide update dialog
+ */
+const showUpdate = () => {
+	document.querySelector(".update").style.display = "block"
+}
+
+/**
+ * Open Authme folder
+ */
+const authmeFolder = () => {
+	shell.showItemInFolder(app.getPath("exe"))
+}
+
+/**
+ * Open setting folder
+ */
+const settingsFolder = () => {
+	shell.openPath(folder_path)
+}
+
+/**
+ * Open cache folder
+ */
+const cacheFolder = () => {
+	shell.openPath(path.join(app.getPath("appData"), "Authme"))
+}
+
+/*
+ * Open latest log
+ */
+const latestLog = () => {
+	ipc.send("logs")
+}
+
+/**
+ * Open logs folder
+ */
+const logsFolder = () => {
+	shell.openPath(path.join(folder_path, "logs"))
+}
+
+/**
+ * Shortcut links
+ */
+const shortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
+}
+
+const globalShortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
+}
+
+const quickCopyShortcutsLink = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=quick-copy-shortcuts")
+}
+
+/**
+ * Hide window
+ */
+const hide = () => {
+	ipc.send("toggleSettings")
+}
+
+/**
+ * Menu
+ */
+document.querySelector(".settings").disabled = true
+document.querySelector(".settings").classList.add("buttonmselected")
+let shortcut = false
+
+/**
+ * Remove menu button styles
+ */
+const removeButtonStyles = () => {
+	document.querySelector(".shortcuts").classList.remove("buttonmselected")
+	document.querySelector(".settings").classList.remove("buttonmselected")
+	document.querySelector(".experimental").classList.remove("buttonmselected")
+	document.querySelector(".codes").classList.remove("buttonmselected")
+}
+
+// control menu
+const menu = (evt, name) => {
+	let i
+
+	if (name === "shortcuts") {
+		removeButtonStyles()
+
+		document.querySelector(".shortcuts").classList.add("buttonmselected")
+
+		document.querySelector(".shortcuts").disabled = true
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".experimental").disabled = false
+		document.querySelector(".codes").disabled = false
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
+		shortcut = true
+
+		checkForIssuers()
+
+		ipc.send("shortcuts")
+	} else if (name === "setting") {
+		removeButtonStyles()
+
+		document.querySelector(".settings").classList.add("buttonmselected")
+
+		document.querySelector(".settings").disabled = true
+		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".experimental").disabled = false
+		document.querySelector(".codes").disabled = false
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
+	} else if (name === "experimental") {
+		removeButtonStyles()
+
+		document.querySelector(".experimental").classList.add("buttonmselected")
+
+		document.querySelector(".experimental").disabled = true
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".codes").disabled = false
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
+	} else if (name === "codes") {
+		removeButtonStyles()
+
+		document.querySelector(".codes").classList.add("buttonmselected")
+
+		document.querySelector(".experimental").disabled = false
+		document.querySelector(".settings").disabled = false
+		document.querySelector(".shortcuts").disabled = false
+		document.querySelector(".codes").disabled = true
+
+		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+
+		if (shortcut === true) {
+			ipc.send("shortcuts")
+
+			shortcut = false
+		}
+	}
+
+	const tabcontent = document.getElementsByClassName("tabcontent")
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none"
+	}
+
+	const tablinks = document.getElementsByClassName("tablinks")
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(" active", "")
+	}
+
+	document.getElementById(name).style.display = "block"
+	evt.currentTarget.className += " active"
+}
+
+/**
+ * Restart Authme
+ */
+const restart = () => {
+	setTimeout(() => {
+		app.relaunch()
+		app.exit()
+	}, 300)
+}
+
+/**
+ * Show About dialog
+ */
+const about = () => {
+	ipc.send("about")
+}
+
+/**
+ * Reload application window
+ */
+const reload = () => {
+	ipc.send("reloadApplicationWindow")
+}
+
+/**
+ * Dismiss dialog on click outside
+ */
+window.addEventListener("click", (event) => {
+	const dropdown_content0 = document.querySelector("#dropdownContent0")
+	const dropdown_button0 = document.querySelector("#dropdownButton0")
+	const dropdown_content1 = document.querySelector("#dropdownContent1")
+	const dropdown_button1 = document.querySelector("#dropdownButton1")
+	const sort_svg = document.querySelector("#sortSvg")
+	const sort_path = document.querySelector("#sortPath")
+	const link0 = document.querySelector("#link0")
+	const link1 = document.querySelector("#link1")
+	const link2 = document.querySelector("#link2")
+
+	if (event.target != dropdown_button0 && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
+		dropdown_content0.style.display = ""
+
+		dropdown_state = false
+	}
+
+	if (event.target != dropdown_content1 && event.target != dropdown_button1) {
+		dropdown_content1.style.display = ""
+
+		display_state = false
+	}
+})
+
+/**
+ * Display release notes
+ */
+const releaseNotes = () => {
+	ipc.send("releaseNotes")
+}
+
+/**
+ * Download manual update
+ */
+const manualUpdate = () => {
+	ipc.send("manualUpdate")
+}
+
+/**
+ * Display auto update download info
+ */
+ipc.on("updateInfo", (event, info) => {
+	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+})
+
+/**
+ * Display auto update popup if update available
+ */
+const updateAvailable = () => {
+	document.querySelector(".autoupdate").style.display = "block"
+}
+
+/**
+ * Display restart button if download finished
+ */
+const updateDownloaded = () => {
+	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateButton").style.display = "block"
+	document.querySelector("#updateClose").style.display = "block"
+}
+
+/**
+ * Restart app after the download finished
+ */
+const updateRestart = () => {
+	ipc.send("updateRestart")
+}
+
+/**
+ * Toggle import screen capture
+ */
+const screenCapture = () => {
 	const toggle = () => {
-		if (webcam_state === true) {
-			file.experimental.webcam = false
+		if (screen_capture_state === true) {
+			settings.experimental.screen_capture = false
 
 			save()
 
 			tgt8.textContent = "Off"
 			tgl8.checked = false
 
-			webcam_state = false
+			screen_capture_state = false
 		} else {
-			file.experimental.webcam = true
+			settings.experimental.screen_capture = true
 
 			save()
 
 			tgt8.textContent = "On"
 			tgl8.checked = true
 
-			webcam_state = true
+			screen_capture_state = true
 		}
 	}
 
@@ -630,307 +925,82 @@ const webcam = () => {
 		})
 }
 
-// ? save settings
-const save = () => {
-	fs.writeFileSync(path.join(file_path, "settings.json"), JSON.stringify(file, null, "\t"))
+/**
+ * Get screens
+ */
+const displays = screen.getAllDisplays()
+const displayChooser = document.querySelector("#dropdownContent1")
+
+for (let i = 1; i < displays.length + 1; i++) {
+	const element = document.createElement("a")
+
+	element.innerHTML = `
+	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	</svg>
+	Display #${i}
+	</a>
+	`
+
+	displayChooser.appendChild(element)
 }
 
-// ? release notes
-const releaseNotes = () => {
-	ipc.send("release_notes")
-}
+/**
+ * Toggle display dropdown
+ */
+let display_state = false
+const display = () => {
+	const dropdown_content = document.querySelector("#dropdownContent1")
 
-// ? download update
-const downloadUpdate = () => {
-	ipc.send("download_update")
-}
+	if (display_state === false) {
+		dropdown_content.style.visibility = "visible"
 
-// ? rate
-const rateAuthme = () => {
-	ipc.send("rate_authme")
-}
+		setTimeout(() => {
+			dropdown_content.style.display = "block"
+		}, 10)
 
-// ? feedback
-const provideFeedback = () => {
-	shell.openExternal("https://github.com/levminer/authme/issues")
-}
-
-// ? docs
-const onlineDocs = () => {
-	shell.openExternal("https://docs.authme.levminer.com")
-}
-
-// ? show info
-const showInfo = () => {
-	document.querySelector(".info").style.display = "block"
-}
-
-// ? show update
-const showUpdate = () => {
-	document.querySelector(".update").style.display = "block"
-}
-
-// ? authme folder
-const folder0 = () => {
-	ipc.send("app_path")
-}
-
-// ? settings folder
-const folder1 = () => {
-	shell.openPath(file_path)
-}
-
-// ? support
-const support = () => {
-	shell.openExternal("https://paypal.me/levminer")
-}
-
-// ? cache folder
-const folder2 = () => {
-	let cache_path
-
-	if (process.platform === "win32") {
-		cache_path = path.join(process.env.APPDATA, "/Authme")
-	} else if (process.platform === "linux") {
-		cache_path = path.join(process.env.HOME, "/.config/Authme")
-	} else if (process.platform === "darwin") {
-		cache_path = path.join(process.env.HOME, "/Library/Application Support/Authme")
-	}
-
-	shell.openPath(cache_path)
-}
-
-// ? status api
-const status = document.querySelector("#but6")
-
-const api = () => {
-	fetch("https://api.levminer.com/api/v1/status/all")
-		.then((res) => res.json())
-		.then((data) => {
-			try {
-				if (data.state === "up") {
-					status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
-					  </svg> \n All systems online`
-				} else {
-					status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
-					  </svg> \n Some systems offline`
-				}
-			} catch (error) {
-				return logger.warn("Error loading API", error)
-			}
-		})
-		.catch((error) => {
-			logger.warn("Can't connect to API", error)
-
-			status.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
-			  </svg> \n Can't connect to API`
-		})
-}
-
-api()
-
-// ? open status
-const statusLink = () => {
-	shell.openExternal("https://status.levminer.com")
-}
-
-// ? shortcuts docs
-const shortcutsLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
-}
-
-// ? shortcuts docs
-const globalShortcutsLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
-}
-
-const quickCopyShortcutsLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=quick-copy-shortcuts")
-}
-
-const hide = () => {
-	ipc.send("hide_settings")
-}
-
-document.querySelector(".settings").disabled = true
-document.querySelector(".settings").classList.add("buttonmselected")
-
-const removeButtonStyles = () => {
-	document.querySelector(".shortcuts").classList.remove("buttonmselected")
-	document.querySelector(".settings").classList.remove("buttonmselected")
-	document.querySelector(".experimental").classList.remove("buttonmselected")
-	document.querySelector(".codes").classList.remove("buttonmselected")
-}
-
-// ? menu
-let shortcut = false
-
-const menu = (evt, name) => {
-	let i
-
-	if (name === "shortcuts") {
-		removeButtonStyles()
-
-		document.querySelector(".shortcuts").classList.add("buttonmselected")
-
-		document.querySelector(".shortcuts").disabled = true
-		document.querySelector(".settings").disabled = false
-		document.querySelector(".experimental").disabled = false
-		document.querySelector(".codes").disabled = false
-
-		shortcut = true
-
-		ipc.send("shortcuts")
-	} else if (name === "setting") {
-		removeButtonStyles()
-
-		document.querySelector(".settings").classList.add("buttonmselected")
-
-		document.querySelector(".settings").disabled = true
-		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".experimental").disabled = false
-		document.querySelector(".codes").disabled = false
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
-	} else if (name === "experimental") {
-		removeButtonStyles()
-
-		document.querySelector(".experimental").classList.add("buttonmselected")
-
-		document.querySelector(".experimental").disabled = true
-		document.querySelector(".settings").disabled = false
-		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".codes").disabled = false
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
-	} else if (name === "codes") {
-		removeButtonStyles()
-
-		document.querySelector(".codes").classList.add("buttonmselected")
-
-		document.querySelector(".experimental").disabled = false
-		document.querySelector(".settings").disabled = false
-		document.querySelector(".shortcuts").disabled = false
-		document.querySelector(".codes").disabled = true
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
-	}
-
-	const tabcontent = document.getElementsByClassName("tabcontent")
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none"
-	}
-
-	const tablinks = document.getElementsByClassName("tablinks")
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "")
-	}
-
-	document.getElementById(name).style.display = "block"
-	evt.currentTarget.className += " active"
-}
-
-// ? restart
-const restart = () => {
-	setTimeout(() => {
-		app.relaunch()
-		app.exit()
-	}, 300)
-}
-
-// ? about
-const about = () => {
-	ipc.send("about")
-}
-
-// ? edit
-const edit = () => {
-	ipc.send("hide_edit")
-}
-// ? logs
-const logs = () => {
-	ipc.send("logs")
-}
-
-// ? build
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-}
-
-// ? offline mode
-let offline_mode = false
-let offline_closed = false
-let online_closed = false
-
-// ? send reload
-const reload = () => {
-	ipc.send("reload_application")
-}
-
-const check_for_internet = () => {
-	dns.lookup("google.com", (err) => {
-		if (err && err.code == "ENOTFOUND" && offline_closed === false) {
-			document.querySelector(".online").style.display = "none"
-			document.querySelector(".offline").style.display = "block"
-
-			offline_mode = true
-			offline_closed = true
-
-			logger.warn("Can't connect to the internet")
-		} else if (err === null && offline_mode === true && online_closed === false) {
-			document.querySelector(".online").style.display = "block"
-			document.querySelector(".offline").style.display = "none"
-
-			offline_mode = false
-			online_closed = true
-
-			logger.log("Connected to the internet")
-		} else if ((online_closed === true || offline_closed === true) && err === null) {
-			offline_mode = false
-			offline_closed = false
-			online_closed = false
-
-			logger.log("Connection restored")
-		}
-	})
-}
-
-check_for_internet()
-
-setInterval(() => {
-	check_for_internet()
-	api()
-}, 10000)
-
-// ? dismiss dialog on click outside
-window.addEventListener("click", (event) => {
-	const dropdown_content = document.querySelector(".dropdown-content")
-	const dropdown_button = document.querySelector(".dropdown-button")
-	const sort_svg = document.querySelector("#sort_svg")
-	const sort_path = document.querySelector("#sort_path")
-	const link0 = document.querySelector("#link0")
-	const link1 = document.querySelector("#link1")
-	const link2 = document.querySelector("#link2")
-
-	if (event.target != dropdown_button && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
+		display_state = true
+	} else {
 		dropdown_content.style.display = ""
 
-		dropdown_state = false
+		display_state = false
 	}
-})
+}
+
+const displayChoose = (id) => {
+	const toggle = () => {
+		drp1.innerHTML = `
+		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+		</svg>
+		Display #${id}
+		`
+
+		settings.settings.default_display = id
+		save()
+
+		display()
+	}
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: ["Yes", "No", "Cancel"],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
+}

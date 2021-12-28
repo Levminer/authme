@@ -1,0 +1,66 @@
+/* link */
+.link:link {
+	color: white;
+	font-size: 24px;
+	font-weight: bold;
+	transition: 0.2s ease-in;
+	text-decoration: underline !important;
+}
+
+.link:hover {
+	color: gray;
+	text-decoration: underline !important;
+}
+
+.link:visited {
+	color: white;
+	text-decoration: none !important;
+}
+
+/* toggle */
+.toggle:checked ~ .toggle-bg {
+	background-color: black !important;
+	transition: 0.2s ease-in;
+}
+
+/* input */
+.input:hover ~ #show_pass_0 {
+	transition: 0.2s ease-in;
+	stroke: white;
+}
+
+.input:hover ~ #show_pass_01 {
+	transition: 0.2s ease-in;
+	stroke: white;
+}
+
+.input:hover ~ #show_pass_1 {
+	transition: 0.2s ease-in;
+	stroke: white;
+}
+
+.input:hover ~ #show_pass_11 {
+	transition: 0.2s ease-in;
+	stroke: white;
+}
+
+/* button */
+.buttoni > svg {
+	position: relative;
+	top: 4px;
+}
+
+.buttonc > svg {
+	position: relative;
+	top: 4px;
+}
+
+.buttonm > svg {
+	position: relative;
+	top: 4px;
+}
+
+.buttonmselected {
+	background-color: rgb(30, 30, 30) !important;
+	border-color: rgb(30, 30, 30) !important;
+}
