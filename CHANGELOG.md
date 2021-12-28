@@ -1,5 +1,7 @@
 ### Authme 3.0.0 (2021. December 28.)
 
+-   [[a31121d](https://github.com/Levminer/authme/commit/a31121d)] Merge branch 'main' into dev (2021-12-28)
+-   [[c99c6c7](https://github.com/Levminer/authme/commit/c99c6c7)] Release build (2021-12-28)
 -   [[83d1edf](https://github.com/Levminer/authme/commit/83d1edf)] Window title information (2021-12-28)
 -   [[32d4c28](https://github.com/Levminer/authme/commit/32d4c28)] Refactor edit (2021-12-28)
 -   [[c393e6c](https://github.com/Levminer/authme/commit/c393e6c)] Refactor export (2021-12-28)
