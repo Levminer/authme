@@ -1411,7 +1411,7 @@ const releaseNotes = () => {
 					cancelId: 1,
 					noLink: true,
 					type: "info",
-					message: markdown.convert(res.data.body),
+					message: markdown.convert(res.data.body).split("Changelog")[0],
 				})
 				.then((result) => {
 					if (result.response === 0) {
@@ -1657,10 +1657,6 @@ const createTray = () => {
 			label: `Authme ${authme_version}`,
 			enabled: false,
 			icon: path.join(__dirname, "img/traymenu.png"),
-		},
-		{
-			label: pre_release ? `(${build_number})` : `(${release_date})`,
-			enabled: false,
 		},
 		{ type: "separator" },
 		{
