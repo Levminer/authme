@@ -724,7 +724,7 @@ const createWindows = () => {
 			axios
 				.get("https://api.levminer.com/api/v1/authme/releases")
 				.then((res) => {
-					if (res.data.tag_name > verify && res.data.tag_name != undefined && res.data.prerelease != true) {
+					if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
 						window_application.webContents.executeJavaScript("showUpdate()")
 
 						window_settings.on("show", () => {
@@ -1561,6 +1561,7 @@ app.whenReady()
 
 		createTray()
 		createMenu()
+		quickShortcuts()
 
 		/**
 		 * App controller
