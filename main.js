@@ -3,7 +3,6 @@ const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
 const { number, date } = require("./build.json")
 const remote = require("@electron/remote/main")
-const debug = require("electron-debug")
 const axios = require("axios").default
 const path = require("path")
 const fs = require("fs")
@@ -61,18 +60,13 @@ let menu = null
 let dev = false
 
 if (app.isPackaged === false) {
+	const debug = require("electron-debug")
+
 	debug({
 		showDevTools: false,
 	})
 
 	dev = true
-} else {
-	if (process.platform === "darwin") {
-		debug({
-			isEnabled: true,
-			showDevTools: false,
-		})
-	}
 }
 
 /**
@@ -907,6 +901,145 @@ const createWindows = () => {
 }
 
 /**
+ * Start Authme when the app is ready
+ */
+app.whenReady()
+	.then(() => {
+		logger.log("Starting app")
+
+		process.on("uncaughtException", (error) => {
+			logger.error("Error occurred while starting", error.stack)
+
+			dialog
+				.showMessageBox({
+					title: "Authme",
+					buttons: ["Report", "Close", "Exit"],
+					defaultId: 0,
+					cancelId: 1,
+					noLink: true,
+					type: "error",
+					message: `Error occurred while starting Authme! \n\n${error.stack}`,
+				})
+				.then((result) => {
+					if (result.response === 0) {
+						shell.openExternal("https://github.com/Levminer/authme/issues/")
+					} else if (result.response === 2) {
+						app.exit()
+					}
+				})
+		})
+
+		// Set application Id
+		if (dev === false) {
+			app.setAppUserModelId("Authme")
+		}
+
+		// Create windows
+		createWindows()
+
+		/**
+		 * Create tray and menu
+		 */
+		const icon_path = path.join(__dirname, "img/tray.png")
+		tray = new Tray(icon_path)
+
+		tray.on("click", () => {
+			showAppFromTray()
+			createTray()
+			createMenu()
+		})
+
+		createTray()
+		createMenu()
+		quickShortcuts()
+
+		/**
+		 * App controller
+		 */
+		if (settings.security.require_password === null) {
+			window_landing.on("ready-to-show", () => {
+				if (authenticated === false) {
+					if (landing_shown === false) {
+						setTimeout(() => {
+							window_landing.maximize()
+							window_landing.show()
+						}, 100)
+
+						landing_shown = true
+					}
+
+					logger.warn("First start")
+
+					if (dev === false) {
+						authme_launcher.enable()
+					}
+				}
+			})
+		}
+
+		if (settings.security.require_password === true) {
+			window_confirm.on("ready-to-show", () => {
+				if (authenticated === false) {
+					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+					setTimeout(() => {
+						window_confirm.maximize()
+						window_confirm.show()
+
+						setTimeout(() => {
+							window_landing.destroy()
+						}, 100)
+					}, 100)
+				}
+			})
+		}
+
+		if (settings.security.require_password === false) {
+			window_application.on("ready-to-show", () => {
+				if (authenticated === false) {
+					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+					setTimeout(() => {
+						window_application.maximize()
+						window_application.show()
+
+						setTimeout(() => {
+							window_confirm.destroy()
+							window_landing.destroy()
+						}, 100)
+					}, 100)
+
+					authenticated = true
+
+					createTray()
+					createMenu()
+				}
+			})
+		}
+	})
+	.catch((error) => {
+		logger.error("Error occurred while starting", error.stack)
+
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: ["Report", "Close", "Exit"],
+				defaultId: 0,
+				cancelId: 1,
+				noLink: true,
+				type: "error",
+				message: `Error occurred while starting Authme! \n\n${error.stack}`,
+			})
+			.then((result) => {
+				if (result.response === 0) {
+					shell.openExternal("https://github.com/Levminer/authme/issues/")
+				} else if (result.response === 2) {
+					app.exit()
+				}
+			})
+	})
+
+/**
  * Auto launch Authme on system start
  */
 const AutoLaunch = require("auto-launch")
@@ -1509,145 +1642,6 @@ power.on("lock-screen", () => {
 		logger.log("Authme locked by sleep")
 	}
 })
-
-/**
- * Start Authme when the app is ready
- */
-app.whenReady()
-	.then(() => {
-		logger.log("Starting app")
-
-		process.on("uncaughtException", (error) => {
-			logger.error("Error occurred while starting", error.stack)
-
-			dialog
-				.showMessageBox({
-					title: "Authme",
-					buttons: ["Report", "Close", "Exit"],
-					defaultId: 0,
-					cancelId: 1,
-					noLink: true,
-					type: "error",
-					message: `Error occurred while starting Authme! \n\n${error.stack}`,
-				})
-				.then((result) => {
-					if (result.response === 0) {
-						shell.openExternal("https://github.com/Levminer/authme/issues/")
-					} else if (result.response === 2) {
-						app.exit()
-					}
-				})
-		})
-
-		// Set application Id
-		if (dev === false) {
-			app.setAppUserModelId("Authme")
-		}
-
-		// Create windows
-		createWindows()
-
-		/**
-		 * Create tray and menu
-		 */
-		const icon_path = path.join(__dirname, "img/tray.png")
-		tray = new Tray(icon_path)
-
-		tray.on("click", () => {
-			showAppFromTray()
-			createTray()
-			createMenu()
-		})
-
-		createTray()
-		createMenu()
-		quickShortcuts()
-
-		/**
-		 * App controller
-		 */
-		if (settings.security.require_password === null) {
-			window_landing.on("ready-to-show", () => {
-				if (authenticated === false) {
-					if (landing_shown === false) {
-						setTimeout(() => {
-							window_landing.maximize()
-							window_landing.show()
-						}, 100)
-
-						landing_shown = true
-					}
-
-					logger.warn("First start")
-
-					if (dev === false) {
-						authme_launcher.enable()
-					}
-				}
-			})
-		}
-
-		if (settings.security.require_password === true) {
-			window_confirm.on("ready-to-show", () => {
-				if (authenticated === false) {
-					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
-
-					setTimeout(() => {
-						window_confirm.maximize()
-						window_confirm.show()
-
-						setTimeout(() => {
-							window_landing.destroy()
-						}, 100)
-					}, 100)
-				}
-			})
-		}
-
-		if (settings.security.require_password === false) {
-			window_application.on("ready-to-show", () => {
-				if (authenticated === false) {
-					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
-
-					setTimeout(() => {
-						window_application.maximize()
-						window_application.show()
-
-						setTimeout(() => {
-							window_confirm.destroy()
-							window_landing.destroy()
-						}, 100)
-					}, 100)
-
-					authenticated = true
-
-					createTray()
-					createMenu()
-				}
-			})
-		}
-	})
-	.catch((error) => {
-		logger.error("Error occurred while starting", error.stack)
-
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Report", "Close", "Exit"],
-				defaultId: 0,
-				cancelId: 1,
-				noLink: true,
-				type: "error",
-				message: `Error occurred while starting Authme! \n\n${error.stack}`,
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					shell.openExternal("https://github.com/Levminer/authme/issues/")
-				} else if (result.response === 2) {
-					app.exit()
-				}
-			})
-	})
 
 /**
  * Create tray menu
