@@ -49,7 +49,7 @@ if (app.isPackaged === false) {
 
 // check if running on linux
 if (process.platform !== "win32" && process.platform !== "darwin") {
-	document.querySelector("#disable_screen_capture_div").style.display = "none"
+	document.querySelector(".windowCapture").style.display = "none"
 }
 
 /**
@@ -653,21 +653,6 @@ const latestLog = () => {
  */
 const logsFolder = () => {
 	shell.openPath(path.join(folder_path, "logs"))
-}
-
-/**
- * Shortcut links
- */
-const shortcutsLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=shortcuts")
-}
-
-const globalShortcutsLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=gobal-shortcuts")
-}
-
-const quickCopyShortcutsLink = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=quick-copy-shortcuts")
 }
 
 /**
