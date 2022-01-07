@@ -16,6 +16,8 @@
 [![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/mac)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/releases)
 
+-   Also available on: [Microsoft Store](ms-windows-store://pdp/?productid=XP9M33RJSVD6JR), [winget](https://winget.run/pkg/Levminer/Authme)
+
 ## Latest Alpha
 
 -   Latest alpha version for advanced users.
