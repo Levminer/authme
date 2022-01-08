@@ -121,7 +121,7 @@
 		<!-- content -->
 		<div class="bg-gray-700 w-3/5 mx-auto mt-20 mb-60 rounded-2xl relative text-center content p-1">
 			<h1 class="h1 mb-5">Authme</h1>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5" id="choose">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5 hidden" id="choose">
 				<h3 class="pt-3">Please choose your import file!</h3>
 				<h4>If you don't have an import file containing your 2FA codes please create one!</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
@@ -139,7 +139,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5" id="starting">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5 hidden" id="starting">
 				<h3 class="pt-3">Getting started</h3>
 				<h4>Importing files</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
@@ -173,7 +173,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="save_container flex justify-center" id="save">
+			<div class="save_container justify-center hidden mb-5" id="save">
 				<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3 pb-5">
 					<h3 class="pt-3">Save codes</h3>
 					<h4>Save your 2FA codes to your computer for future use.</h4>
@@ -207,7 +207,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- grid -->
+			<!-- codes -->
 		</div>
 	</body>
 </html>

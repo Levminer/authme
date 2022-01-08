@@ -67,7 +67,7 @@ const query = []
 const description_query = []
 const name_query = []
 
-const name_state = settings.settings.codes_description
+const description_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
 const blur_state = settings.settings.blur_codes
 const search_state = settings.settings.search_history
@@ -167,105 +167,113 @@ const go = (data) => {
 			const element = document.createElement("div")
 
 			// set div elements
-			if (blur_state === true && name_state === true) {
+			if (blur_state === true && description_state === true) {
 				element.innerHTML = `
-					<div class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
+					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
+					<div class="flex flex-row justify-center items-center">
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Name</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3 class="relative -top-1">Code</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Time</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+						</div>
 					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
+					<div class="flex flex-col justify-center items-center">
+						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${counter}">Description</p>
+						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+							</svg>
+							Copy
+						</button>
 					</div>
 					</div>
 					`
 			} else if (blur_state === true) {
 				element.innerHTML = `
-					<div class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
+					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div class="flex flex-row justify-center items-center">
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Name</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3 class="relative -top-1">Code</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Time</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+						</div>
 					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
+					<div class="flex flex-col justify-center items-center">
+						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+							</svg>
+							Copy
+						</button>
 					</div>
 					</div>
 					`
-			} else if (name_state === true) {
-				element.innerHTML = `
-					<div class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
+			} else if (description_state === true) {
+				element.innerHTML = `					
+					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
+					<div class="flex flex-row justify-center items-center">
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Name</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3 class="relative -top-1">Code</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">Code</p>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Time</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+						</div>
 					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<p tabindex="0" class="text3 name" id="text${counter}">Description</p>
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-1" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
+					<div class="flex flex-col justify-center items-center">
+						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${counter}">Description</p>
+						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+							</svg>
+							Copy
+						</button>
 					</div>
 					</div>
 					`
 			} else {
-				element.innerHTML = `
-					<div class="grid" id="grid${counter}">
-					<div class="div1">
-					<h3>Name</h3>
-					<p tabindex="0" class="text2 mt-11 mx-3" id="name${counter}">Name</p>
+				element.innerHTML = `					
+					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div class="flex flex-row justify-center items-center">
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Name</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3 class="relative -top-1">Code</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">Code</p>
+						</div>
+						<div class="flex flex-col flex-1 justify-center items-center">
+							<h3>Time</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+						</div>
 					</div>
-					<div class="div2">
-					<h3>Code</h3>
-					<p tabindex="0" class="input w-[126px] m-0 text-xl -top-1.5 relative select-all" id="code${counter}">Code</p>
-					</div>
-					<div class="div3">
-					<h3>Time</h3>
-					<p tabindex="0" class="text2 mt-11" id="time${counter}">Time</p>
-					</div>
-					<div class="div4">
-					<button onclick="copyCode(${i})" class="buttoni w-[194px] -mt-3" id="copy${counter}">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					Copy
-					</button>
+					<div class="flex flex-col justify-center items-center">
+						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+							</svg>
+							Copy
+						</button>
 					</div>
 					</div>
 					`
@@ -290,7 +298,7 @@ const go = (data) => {
 			description_query.push(names[i].toLowerCase().trim())
 
 			// setting elements
-			if (name_state === true) {
+			if (description_state === true) {
 				text.textContent = names[i]
 			}
 
@@ -308,8 +316,8 @@ const go = (data) => {
 			code.textContent = token
 			time.textContent = remaining_time
 
-			if (name_state === true) {
-				const grid = document.querySelector(`#grid${i}`)
+			if (description_state === true) {
+				const grid = document.querySelector(`#codes${i}`)
 				grid.style.height = "310px"
 			}
 
@@ -337,7 +345,7 @@ const go = (data) => {
 
 	// set block count
 	for (let i = 0; i < names.length; i++) {
-		const block = document.querySelector(`#grid${i}`)
+		const block = document.querySelector(`#codes${i}`)
 		block.style.display = "grid"
 	}
 
@@ -407,7 +415,7 @@ const copyCode = (id) => {
 		setTimeout(() => {
 			if (copy_state === true) {
 				for (let i = 0; i < query.length; i++) {
-					const div = document.querySelector(`#grid${[i]}`)
+					const div = document.querySelector(`#codes${[i]}`)
 					div.style.display = "grid"
 				}
 
@@ -435,7 +443,7 @@ const search = () => {
 
 	// restart
 	for (let i = 0; i < name_query.length; i++) {
-		const div = document.querySelector(`#grid${[i]}`)
+		const div = document.querySelector(`#codes${[i]}`)
 		div.style.display = "grid"
 	}
 
@@ -448,7 +456,7 @@ const search = () => {
 	name_query.forEach((result) => {
 		if (settings.settings.search_filter.name === true && settings.settings.search_filter.description === false) {
 			if (!result.startsWith(input)) {
-				const div = document.querySelector(`#grid${[i]}`)
+				const div = document.querySelector(`#codes${[i]}`)
 				div.style.display = "none"
 
 				if (div.style.display === "none") {
@@ -457,7 +465,7 @@ const search = () => {
 			}
 		} else if (settings.settings.search_filter.description === true && settings.settings.search_filter.name === false) {
 			if (!description_query[i].startsWith(input)) {
-				const div = document.querySelector(`#grid${[i]}`)
+				const div = document.querySelector(`#codes${[i]}`)
 				div.style.display = "none"
 
 				if (div.style.display === "none") {
@@ -466,7 +474,7 @@ const search = () => {
 			}
 		} else {
 			if (!query[i].includes(input)) {
-				const div = document.querySelector(`#grid${[i]}`)
+				const div = document.querySelector(`#codes${[i]}`)
 				div.style.display = "none"
 
 				if (div.style.display === "none") {
@@ -500,7 +508,7 @@ const search = () => {
 	// if search empty
 	if (search.value == "") {
 		for (let i = 0; i < name_query.length; i++) {
-			const div = document.querySelector(`#grid${[i]}`)
+			const div = document.querySelector(`#codes${[i]}`)
 			div.style.display = "grid"
 		}
 	}
