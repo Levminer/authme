@@ -1415,9 +1415,20 @@ ipc.on("support", () => {
 })
 
 /**
- * Show rate Authme dialog
+ * Open Microsoft Store link
  */
 ipc.on("rateAuthme", () => {
+	shell.openExternal("ms-windows-store://pdp/?productid=XP9M33RJSVD6JR")
+
+	settings.statistics.rated = true
+
+	saveSettings()
+})
+
+/**
+ * Open GitHub link
+ */
+ipc.on("starAuthme", () => {
 	shell.openExternal("https://github.com/Levminer/authme/")
 
 	settings.statistics.rated = true

@@ -766,6 +766,10 @@ const rateAuthme = () => {
 	ipc.send("rateAuthme")
 }
 
+const starAuthme = () => {
+	ipc.send("starAuthme")
+}
+
 const provideFeedback = () => {
 	ipc.send("provideFeedback")
 }

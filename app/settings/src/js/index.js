@@ -593,10 +593,14 @@ const save = () => {
 }
 
 /**
- * Rate Authme
+ * Feedback buttons
  */
 const rateAuthme = () => {
 	ipc.send("rateAuthme")
+}
+
+const starAuthme = () => {
+	ipc.send("starAuthme")
 }
 
 /**
