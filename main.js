@@ -401,7 +401,7 @@ const createWindows = () => {
 	 * Create windows
 	 */
 	window_landing = new BrowserWindow({
-		title: `Authme ${authme_version}`,
+		title: `Authme (${authme_version})`,
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -425,7 +425,7 @@ const createWindows = () => {
 	})
 
 	window_confirm = new BrowserWindow({
-		title: `Authme ${authme_version}`,
+		title: `Authme (${authme_version})`,
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -449,7 +449,7 @@ const createWindows = () => {
 	})
 
 	window_application = new BrowserWindow({
-		title: `Authme ${authme_version}`,
+		title: `Authme (${authme_version})`,
 		x: display.bounds.x,
 		y: display.bounds.y,
 		width: 1900,
@@ -1660,7 +1660,7 @@ power.on("lock-screen", () => {
 const createTray = () => {
 	const contextmenu = Menu.buildFromTemplate([
 		{
-			label: `Authme ${authme_version}`,
+			label: `Authme (${authme_version})`,
 			enabled: false,
 			icon: path.join(__dirname, "img/traymenu.png"),
 		},
