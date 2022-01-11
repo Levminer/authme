@@ -1,5 +1,6 @@
 ### Authme 3.0.1 (2022. January 11.)
 
+-   [[2272b8f](https://github.com/Levminer/authme/commit/2272b8f)] Update changelog (2022-01-11)
 -   [[d1f02d4](https://github.com/Levminer/authme/commit/d1f02d4)] Confirm password spam protection #175 (2022-01-09)
 -   [[60071f5](https://github.com/Levminer/authme/commit/60071f5)] Update version display (2022-01-09)
 -   [[7e6d20a](https://github.com/Levminer/authme/commit/7e6d20a)] Available on Microsoft Store #174 (2022-01-08)
