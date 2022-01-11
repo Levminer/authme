@@ -155,9 +155,16 @@
 
 								<p class="mx-3 flex flex-row relative top-3">
 									Enjoying Authme?
-									<button type="button" onclick="rateAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="rateAuthme()" class="ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+										</svg>
+										Rate on Microsoft Store
+									</button>
+
+									<button type="button" onclick="starAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
 										</svg>
 										Star on GitHub
 									</button>
@@ -166,7 +173,7 @@
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
 										</svg>
-										Provide feedback on GitHub
+										Provide feedback
 									</button>
 								</p>
 							</div>
@@ -214,7 +221,7 @@
 								<span id="tgt1" class="text-black text-xl">-</span>
 							</div>
 							<hr />
-							<div id="disable_screen_capture_div">
+							<div class="windowCapture">
 								<h3>Window capture</h3>
 								<h4>Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.</h4>
 								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
@@ -323,7 +330,7 @@
 							<br />
 							<hr />
 							<h3>Blur codes</h3>
-							<h4>Blur the saved codes. You can still copy it or hover over it to reveal.</h4>
+							<h4>Blur the saved codes. You can still copy the codes or hover over the codes to show them.</h4>
 							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 								<a href="#" onclick="blurCodes()">
 									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
@@ -364,16 +371,8 @@
 							<h4>
 								You can modify the shortcuts here, read the documentation for more information.
 								<br />
-								Shortcuts not work on this page, go back to the settings tab to reactivate them!
+								Shortcuts not work on this tab, go to any other settings tab to reactivate them!
 							</h4>
-							<button class="buttoni" onclick="shortcutsLink()">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-								</svg>
-								Documentation
-							</button>
-							<br />
-							<br />
 							<br />
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
@@ -788,16 +787,8 @@
 							<h4>
 								You can modify the global shortcuts here, read the documentation for more information.
 								<br />
-								Shortcuts not work on this page, go back to the settings tab to reactivate them!
+								Shortcuts not work on this tab, go to any other settings tab to reactivate them!
 							</h4>
-							<button class="buttoni" onclick="globalShortcutsLink()">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-								</svg>
-								Documentation
-							</button>
-							<br />
-							<br />
 							<br />
 							<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
 								<div class="flex justify-center items-center">
@@ -887,16 +878,8 @@
 							<h4>
 								You can create a shortcut for your most used codes to copy quickly.
 								<br />
-								Shortcuts not work on this page, go back to the settings tab to reactivate them!
+								Shortcuts not work on this tab, go to any other settings tab to reactivate them!
 							</h4>
-							<button class="buttoni" onclick="quickCopyShortcutsLink()">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-								</svg>
-								Read docs
-							</button>
-							<br />
-							<br />
 							<br />
 							<div class="quick"></div>
 						</div>

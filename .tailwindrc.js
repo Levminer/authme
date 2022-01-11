@@ -37,6 +37,7 @@ module.exports = {
 
 			screens: {
 				lg: "1400px",
+				md: "200px",
 			},
 
 			stroke: (theme) => ({

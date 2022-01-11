@@ -47,6 +47,6 @@ if (process.platform === "win32") {
  */
 ipc.on("refreshMenu", () => {
 	if (loaded === true) {
-		titlebar.updateMenu(Menu.getApplicationMenu())
+		titlebar.updateOptions({ menu: Menu.getApplicationMenu() })
 	}
 })

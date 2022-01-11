@@ -95,9 +95,16 @@
 
 					<p class="mx-3 flex flex-row relative top-3">
 						Enjoying Authme?
-						<button type="button" onclick="rateAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+						<button type="button" onclick="rateAuthme()" class="ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
 							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+							</svg>
+							Rate on Microsoft Store
+						</button>
+
+						<button type="button" onclick="starAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
 							</svg>
 							Star on GitHub
 						</button>
@@ -106,7 +113,7 @@
 							<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
 							</svg>
-							Provide feedback on GitHub
+							Provide feedback
 						</button>
 					</p>
 				</div>
@@ -121,7 +128,7 @@
 		<!-- content -->
 		<div class="bg-gray-700 w-3/5 mx-auto mt-20 mb-60 rounded-2xl relative text-center content p-1">
 			<h1 class="h1 mb-5">Authme</h1>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5" id="choose">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5 hidden" id="choose">
 				<h3 class="pt-3">Please choose your import file!</h3>
 				<h4>If you don't have an import file containing your 2FA codes please create one!</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
@@ -139,7 +146,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5" id="starting">
+			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5 hidden" id="starting">
 				<h3 class="pt-3">Getting started</h3>
 				<h4>Importing files</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
@@ -173,7 +180,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="save_container flex justify-center" id="save">
+			<div class="save_container justify-center hidden mb-5" id="save">
 				<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3 pb-5">
 					<h3 class="pt-3">Save codes</h3>
 					<h4>Save your 2FA codes to your computer for future use.</h4>
@@ -207,7 +214,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- grid -->
+			<!-- codes -->
 		</div>
 	</body>
 </html>

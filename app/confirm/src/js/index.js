@@ -123,9 +123,21 @@ const check_integrity = () => {
 /**
  * Compare passwords
  */
+let tries = 0
+
 const unhashPassword = async () => {
 	if (integrity === false) {
 		check_integrity()
+	}
+
+	if (tries === 5) {
+		setTimeout(() => {
+			tries = 3
+
+			text.textContent = "Try again!"
+		}, 5000)
+
+		return (text.textContent = "Please try again in 5 seconds!")
 	}
 
 	// read settings
@@ -154,6 +166,8 @@ const unhashPassword = async () => {
 
 		text.style.color = "#CC001B"
 		text.textContent = "Passwords don't match! Try again!"
+
+		tries++
 	}
 }
 

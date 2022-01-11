@@ -1,5 +1,22 @@
+### Authme 3.0.1 (2022. January 11.)
+
+-   [[d1f02d4](https://github.com/Levminer/authme/commit/d1f02d4)] Confirm password spam protection #175 (2022-01-09)
+-   [[60071f5](https://github.com/Levminer/authme/commit/60071f5)] Update version display (2022-01-09)
+-   [[7e6d20a](https://github.com/Levminer/authme/commit/7e6d20a)] Available on Microsoft Store #174 (2022-01-08)
+-   [[b02203c](https://github.com/Levminer/authme/commit/b02203c)] Migrate 2FA codes container to tailwind (2022-01-08)
+-   [[7ad2118](https://github.com/Levminer/authme/commit/7ad2118)] Update packages (2022-01-07)
+-   [[f374b88](https://github.com/Levminer/authme/commit/f374b88)] Update readme (2022-01-07)
+-   [[285f473](https://github.com/Levminer/authme/commit/285f473)] Settings better wording (2022-01-06)
+-   [[efaa065](https://github.com/Levminer/authme/commit/efaa065)] Improve startup time (2022-01-05)
+-   [[f8771c4](https://github.com/Levminer/authme/commit/f8771c4)] Fix manual update and quick shortcuts (2022-01-02)
+-   [[7cafbe6](https://github.com/Levminer/authme/commit/7cafbe6)] Fix release notes (2021-12-29)
+-   [[b703350](https://github.com/Levminer/authme/commit/b703350)] Bump version (2021-12-28)
+-   [[293f26b](https://github.com/Levminer/authme/commit/293f26b)] Merge branch 'main' into dev (2021-12-28)
+
 ### Authme 3.0.0 (2021. December 28.)
 
+-   [[a31121d](https://github.com/Levminer/authme/commit/a31121d)] Merge branch 'main' into dev (2021-12-28)
+-   [[c99c6c7](https://github.com/Levminer/authme/commit/c99c6c7)] Release build (2021-12-28)
 -   [[83d1edf](https://github.com/Levminer/authme/commit/83d1edf)] Window title information (2021-12-28)
 -   [[32d4c28](https://github.com/Levminer/authme/commit/32d4c28)] Refactor edit (2021-12-28)
 -   [[c393e6c](https://github.com/Levminer/authme/commit/c393e6c)] Refactor export (2021-12-28)
