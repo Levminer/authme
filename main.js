@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power, screen } = require("electron")
+const { en, hu } = require("@levminer/languages")
 const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
 const { number, date } = require("./build.json")
@@ -272,6 +273,9 @@ if (settings.settings.hardware_acceleration === false) {
 	app.disableHardwareAcceleration()
 }
 
+/* Set language */
+let lang = en
+
 /**
  * Show application window from tray
  */
@@ -368,6 +372,25 @@ const exitFromTray = () => {
  */
 const createWindows = () => {
 	logger.log("Started creating windows")
+
+	/**
+	 * Get language
+	 */
+	const locale = app.getLocale().slice(0, 2)
+
+	switch (locale) {
+		case "en":
+			lang = en
+			break
+
+		case "hu":
+			lang = hu
+			break
+
+		default:
+			lang = en
+			break
+	}
 
 	/**
 	 * Window Controls Overlay
@@ -795,7 +818,7 @@ const createWindows = () => {
 		if (manual_update === true) {
 			dialog.showMessageBox({
 				title: "Authme",
-				buttons: ["Close"],
+				buttons: [lang.button.close],
 				defaultId: 0,
 				cancelId: 1,
 				type: "info",
@@ -817,7 +840,7 @@ const createWindows = () => {
 
 		dialog.showMessageBox({
 			title: "Authme",
-			buttons: ["Close"],
+			buttons: [lang.button.close],
 			defaultId: 0,
 			cancelId: 1,
 			type: "error",
@@ -913,7 +936,7 @@ app.whenReady()
 			dialog
 				.showMessageBox({
 					title: "Authme",
-					buttons: ["Report", "Close", "Exit"],
+					buttons: ["Report", lang.button.close, "Exit"],
 					defaultId: 0,
 					cancelId: 1,
 					noLink: true,
@@ -1023,7 +1046,7 @@ app.whenReady()
 		dialog
 			.showMessageBox({
 				title: "Authme",
-				buttons: ["Report", "Close", "Exit"],
+				buttons: ["Report", lang.button.close, "Exit"],
 				defaultId: 0,
 				cancelId: 1,
 				noLink: true,
@@ -1332,7 +1355,7 @@ ipc.on("logs", () => {
  * Show about dialog
  */
 ipc.on("about", () => {
-	about()
+	version()
 })
 
 /**
@@ -1342,7 +1365,7 @@ ipc.on("abort", () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Help", "Close"],
+			buttons: ["Help", lang.button.close],
 			type: "error",
 			defaultId: 0,
 			cancelId: 1,
@@ -1386,7 +1409,7 @@ ipc.on("manualUpdate", () => {
 				dialog
 					.showMessageBox({
 						title: "Authme",
-						buttons: ["Download", "Close"],
+						buttons: ["Download", lang.button.close],
 						defaultId: 0,
 						cancelId: 1,
 						noLink: true,
@@ -1515,7 +1538,7 @@ const logs = () => {
 /**
  * About dialog
  */
-const about = () => {
+const version = () => {
 	const message = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
@@ -1523,7 +1546,7 @@ const about = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Copy", "Close"],
+			buttons: [lang.button.copy, lang.button.close],
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
@@ -1550,7 +1573,7 @@ const releaseNotes = () => {
 			dialog
 				.showMessageBox({
 					title: "Authme",
-					buttons: ["More", "Close"],
+					buttons: [lang.button.more, lang.button.close],
 					defaultId: 1,
 					cancelId: 1,
 					noLink: true,
@@ -1577,7 +1600,7 @@ const support = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["PayPal", "Close"],
+			buttons: ["PayPal", lang.button.close],
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
@@ -1598,7 +1621,7 @@ const feedback = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["GitHub", "Email", "Close"],
+			buttons: ["GitHub", "Email", lang.button.close],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
@@ -1666,7 +1689,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: application_shown ? "Hide App" : "Show App",
+			label: application_shown ? lang.tray.hide_app : lang.tray.show_app,
 			accelerator: shortcuts ? "" : settings.global_shortcuts.show,
 			click: () => {
 				showAppFromTray()
@@ -1676,7 +1699,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: "Settings",
+			label: lang.tray.settings,
 			enabled: authenticated,
 			accelerator: shortcuts ? "" : settings.global_shortcuts.settings,
 			click: () => {
@@ -1685,7 +1708,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: "Exit App",
+			label: lang.tray.exit_app,
 			accelerator: shortcuts ? "" : settings.global_shortcuts.exit,
 			click: () => {
 				exitFromTray()
@@ -1703,10 +1726,10 @@ const createTray = () => {
 const createMenu = () => {
 	const template = [
 		{
-			label: "File",
+			label: lang.menu.file,
 			submenu: [
 				{
-					label: application_shown ? "Hide App" : "Show App",
+					label: application_shown ? lang.menu.hide_app : lang.menu.show_app,
 					accelerator: shortcuts ? "" : settings.shortcuts.show,
 					click: () => {
 						showAppFromTray()
@@ -1718,7 +1741,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Settings",
+					label: lang.menu.settings,
 					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.settings,
 					click: () => {
@@ -1752,7 +1775,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Exit",
+					label: lang.menu.exit,
 					accelerator: shortcuts ? "" : settings.shortcuts.exit,
 					click: () => {
 						tray_minimized = false
@@ -1764,10 +1787,10 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "View",
+			label: lang.menu.view,
 			submenu: [
 				{
-					label: "Reset",
+					label: lang.menu.reset,
 					role: shortcuts ? "" : "resetZoom",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_reset,
 				},
@@ -1775,7 +1798,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Zoom In",
+					label: lang.menu.zoom_in,
 					role: shortcuts ? "" : "zoomIn",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_in,
 				},
@@ -1783,17 +1806,17 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Zoom Out",
+					label: lang.menu.zoom_out,
 					role: shortcuts ? "" : "zoomOut",
 					accelerator: shortcuts ? "" : settings.shortcuts.zoom_out,
 				},
 			],
 		},
 		{
-			label: "Tools",
+			label: lang.menu.tools,
 			submenu: [
 				{
-					label: "Edit Codes",
+					label: lang.menu.edit_codes,
 					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
@@ -1827,7 +1850,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Import",
+					label: lang.menu.import,
 					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.import,
 					click: () => {
@@ -1861,7 +1884,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Export",
+					label: lang.menu.export,
 					enabled: authenticated,
 					accelerator: shortcuts ? "" : settings.shortcuts.export,
 					click: () => {
@@ -1894,16 +1917,16 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "Help",
+			label: lang.menu.help,
 			submenu: [
 				{
-					label: "Documentation",
+					label: lang.menu.documentation,
 					accelerator: shortcuts ? "" : settings.shortcuts.docs,
 					click: () => {
 						dialog
 							.showMessageBox({
 								title: "Authme",
-								buttons: ["Open", "Close"],
+								buttons: [lang.button.open, lang.button.close],
 								defaultId: 1,
 								cancelId: 1,
 								noLink: true,
@@ -1921,7 +1944,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Release Notes",
+					label: lang.menu.release_notes,
 					accelerator: shortcuts ? "" : settings.shortcuts.release,
 					click: () => {
 						releaseNotes()
@@ -1931,7 +1954,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Support Development",
+					label: lang.menu.support_development,
 					accelerator: shortcuts ? "" : settings.shortcuts.support,
 					click: () => {
 						support()
@@ -1940,16 +1963,16 @@ const createMenu = () => {
 			],
 		},
 		{
-			label: "About",
+			label: lang.menu.about,
 			submenu: [
 				{
-					label: "Show Licenses",
+					label: lang.menu.show_licenses,
 					accelerator: shortcuts ? "" : settings.shortcuts.licenses,
 					click: () => {
 						dialog
 							.showMessageBox({
 								title: "Authme",
-								buttons: ["More", "Close"],
+								buttons: [lang.button.more, lang.button.close],
 								defaultId: 1,
 								cancelId: 1,
 								noLink: true,
@@ -1967,7 +1990,7 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Update",
+					label: lang.menu.update,
 					accelerator: shortcuts ? "" : settings.shortcuts.update,
 					click: () => {
 						if (platform === "windows") {
@@ -1998,7 +2021,7 @@ const createMenu = () => {
 									} else {
 										dialog.showMessageBox({
 											title: "Authme",
-											buttons: ["Close"],
+											buttons: [lang.button.close],
 											defaultId: 0,
 											cancelId: 1,
 											type: "info",
@@ -2018,10 +2041,10 @@ const createMenu = () => {
 					type: "separator",
 				},
 				{
-					label: "Info",
+					label: lang.menu.info,
 					accelerator: shortcuts ? "" : settings.shortcuts.info,
 					click: () => {
-						about()
+						version()
 					},
 				},
 			],
