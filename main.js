@@ -1527,6 +1527,14 @@ ipc.on("loggerError", (event, data) => {
 })
 
 /**
+ * Send lang code
+ */
+ipc.on("lang", (event) => {
+	const lang_code = app.getLocale().slice(0, 2)
+	event.returnValue = { lang_code }
+})
+
+/**
  * Logger path
  */
 const logs = () => {
