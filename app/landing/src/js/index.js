@@ -1,4 +1,4 @@
-const { aes, password } = require("@levminer/lib")
+const { aes, password, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { app, dialog } = require("@electron/remote")
 const { ipcRenderer: ipc } = require("electron")
@@ -17,6 +17,11 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("landing")
+
+/**
+ * Localization
+ */
+localization.localize("landing")
 
 /**
  * If running in development
