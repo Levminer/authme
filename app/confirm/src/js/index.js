@@ -1,5 +1,6 @@
 const logger = require("@levminer/lib/logger/renderer")
 const { app, dialog } = require("@electron/remote")
+const { localization } = require("@levminer/lib")
 const { ipcRenderer: ipc } = require("electron")
 const bcrypt = require("bcryptjs")
 const path = require("path")
@@ -16,6 +17,11 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("confirm")
+
+/**
+ * Localization
+ */
+localization.localize("confirm")
 
 /**
  * Check if running in development
