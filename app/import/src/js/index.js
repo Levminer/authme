@@ -1,5 +1,5 @@
 const { app, dialog, shell, desktopCapturer, BrowserWindow } = require("@electron/remote")
-const { qrcodeConverter, time } = require("@levminer/lib")
+const { qrcodeConverter, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const QrcodeDecoder = require("qrcode-decoder").default
 const { ipcRenderer: ipc } = require("electron")
@@ -17,6 +17,11 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("import")
+
+/**
+ * Localization
+ */
+localization.localize("import")
 
 /**
  * Check if running in development

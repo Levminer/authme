@@ -27,12 +27,12 @@
 		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
 			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
 			<h2>Import</h2>
-			<h4>You can create your import file from QR codes and Google Authenticator QR codes.</h4>
+			<h4 data-loc>You can create your import file from QR codes and Google Authenticator QR codes.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 				</svg>
-				Close window
+				<span data-loc>Close window</span>
 			</button>
 		</div>
 
@@ -43,14 +43,14 @@
 					<h2 class="pt-5">Import</h2>
 					<h3>QR code</h3>
 					<details class="details mb-8">
-						<summary class="summary">Instructions</summary>
+						<summary data-loc class="summary">Instructions</summary>
 						<h4>
-							Just screenshot the QR code(s) you want to import, save them on your computer, and choose the image(s) you saved.
+							<span data-loc> Just screenshot the QR code(s) you want to import, save them on your computer, and choose the image(s) you saved.</span>
 							<br />
 							<br />
-							If you need more steps or help:
+							<span data-loc>If you need more steps or help:</span>
 							<br />
-							<a class="link" href="#qrLink" onclick="qrLink()">Detailed steps</a>
+							<a data-loc class="link" href="#qrLink" onclick="qrLink()">Detailed steps</a>
 						</h4>
 					</details>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
@@ -58,14 +58,14 @@
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
 							</svg>
-							Choose image(s)
+							<span data-loc>Choose image(s)</span>
 						</button>
 						<button class="buttoni mb-8" onclick="qrCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
 							</svg>
-							Use webcam
+							<span data-loc>Use webcam</span>
 						</button>
 						<button class="buttoni mb-8 screenCapture hidden" onclick="qrScreen()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,14 +87,14 @@
 					<h2 class="pt-5">Advanced import</h2>
 					<h3>Google Authenticator QR code</h3>
 					<details class="details mb-8">
-						<summary class="summary">Instructions</summary>
+						<summary data-loc class="summary">Instructions</summary>
 						<h4>
-							Tap on the three dots on the top right corner of the screen and export your accounts, take a picture of the export QR code(s), and choose the image(s) you saved and transferred to your computer.
+							<span data-loc>Tap on the three dots on the top right corner of the screen and export your accounts, take a picture of the export QR code(s), and choose the image(s) you saved and transferred to your computer.</span>
 							<br />
 							<br />
-							If you need more steps or help:
+							<span data-loc>If you need more steps or help:</span>
 							<br />
-							<a class="link" href="#gaLink" onclick="gaLink()">Detailed steps</a>
+							<a data-loc class="link" href="#gaLink" onclick="gaLink()">Detailed steps</a>
 						</h4>
 					</details>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
@@ -102,14 +102,14 @@
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
 							</svg>
-							Choose image(s)
+							<span data-loc>Choose image(s)</span>
 						</button>
 						<button class="buttoni mb-8" onclick="gaCamera()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
 							</svg>
-							Use webcam
+							<span data-loc>Use webcam</span>
 						</button>
 					</div>
 					<video id="gaVideo" class="hidden mx-auto" autoplay></video>
