@@ -1,7 +1,7 @@
 const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
+const { convert, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
-const { convert } = require("@levminer/lib")
 const path = require("path")
 const fs = require("fs")
 
@@ -18,6 +18,11 @@ window.onerror = (error) => {
 logger.getWindow("application")
 
 /**
+ * Localization
+ */
+localization.localize("settings")
+
+/**
  * Get app information
  */
 const res = ipc.sendSync("info")
@@ -32,11 +37,6 @@ if (res.build_number.startsWith("alpha")) {
 	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
 	document.querySelector(".build").style.display = "block"
 }
-
-// set app version
-document.querySelector(".about").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-</svg> Authme (${res.authme_version})`
 
 /**
  * If running in development
