@@ -129,68 +129,68 @@
 		<div class="bg-gray-700 w-3/5 mx-auto mt-20 mb-60 rounded-2xl relative text-center content p-1">
 			<h1 class="h1 mb-5">Authme</h1>
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5 hidden" id="choose">
-				<h3 class="pt-3">Please choose your import file!</h3>
-				<h4>If you don't have an import file containing your 2FA codes please create one!</h4>
+				<h3 data-loc class="pt-3">Choose your import file</h3>
+				<h4 data-loc>If you don't have an import file containing your 2FA codes please create one!</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
 					<button class="buttoni" id="input" onclick="loadFile()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" />
 						</svg>
-						Choose import file
+						<span data-loc>Choose import file</span>
 					</button>
 					<button class="buttoni" onclick="createFile()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 						</svg>
-						Create import file
+						<span data-loc>Create import file</span>
 					</button>
 				</div>
 			</div>
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 pb-5 hidden" id="starting">
-				<h3 class="pt-3">Getting started</h3>
-				<h4>Importing files</h4>
+				<h3 data-loc class="pt-3">Getting started</h3>
+				<h4 data-loc>Importing files</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
 					<button class="buttoni" onclick="readDocs()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
 						</svg>
-						Read online docs
+						<span data-loc>Read online docs</span>
 					</button>
 					<button class="buttoni" onclick="sampleImport()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 						</svg>
-						Sample import file
+						<span data-loc>Sample import file</span>
 					</button>
 				</div>
-				<h4>Useful options</h4>
+				<h4 data-loc>Useful options</h4>
 				<div class="flex flex-row flex-wrap gap-3 items-center justify-center">
 					<button class="buttoni" onclick="configureSettings()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 						</svg>
-						Configure settings
+						<span data-loc>Configure settings</span>
 					</button>
 					<button class="buttoni" onclick="supportDevelopment()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
 						</svg>
-						Support development
+						<span data-loc>Support development</span>
 					</button>
 				</div>
 			</div>
 			<div class="save_container justify-center hidden mb-5" id="save">
 				<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3 pb-5">
-					<h3 class="pt-3">Save codes</h3>
-					<h4>Save your 2FA codes to your computer for future use.</h4>
+					<h3 data-loc class="pt-3">Save codes</h3>
+					<h4 data-loc>Save your 2FA codes to your computer for future use.</h4>
 					<div class="flex flex-row items-center justify-center">
 						<div class="gap-3">
 							<button class="buttoni" onclick="saveCodes()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 								</svg>
-								Save codes
+								<span data-loc>Save codes</span>
 							</button>
 						</div>
 					</div>
@@ -209,8 +209,8 @@
 				<!-- dropdown -->
 				<div class="relative inline-block">
 					<div id="dropdownContent0" class="animation hidden absolute -top-8 left-6 z-20 w-48 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
-						<a href="#" class="cursor-default block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black"> <input type="checkbox" tabindex="-1" id="checkbox0" name="checkbox1" class="checkbox" /> Name </a>
-						<a href="#" class="cursor-default block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black"> <input type="checkbox" tabindex="-1" id="checkbox1" name="checkbox1" class="checkbox" /> Description </a>
+						<a href="#" class="cursor-default block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black"> <input type="checkbox" tabindex="-1" id="checkbox0" name="checkbox1" class="checkbox" /> <span data-loc>Name</span> </a>
+						<a href="#" class="cursor-default block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black"> <input type="checkbox" tabindex="-1" id="checkbox1" name="checkbox1" class="checkbox" /> <span data-loc>Description</span> </a>
 					</div>
 				</div>
 			</div>

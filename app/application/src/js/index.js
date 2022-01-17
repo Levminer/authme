@@ -1,6 +1,6 @@
 const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
 const logger = require("@levminer/lib/logger/renderer")
-const { aes, convert, time } = require("@levminer/lib")
+const { aes, convert, time, localization } = require("@levminer/lib")
 const { ipcRenderer: ipc } = require("electron")
 const speakeasy = require("@levminer/speakeasy")
 const path = require("path")
@@ -17,6 +17,13 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("application")
+
+/**
+ * Localization
+ */
+localization.localize("application")
+
+const lang = localization.getLang()
 
 /**
  * If running in development
