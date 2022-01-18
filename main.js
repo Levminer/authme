@@ -799,7 +799,18 @@ const createWindows = () => {
 	 * Auto update on Windows
 	 */
 	if (dev === false && platform === "windows") {
-		autoUpdater.checkForUpdates()
+		axios
+			.get("https://api.levminer.com/api/v1/authme/releases")
+			.then((res) => {
+				if (res.data.tag_name > authme_version && res.data.tag_name != undefined) {
+					autoUpdater.checkForUpdates()
+				} else {
+					logger.log("No auto update found")
+				}
+			})
+			.catch((error) => {
+				logger.error("Error during looking for auto update", error.stack)
+			})
 	}
 
 	autoUpdater.on("checking-for-update", () => {
