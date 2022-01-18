@@ -23,13 +23,13 @@
 		<!-- header -->
 		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
 			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
-			<h2>Edit codes</h2>
-			<h4>You can edit or delete your existing codes and you can add more codes.</h4>
+			<h2 data-loc>Edit codes</h2>
+			<h4 data-loc>You can edit or delete your existing codes and you can add more codes.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 				</svg>
-				Close window
+				<span data-loc>Close window</span>
 			</button>
 		</div>
 
@@ -37,62 +37,62 @@
 		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center p-1">
 			<!-- rollback -->
 			<div class="mx-auto rounded-2xl hidden bg-gray-800 w-2/3 rollback mt-20">
-				<h3 id="rollbackText" class="pt-5">Rollback</h3>
-				<h4>You can rollback to the latest save. If you load your codes below it will overwrite the current save!</h4>
+				<h3 data-loc id="rollbackText" class="pt-5">Restore</h3>
+				<h4 data-loc>You can restore the latest save. If you load your codes below it will overwrite the current save!</h4>
 				<button class="buttoni mb-5" onclick="loadRollback()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 					</svg>
-					Rollback
+					<span data-loc>Restore</span>
 				</button>
 			</div>
 			<!-- load codes -->
 			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20 mt-20 beforeLoad">
-				<h3 id="rollbackBut" class="pt-5">Load saved codes</h3>
-				<h4>You can load the 2FA codes you saved. After that you can edit or delete them and you can add more codes.</h4>
+				<h3 data-loc id="rollbackBut" class="pt-5">Load saved codes</h3>
+				<h4 data-loc>You can load the 2FA codes you saved. After that you can edit or delete them and you can add more codes.</h4>
 				<button class="buttoni mb-5" onclick="loadCodes()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
 					</svg>
-					Load codes
+					<span data-loc>Load codes</span>
 				</button>
 			</div>
 			<!-- save codes and add codes -->
 			<div class="afterLoad hidden">
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
-					<h3 id="rollbackBut" class="pt-5">Edit mode</h3>
-					<h4>Now you can modify existing codes or add more codes.</h4>
+					<h3 data-loc id="rollbackBut" class="pt-5">Edit mode</h3>
+					<h4 data-loc>Now you can modify existing codes or add more codes.</h4>
 					<div class="flex flex-row justify-center gap-3 flex-wrap pb-5">
 						<button class="buttoni" onclick="createSave()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 							</svg>
-							Save modifications
+							<span data-loc>Save modifications</span>
 						</button>
 
 						<button class="buttoni" onclick="addCodes()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 							</svg>
-							Add codes
+							<span data-loc>Add codes</span>
 						</button>
 					</div>
 					<div class="mx-auto pb-5">
 						<details class="details mb-5 transform ease-in duration-200">
-							<summary class="summary font-bold mb-3 cursor-pointer">More options</summary>
+							<summary data-loc class="summary font-bold mb-3 cursor-pointer">More options</summary>
 							<div class="flex flex-row justify-center gap-3 flex-wrap">
 								<button class="buttoni" onclick="revertChanges()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 									</svg>
-									Revert changes
+									<span data-loc>Revert changes</span>
 								</button>
 
 								<button class="buttoni" onclick="deleteCodes()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
-									Delete codes
+									<span data-loc>Delete codes</span>
 								</button>
 							</div>
 						</details>
