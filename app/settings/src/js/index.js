@@ -82,8 +82,8 @@ const currentWindow = BrowserWindow.getFocusedWindow()
 /**
  * Elements
  */
-const drp0 = document.querySelector("#dropdownButton0")
-const drp1 = document.querySelector("#dropdownButton1")
+const drp0 = document.querySelector("#sortButton")
+const drp1 = document.querySelector("#displayButton")
 
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
@@ -180,18 +180,18 @@ if (reset_copy_state === true) {
 const sort_number = settings.experimental.sort
 
 if (sort_number === 1) {
-	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 	</svg> A-Z`
 } else if (sort_number === 2) {
-	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 	</svg> Z-A`
 }
 
 // display
 drp1.innerHTML = `
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 	</svg>
 	Display #${settings.settings.default_display}
@@ -525,60 +525,63 @@ const hardwareAcceleration = () => {
 /**
  * Sort codes dropdown
  */
-let dropdown_state = false
+let sort_shown = false
 
 // show dropdown
-const dropdown = () => {
-	const dropdown_content = document.querySelector("#dropdownContent0")
+const sortDropdown = () => {
+	const sort_content = document.querySelector("#sortContent")
 
-	if (dropdown_state === false) {
-		dropdown_content.style.visibility = "visible"
+	if (sort_shown === false) {
+		sort_content.style.visibility = "visible"
 
 		setTimeout(() => {
-			dropdown_content.style.display = "block"
+			sort_content.style.display = "block"
 		}, 10)
 
-		dropdown_state = true
+		sort_shown = true
 	} else {
-		dropdown_content.style.display = ""
+		sort_content.style.display = ""
 
-		dropdown_state = false
+		sort_shown = false
 	}
 }
 
 // choose option
-const dropdownChoose = (id) => {
-	const dropdown_button = document.querySelector("#dropdownButton0")
+const sortDropdownChoose = (id) => {
+	const sort_content = document.querySelector("#sortContent")
+	const sort_button = document.querySelector("#sortButton")
 
 	const sort = () => {
 		switch (id) {
 			case 0:
-				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-					 </svg> Default`
+				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+					   </svg> Default`
 
 				settings.experimental.sort = null
 				break
 
 			case 1:
-				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-					 </svg> A-Z`
+				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+					   </svg> A-Z`
 
 				settings.experimental.sort = 1
 				break
 
 			case 2:
-				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-					</svg> Z-A`
+				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+					  </svg> Z-A`
 
 				settings.experimental.sort = 2
 				break
 		}
 	}
 
-	dropdown()
+	sort_content.style.display = ""
+	sort_shown = false
+
 	sort()
 	save()
 
@@ -799,26 +802,21 @@ const reload = () => {
  * Dismiss dialog on click outside
  */
 window.addEventListener("click", (event) => {
-	const dropdown_content0 = document.querySelector("#dropdownContent0")
-	const dropdown_button0 = document.querySelector("#dropdownButton0")
-	const dropdown_content1 = document.querySelector("#dropdownContent1")
-	const dropdown_button1 = document.querySelector("#dropdownButton1")
-	const sort_svg = document.querySelector("#sortSvg")
-	const sort_path = document.querySelector("#sortPath")
-	const link0 = document.querySelector("#link0")
-	const link1 = document.querySelector("#link1")
-	const link2 = document.querySelector("#link2")
+	const sort_content = document.querySelector("#sortContent")
+	const sort_button = document.querySelector("#sortButton")
+	const display_content = document.querySelector("#displayContent")
+	const display_button = document.querySelector("#displayButton")
 
-	if (event.target != dropdown_button0 && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
-		dropdown_content0.style.display = ""
+	if (event.target != sort_button) {
+		sort_content.style.display = ""
 
-		dropdown_state = false
+		sort_shown = false
 	}
 
-	if (event.target != dropdown_content1 && event.target != dropdown_button1) {
-		dropdown_content1.style.display = ""
+	if (event.target != display_button) {
+		display_content.style.display = ""
 
-		display_state = false
+		display_shown = false
 	}
 })
 
@@ -918,49 +916,47 @@ const screenCapture = () => {
  * Get screens
  */
 const displays = screen.getAllDisplays()
-const displayChooser = document.querySelector("#dropdownContent1")
+const display_content = document.querySelector("#displayContent")
 
 for (let i = 1; i < displays.length + 1; i++) {
 	const element = document.createElement("a")
 
 	element.innerHTML = `
 	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 	</svg>
 	Display #${i}
 	</a>
 	`
 
-	displayChooser.appendChild(element)
+	display_content.appendChild(element)
 }
 
 /**
- * Toggle display dropdown
+ * Toggle default display dropdown
  */
-let display_state = false
+let display_shown = false
 const display = () => {
-	const dropdown_content = document.querySelector("#dropdownContent1")
-
-	if (display_state === false) {
-		dropdown_content.style.visibility = "visible"
+	if (display_shown === false) {
+		display_content.style.visibility = "visible"
 
 		setTimeout(() => {
-			dropdown_content.style.display = "block"
+			display_content.style.display = "block"
 		}, 10)
 
-		display_state = true
+		display_shown = true
 	} else {
-		dropdown_content.style.display = ""
+		display_content.style.display = ""
 
-		display_state = false
+		display_shown = false
 	}
 }
 
 const displayChoose = (id) => {
 	const toggle = () => {
 		drp1.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 		</svg>
 		Display #${id}

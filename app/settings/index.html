@@ -249,14 +249,14 @@
 							<h3 data-loc>Default display</h3>
 							<h4 data-loc>Choose which display should Authme open by default. Authme will fall back to the primary display if the chosen one is not available.</h4>
 							<div class="relative inline-block">
-								<button id="dropdownButton1" class="buttoni" onclick="display()">
-									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<button id="displayButton" class="buttoni" onclick="display()">
+									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 									</svg>
 									Display #1
 								</button>
 
-								<div id="dropdownContent1" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
+								<div id="displayContent" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
 									<!-- displays -->
 								</div>
 							</div>
@@ -875,28 +875,28 @@
 							<h4>You can choose how to sort the codes. By default codes are sorted by importing order.</h4>
 
 							<div class="relative inline-block">
-								<button id="dropdownButton0" class="buttoni" onclick="dropdown()">
-									<svg id="sortSvg" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path id="sortPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+								<button id="sortButton" class="buttoni" onclick="sortDropdown()">
+									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 									</svg>
 									Default
 								</button>
 
-								<div id="dropdownContent0" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
-									<a href="#" onclick="dropdownChoose(0)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<div id="sortContent" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
+									<a href="#" onclick="sortDropdownChoose(0)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 										</svg>
 										Default
 									</a>
-									<a href="#" onclick="dropdownChoose(1)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<a href="#" onclick="sortDropdownChoose(1)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 										</svg>
 										A-Z
 									</a>
-									<a href="#" onclick="dropdownChoose(2)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<a href="#" onclick="sortDropdownChoose(2)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 										</svg>
 										Z-A
