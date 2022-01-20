@@ -202,6 +202,7 @@ const settings_file = {
 			description: false,
 		},
 		default_display: 1,
+		language: null,
 	},
 	experimental: {
 		sort: null,
@@ -262,6 +263,15 @@ const saveSettings = () => {
 let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 /**
+ * Settings compatibility check
+ */
+if (settings.settings.language === undefined) {
+	settings.settings.language = null
+
+	saveSettings()
+}
+
+/**
  * Force dark mode
  */
 nativeTheme.themeSource = "dark"
@@ -275,6 +285,27 @@ if (settings.settings.hardware_acceleration === false) {
 
 /* Set language */
 let lang = en
+let locale = "en"
+
+if (settings.settings.language !== null) {
+	locale = settings.settings.language
+} else {
+	locale = app.getLocale().slice(0, 2)
+}
+
+switch (locale) {
+	case "en":
+		lang = en
+		break
+
+	case "hu":
+		lang = hu
+		break
+
+	default:
+		lang = en
+		break
+}
 
 /**
  * Show application window from tray
@@ -372,25 +403,6 @@ const exitFromTray = () => {
  */
 const createWindows = () => {
 	logger.log("Started creating windows")
-
-	/**
-	 * Get language
-	 */
-	const locale = app.getLocale().slice(0, 2)
-
-	switch (locale) {
-		case "en":
-			lang = en
-			break
-
-		case "hu":
-			lang = hu
-			break
-
-		default:
-			lang = en
-			break
-	}
 
 	/**
 	 * Window Controls Overlay
@@ -1540,9 +1552,8 @@ ipc.on("loggerError", (event, data) => {
 /**
  * Send lang code
  */
-ipc.on("lang", (event) => {
-	const lang_code = app.getLocale().slice(0, 2)
-	event.returnValue = { lang_code }
+ipc.on("languageCode", (event) => {
+	event.returnValue = { language: lang.locale.code }
 })
 
 /**
