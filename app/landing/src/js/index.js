@@ -23,6 +23,8 @@ logger.getWindow("landing")
  */
 localization.localize("landing")
 
+const lang = localization.getLang()
+
 /**
  * If running in development
  */
@@ -92,17 +94,17 @@ const comparePasswords = () => {
 
 	if (password_input1.toString().length > 64) {
 		text.style.color = "#CC001B"
-		text.textContent = "Maximum password length is 64 characters!"
+		text.textContent = lang.landing_text.maximum_password
 	} else if (password_input1.toString().length < 8) {
 		text.style.color = "#CC001B"
-		text.textContent = "Minimum password length is 8 characters!"
+		text.textContent = lang.landing_text.minimum_password
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
 			if (!password.search(password_input1.toString())) {
 				logger.log("Passwords match!")
 
 				text.style.color = "#28A443"
-				text.textContent = "Passwords match! Please wait!"
+				text.textContent = lang.landing_text.passwords_match
 
 				password_input1.fill(0)
 				password_input2.fill(0)
@@ -110,13 +112,13 @@ const comparePasswords = () => {
 				hashPasswords()
 			} else {
 				text.style.color = "#CC001B"
-				text.textContent = "This password is on the list of the top 1000 most common passwords. Please choose a more secure password!"
+				text.textContent = lang.landing_text.top_1000_password
 			}
 		} else {
 			logger.warn("Passwords dont match!")
 
 			text.style.color = "#CC001B"
-			text.textContent = "Passwords don't match! Try again!"
+			text.textContent = lang.landing_text.passwords_dont_match
 		}
 	}
 }
@@ -180,17 +182,17 @@ const noPassword = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No"],
+			buttons: [lang.button.yes, lang.button.no],
 			type: "warning",
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
-			message: "Are you sure? \n\nThis way everyone with access to your computer can access your 2FA codes too.",
+			message: lang.landing_dialog.no_password,
 		})
 		.then((result) => {
 			if (result.response === 0) {
 				text.style.color = "#28A443"
-				text.textContent = "Please wait!"
+				text.textContent = lang.landing_text.please_wait
 
 				/**
 				 * Read settings
