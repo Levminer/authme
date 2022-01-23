@@ -22,6 +22,8 @@ logger.getWindow("application")
  */
 localization.localize("settings")
 
+const lang = localization.getLang()
+
 /**
  * Get app information
  */
@@ -194,7 +196,7 @@ drp1.innerHTML = `
 	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 	</svg>
-	Display #${settings.settings.default_display}
+	${lang.text.display} #${settings.settings.default_display}
 	`
 
 // language
@@ -340,24 +342,24 @@ const clearData = () => {
 	dialog
 		.showMessageBox(currentWindow, {
 			title: "Authme",
-			buttons: ["Yes", "No"],
+			buttons: [lang.button.yes, lang.button.no],
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
 			type: "warning",
-			message: "Are you sure you want to clear all data? \n\nThis cannot be undone!",
+			message: lang.settings_dialog.clear_data,
 		})
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
 					.showMessageBox(currentWindow, {
 						title: "Authme",
-						buttons: ["Yes", "No"],
+						buttons: [lang.button.yes, lang.button.no],
 						defaultId: 1,
 						cancelId: 1,
 						noLink: true,
 						type: "warning",
-						message: "Are you absolutely sure? \n\nThere is no way back!",
+						message: lang.settings_dialog.confirm_clear_data,
 					})
 					.then(async (result) => {
 						if (result.response === 0) {
@@ -541,12 +543,12 @@ const hardwareAcceleration = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -689,12 +691,12 @@ const languageDropdownChoose = (id) => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -1023,12 +1025,12 @@ const screenCapture = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -1056,7 +1058,7 @@ for (let i = 1; i < displays.length + 1; i++) {
 	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 	</svg>
-	Display #${i}
+	${lang.text.display} #${i}
 	</a>
 	`
 
@@ -1089,24 +1091,22 @@ const displayChoose = (id) => {
 		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 		</svg>
-		Display #${id}
+		${lang.text.display} #${id}
 		`
 
 		settings.settings.default_display = id
 		save()
-
-		display()
 	}
 
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {

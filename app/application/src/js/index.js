@@ -1,6 +1,6 @@
 const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
-const logger = require("@levminer/lib/logger/renderer")
 const { aes, convert, time, localization } = require("@levminer/lib")
+const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
 const speakeasy = require("@levminer/speakeasy")
 const path = require("path")
@@ -87,9 +87,9 @@ const sort_number = settings.experimental.sort
 const loadFile = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme import file",
+			title: lang.application_dialog.choose_import_file,
 			properties: ["openFile"],
-			filters: [{ name: "Authme file", extensions: ["authme"] }],
+			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
@@ -106,12 +106,12 @@ const loadFile = () => {
 				} else {
 					dialog.showMessageBox({
 						title: "Authme",
-						buttons: ["Close"],
+						buttons: [lang.button.close],
 						defaultId: 0,
 						cancelId: 0,
 						type: "error",
 						noLink: true,
-						message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+						message: `${lang.application_dialog.old_file_0} ${loaded.role} ${lang.application_dialog.old_file_1}`,
 					})
 				}
 			}
@@ -179,16 +179,16 @@ const go = (data) => {
 					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Name</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+							<h3>${lang.text.name}</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">Code</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
+							<h3 class="relative -top-1">${lang.text.code}</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Time</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+							<h3>${lang.text.time}</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
@@ -197,7 +197,7 @@ const go = (data) => {
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
-							Copy
+							${lang.button.copy}
 						</button>
 					</div>
 					</div>
@@ -207,16 +207,16 @@ const go = (data) => {
 					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Name</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+							<h3>${lang.text.name}</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">Code</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">Code</p>
+							<h3 class="relative -top-1">${lang.text.code}</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Time</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+							<h3>${lang.text.time}</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
@@ -224,7 +224,7 @@ const go = (data) => {
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
-							Copy
+							${lang.button.copy}
 						</button>
 					</div>
 					</div>
@@ -234,16 +234,16 @@ const go = (data) => {
 					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Name</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+							<h3>${lang.text.name}</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">Code</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">Code</p>
+							<h3 class="relative -top-1">${lang.text.code}</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Time</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+							<h3>${lang.text.time}</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
@@ -252,7 +252,7 @@ const go = (data) => {
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
-							Copy
+							${lang.button.copy}
 						</button>
 					</div>
 					</div>
@@ -262,16 +262,16 @@ const go = (data) => {
 					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Name</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">Name</h2>
+							<h3>${lang.text.name}</h3>
+							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">Code</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">Code</p>
+							<h3 class="relative -top-1">${lang.text.code}</h3>
+							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>Time</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">Time</h2>
+							<h3>${lang.text.time}</h3>
+							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
@@ -279,7 +279,7 @@ const go = (data) => {
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
-							Copy
+							${lang.button.copy}
 						</button>
 					</div>
 					</div>
@@ -405,8 +405,8 @@ const copyCode = (id) => {
 	button.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-			 	 </svg>
-				Copied
+			 	</svg>
+				${lang.button.copied}
 				`
 
 	// copy button
@@ -415,7 +415,7 @@ const copyCode = (id) => {
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 					</svg>
-					Copy
+					${lang.button.copy}
 					`
 
 		// reset search bar
@@ -500,8 +500,8 @@ const search = () => {
 		element.innerHTML = `
 		<div class="flex justify-center">
 		<div class="mx-auto rounded-2xl bg-gray-800 mb-8 w-2/3">
-		<h3 class="pt-3">No results found!</h3>
-		<h4 id="searchResult">Not found search results.</h4>
+		<h3 class="pt-3">${lang.application_text.no_results}</h3>
+		<h4 id="searchResult"></h4>
 		</div>
 		</div>
 		`
@@ -509,7 +509,7 @@ const search = () => {
 		element.setAttribute("id", "noResult")
 		document.querySelector(".content").appendChild(element)
 
-		document.querySelector("#searchResult").textContent = `Not found search results for "${document.querySelector("#search").value}".`
+		document.querySelector("#searchResult").textContent = `${lang.application_text.not_found_results} "${document.querySelector("#search").value}".`
 	}
 
 	// if search empty
@@ -591,11 +591,12 @@ const saveCodes = () => {
 
 	dialog.showMessageBox({
 		title: "Authme",
-		buttons: ["Close"],
+		buttons: [lang.button.close],
 		defaultId: 0,
-		cancelId: 1,
+		cancelId: 0,
+		noLink: true,
 		type: "info",
-		message: "Your 2FA codes saved! \n\nIf you want to add more codes or delete codes go to Edit codes under Tools!",
+		message: lang.application_dialog.codes_saved,
 	})
 
 	password.fill(0)
@@ -652,7 +653,7 @@ const loadCodes = () => {
 				dialog
 					.showMessageBox({
 						title: "Authme",
-						buttons: ["Close", "Migration guide"],
+						buttons: [lang.button.close, lang.application_dialog.guide],
 						defaultId: 0,
 						cancelId: 0,
 						type: "error",
