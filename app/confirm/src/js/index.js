@@ -1,7 +1,7 @@
 const logger = require("@levminer/lib/logger/renderer")
 const { app, dialog } = require("@electron/remote")
 const { localization } = require("@levminer/lib")
-const { ipcRenderer: ipc } = require("electron")
+const { ipcRenderer: ipc, shell } = require("electron")
 const bcrypt = require("bcryptjs")
 const path = require("path")
 const fs = require("fs")
@@ -23,17 +23,15 @@ logger.getWindow("confirm")
  */
 localization.localize("confirm")
 
+const lang = localization.getLang()
+
 /**
  * Check if running in development
  */
 let dev = false
-let integrity = false
 
 if (app.isPackaged === false) {
 	dev = true
-
-	// check for integrity
-	integrity = true
 }
 
 /**
@@ -73,9 +71,7 @@ const text = document.querySelector("#text")
  */
 document.querySelector("#password_input").addEventListener("keypress", (e) => {
 	if (e.key === "Enter") {
-		if (integrity === false) {
-			check_integrity()
-		}
+		check_integrity()
 
 		setTimeout(() => {
 			unhashPassword()
@@ -91,38 +87,46 @@ const check_integrity = () => {
 	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 	// check integrity
-	const storage = JSON.parse(localStorage.getItem("storage"))
+	const storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-	if (integrity == false) {
-		try {
-			if (settings.security.password !== storage.password || settings.security.require_password !== storage.require_password) {
-				dialog
-					.showMessageBox({
-						title: "Authme",
-						buttons: ["Close"],
-						type: "error",
-						defaultId: 0,
-						message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
-					})
-					.then((result) => {
-						app.exit()
-					})
-			}
-		} catch (error) {
-			logger.error("Local storage not found")
-
+	try {
+		if (settings.security.password !== storage.password || settings.security.require_password !== storage.require_password) {
 			dialog
 				.showMessageBox({
 					title: "Authme",
-					buttons: ["Close"],
+					buttons: [lang.button.help, lang.button.close],
 					type: "error",
-					defaultId: 0,
-					message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
+					defaultId: 1,
+					noLink: true,
+					message: lang.dialog.integrity,
 				})
-				.then((result) => {
+				.then((res) => {
+					if (res.response === 0) {
+						shell.openExternal("https://github.com/Levminer/authme/issues")
+					}
+
 					app.exit()
 				})
 		}
+	} catch (error) {
+		logger.error("Local storage not found")
+
+		dialog
+			.showMessageBox({
+				title: "Authme",
+				buttons: [lang.button.help, lang.button.close],
+				type: "error",
+				defaultId: 1,
+				noLink: true,
+				message: lang.dialog.integrity,
+			})
+			.then((res) => {
+				if (res.response === 0) {
+					shell.openExternal("https://github.com/Levminer/authme/issues")
+				}
+
+				app.exit()
+			})
 	}
 }
 
@@ -132,18 +136,16 @@ const check_integrity = () => {
 let tries = 0
 
 const unhashPassword = async () => {
-	if (integrity === false) {
-		check_integrity()
-	}
+	check_integrity()
 
 	if (tries === 5) {
 		setTimeout(() => {
 			tries = 3
 
-			text.textContent = "Try again!"
+			text.textContent = lang.confirm_text.try_again
 		}, 5000)
 
-		return (text.textContent = "Please try again in 5 seconds!")
+		return (text.textContent = lang.confirm_text.locked)
 	}
 
 	// read settings
@@ -158,7 +160,7 @@ const unhashPassword = async () => {
 		ipc.send("send_password", password_input)
 
 		text.style.color = "#28A443"
-		text.textContent = "Passwords match! Please wait!"
+		text.textContent = lang.landing_text.passwords_match
 
 		setInterval(() => {
 			password_input.fill(0)
@@ -171,7 +173,7 @@ const unhashPassword = async () => {
 		logger.warn("Passwords dont match!")
 
 		text.style.color = "#CC001B"
-		text.textContent = "Passwords don't match! Try again!"
+		text.textContent = lang.landing_text.passwords_dont_match
 
 		tries++
 	}
