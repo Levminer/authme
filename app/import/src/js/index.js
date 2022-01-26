@@ -5,6 +5,8 @@ const QrcodeDecoder = require("qrcode-decoder").default
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
+const { qrImport, qrCamera, qrScreen } = require(path.join(__dirname, "src", "js", "qr.js"))
+const { gaImport, gaCamera } = require(path.join(__dirname, "src", "js", "ga.js"))
 
 /**
  * Send error to main process
@@ -22,6 +24,8 @@ logger.getWindow("import")
  * Localization
  */
 localization.localize("import")
+
+const lang = localization.getLang()
 
 /**
  * Check if running in development

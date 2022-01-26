@@ -214,6 +214,23 @@ module.exports = {
 		"Use webcam",
     ],
 
+	"import_dialog": {
+		"import_qrcode": "Import from QR code(s)",
+		"image_file": "Image file",
+		"save_file": "Save file",
+		"no_webcam": "Not found webcam! \n\nPlease check if your webcam is working correctly or not used by another application.",
+		"wrong_qrcode": "Wrong QR code found on camera! \n\nMake sure this is a correct QR code and try again!",
+		"qrcode_found": "QR code(s) found! \n\nNow select where do you want to save the file!",
+		"webcam_used": "Webcam in use! \n\nPlease check if your webcam is not used by another application.",
+		"import_qa_qrcode": "Import from Google Authenticator QR code(s)",
+		"no_qrcode_found_0": "No QR code found on the picture:",
+		"no_qrcode_found_1": "\n\nTry to take a better picture and try again!",
+		"correct_qrcode_found_0": "QR codes found on these pictures:",
+		"correct_qrcode_found_1": "\n\nNow select where do you want to save the file!",
+		"wrong_qrcode_found_0": "Wrong QR code found on the picture:",
+		"wrong_qrcode_found_1": "\n\nMake sure this is a correct QR code and try again!",
+	},
+
 	"export": [
 		"You can export the 2FA codes you saved.",
 		"Close window",
