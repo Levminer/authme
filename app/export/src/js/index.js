@@ -1,4 +1,4 @@
-const { aes, convert, time } = require("@levminer/lib")
+const { aes, convert, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { app, dialog } = require("@electron/remote")
 const { ipcRenderer: ipc } = require("electron")
@@ -17,6 +17,13 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("export")
+
+/**
+ * Localization
+ */
+localization.localize("export")
+
+const lang = localization.getLang()
 
 /**
  * Check if running in development
@@ -119,8 +126,8 @@ const go = (data) => {
 const saveFile = () => {
 	dialog
 		.showSaveDialog({
-			title: "Save as Text file",
-			filters: [{ name: "Text file", extensions: ["txt"] }],
+			title: lang.import_dialog.save_file,
+			filters: [{ name: lang.export_dialog.text_file, extensions: ["txt"] }],
 			defaultPath: "~/authme_export.txt",
 		})
 		.then((result) => {
@@ -148,8 +155,8 @@ const saveFile = () => {
 const newSaveFile = () => {
 	dialog
 		.showSaveDialog({
-			title: "Save as Authme file",
-			filters: [{ name: "Authme file", extensions: ["authme"] }],
+			title: lang.import_dialog.save_file,
+			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 			defaultPath: "~/export.authme",
 		})
 		.then((result) => {
@@ -189,8 +196,8 @@ const newSaveFile = () => {
 const saveQrCodes = () => {
 	dialog
 		.showSaveDialog({
-			title: "Save as HTML file",
-			filters: [{ name: "HTML file", extensions: ["html"] }],
+			title: lang.import_dialog.save_file,
+			filters: [{ name: lang.export_dialog.html_file, extensions: ["html"] }],
 			defaultPath: "~/authme_export.html",
 		})
 		.then((result) => {
@@ -229,13 +236,14 @@ const hide = () => {
  * No saved codes found
  */
 const error = () => {
-	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err) => {
 		if (err) {
 			dialog.showMessageBox({
 				title: "Authme",
-				buttons: ["Close"],
+				buttons: [lang.button.close],
+				noLink: true,
 				type: "error",
-				message: "No save file found. \n\nGo back to the main page and save your codes!",
+				message: lang.export_dialog.no_save_found,
 			})
 		}
 	})
