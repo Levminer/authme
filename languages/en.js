@@ -1,5 +1,5 @@
 /* prettier-ignore */
-/* cSpell:disable */
+/* English */
 module.exports = {
 	"locale": {
 		"code": "en",
@@ -244,6 +244,12 @@ module.exports = {
 		"Ideal for scanning the QR codes or for security backup.",
 	],
 
+	"export_dialog": {
+		"text_file": "Text file",
+		"html_file": "HTML file",
+		"no_save_found": "No save file found. \n\nGo back to the main page and save your codes!",
+	},
+
 	"edit": [
 		"Edit codes",
 		"You can edit or delete your existing codes and you can add more codes.",
@@ -262,4 +268,15 @@ module.exports = {
 		"Revert changes",
 		"Delete codes",
 	],
+
+	"edit_dialog": {
+		"load_rollback": "Are you sure you want to rollback to the latest save? \n\nThis will overwrite your saved codes!",
+		"rollback_successful": "Rollback successful! \n\nGo back to the main page to check out the changes!",
+		"delete_code": "Are you sure you want to delete this code? \n\nIf you want to revert this, click more options and revert changes.",
+		"create_save": "Are you sure you want to save the modified code(s)? \n\nThis will overwrite your saved codes!",
+		"codes_added": "Code(s) added! \n\nScroll down to view them!",
+		"load_codes": "Are you sure you want to load your currently saved codes? \n\nThis will overwrite your latest rollback!",
+		"revert_changes": "Are you sure you want to revert all current change(s)? \n\nYou will lose all current changes!",
+		"delete_all_codes": "Are you sure you want to delete all codes? \n\nYou can revert this with a rollback.",
+	},
 }
