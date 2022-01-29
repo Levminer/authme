@@ -37,12 +37,14 @@ module.exports = {
 	},
 
 	"dialog": {
-		"error": "Error occurred while running Authme!",
+		"error": "Error occurred while running Authme.",
 		"integrity": "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
 		"support": "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
 		"feedback": "Thank you for providing feedback! \n\nPlease report issues on GitHub or by Email.",
 		"docs": "You can view the Authme Docs in the browser. \n\nClick open to view it in your browser.",
 		"license": "This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente",
+		"no_update_available": "No update available: \n\nYou are running the latest version! \n\nYou are currently running:",
+		"update_error": "Error during auto update. \n\nTry to restart Authme and check your network connection.",
 	},
 
 	"button": {
@@ -55,6 +57,8 @@ module.exports = {
 		"copy": "Copy",
 		"copied": "Copied",
 		"help": "Help",
+		"exit": "Exit",
+		"report": "Report"
 	},
 
 	"text": {

@@ -14,7 +14,7 @@ const os = require("os")
  */
 process.on("uncaughtException", (error) => {
 	logger.error("Error on load", error.stack)
-	dialog.showErrorBox("Authme", `Authme crashed, exiting now. \n\nPlease open a GitHub Issue with a screenshot of this error. \n\n${error.stack}`)
+	dialog.showErrorBox("Authme", `Authme crashed while starting. \n\nPlease open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme). \n\n${error.stack}`)
 
 	shell.openExternal("https://github.com/Levminer/authme/issues")
 
@@ -821,7 +821,9 @@ const createWindows = () => {
 				}
 			})
 			.catch((error) => {
-				logger.error("Error during looking for auto update", error.stack)
+				logger.error("Error getting response from API (Auto update)", error.stack)
+
+				autoUpdater.checkForUpdates()
 			})
 	}
 
@@ -845,7 +847,7 @@ const createWindows = () => {
 				defaultId: 0,
 				cancelId: 1,
 				type: "info",
-				message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${authme_version}`,
+				message: `${lang.dialog.no_update_available} ${authme_version}`,
 			})
 
 			manual_update = false
@@ -867,7 +869,7 @@ const createWindows = () => {
 			defaultId: 0,
 			cancelId: 1,
 			type: "error",
-			message: `Error during auto update. \n\nTry to restart Authme and check your network connection! \n\n${error.stack}`,
+			message: `${lang.dialog.update_error} \n\n${error.stack}`,
 		})
 	})
 
@@ -932,15 +934,15 @@ const createWindows = () => {
 	}
 
 	if (settings.statistics.rate === true || settings.statistics.feedback === true) {
-		if (opens % 150 === 0) {
+		if (opens % 50 === 0) {
 			openInfo()
 		}
 	} else if (settings.statistics.rate === true && settings.statistics.feedback === true) {
-		if (opens % 1000 === 0) {
+		if (opens % 100 === 0) {
 			openInfo()
 		}
 	} else {
-		if (opens % 50 === 0) {
+		if (opens % 15 === 0) {
 			openInfo()
 		}
 	}
@@ -959,12 +961,12 @@ app.whenReady()
 			dialog
 				.showMessageBox({
 					title: "Authme",
-					buttons: ["Report", lang.button.close, "Exit"],
+					buttons: [lang.button.report, lang.button.close, lang.button.exit],
 					defaultId: 0,
 					cancelId: 1,
 					noLink: true,
 					type: "error",
-					message: `Error occurred while starting Authme! \n\n${error.stack}`,
+					message: `${lang.dialog.error} \n\n${error.stack}`,
 				})
 				.then((result) => {
 					if (result.response === 0) {
@@ -1069,12 +1071,12 @@ app.whenReady()
 		dialog
 			.showMessageBox({
 				title: "Authme",
-				buttons: ["Report", lang.button.close, "Exit"],
+				buttons: [lang.button.report, lang.button.close, lang.button.exit],
 				defaultId: 0,
 				cancelId: 1,
 				noLink: true,
 				type: "error",
-				message: `Error occurred while starting Authme! \n\n${error.stack}`,
+				message: `${lang.dialog.error} \n\n${error.stack}`,
 			})
 			.then((result) => {
 				if (result.response === 0) {
@@ -1388,12 +1390,12 @@ ipc.on("abort", () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Help", lang.button.close],
+			buttons: [lang.button.help, lang.button.close],
 			type: "error",
 			defaultId: 0,
 			cancelId: 1,
 			noLink: true,
-			message: "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
+			message: lang.dialog.integrity,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -1464,7 +1466,7 @@ ipc.on("support", () => {
  * Open Microsoft Store link
  */
 ipc.on("rateAuthme", () => {
-	shell.openExternal("ms-windows-store://pdp/?productid=XP9M33RJSVD6JR")
+	shell.openExternal("ms-windows-store://review/?ProductId=XP9M33RJSVD6JR")
 
 	settings.statistics.rated = true
 
@@ -1635,7 +1637,7 @@ const support = () => {
 			cancelId: 1,
 			noLink: true,
 			type: "info",
-			message: "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
+			message: lang.dialog.support,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -1656,7 +1658,7 @@ const feedback = () => {
 			cancelId: 2,
 			noLink: true,
 			type: "info",
-			message: "Thank you for providing feedback! \n\nPlease report issues on GitHub or by Email.",
+			message: lang.dialog.feedback,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -1961,7 +1963,7 @@ const createMenu = () => {
 								cancelId: 1,
 								noLink: true,
 								type: "info",
-								message: "You can view the Authme Docs in the browser. \n\nClick open to view it in your browser!",
+								message: lang.dialog.docs,
 							})
 							.then((result) => {
 								if (result.response === 0) {
@@ -2007,7 +2009,7 @@ const createMenu = () => {
 								cancelId: 1,
 								noLink: true,
 								type: "info",
-								message: "This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente",
+								message: lang.dialog.license,
 							})
 							.then((result) => {
 								if (result.response === 0) {
