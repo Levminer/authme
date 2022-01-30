@@ -41,6 +41,11 @@
 -   For detailed instructions check out the: [Docs](https://docs.authme.levminer.com/#/import?id=import)
 -   If you just want to test the app download this sample import file, unzip it, and import it to Authme: [Download](https://github.com/Levminer/authme/blob/main/sample/authme_import_sample.zip?raw=true)
 
+## Translating
+
+-   Help translate Authme: [Translation](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md#translation)
+-   You can translate on Crowdin to: [Crowdin](https://crowdin.com/project/authme-2fa)
+
 ## Importing
 
 -   From QR codes: You screenshot all the QR codes from your favorite websites, and import all of them to Authme
