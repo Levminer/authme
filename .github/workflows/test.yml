@@ -1,64 +1,62 @@
-name: Release Artifacts
+name: Test
 on:
-    push:
-        branches: [main]
+  push:
+    branches:
+      - dev
 jobs:
-    build:
-        runs-on: ${{matrix.os}}
-        strategy:
-            matrix:
-                include:
-                    - os: macos-latest
-                      NAME: mac
-                    - os: ubuntu-latest
-                      NAME: linux
-                    - os: windows-latest
-                      NAME: windows
-                      steps:
-                      - uses: actions/checkout@v2
-                      - uses: actions/setup-node@v2
-                        with:
-                          node-version: '16'
-                      - name: Install modules
-                        run: npm ci
-                      - name: Build project
-                        run: npm run build:release
-                      - uses: octokit/request-action@v2.x
-                        id: get_latest_release
-                        with:
-                            route: GET /repos/:repository/releases/latest
-                            repository: ${{ github.repository }}
-                        env:
-                            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                      - name: get upload url
-                        id: get_upload_url
-                        run: |
-                          url=$(echo "$response" | jq -r '.upload_url')
-                          echo "::set-output name=url::$url"
-                        env: 
-                            response:  ${{ steps.get_latest_release.outputs.data }}
-                      - name: Get build number
-                        id: number
-                        uses: notiz-dev/github-action-json-property@release
-                        with: 
-                          path: 'package.json'
-                          prop_path: 'number'
-                      - name: Upload a Release Asset
-                        if: runner.os == 'Windows'
-                        uses: actions/upload-release-asset@v1.0.2
-                        env:
-                            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                        with:
-                          # The URL for uploading assets to the release
-                          upload_url:  ${{steps.get_upload_url.outputs.url}}
-                          # The path to the asset you want to upload
-                          asset_path: ./dist/authme-${{steps.number.outputs.prop}}-windows-x64-installer.exe
-                          # The name of the asset you want to upload
-                          asset_name: authme-${{steps.number.outputs.prop}}-windows-x64-installer.exe
-                          # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-                          asset_content_type: application/octet-stream
-                      - name: Upload artifacts
-                        uses: actions/upload-artifact@v2
-                        with:
-                            name: authme-latest-release-${{matrix.NAME}}-x64-installer-portable
-                            path: dist
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            NAME: mac
+          - os: ubuntu-latest
+            NAME: linux
+          - os: windows-latest
+            NAME: windows
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Install modules
+        run: npm ci
+      - name: Build project
+        run: npm run build:release
+      - uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/:repository/releases/latest
+          repository: ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: get upload url
+        id: get_upload_url
+        run: >
+          url=$(echo "$response" | jq -r '.upload_url')
+
+          echo "::set-output name=url::$url"
+        env:
+          response: ${{ steps.get_latest_release.outputs.data }}
+      - name: Get build number
+        id: number
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: package.json
+          prop_path: number
+      - name: Upload a Release Asset
+        if: runner.os == 'Windows'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.number.outputs.prop}}-windows-x64-installer.exe
+          asset_name: authme-${{steps.number.outputs.prop}}-windows-x64-installer.exe
+          asset_content_type: application/octet-stream
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: authme-latest-release-${{matrix.NAME}}-x64-installer-portable
+          path: dist
