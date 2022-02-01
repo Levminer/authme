@@ -39,12 +39,12 @@ jobs:
           echo "::set-output name=url::$url"
         env:
           response: ${{ steps.get_latest_release.outputs.data }}
-      - name: Get build number
-        id: number
+      - name: Get version
+        id: version
         uses: notiz-dev/github-action-json-property@release
         with:
           path: package.json
-          prop_path: number
+          prop_path: version
       - name: Upload a Release Asset
         if: runner.os == 'Windows'
         uses: actions/upload-release-asset@v1.0.2
@@ -52,8 +52,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{steps.get_upload_url.outputs.url}}
-          asset_path: ./dist/authme-${{steps.number.outputs.prop}}-windows-x64-installer.exe
-          asset_name: authme-${{steps.number.outputs.prop}}-windows-x64-installer.exe
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-windows-x64-installer.exe
+          asset_name: authme-${{steps.version.outputs.prop}}-windows-x64-installer.exe
           asset_content_type: application/octet-stream
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
