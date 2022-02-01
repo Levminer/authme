@@ -39,6 +39,7 @@ jobs:
           echo "::set-output name=url::$url"
         env:
           response: ${{ steps.get_latest_release.outputs.data }}
+        shell: bash
       - name: Get version
         id: version
         uses: notiz-dev/github-action-json-property@release
