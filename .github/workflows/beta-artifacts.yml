@@ -18,7 +18,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v2
               with:
-                node-version: '15'
+                node-version: '16'
             - name: Install modules
               run: npm ci
             - name: Run build
@@ -26,5 +26,5 @@ jobs:
             - name: Upload artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
+                  name: authme-latest-beta-${{matrix.NAME}}-x64-installer-portable
                   path: dist
