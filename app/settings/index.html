@@ -353,15 +353,15 @@
 
 						<!-- codes -->
 						<div id="codes" class="tabcontent part hidden">
-							<h3>Sort codes</h3>
-							<h4>You can choose how to sort the codes. By default codes are sorted by importing order.</h4>
+							<h3 data-loc>Sort codes</h3>
+							<h4 data-loc>You can choose how to sort the codes. By default codes are sorted by importing order.</h4>
 
 							<div class="relative inline-block">
 								<button id="sortButton" class="buttoni" onclick="sortDropdown()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 									</svg>
-									Default
+									<span class="sortDefault">Default</span>
 								</button>
 
 								<div id="sortContent" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
@@ -369,7 +369,7 @@
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 										</svg>
-										Default
+										<span class="sortContentDefault">Default</span>
 									</a>
 									<a href="#" onclick="sortDropdownChoose(1)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">

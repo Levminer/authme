@@ -567,6 +567,9 @@ const hardwareAcceleration = () => {
  */
 let sort_shown = false
 
+document.querySelector(".sortDefault").textContent = lang.text.default
+document.querySelector(".sortContentDefault").textContent = lang.text.default
+
 // show dropdown
 const sortDropdown = () => {
 	const sort_content = document.querySelector("#sortContent")
@@ -596,7 +599,7 @@ const sortDropdownChoose = (id) => {
 			case 0:
 				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-					   </svg> Default`
+					   </svg> ${lang.text.default}`
 
 				settings.settings.sort = null
 				break
