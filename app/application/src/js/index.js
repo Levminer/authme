@@ -78,8 +78,7 @@ const description_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
 const blur_state = settings.settings.blur_codes
 const search_state = settings.settings.search_history
-
-const sort_number = settings.experimental.sort
+const sort_number = settings.settings.sort
 
 /**
  * Load file first time from dialog

@@ -203,9 +203,9 @@ const settings_file = {
 		},
 		default_display: 1,
 		language: null,
+		sort: null,
 	},
 	experimental: {
-		sort: null,
 		screen_capture: false,
 	},
 	security: {
@@ -267,6 +267,12 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
  */
 if (settings.settings.language === undefined) {
 	settings.settings.language = null
+
+	saveSettings()
+}
+
+if (settings.settings.sort === undefined) {
+	settings.settings.sort = null
 
 	saveSettings()
 }
