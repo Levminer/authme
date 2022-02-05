@@ -85,7 +85,7 @@
 			</div>
 		</div>
 
-		<!-- info -->
+		<!-- rate authme -->
 		<div class="w-full text-white bg-popup-yellow font-bold info hidden">
 			<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
 				<div class="flex">
@@ -215,6 +215,20 @@
 				</div>
 			</div>
 			<!-- codes -->
+		</div>
+		<!-- info bar -->
+		<div class="sticky bottom-5 z-10 w-max mx-auto infoBar hidden">
+			<div class="flex items-center justify-center p-2 bg-popup-magenta rounded-2xl shadow text-white">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				<h5 class="m-0 text-center mx-5 bar">Thanks for using Authme! <a class="text-white text-lg font-bold barLink" href="#" onclick="barLink()">Feedback</a></h5>
+				<a onclick="this.parentElement.style.display='none'" class="top-0.5 relative py-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</a>
+			</div>
 		</div>
 	</body>
 </html>

@@ -863,3 +863,39 @@ const updateDownloaded = () => {
 const updateRestart = () => {
 	ipc.send("updateRestart")
 }
+
+/* info bar */
+const random = Math.floor(Math.random() * 1)
+
+const infoBar = () => {
+	const { opens } = ipc.sendSync("statistics")
+	const bar = document.querySelector(".bar")
+	const bar_link = document.querySelector(".barLink")
+	const info_bar = document.querySelector(".infoBar")
+
+	if (opens % 3 === 0) {
+		switch (random) {
+			case 0:
+				info_bar.style.display = "flex"
+				break
+
+			default:
+				info_bar.style.display = "flex"
+				break
+		}
+	}
+}
+
+infoBar()
+
+const barLink = () => {
+	switch (random) {
+		case 0:
+			provideFeedback()
+			break
+
+		default:
+			provideFeedback()
+			break
+	}
+}
