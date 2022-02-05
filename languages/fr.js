@@ -1,5 +1,5 @@
 /* prettier-ignore */
-/* cSpell:disable */
+/* English */
 module.exports = {
 	'locale': { 'code': 'en' },
 	'tray': {
@@ -15,7 +15,7 @@ module.exports = {
 		'settings': 'Settings',
 		'exit': 'Exit',
 		'view': 'View',
-		'reset': 'Reset',
+		'reset': 'Reset Zoom',
 		'zoom_in': 'Zoom In',
 		'zoom_out': 'Zoom Out',
 		'tools': 'Tools',
@@ -25,19 +25,21 @@ module.exports = {
 		'help': 'Help',
 		'documentation': 'Documentation',
 		'release_notes': 'Release Notes',
-		'support_development': 'Support Development',
+		'support_development': 'Support',
 		'about': 'About',
-		'show_licenses': 'Show Licenses',
+		'show_licenses': 'Licenses',
 		'update': 'Update',
 		'info': 'Version'
 	},
 	'dialog': {
-		'error': 'Error occurred while running Authme!',
+		'error': 'Error occurred while running Authme.',
 		'integrity': 'Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!',
 		'support': 'Authme is a free, open source software. \n\nIf you like the app, please consider supporting!',
 		'feedback': 'Thank you for providing feedback! \n\nPlease report issues on GitHub or by Email.',
 		'docs': 'You can view the Authme Docs in the browser. \n\nClick open to view it in your browser.',
-		'license': 'This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente'
+		'license': 'This software is licensed under GPL-3.0 \n\nCopyright © 2020 Lőrik Levente',
+		'no_update_available': 'No update available: \n\nYou are running the latest version! \n\nYou are currently running:',
+		'update_error': 'Error during auto update. \n\nTry to restart Authme and check your network connection.'
 	},
 	'button': {
 		'yes': 'Yes',
@@ -48,14 +50,17 @@ module.exports = {
 		'open': 'Open',
 		'copy': 'Copy',
 		'copied': 'Copied',
-		'help': 'Help'
+		'help': 'Help',
+		'exit': 'Exit',
+		'report': 'Report'
 	},
 	'text': {
 		'name': 'Name',
 		'code': 'Code',
 		'time': 'Time',
 		'latest_save': 'Latest save',
-		'display': 'Display'
+		'display': 'Display',
+		'default': 'Default'
 	},
 	'landing': [
 		'Create password',
@@ -155,6 +160,8 @@ module.exports = {
 		'You can view the logs for debugging. You can view all the logs in the settings folder.',
 		'Latest log',
 		'Logs folder',
+		'Sort codes',
+		'You can choose how to sort the codes. By default codes are sorted by importing order.',
 		'Codes description',
 		'The saved codes description will be visible. You can copy it after clicking it.',
 		'Blur codes',
@@ -221,6 +228,11 @@ module.exports = {
 		'Export .html file',
 		'Ideal for scanning the QR codes or for security backup.'
 	],
+	'export_dialog': {
+		'text_file': 'Text file',
+		'html_file': 'HTML file',
+		'no_save_found': 'No save file found. \n\nGo back to the main page and save your codes!'
+	},
 	'edit': [
 		'Edit codes',
 		'You can edit or delete your existing codes and you can add more codes.',
@@ -238,5 +250,15 @@ module.exports = {
 		'More options',
 		'Revert changes',
 		'Delete codes'
-	]
+	],
+	'edit_dialog': {
+		'load_rollback': 'Are you sure you want to rollback to the latest save? \n\nThis will overwrite your saved codes!',
+		'rollback_successful': 'Rollback successful! \n\nGo back to the main page to check out the changes!',
+		'delete_code': 'Are you sure you want to delete this code? \n\nIf you want to revert this, click more options and revert changes.',
+		'create_save': 'Are you sure you want to save the modified code(s)? \n\nThis will overwrite your saved codes!',
+		'codes_added': 'Code(s) added! \n\nScroll down to view them!',
+		'load_codes': 'Are you sure you want to load your currently saved codes? \n\nThis will overwrite your latest rollback!',
+		'revert_changes': 'Are you sure you want to revert all current change(s)? \n\nYou will lose all current changes!',
+		'delete_all_codes': 'Are you sure you want to delete all codes? \n\nYou can revert this with a rollback.'
+	}
 };
