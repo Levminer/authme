@@ -374,7 +374,7 @@ const clearData = () => {
 
 							// remove startup shortcut
 							if (dev === false) {
-								ipc.sendSync("disableStartup")
+								ipc.send("disableStartup")
 							}
 
 							// clear storage
