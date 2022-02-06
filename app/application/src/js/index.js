@@ -838,7 +838,7 @@ const manualUpdate = () => {
  * Display auto update download info
  */
 ipc.on("updateInfo", (event, info) => {
-	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+	document.querySelector("#updateText").textContent = `${lang.popup.downloading_update} ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
 })
 
 /**
@@ -852,7 +852,7 @@ const updateAvailable = () => {
  * Display restart button if download finished
  */
 const updateDownloaded = () => {
-	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateText").textContent = lang.popup.update_downloaded
 	document.querySelector("#updateButton").style.display = "block"
 	document.querySelector("#updateClose").style.display = "block"
 }
