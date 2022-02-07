@@ -58,20 +58,21 @@ const settings_refresher = setInterval(() => {
 }, 100)
 
 /**
- * Get app information
+ * Build number
  */
-const res = ipc.sendSync("info")
+const buildNumber = async () => {
+	const info = await ipc.invoke("info")
 
-/**
- * Show build number if version is pre release
- */
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-} else if (res.build_number.startsWith("beta")) {
-	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
+	if (info.build_number.startsWith("alpha")) {
+		document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	} else if (info.build_number.startsWith("beta")) {
+		document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	}
 }
+
+buildNumber()
 
 /**
  * Check for latest rollback
@@ -358,12 +359,12 @@ const createSave = () => {
 /**
  * Saves the modifications made to the codes
  */
-const saveModifications = () => {
+const saveModifications = async () => {
 	let password
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(ipc.sendSync("request_password"))
+		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
@@ -519,78 +520,74 @@ const loadError = () => {
 /**
  * Loads saved codes from disk
  */
-const loadCodes = () => {
-	const check = () => {}
-
+const loadCodes = async () => {
 	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: [lang.button.yes, lang.button.cancel],
-				defaultId: 1,
-				cancelId: 1,
-				type: "warning",
-				noLink: true,
-				message: lang.edit_dialog.load_codes,
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
-						if (err) {
-							dialog.showMessageBox({
-								title: "Authme",
-								buttons: [lang.button.close],
-								type: "error",
-								message: lang.export_dialog.no_save_found,
-							})
+		const result = await dialog.showMessageBox({
+			title: "Authme",
+			buttons: [lang.button.yes, lang.button.cancel],
+			defaultId: 1,
+			cancelId: 1,
+			type: "warning",
+			noLink: true,
+			message: lang.edit_dialog.load_codes,
+		})
+
+		if (result.response === 0) {
+			fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
+				if (err) {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						message: lang.export_dialog.no_save_found,
+					})
+				} else {
+					let password
+					let key
+
+					if (settings.security.require_password === true) {
+						password = Buffer.from(await ipc.invoke("request_password"))
+						key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+					} else {
+						/**
+						 * Load storage
+						 * @type {LibStorage}
+						 */
+						let storage
+
+						if (dev === false) {
+							storage = JSON.parse(localStorage.getItem("storage"))
 						} else {
-							let password
-							let key
+							storage = JSON.parse(localStorage.getItem("dev_storage"))
+						}
 
-							if (settings.security.require_password === true) {
-								password = Buffer.from(ipc.sendSync("request_password"))
-								key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
-							} else {
-								/**
-								 * Load storage
-								 * @type {LibStorage}
-								 */
-								let storage
+						password = Buffer.from(storage.password, "base64")
+						key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+					}
 
-								if (dev === false) {
-									storage = JSON.parse(localStorage.getItem("storage"))
-								} else {
-									storage = JSON.parse(localStorage.getItem("dev_storage"))
-								}
+					fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+						if (err) {
+							logger.warn("The file codes.authme don't exists")
 
-								password = Buffer.from(storage.password, "base64")
-								key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
-							}
+							password.fill(0)
+							key.fill(0)
+						} else {
+							const codes_file = JSON.parse(content)
 
-							fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
-								if (err) {
-									logger.warn("The file codes.authme don't exists")
+							const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-									password.fill(0)
-									key.fill(0)
-								} else {
-									const codes_file = JSON.parse(content)
+							processdata(decrypted.toString())
 
-									const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
-
-									processdata(decrypted.toString())
-
-									decrypted.fill(0)
-									password.fill(0)
-									key.fill(0)
-								}
-							})
+							decrypted.fill(0)
+							password.fill(0)
+							key.fill(0)
 						}
 					})
 				}
 			})
+		}
 	} else {
-		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 			if (err) {
 				dialog.showMessageBox({
 					title: "Authme",
@@ -604,7 +601,7 @@ const loadCodes = () => {
 				let key
 
 				if (settings.security.require_password === true) {
-					password = Buffer.from(ipc.sendSync("request_password"))
+					password = Buffer.from(await ipc.invoke("request_password"))
 					key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 				} else {
 					/**

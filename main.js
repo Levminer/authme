@@ -140,8 +140,8 @@ const release_date = date
 const build_number = number
 
 // Send Authme info to renderer
-ipc.on("info", (event) => {
-	event.returnValue = { authme_version, release_date, build_number }
+ipc.handle("info", (event) => {
+	return { authme_version, release_date, build_number }
 })
 
 const chrome_version = process.versions.chrome
@@ -1513,8 +1513,8 @@ ipc.on("send_password", (event, data) => {
 /**
  * Send password to requesting page
  */
-ipc.on("request_password", (event) => {
-	event.returnValue = password_buffer
+ipc.handle("request_password", (event) => {
+	return password_buffer
 })
 
 /**
