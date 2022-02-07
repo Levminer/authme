@@ -300,4 +300,18 @@ module.exports = {
 		"revert_changes": "Are you sure you want to revert all current change(s)? \n\nYou will lose all current changes!",
 		"delete_all_codes": "Are you sure you want to delete all codes? \n\nYou can revert this with a rollback.",
 	},
+
+	"popup": {
+		"downloading_update": "Downloading update:",
+		"update_downloaded": "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically.",
+	},
+
+	"info_bar": {
+		"feedback": "Do you have any ideas or found a mistake?",
+		"feedback_link": "Feedback",
+		"rate": "Enjoying Authme?",
+		"rate_link": "Rate on Microsoft Store",
+		"translate": "Do you want to see Authme in another language?",
+		"translate_link": "Translation",
+	},
 }

@@ -865,18 +865,32 @@ const updateRestart = () => {
 }
 
 /* info bar */
-const random = Math.floor(Math.random() * 1)
+const random = Math.floor(Math.random() * 3)
 
-const infoBar = () => {
-	const { opens } = ipc.sendSync("statistics")
+const infoBar = async () => {
+	const { opens } = await ipc.invoke("statistics")
 	const bar = document.querySelector(".bar")
 	const bar_link = document.querySelector(".barLink")
 	const info_bar = document.querySelector(".infoBar")
 
-	if (opens % 3 === 0) {
+	if (opens % 5 === 0) {
 		switch (random) {
 			case 0:
 				info_bar.style.display = "flex"
+				bar.textContent = lang.info_bar.feedback
+				bar_link.textContent = lang.info_bar.feedback_link
+				break
+
+			case 1:
+				info_bar.style.display = "flex"
+				bar.textContent = lang.info_bar.rate
+				bar_link.textContent = lang.info_bar.rate_link
+				break
+
+			case 2:
+				info_bar.style.display = "flex"
+				bar.textContent = lang.info_bar.translate
+				bar_link.textContent = lang.info_bar.translate_link
 				break
 
 			default:
@@ -892,6 +906,14 @@ const barLink = () => {
 	switch (random) {
 		case 0:
 			provideFeedback()
+			break
+
+		case 1:
+			rateAuthme()
+			break
+
+		case 2:
+			shell.openExternal("https://github.com/Levminer/authme/blob/dev/.github/CONTRIBUTING.md#translation")
 			break
 
 		default:

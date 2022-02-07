@@ -68,14 +68,6 @@ if (app.isPackaged === false) {
 	})
 
 	dev = true
-} else {
-	const debug = require("electron-debug")
-
-	if (number.startsWith("alpha")) {
-		debug({
-			showDevTools: false,
-		})
-	}
 }
 
 /**
@@ -1575,8 +1567,8 @@ ipc.on("languageCode", (event) => {
 /**
  * Send statistics
  */
-ipc.on("statistics", (event) => {
-	event.returnValue = settings.statistics
+ipc.handle("statistics", () => {
+	return settings.statistics
 })
 
 /**

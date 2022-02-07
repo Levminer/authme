@@ -300,4 +300,18 @@ module.exports = {
 		"revert_changes": "Biztos vissza akarod vonni az összes változtatást? \n\nEzzel elveszted az összes módosítást!",
 		"delete_all_codes": "Biztos ki akarod törölni az össszes kódot? \n\nA visszaállításhoz töltsd be a legutolsó mentést.",
 	},
+
+	"popup": {
+		"downloading_update": "Frissítés letöltése:",
+		"update_downloaded": "Frissítés sikeresen letölve! Kérlek indítsd újra az alkalmazást, az Authme a háttérben telepíti a frissítést és újraindul autómatikusan.",
+	},
+
+	"info_bar": {
+		"feedback": "Van valami ötleted vagy hibát találtál?",
+		"feedback_link": "Visszajelzés",
+		"rate": "Tetszik az Authme?",
+		"rate_link": "Értékelés a Microsoft Store-on",
+		"translate": "Látni akarod az Authme-t valamilyen más nyelven?",
+		"translate_link": "Fordítás",
+	},
 }
