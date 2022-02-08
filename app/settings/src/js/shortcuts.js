@@ -27,6 +27,107 @@ const default_shortcuts = {
 }
 
 /**
+ * Create shortcuts
+ */
+const createShortcuts = () => {
+	const names = lang.menu
+
+	delete names.file
+	delete names.hide_app
+	delete names.view
+	delete names.tools
+	delete names.help
+	delete names.about
+
+	let i = 0
+
+	for (const name in names) {
+		const element = `
+		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+		<div class="flex justify-center items-center">
+		<h3>${names[name]}</h3>
+		</div>
+		<div class="flex justify-center items-center">
+		<input class="input" disabled type="text" id="hk${i}_input" />
+		</div>
+		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
+		<button class="buttonr button" id="hk${i}_button_edit" onclick="hk_edit(${i})">
+		<svg id="hk${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+		</svg>
+		</button>
+		<button class="buttonr button" id="hk${i}_button_reset" onclick="hk_reset(${i})">
+		<svg id="hk${i}_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+		</svg>
+		</button>
+		<button class="buttonr button" id="hk${i}_button_delete" onclick="hk_delete(${i})">
+		<svg id="hk${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+		</svg>
+		</button>
+		</div>
+		</div>
+		`
+		const div = document.createElement("div")
+		div.innerHTML = element
+		document.querySelector(".shortcutsDiv").appendChild(div)
+
+		i++
+	}
+}
+
+createShortcuts()
+
+/**
+ * Create global shortcuts
+ */
+const createGlobalShortcuts = () => {
+	const names = lang.tray
+
+	delete names.hide_app
+
+	let i = 100
+
+	for (const name in names) {
+		const element = `
+		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
+		<div class="flex justify-center items-center">
+		<h3>${names[name]}</h3>
+		</div>
+		<div class="flex justify-center items-center">
+		<input class="input" disabled type="text" id="hk${i}_input" />
+		</div>
+		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
+		<button class="buttonr button" id="hk${i}_button_edit" onclick="hk_edit(${i})">
+		<svg id="hk${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+		</svg>
+		</button>
+		<button class="buttonr button" id="hk${i}_button_reset" onclick="hk_reset(${i})">
+		<svg id="hk${i}_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+		</svg>
+		</button>
+		<button class="buttonr button" id="hk${i}_button_delete" onclick="hk_delete(${i})">
+		<svg id="hk${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+		</svg>
+		</button>
+		</div>
+		</div>
+		`
+		const div = document.createElement("div")
+		div.innerHTML = element
+		document.querySelector(".globalShortcutsDiv").appendChild(div)
+
+		i++
+	}
+}
+
+createGlobalShortcuts()
+
+/**
  * Load storage
  * @type {LibStorage}
  */
@@ -68,18 +169,18 @@ const hk102 = document.querySelector("#hk102_input")
 hk0.value = settings.shortcuts.show
 hk1.value = settings.shortcuts.settings
 hk2.value = settings.shortcuts.exit
-hk3.value = settings.shortcuts.edit
-hk4.value = settings.shortcuts.import
-hk5.value = settings.shortcuts.export
-hk6.value = settings.shortcuts.release
-hk7.value = settings.shortcuts.support
-hk8.value = settings.shortcuts.docs
-hk9.value = settings.shortcuts.licenses
-hk10.value = settings.shortcuts.update
-hk11.value = settings.shortcuts.info
-hk12.value = settings.shortcuts.zoom_reset
-hk13.value = settings.shortcuts.zoom_in
-hk14.value = settings.shortcuts.zoom_out
+hk3.value = settings.shortcuts.zoom_reset
+hk4.value = settings.shortcuts.zoom_in
+hk5.value = settings.shortcuts.zoom_out
+hk6.value = settings.shortcuts.edit
+hk7.value = settings.shortcuts.import
+hk8.value = settings.shortcuts.export
+hk9.value = settings.shortcuts.docs
+hk10.value = settings.shortcuts.release
+hk11.value = settings.shortcuts.support
+hk12.value = settings.shortcuts.licenses
+hk13.value = settings.shortcuts.update
+hk14.value = settings.shortcuts.info
 hk100.value = settings.global_shortcuts.show
 hk101.value = settings.global_shortcuts.settings
 hk102.value = settings.global_shortcuts.exit
@@ -158,63 +259,63 @@ const hk_edit = (value) => {
 			case 3:
 				const hk3 = document.querySelector("#hk3_input").value
 
-				settings.shortcuts.edit = hk3
+				settings.shortcuts.zoom_reset = hk3
 				break
 			case 4:
 				const hk4 = document.querySelector("#hk4_input").value
 
-				settings.shortcuts.import = hk4
+				settings.shortcuts.zoom_in = hk4
 				break
 			case 5:
 				const hk5 = document.querySelector("#hk5_input").value
 
-				settings.shortcuts.export = hk5
+				settings.shortcuts.zoom_out = hk5
 				break
 
 			case 6:
 				const hk6 = document.querySelector("#hk6_input").value
 
-				settings.shortcuts.release = hk6
+				settings.shortcuts.edit = hk6
 				break
 			case 7:
 				const hk7 = document.querySelector("#hk7_input").value
 
-				settings.shortcuts.support = hk7
+				settings.shortcuts.import = hk7
 				break
 			case 8:
 				const hk8 = document.querySelector("#hk8_input").value
 
-				settings.shortcuts.docs = hk8
+				settings.shortcuts.export = hk8
 				break
 			case 9:
 				const hk9 = document.querySelector("#hk9_input").value
 
-				settings.shortcuts.licenses = hk9
+				settings.shortcuts.docs = hk9
 				break
 			case 10:
 				const hk10 = document.querySelector("#hk10_input").value
 
-				settings.shortcuts.update = hk10
+				settings.shortcuts.release = hk10
 				break
 			case 11:
 				const hk11 = document.querySelector("#hk11_input").value
 
-				settings.shortcuts.info = hk11
+				settings.shortcuts.support = hk11
 				break
 			case 12:
 				const hk12 = document.querySelector("#hk12_input").value
 
-				settings.shortcuts.zoom_reset = hk12
+				settings.shortcuts.licenses = hk12
 				break
 			case 13:
 				const hk13 = document.querySelector("#hk13_input").value
 
-				settings.shortcuts.zoom_in = hk13
+				settings.shortcuts.update = hk13
 				break
 			case 14:
 				const hk14 = document.querySelector("#hk14_input").value
 
-				settings.shortcuts.zoom_out = hk14
+				settings.shortcuts.info = hk14
 				break
 
 			// global shortcuts
@@ -292,63 +393,63 @@ const hk_delete = (value) => {
 		case 3:
 			const hk3 = document.querySelector("#hk3_input").value
 
-			settings.shortcuts.edit = hk3
+			settings.shortcuts.zoom_reset = hk3
 			break
 		case 4:
 			const hk4 = document.querySelector("#hk4_input").value
 
-			settings.shortcuts.import = hk4
+			settings.shortcuts.zoom_in = hk4
 			break
 		case 5:
 			const hk5 = document.querySelector("#hk5_input").value
 
-			settings.shortcuts.export = hk5
+			settings.shortcuts.zoom_out = hk5
 			break
 
 		case 6:
 			const hk6 = document.querySelector("#hk6_input").value
 
-			settings.shortcuts.release = hk6
+			settings.shortcuts.edit = hk6
 			break
 		case 7:
 			const hk7 = document.querySelector("#hk7_input").value
 
-			settings.shortcuts.support = hk7
+			settings.shortcuts.import = hk7
 			break
 		case 8:
 			const hk8 = document.querySelector("#hk8_input").value
 
-			settings.shortcuts.docs = hk8
+			settings.shortcuts.export = hk8
 			break
 		case 9:
 			const hk9 = document.querySelector("#hk9_input").value
 
-			settings.shortcuts.licenses = hk9
+			settings.shortcuts.docs = hk9
 			break
 		case 10:
 			const hk10 = document.querySelector("#hk10_input").value
 
-			settings.shortcuts.update = hk10
+			settings.shortcuts.release = hk10
 			break
 		case 11:
 			const hk11 = document.querySelector("#hk11_input").value
 
-			settings.shortcuts.info = hk11
+			settings.shortcuts.support = hk11
 			break
 		case 12:
 			const hk12 = document.querySelector("#hk12_input").value
 
-			settings.shortcuts.zoom_reset = hk12
+			settings.shortcuts.licenses = hk12
 			break
 		case 13:
 			const hk13 = document.querySelector("#hk13_input").value
 
-			settings.shortcuts.zoom_in = hk13
+			settings.shortcuts.update = hk13
 			break
 		case 14:
 			const hk14 = document.querySelector("#hk14_input").value
 
-			settings.shortcuts.zoom_out = hk14
+			settings.shortcuts.info = hk14
 			break
 
 		// global shortcuts
@@ -411,65 +512,65 @@ const hk_reset = (value) => {
 			settings.shortcuts.exit = default_shortcuts.shortcuts.exit
 			break
 		case 3:
-			document.querySelector("#hk3_input").value = default_shortcuts.shortcuts.edit
-
-			settings.shortcuts.edit = default_shortcuts.shortcuts.edit
-			break
-		case 4:
-			document.querySelector("#hk4_input").value = default_shortcuts.shortcuts.import
-
-			settings.shortcuts.import = default_shortcuts.shortcuts.import
-			break
-		case 5:
-			document.querySelector("#hk5_input").value = default_shortcuts.shortcuts.export
-
-			settings.shortcuts.export = default_shortcuts.shortcuts.export
-			break
-
-		case 6:
-			document.querySelector("#hk6_input").value = default_shortcuts.shortcuts.release
-
-			settings.shortcuts.release = default_shortcuts.shortcuts.release
-			break
-		case 7:
-			document.querySelector("#hk7_input").value = default_shortcuts.shortcuts.support
-
-			settings.shortcuts.support = default_shortcuts.shortcuts.support
-			break
-		case 8:
-			document.querySelector("#hk8_input").value = default_shortcuts.shortcuts.docs
-
-			settings.shortcuts.docs = default_shortcuts.shortcuts.docs
-			break
-		case 9:
-			document.querySelector("#hk9_input").value = default_shortcuts.shortcuts.licenses
-
-			settings.shortcuts.licenses = default_shortcuts.shortcuts.licenses
-			break
-		case 10:
-			document.querySelector("#hk10_input").value = default_shortcuts.shortcuts.update
-
-			settings.shortcuts.update = default_shortcuts.shortcuts.update
-			break
-		case 11:
-			document.querySelector("#hk11_input").value = default_shortcuts.shortcuts.info
-
-			settings.shortcuts.info = default_shortcuts.shortcuts.info
-			break
-		case 12:
-			document.querySelector("#hk12_input").value = default_shortcuts.shortcuts.zoom_reset
+			document.querySelector("#hk3_input").value = default_shortcuts.shortcuts.zoom_reset
 
 			settings.shortcuts.zoom_reset = default_shortcuts.shortcuts.zoom_reset
 			break
-		case 13:
-			document.querySelector("#hk13_input").value = default_shortcuts.shortcuts.zoom_in
+		case 4:
+			document.querySelector("#hk4_input").value = default_shortcuts.shortcuts.zoom_in
 
 			settings.shortcuts.zoom_in = default_shortcuts.shortcuts.zoom_in
 			break
-		case 14:
-			document.querySelector("#hk14_input").value = default_shortcuts.shortcuts.zoom_out
+		case 5:
+			document.querySelector("#hk5_input").value = default_shortcuts.shortcuts.zoom_out
 
 			settings.shortcuts.zoom_out = default_shortcuts.shortcuts.zoom_out
+			break
+
+		case 6:
+			document.querySelector("#hk6_input").value = default_shortcuts.shortcuts.edit
+
+			settings.shortcuts.edit = default_shortcuts.shortcuts.edit
+			break
+		case 7:
+			document.querySelector("#hk7_input").value = default_shortcuts.shortcuts.import
+
+			settings.shortcuts.import = default_shortcuts.shortcuts.import
+			break
+		case 8:
+			document.querySelector("#hk8_input").value = default_shortcuts.shortcuts.export
+
+			settings.shortcuts.export = default_shortcuts.shortcuts.export
+			break
+		case 9:
+			document.querySelector("#hk9_input").value = default_shortcuts.shortcuts.docs
+
+			settings.shortcuts.docs = default_shortcuts.shortcuts.docs
+			break
+		case 10:
+			document.querySelector("#hk10_input").value = default_shortcuts.shortcuts.release
+
+			settings.shortcuts.release = default_shortcuts.shortcuts.release
+			break
+		case 11:
+			document.querySelector("#hk11_input").value = default_shortcuts.shortcuts.support
+
+			settings.shortcuts.support = default_shortcuts.shortcuts.support
+			break
+		case 12:
+			document.querySelector("#hk12_input").value = default_shortcuts.shortcuts.licenses
+
+			settings.shortcuts.licenses = default_shortcuts.shortcuts.licenses
+			break
+		case 13:
+			document.querySelector("#hk13_input").value = default_shortcuts.shortcuts.update
+
+			settings.shortcuts.update = default_shortcuts.shortcuts.update
+			break
+		case 14:
+			document.querySelector("#hk14_input").value = default_shortcuts.shortcuts.info
+
+			settings.shortcuts.info = default_shortcuts.shortcuts.info
 			break
 
 		// global shortcuts
@@ -534,7 +635,7 @@ const generateQuickShortcuts = (issuers) => {
 
 		const div = document.createElement("div")
 		div.innerHTML = element
-		document.querySelector(".quick").appendChild(div)
+		document.querySelector(".quickShortcutsDiv").appendChild(div)
 
 		document.querySelector(`#issuers${i}`).textContent = `${issuers[i]}`
 	}
@@ -555,14 +656,14 @@ const checkForIssuers = () => {
 	if (issuers !== undefined) {
 		generateQuickShortcuts(issuers)
 	} else {
-		document.querySelector(".quick").innerHTML = `
-		<div class="mx-auto rounded-2xl bg-gray-800 w-2/3">
-		<h3 class="pt-5">Please save your codes on the main page and click reload to be able to create quick shortcuts!</h3>
+		document.querySelector(".quickShortcutsDiv").innerHTML = `
+		<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 -mt-16">
+		<h4 class="pt-5">${lang.text.quick_shortcuts}</h4>
 		<button class="buttoni mb-8" onclick="location.reload()">
 		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-		  </svg>
-		Reload
+		</svg>
+		${lang.text.refresh}
 		</button>
 		</div>
 		`
@@ -571,7 +672,7 @@ const checkForIssuers = () => {
 
 /**
  * Edit selected quick shortcuts
- * @param {Number} value
+ * @param {number} value
  */
 const qsEdit = (value) => {
 	const issuers = storage.issuers
@@ -621,7 +722,7 @@ const qsEdit = (value) => {
 
 /**
  * Delete selected quick shortcut
- * @param {Number} value
+ * @param {number} value
  */
 const qsDelete = (value) => {
 	const issuers = storage.issuers

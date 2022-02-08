@@ -24,12 +24,12 @@
 		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 mt-40 text-center">
 			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
 			<h2>Export</h2>
-			<h4>You can export the 2FA codes you saved.</h4>
+			<h4 data-loc>You can export the 2FA codes you saved.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 				</svg>
-				Close window
+				<span data-loc>Close window</span>
 			</button>
 		</div>
 
@@ -37,8 +37,8 @@
 		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center p-1">
 			<!-- before export -->
 			<div class="before_export mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
-				<h3 class="pt-5">Export codes</h3>
-				<h4>If you saved your codes you can export the secrets and the saved QR codes.</h4>
+				<h3 data-loc class="pt-5">Export codes</h3>
+				<h4 data-loc>If you saved your codes you can export the secrets and the saved QR codes.</h4>
 				<button class="buttoni but1 mb-5" id="but0" onclick="exportCodes()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -49,26 +49,26 @@
 			<!-- after export -->
 			<div class="after_export hidden">
 				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
-					<h3 class="pt-5">Save exported codes</h3>
-					<h4>Save your exported 2FA codes to use it elsewhere.</h4>
+					<h3 data-loc class="pt-5">Save exported codes</h3>
+					<h4 data-loc>Save your exported 2FA codes to use it elsewhere.</h4>
 					<div class="flex flex-row justify-center gap-3 flex-wrap">
 						<div>
 							<button class="buttoni" id="but1" onclick="newSaveFile()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 								</svg>
-								Export .authme file
+								<span data-loc>Export .authme file</span>
 							</button>
-							<h5 class="m-3">Ideal to import for Authme or other Authme apps.</h5>
+							<h5 data-loc class="m-3">Ideal to import for Authme or other Authme apps.</h5>
 						</div>
 						<div>
 							<button class="buttoni" id="but2" onclick="saveQrCodes()">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
 								</svg>
-								Export .html file
+								<span data-loc>Export .html file</span>
 							</button>
-							<h5 class="m-3">Ideal for scanning the QR codes or for security backup.</h5>
+							<h5 data-loc class="m-3">Ideal for scanning the QR codes or for security backup.</h5>
 						</div>
 					</div>
 

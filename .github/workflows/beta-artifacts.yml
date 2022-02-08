@@ -1,30 +1,125 @@
 name: Beta Artifacts
 on:
-    push:
-        branches: [beta]
+  push:
+    branches: [beta]
 jobs:
-    build:
-        runs-on: ${{matrix.os}}
-        strategy:
-            matrix:
-                include:
-                    - os: macos-latest
-                      NAME: mac
-                    - os: ubuntu-latest
-                      NAME: linux
-                    - os: windows-latest
-                      NAME: windows
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
-              with:
-                node-version: '15'
-            - name: Install modules
-              run: npm ci
-            - name: Run build
-              run: npm run build:beta
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v2
-              with:
-                  name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
-                  path: dist
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            NAME: mac
+          - os: ubuntu-latest
+            NAME: linux
+          - os: windows-latest
+            NAME: windows
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install modules
+        run: npm ci
+      - name: Build project
+        run: npm run build:beta
+      - uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/:repository/releases?per_page=1
+          repository: ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get upload url
+        id: get_upload_url
+        run: >
+          url=$(echo "$response" | jq -r ".[0].upload_url")
+
+          echo "::set-output name=url::$url"
+        env:
+          response: ${{ steps.get_latest_release.outputs.data }}
+        shell: bash
+      - name: Get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: package.json
+          prop_path: version
+      # Windows
+      - name: Upload the windows installer asset
+        if: runner.os == 'Windows'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-windows-x64-installer.exe
+          asset_name: authme-${{steps.version.outputs.prop}}-windows-x64-installer.exe
+          asset_content_type: application/octet-stream
+      - name: Upload the windows portable asset
+        if: runner.os == 'Windows'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-windows-x64-portable.zip
+          asset_name: authme-${{steps.version.outputs.prop}}-windows-x64-portable.zip
+          asset_content_type: application/x-zip-compressed
+      - name: Upload the windows latest.yml asset
+        if: runner.os == 'Windows'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/latest.yml
+          asset_name: latest.yml
+          asset_content_type: application/octet-stream
+      # Linux
+      - name: Upload the linux installer asset
+        if: runner.os == 'Linux'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-linux-x64-installer.appimage
+          asset_name: authme-${{steps.version.outputs.prop}}-linux-x64-installer.appimage
+          asset_content_type: application/octet-stream
+      - name: Upload the linux portable asset
+        if: runner.os == 'Linux'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-linux-x64-portable.zip
+          asset_name: authme-${{steps.version.outputs.prop}}-linux-x64-portable.zip
+          asset_content_type: application/x-zip-compressed     
+      # Mac
+      - name: Upload the mac installer asset
+        if: runner.os == 'macOS'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-mac-x64-installer.dmg
+          asset_name: authme-${{steps.version.outputs.prop}}-mac-x64-installer.dmg
+          asset_content_type: application/octet-stream
+      - name: Upload the mac portable asset
+        if: runner.os == 'macOS'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./dist/authme-${{steps.version.outputs.prop}}-mac-x64-portable.zip
+          asset_name: authme-${{steps.version.outputs.prop}}-mac-x64-portable.zip
+          asset_content_type: application/x-zip-compressed     
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: authme-latest-beta-${{matrix.NAME}}-x64-installer-portable
+          path: dist

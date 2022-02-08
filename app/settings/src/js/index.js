@@ -1,7 +1,7 @@
 const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
+const { convert, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
-const { convert } = require("@levminer/lib")
 const path = require("path")
 const fs = require("fs")
 
@@ -18,25 +18,28 @@ window.onerror = (error) => {
 logger.getWindow("application")
 
 /**
- * Get app information
+ * Localization
  */
-const res = ipc.sendSync("info")
+localization.localize("settings")
+
+const lang = localization.getLang()
 
 /**
- * Show build number if version is pre release
+ * Build number
  */
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-} else if (res.build_number.startsWith("beta")) {
-	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
+const buildNumber = async () => {
+	const info = await ipc.invoke("info")
+
+	if (info.build_number.startsWith("alpha")) {
+		document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	} else if (info.build_number.startsWith("beta")) {
+		document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	}
 }
 
-// set app version
-document.querySelector(".about").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-</svg> Authme (${res.authme_version})`
+buildNumber()
 
 /**
  * If running in development
@@ -82,9 +85,9 @@ const currentWindow = BrowserWindow.getFocusedWindow()
 /**
  * Elements
  */
-const drp0 = document.querySelector("#dropdownButton0")
-const drp1 = document.querySelector("#dropdownButton1")
-
+const drp0 = document.querySelector("#sortButton")
+const drp1 = document.querySelector("#displayButton")
+const drp2 = document.querySelector("#languageButton")
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
 const tgl1 = document.querySelector("#tgl1")
@@ -177,25 +180,63 @@ if (reset_copy_state === true) {
 }
 
 // sort
-const sort_number = settings.experimental.sort
+const sort_number = settings.settings.sort
 
 if (sort_number === 1) {
-	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 	</svg> A-Z`
 } else if (sort_number === 2) {
-	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 	</svg> Z-A`
 }
 
 // display
 drp1.innerHTML = `
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 	</svg>
-	Display #${settings.settings.default_display}
+	${lang.text.display} #${settings.settings.default_display}
 	`
+
+// language
+switch (settings.settings.language) {
+	case "en":
+		drp2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+		<path fill="#B22334" d="M35.445 7C34.752 5.809 33.477 5 32 5H18v2h17.445zM0 25h36v2H0zm18-8h18v2H18zm0-4h18v2H18zM0 21h36v2H0zm4 10h28c1.477 0 2.752-.809 3.445-2H.555c.693 1.191 1.968 2 3.445 2zM18 9h18v2H18z" />
+		<path fill="#EEE" d="M.068 27.679c.017.093.036.186.059.277.026.101.058.198.092.296.089.259.197.509.333.743L.555 29h34.89l.002-.004c.135-.233.243-.483.332-.741.034-.099.067-.198.093-.301.023-.09.042-.182.059-.275.041-.22.069-.446.069-.679H0c0 .233.028.458.068.679zM0 23h36v2H0zm0-4v2h36v-2H18zm18-4h18v2H18zm0-4h18v2H18zM0 9c0-.233.03-.457.068-.679C.028 8.542 0 8.767 0 9zm.555-2l-.003.005L.555 7zM.128 8.044c.025-.102.06-.199.092-.297-.034.098-.066.196-.092.297zM18 9h18c0-.233-.028-.459-.069-.68-.017-.092-.035-.184-.059-.274-.027-.103-.059-.203-.094-.302-.089-.258-.197-.507-.332-.74.001-.001 0-.003-.001-.004H18v2z" />
+		<path fill="#3C3B6E" d="M18 5H4C1.791 5 0 6.791 0 9v10h18V5z" />
+		<path
+		fill="#FFF"
+		d="M2.001 7.726l.618.449-.236.725L3 8.452l.618.448-.236-.725L4 7.726h-.764L3 7l-.235.726zm2 2l.618.449-.236.725.617-.448.618.448-.236-.725L6 9.726h-.764L5 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 9l-.235.726zm-8 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L5 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 13l-.235.726zm-6-6l.618.449-.236.725L7 8.452l.618.448-.236-.725L8 7.726h-.764L7 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 7l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 11l-.235.726zM6.383 12.9L7 12.452l.618.448-.236-.725.618-.449h-.764L7 11l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 11l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 11l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 15l-.235.726zM6.383 16.9L7 16.452l.618.448-.236-.725.618-.449h-.764L7 15l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 15l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 15l-.235.726z"
+		/>
+		</svg>
+		English (US)`
+		break
+
+	case "hu":
+		drp2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+		<path fill="#EEE" d="M0 14h36v8H0z" />
+		<path fill="#CD2A3E" d="M32 5H4C1.791 5 0 6.791 0 9v5h36V9c0-2.209-1.791-4-4-4z" />
+		<path fill="#436F4D" d="M4 31h28c2.209 0 4-1.791 4-4v-5H0v5c0 2.209 1.791 4 4 4z" />
+		</svg>
+		Hungarian (Magyar)`
+		break
+
+	default:
+		drp2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+			<path fill="#B22334" d="M35.445 7C34.752 5.809 33.477 5 32 5H18v2h17.445zM0 25h36v2H0zm18-8h18v2H18zm0-4h18v2H18zM0 21h36v2H0zm4 10h28c1.477 0 2.752-.809 3.445-2H.555c.693 1.191 1.968 2 3.445 2zM18 9h18v2H18z" />
+			<path fill="#EEE" d="M.068 27.679c.017.093.036.186.059.277.026.101.058.198.092.296.089.259.197.509.333.743L.555 29h34.89l.002-.004c.135-.233.243-.483.332-.741.034-.099.067-.198.093-.301.023-.09.042-.182.059-.275.041-.22.069-.446.069-.679H0c0 .233.028.458.068.679zM0 23h36v2H0zm0-4v2h36v-2H18zm18-4h18v2H18zm0-4h18v2H18zM0 9c0-.233.03-.457.068-.679C.028 8.542 0 8.767 0 9zm.555-2l-.003.005L.555 7zM.128 8.044c.025-.102.06-.199.092-.297-.034.098-.066.196-.092.297zM18 9h18c0-.233-.028-.459-.069-.68-.017-.092-.035-.184-.059-.274-.027-.103-.059-.203-.094-.302-.089-.258-.197-.507-.332-.74.001-.001 0-.003-.001-.004H18v2z" />
+			<path fill="#3C3B6E" d="M18 5H4C1.791 5 0 6.791 0 9v10h18V5z" />
+			<path
+			fill="#FFF"
+			d="M2.001 7.726l.618.449-.236.725L3 8.452l.618.448-.236-.725L4 7.726h-.764L3 7l-.235.726zm2 2l.618.449-.236.725.617-.448.618.448-.236-.725L6 9.726h-.764L5 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 9l-.235.726zm-8 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L5 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 13l-.235.726zm-6-6l.618.449-.236.725L7 8.452l.618.448-.236-.725L8 7.726h-.764L7 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 7l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 11l-.235.726zM6.383 12.9L7 12.452l.618.448-.236-.725.618-.449h-.764L7 11l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 11l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 11l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 15l-.235.726zM6.383 16.9L7 16.452l.618.448-.236-.725.618-.449h-.764L7 15l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 15l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 15l-.235.726z"
+			/>
+			</svg>
+			English (US)`
+		break
+}
 
 // hardware
 let hardware_state = settings.settings.hardware_acceleration
@@ -302,24 +343,24 @@ const clearData = () => {
 	dialog
 		.showMessageBox(currentWindow, {
 			title: "Authme",
-			buttons: ["Yes", "No"],
+			buttons: [lang.button.yes, lang.button.no],
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
 			type: "warning",
-			message: "Are you sure you want to clear all data? \n\nThis cannot be undone!",
+			message: lang.settings_dialog.clear_data,
 		})
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
 					.showMessageBox(currentWindow, {
 						title: "Authme",
-						buttons: ["Yes", "No"],
+						buttons: [lang.button.yes, lang.button.no],
 						defaultId: 1,
 						cancelId: 1,
 						noLink: true,
 						type: "warning",
-						message: "Are you absolutely sure? \n\nThere is no way back!",
+						message: lang.settings_dialog.confirm_clear_data,
 					})
 					.then(async (result) => {
 						if (result.response === 0) {
@@ -334,7 +375,7 @@ const clearData = () => {
 
 							// remove startup shortcut
 							if (dev === false) {
-								ipc.sendSync("disableStartup")
+								ipc.send("disableStartup")
 							}
 
 							// clear storage
@@ -503,12 +544,12 @@ const hardwareAcceleration = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -525,65 +566,155 @@ const hardwareAcceleration = () => {
 /**
  * Sort codes dropdown
  */
-let dropdown_state = false
+let sort_shown = false
+
+document.querySelector(".sortDefault").textContent = lang.text.default
+document.querySelector(".sortContentDefault").textContent = lang.text.default
 
 // show dropdown
-const dropdown = () => {
-	const dropdown_content = document.querySelector("#dropdownContent0")
+const sortDropdown = () => {
+	const sort_content = document.querySelector("#sortContent")
 
-	if (dropdown_state === false) {
-		dropdown_content.style.visibility = "visible"
+	if (sort_shown === false) {
+		sort_content.style.visibility = "visible"
 
 		setTimeout(() => {
-			dropdown_content.style.display = "block"
+			sort_content.style.display = "block"
 		}, 10)
 
-		dropdown_state = true
+		sort_shown = true
 	} else {
-		dropdown_content.style.display = ""
+		sort_content.style.display = ""
 
-		dropdown_state = false
+		sort_shown = false
 	}
 }
 
 // choose option
-const dropdownChoose = (id) => {
-	const dropdown_button = document.querySelector("#dropdownButton0")
+const sortDropdownChoose = (id) => {
+	const sort_content = document.querySelector("#sortContent")
+	const sort_button = document.querySelector("#sortButton")
 
 	const sort = () => {
 		switch (id) {
 			case 0:
-				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-					 </svg> Default`
+				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+					   </svg> ${lang.text.default}`
 
-				settings.experimental.sort = null
+				settings.settings.sort = null
 				break
 
 			case 1:
-				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-					 </svg> A-Z`
+				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
+					   </svg> A-Z`
 
-				settings.experimental.sort = 1
+				settings.settings.sort = 1
 				break
 
 			case 2:
-				dropdown_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-					</svg> Z-A`
+				sort_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+					  </svg> Z-A`
 
-				settings.experimental.sort = 2
+				settings.settings.sort = 2
 				break
 		}
 	}
 
-	dropdown()
+	sort_content.style.display = ""
+	sort_shown = false
+
 	sort()
 	save()
 
 	ipc.send("reloadApplicationWindow")
 }
+
+/**
+ * Choose language dropdown
+ */
+let language_shown = false
+
+// show dropdown
+const languageDropdown = () => {
+	const language_content = document.querySelector("#languageContent")
+
+	if (language_shown === false) {
+		language_content.style.visibility = "visible"
+
+		setTimeout(() => {
+			language_content.style.display = "block"
+		}, 10)
+
+		language_shown = true
+	} else {
+		language_content.style.display = ""
+
+		language_shown = false
+	}
+}
+
+// choose option
+const languageDropdownChoose = (id) => {
+	const language_button = document.querySelector("#languageButton")
+
+	const toggle = () => {
+		switch (id) {
+			case "en":
+				language_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+				<path fill="#B22334" d="M35.445 7C34.752 5.809 33.477 5 32 5H18v2h17.445zM0 25h36v2H0zm18-8h18v2H18zm0-4h18v2H18zM0 21h36v2H0zm4 10h28c1.477 0 2.752-.809 3.445-2H.555c.693 1.191 1.968 2 3.445 2zM18 9h18v2H18z" />
+				<path fill="#EEE" d="M.068 27.679c.017.093.036.186.059.277.026.101.058.198.092.296.089.259.197.509.333.743L.555 29h34.89l.002-.004c.135-.233.243-.483.332-.741.034-.099.067-.198.093-.301.023-.09.042-.182.059-.275.041-.22.069-.446.069-.679H0c0 .233.028.458.068.679zM0 23h36v2H0zm0-4v2h36v-2H18zm18-4h18v2H18zm0-4h18v2H18zM0 9c0-.233.03-.457.068-.679C.028 8.542 0 8.767 0 9zm.555-2l-.003.005L.555 7zM.128 8.044c.025-.102.06-.199.092-.297-.034.098-.066.196-.092.297zM18 9h18c0-.233-.028-.459-.069-.68-.017-.092-.035-.184-.059-.274-.027-.103-.059-.203-.094-.302-.089-.258-.197-.507-.332-.74.001-.001 0-.003-.001-.004H18v2z" />
+				<path fill="#3C3B6E" d="M18 5H4C1.791 5 0 6.791 0 9v10h18V5z" />
+				<path
+				fill="#FFF"
+				d="M2.001 7.726l.618.449-.236.725L3 8.452l.618.448-.236-.725L4 7.726h-.764L3 7l-.235.726zm2 2l.618.449-.236.725.617-.448.618.448-.236-.725L6 9.726h-.764L5 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 9l-.235.726zm-8 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L5 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 13l-.235.726zm-6-6l.618.449-.236.725L7 8.452l.618.448-.236-.725L8 7.726h-.764L7 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 7l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 11l-.235.726zM6.383 12.9L7 12.452l.618.448-.236-.725.618-.449h-.764L7 11l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 11l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 11l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 15l-.235.726zM6.383 16.9L7 16.452l.618.448-.236-.725.618-.449h-.764L7 15l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 15l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 15l-.235.726z"
+				/>
+				</svg>
+				English (US)`
+
+				settings.settings.language = "en"
+				break
+
+			case "hu":
+				language_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+				<path fill="#EEE" d="M0 14h36v8H0z" />
+				<path fill="#CD2A3E" d="M32 5H4C1.791 5 0 6.791 0 9v5h36V9c0-2.209-1.791-4-4-4z" />
+				<path fill="#436F4D" d="M4 31h28c2.209 0 4-1.791 4-4v-5H0v5c0 2.209 1.791 4 4 4z" />
+				</svg>
+				Hungarian (Magyar)`
+
+				settings.settings.language = "hu"
+				break
+		}
+
+		save()
+	}
+
+	dialog
+		.showMessageBox({
+			title: "Authme",
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
+			defaultId: 2,
+			cancelId: 2,
+			noLink: true,
+			type: "warning",
+			message: lang.settings_dialog.restart,
+		})
+		.then((result) => {
+			if (result.response === 0) {
+				toggle()
+				restart()
+			}
+
+			if (result.response === 1) {
+				toggle()
+			}
+		})
+}
+
+// default
 
 /**
  * Save settings to disk
@@ -799,26 +930,29 @@ const reload = () => {
  * Dismiss dialog on click outside
  */
 window.addEventListener("click", (event) => {
-	const dropdown_content0 = document.querySelector("#dropdownContent0")
-	const dropdown_button0 = document.querySelector("#dropdownButton0")
-	const dropdown_content1 = document.querySelector("#dropdownContent1")
-	const dropdown_button1 = document.querySelector("#dropdownButton1")
-	const sort_svg = document.querySelector("#sortSvg")
-	const sort_path = document.querySelector("#sortPath")
-	const link0 = document.querySelector("#link0")
-	const link1 = document.querySelector("#link1")
-	const link2 = document.querySelector("#link2")
+	const sort_content = document.querySelector("#sortContent")
+	const sort_button = document.querySelector("#sortButton")
+	const display_content = document.querySelector("#displayContent")
+	const display_button = document.querySelector("#displayButton")
+	const language_content = document.querySelector("#languageContent")
+	const language_button = document.querySelector("#languageButton")
 
-	if (event.target != dropdown_button0 && event.target != sort_svg && event.target != sort_path && event.target != link0 && event.target != link1 && event.target != link2) {
-		dropdown_content0.style.display = ""
+	if (event.target != sort_button) {
+		sort_content.style.display = ""
 
-		dropdown_state = false
+		sort_shown = false
 	}
 
-	if (event.target != dropdown_content1 && event.target != dropdown_button1) {
-		dropdown_content1.style.display = ""
+	if (event.target != display_button) {
+		display_content.style.display = ""
 
-		display_state = false
+		display_shown = false
+	}
+
+	if (event.target != language_button) {
+		language_content.style.display = ""
+
+		language_shown = false
 	}
 })
 
@@ -840,7 +974,7 @@ const manualUpdate = () => {
  * Display auto update download info
  */
 ipc.on("updateInfo", (event, info) => {
-	document.querySelector("#updateText").textContent = `Downloading update: ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
+	document.querySelector("#updateText").textContent = `${lang.popup.downloading_update} ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
 })
 
 /**
@@ -854,7 +988,7 @@ const updateAvailable = () => {
  * Display restart button if download finished
  */
 const updateDownloaded = () => {
-	document.querySelector("#updateText").textContent = "Successfully downloaded update! Please restart the app, Authme will install the updates in the background and restart automatically."
+	document.querySelector("#updateText").textContent = lang.popup.update_downloaded
 	document.querySelector("#updateButton").style.display = "block"
 	document.querySelector("#updateClose").style.display = "block"
 }
@@ -895,12 +1029,12 @@ const screenCapture = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -918,69 +1052,65 @@ const screenCapture = () => {
  * Get screens
  */
 const displays = screen.getAllDisplays()
-const displayChooser = document.querySelector("#dropdownContent1")
+const display_content = document.querySelector("#displayContent")
 
 for (let i = 1; i < displays.length + 1; i++) {
 	const element = document.createElement("a")
 
 	element.innerHTML = `
 	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 	</svg>
-	Display #${i}
+	${lang.text.display} #${i}
 	</a>
 	`
 
-	displayChooser.appendChild(element)
+	display_content.appendChild(element)
 }
 
 /**
- * Toggle display dropdown
+ * Toggle default display dropdown
  */
-let display_state = false
+let display_shown = false
 const display = () => {
-	const dropdown_content = document.querySelector("#dropdownContent1")
-
-	if (display_state === false) {
-		dropdown_content.style.visibility = "visible"
+	if (display_shown === false) {
+		display_content.style.visibility = "visible"
 
 		setTimeout(() => {
-			dropdown_content.style.display = "block"
+			display_content.style.display = "block"
 		}, 10)
 
-		display_state = true
+		display_shown = true
 	} else {
-		dropdown_content.style.display = ""
+		display_content.style.display = ""
 
-		display_state = false
+		display_shown = false
 	}
 }
 
 const displayChoose = (id) => {
 	const toggle = () => {
 		drp1.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 		</svg>
-		Display #${id}
+		${lang.text.display} #${id}
 		`
 
 		settings.settings.default_display = id
 		save()
-
-		display()
 	}
 
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No", "Cancel"],
+			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
 			defaultId: 2,
 			cancelId: 2,
 			noLink: true,
 			type: "warning",
-			message: "If you want to change this setting you have to restart the app! \n\nDo you want to restart it now?",
+			message: lang.settings_dialog.restart,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -992,4 +1122,9 @@ const displayChoose = (id) => {
 				toggle()
 			}
 		})
+}
+
+/* Experimental docs */
+const experimentalDocs = () => {
+	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=experimental-features")
 }

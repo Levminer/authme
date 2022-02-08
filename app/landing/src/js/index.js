@@ -1,4 +1,4 @@
-const { aes, password } = require("@levminer/lib")
+const { aes, password, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { app, dialog } = require("@electron/remote")
 const { ipcRenderer: ipc } = require("electron")
@@ -17,6 +17,13 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("landing")
+
+/**
+ * Localization
+ */
+localization.localize("landing")
+
+const lang = localization.getLang()
 
 /**
  * If running in development
@@ -39,20 +46,21 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
 let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 /**
- * Get app information
+ * Build number
  */
-const res = ipc.sendSync("info")
+const buildNumber = async () => {
+	const info = await ipc.invoke("info")
 
-/**
- * Show build number if version is pre release
- */
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-} else if (res.build_number.startsWith("beta")) {
-	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
+	if (info.build_number.startsWith("alpha")) {
+		document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	} else if (info.build_number.startsWith("beta")) {
+		document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	}
 }
+
+buildNumber()
 
 /**
  * Get info text
@@ -87,17 +95,17 @@ const comparePasswords = () => {
 
 	if (password_input1.toString().length > 64) {
 		text.style.color = "#CC001B"
-		text.textContent = "Maximum password length is 64 characters!"
+		text.textContent = lang.landing_text.maximum_password
 	} else if (password_input1.toString().length < 8) {
 		text.style.color = "#CC001B"
-		text.textContent = "Minimum password length is 8 characters!"
+		text.textContent = lang.landing_text.minimum_password
 	} else {
 		if (password_input1.toString() == password_input2.toString()) {
 			if (!password.search(password_input1.toString())) {
 				logger.log("Passwords match!")
 
 				text.style.color = "#28A443"
-				text.textContent = "Passwords match! Please wait!"
+				text.textContent = lang.landing_text.passwords_match
 
 				password_input1.fill(0)
 				password_input2.fill(0)
@@ -105,13 +113,13 @@ const comparePasswords = () => {
 				hashPasswords()
 			} else {
 				text.style.color = "#CC001B"
-				text.textContent = "This password is on the list of the top 1000 most common passwords. Please choose a more secure password!"
+				text.textContent = lang.landing_text.top_1000_password
 			}
 		} else {
 			logger.warn("Passwords dont match!")
 
 			text.style.color = "#CC001B"
-			text.textContent = "Passwords don't match! Try again!"
+			text.textContent = lang.landing_text.passwords_dont_match
 		}
 	}
 }
@@ -175,17 +183,17 @@ const noPassword = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "No"],
+			buttons: [lang.button.yes, lang.button.no],
 			type: "warning",
 			defaultId: 1,
 			cancelId: 1,
 			noLink: true,
-			message: "Are you sure? \n\nThis way everyone with access to your computer can access your 2FA codes too.",
+			message: lang.landing_dialog.no_password,
 		})
 		.then((result) => {
 			if (result.response === 0) {
 				text.style.color = "#28A443"
-				text.textContent = "Please wait!"
+				text.textContent = lang.landing_text.please_wait
 
 				/**
 				 * Read settings

@@ -1,4 +1,4 @@
-const { aes, convert, time } = require("@levminer/lib")
+const { aes, convert, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { app, dialog } = require("@electron/remote")
 const { ipcRenderer: ipc } = require("electron")
@@ -16,6 +16,13 @@ window.onerror = (error) => {
  * Start logger
  */
 logger.getWindow("edit")
+
+/**
+ * Localization
+ */
+localization.localize("edit")
+
+const lang = localization.getLang()
 
 /**
  * Check if running in development
@@ -51,20 +58,21 @@ const settings_refresher = setInterval(() => {
 }, 100)
 
 /**
- * Get app information
+ * Build number
  */
-const res = ipc.sendSync("info")
+const buildNumber = async () => {
+	const info = await ipc.invoke("info")
 
-/**
- * Show build number if version is pre release
- */
-if (res.build_number.startsWith("alpha")) {
-	document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
-} else if (res.build_number.startsWith("beta")) {
-	document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${res.authme_version} - Build ${res.build_number}`
-	document.querySelector(".build").style.display = "block"
+	if (info.build_number.startsWith("alpha")) {
+		document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	} else if (info.build_number.startsWith("beta")) {
+		document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	}
 }
+
+buildNumber()
 
 /**
  * Check for latest rollback
@@ -85,13 +93,14 @@ fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
 		const edited_date = fs.statSync(cache_path).atime
 
 		const year = edited_date.getFullYear()
-		const month = edited_date.toLocaleString("en-us", { month: "long" })
+		let month = edited_date.toLocaleString(lang.locale.code, { month: "long" })
+		month = month.charAt(0).toUpperCase() + month.slice(1)
 		const day = edited_date.toISOString().substring(8, 10)
 
 		const temp_date = `${year}. ${month} ${day}.`
 		const temp_time = `${edited_date.getHours().toString().padStart(2, "0")}:${edited_date.getMinutes().toString().padStart(2, "0")}:${edited_date.getSeconds().toString().padStart(2, "0")}`
 
-		rollback_text.innerHTML = `Latest rollback: <br /> ${temp_date}  ${temp_time}`
+		rollback_text.innerHTML = `${lang.text.latest_save}: <br /> ${temp_date}  ${temp_time}`
 	}
 })
 
@@ -102,12 +111,12 @@ const loadRollback = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "Cancel"],
+			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: "Are you sure you want to rollback to the latest save? \n\nThis will overwrite your saved codes!",
+			message: lang.edit_dialog.load_rollback,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -123,9 +132,10 @@ const loadRollback = () => {
 
 								dialog.showMessageBox({
 									title: "Authme",
-									buttons: ["Close"],
+									buttons: [lang.button.close],
 									type: "info",
-									message: "Rollback successful! \n\nGo back to the main page to check out the changes!",
+									noLink: true,
+									message: lang.edit_dialog.rollback_successful,
 								})
 							}
 						})
@@ -268,9 +278,12 @@ const del = (number) => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "Cancel"],
+			buttons: [lang.button.yes, lang.button.cancel],
 			type: "warning",
-			message: "Are you sure you want to delete this code? \n\nIf you want to revert this, click more options and revert changes.",
+			defaultId: 1,
+			cancelId: 1,
+			noLink: true,
+			message: lang.edit_dialog.delete_code,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -301,12 +314,12 @@ const createSave = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "Cancel"],
+			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: "Are you sure you want to save the modified code(s)? \n\nThis will overwrite your saved codes!",
+			message: lang.edit_dialog.create_save,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -346,12 +359,12 @@ const createSave = () => {
 /**
  * Saves the modifications made to the codes
  */
-const saveModifications = () => {
+const saveModifications = async () => {
 	let password
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(ipc.sendSync("request_password"))
+		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		/**
@@ -396,9 +409,9 @@ const saveModifications = () => {
 const addCodes = () => {
 	dialog
 		.showOpenDialog({
-			title: "Import from Authme file",
+			title: lang.application_dialog.choose_import_file,
 			properties: ["openFile", "multiSelections"],
-			filters: [{ name: "Authme file", extensions: ["authme"] }],
+			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		})
 		.then((result) => {
 			canceled = result.canceled
@@ -436,12 +449,12 @@ const addCodes = () => {
 							} else {
 								dialog.showMessageBox({
 									title: "Authme",
-									buttons: ["Close"],
+									buttons: [lang.button.close],
 									defaultId: 0,
 									cancelId: 0,
 									type: "error",
 									noLink: true,
-									message: `This file is an Authme ${loaded.role} file! \n\nYou need an Authme export or import file!`,
+									message: `${lang.application_dialog.old_file_0} ${loaded.role} ${lang.application_dialog.old_file_1}`,
 								})
 							}
 						}
@@ -450,12 +463,12 @@ const addCodes = () => {
 
 				dialog.showMessageBox({
 					title: "Authme",
-					buttons: ["Close"],
+					buttons: [lang.button.close],
 					defaultId: 0,
 					cancelId: 0,
 					type: "info",
 					noLink: true,
-					message: "Code(s) added! \n\nScroll down to view them!",
+					message: lang.edit_dialog.codes_added,
 				})
 			}
 		})
@@ -495,9 +508,10 @@ const loadError = () => {
 		if (err) {
 			dialog.showMessageBox({
 				title: "Authme",
-				buttons: ["Close"],
+				buttons: [lang.button.close],
 				type: "error",
-				message: "No save file found. \n\nGo back to the main page and save your codes!",
+				noLink: true,
+				message: lang.export_dialog.no_save_found,
 			})
 		}
 	})
@@ -506,91 +520,88 @@ const loadError = () => {
 /**
  * Loads saved codes from disk
  */
-const loadCodes = () => {
-	const check = () => {}
-
+const loadCodes = async () => {
 	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
-		dialog
-			.showMessageBox({
-				title: "Authme",
-				buttons: ["Yes", "Cancel"],
-				defaultId: 1,
-				cancelId: 1,
-				type: "warning",
-				noLink: true,
-				message: "Are you sure you want to load your currently saved codes? \n\nThis will overwrite your latest rollback!",
-			})
-			.then((result) => {
-				if (result.response === 0) {
-					fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
-						if (err) {
-							dialog.showMessageBox({
-								title: "Authme",
-								buttons: ["Close"],
-								type: "error",
-								message: "No save file found. \n\nGo back to the main page and save your codes!",
-							})
+		const result = await dialog.showMessageBox({
+			title: "Authme",
+			buttons: [lang.button.yes, lang.button.cancel],
+			defaultId: 1,
+			cancelId: 1,
+			type: "warning",
+			noLink: true,
+			message: lang.edit_dialog.load_codes,
+		})
+
+		if (result.response === 0) {
+			fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
+				if (err) {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						message: lang.export_dialog.no_save_found,
+					})
+				} else {
+					let password
+					let key
+
+					if (settings.security.require_password === true) {
+						password = Buffer.from(await ipc.invoke("request_password"))
+						key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+					} else {
+						/**
+						 * Load storage
+						 * @type {LibStorage}
+						 */
+						let storage
+
+						if (dev === false) {
+							storage = JSON.parse(localStorage.getItem("storage"))
 						} else {
-							let password
-							let key
+							storage = JSON.parse(localStorage.getItem("dev_storage"))
+						}
 
-							if (settings.security.require_password === true) {
-								password = Buffer.from(ipc.sendSync("request_password"))
-								key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
-							} else {
-								/**
-								 * Load storage
-								 * @type {LibStorage}
-								 */
-								let storage
+						password = Buffer.from(storage.password, "base64")
+						key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+					}
 
-								if (dev === false) {
-									storage = JSON.parse(localStorage.getItem("storage"))
-								} else {
-									storage = JSON.parse(localStorage.getItem("dev_storage"))
-								}
+					fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+						if (err) {
+							logger.warn("The file codes.authme don't exists")
 
-								password = Buffer.from(storage.password, "base64")
-								key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
-							}
+							password.fill(0)
+							key.fill(0)
+						} else {
+							const codes_file = JSON.parse(content)
 
-							fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
-								if (err) {
-									logger.warn("The file codes.authme don't exists")
+							const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-									password.fill(0)
-									key.fill(0)
-								} else {
-									const codes_file = JSON.parse(content)
+							processdata(decrypted.toString())
 
-									const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
-
-									processdata(decrypted.toString())
-
-									decrypted.fill(0)
-									password.fill(0)
-									key.fill(0)
-								}
-							})
+							decrypted.fill(0)
+							password.fill(0)
+							key.fill(0)
 						}
 					})
 				}
 			})
+		}
 	} else {
-		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
+		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 			if (err) {
 				dialog.showMessageBox({
 					title: "Authme",
-					buttons: ["Close"],
+					buttons: [lang.button.close],
 					type: "error",
-					message: "No save file found. \n\nGo back to the main page and save your codes!",
+					noLink: true,
+					message: lang.export_dialog.no_save_found,
 				})
 			} else {
 				let password
 				let key
 
 				if (settings.security.require_password === true) {
-					password = Buffer.from(ipc.sendSync("request_password"))
+					password = Buffer.from(await ipc.invoke("request_password"))
 					key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 				} else {
 					/**
@@ -657,12 +668,12 @@ const revertChanges = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "Cancel"],
+			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: "Are you sure you want to revert all current change(s)? \n\nYou will lose all current changes!",
+			message: lang.edit_dialog.revert_changes,
 		})
 		.then((result) => {
 			if (result.response === 0) {
@@ -678,12 +689,12 @@ const deleteCodes = () => {
 	dialog
 		.showMessageBox({
 			title: "Authme",
-			buttons: ["Yes", "Cancel"],
+			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
 			cancelId: 1,
 			type: "warning",
 			noLink: true,
-			message: "Are you sure you want to delete all codes? \n\nYou can revert this with a rollback.",
+			message: lang.edit_dialog.delete_all_codes,
 		})
 		.then((result) => {
 			if (result.response === 0) {

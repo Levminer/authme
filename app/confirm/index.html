@@ -24,10 +24,10 @@
 		<div class="bg-gray-700 w-3/5 m-auto mt-60 mb-32 rounded-2xl relative text-center p-1">
 			<h1>Authme</h1>
 			<div class="mx-auto rounded-2xl mb-12 bg-gray-800 w-2/3" id="choose">
-				<h3 class="pt-3">Welcome back!</h3>
-				<h4 id="text">Please enter your password to continue!</h4>
+				<h3 data-loc class="pt-3">Confirm password</h3>
+				<h4 data-loc id="text">Please enter your password to continue!</h4>
 				<div class="flex flex-col justify-center items-center">
-					<label class="mb-1" id="password_label1">Password</label>
+					<label data-loc class="mb-1" id="password_label1">Password</label>
 					<input class="input" type="password" id="password_input" spellcheck="false" />
 					<svg tabindex="0" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-[-45px] cursor-pointer left-[120px]" fill="none" viewBox="0 0 24 24" stroke="black" id="show_pass_0">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -41,20 +41,20 @@
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 							</svg>
-							Confirm
+							<span data-loc>Confirm</span>
 						</button>
 					</div>
 					<div class="mx-auto pb-3">
 						<details class="details mb-5 transform ease-in duration-200" onclick="showMoreOptions()">
-							<summary class="summary font-bold mb-3 cursor-pointer">More options</summary>
+							<summary data-loc class="summary font-bold mb-3 cursor-pointer">More options</summary>
 						</details>
 					</div>
 				</div>
 			</div>
 			<div id="more_options" class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20 pb-10 pt-1 animation invisible hidden">
 				<div>
-					<h3>Window capture</h3>
-					<h4>Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.</h4>
+					<h3 data-loc>Window capture</h3>
+					<h4 data-loc>Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.</h4>
 					<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
 						<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
 							<input onclick="toggleWindowCapture()" id="tgl0" type="checkbox" class="toggle checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer" />
