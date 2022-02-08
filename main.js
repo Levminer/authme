@@ -852,6 +852,7 @@ const createWindows = () => {
 				buttons: [lang.button.close],
 				defaultId: 0,
 				cancelId: 1,
+				noLink: true,
 				type: "info",
 				message: `${lang.dialog.no_update_available} ${authme_version}`,
 			})
@@ -874,6 +875,7 @@ const createWindows = () => {
 			buttons: [lang.button.close],
 			defaultId: 0,
 			cancelId: 1,
+			noLink: true,
 			type: "error",
 			message: `${lang.dialog.update_error} \n\n${error.stack}`,
 		})
@@ -2055,6 +2057,7 @@ const createMenu = () => {
 												buttons: ["Yes", "No"],
 												defaultId: 0,
 												cancelId: 1,
+												noLink: true,
 												type: "info",
 												message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${authme_version}`,
 											})
@@ -2069,6 +2072,7 @@ const createMenu = () => {
 											buttons: [lang.button.close],
 											defaultId: 0,
 											cancelId: 1,
+											noLink: true,
 											type: "info",
 											message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${authme_version}`,
 										})
