@@ -1,5 +1,6 @@
 ### Authme 3.1.0 (2022. February 8.)
 
+* [[4c44604](https://github.com/Levminer/authme/commit/4c44604)] Update changelog and translations (2022-02-08)
 * [[f906b43](https://github.com/Levminer/authme/commit/f906b43)] Migrate to async ipc (2022-02-07)
 * [[186deda](https://github.com/Levminer/authme/commit/186deda)] Update packages (2022-02-07)
 * [[21536c4](https://github.com/Levminer/authme/commit/21536c4)] Update localization (2022-02-07)
