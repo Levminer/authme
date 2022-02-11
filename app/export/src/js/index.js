@@ -85,17 +85,17 @@ const settings_refresher = setInterval(() => {
  * Process data from saved file
  * @param {String} text
  */
-const processdata = (text) => {
+const processData = (text) => {
 	const converted = convert.fromText(text, 0)
 
-	go(converted)
+	createElements(converted)
 }
 
 /**
  * Start creating export elements
  * @param {LibImportFile} data
  */
-const go = (data) => {
+const createElements = (data) => {
 	const names = data.names
 	const secrets = data.secrets
 	const issuers = data.issuers
@@ -122,38 +122,9 @@ const go = (data) => {
 }
 
 /**
- * Save .txt file
- */
-const saveFile = () => {
-	dialog
-		.showSaveDialog({
-			title: lang.import_dialog.save_file,
-			filters: [{ name: lang.export_dialog.text_file, extensions: ["txt"] }],
-			defaultPath: "~/authme_export.txt",
-		})
-		.then((result) => {
-			canceled = result.canceled
-			output = result.filePath
-
-			if (canceled === false) {
-				fs.writeFile(output, file, (err) => {
-					if (err) {
-						return logger.error(`Error creating file - ${err}`)
-					} else {
-						return logger.log("Text file created")
-					}
-				})
-			}
-		})
-		.catch((err) => {
-			logger.error(`Failed to save - ${err}`)
-		})
-}
-
-/**
  * Save .authme file
  */
-const newSaveFile = () => {
+const saveFile = () => {
 	dialog
 		.showSaveDialog({
 			title: lang.import_dialog.save_file,
@@ -286,7 +257,7 @@ const exportCodes = async () => {
 
 			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-			processdata(decrypted.toString())
+			processData(decrypted.toString())
 			file = decrypted.toString()
 
 			decrypted.fill(0)
