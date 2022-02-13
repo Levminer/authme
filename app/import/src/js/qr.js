@@ -1,5 +1,6 @@
-const { en } = require("@levminer/languages")
+const { dialog, desktopCapturer } = require("@electron/remote")
 const { localization } = require("@levminer/lib")
+const { ipcRenderer: ipc } = require("electron")
 
 const lang = localization.getLang()
 
@@ -30,121 +31,134 @@ module.exports = {
 				}
 			})
 
-		const qrImportResume = () => {
+		const qrImportResume = async () => {
 			for (let i = 0; i < images.length; i++) {
 				const element = images[i]
 
 				const reader = new QrcodeDecoder()
 
-				reader.decodeFromImage(element).then((res) => {
-					if (res === false) {
-						dialog.showMessageBox({
-							title: "Authme",
-							buttons: [lang.button.close],
-							type: "error",
-							noLink: true,
-							message: `${lang.import_dialog.no_qrcode_found_0} ${element}. ${lang.import_dialog.no_qrcode_found_1}`,
-						})
+				const res = await reader.decodeFromImage(element)
 
-						return logger.warn("No QR code found (QR)")
-					} else if (res.data.startsWith("otpauth://totp/")) {
-						// correct pictures
-						corrects.push(element)
+				if (res === false) {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						noLink: true,
+						message: `${lang.import_dialog.no_qrcode_found_0} ${element}. ${lang.import_dialog.no_qrcode_found_1}`,
+					})
 
-						// construct
-						let url = res.data.replaceAll(/\s/g, "")
-						url = url.slice(15)
+					return logger.warn("No QR code found (QR)")
+				} else if (res.data.startsWith("otpauth://totp/")) {
+					// correct pictures
+					corrects.push(element)
 
-						// get name
-						const name_index = url.match(/[?]/)
-						const name = url.slice(0, name_index.index)
-						url = url.slice(name.length + 1)
+					// construct
+					let url = res.data.replaceAll(/\s/g, "")
+					url = url.slice(15)
 
-						// get secret
-						const secret_index = url.match(/[&]/)
-						const secret = url.slice(7, secret_index.index)
-						url = url.slice(secret.length + 14 + 1)
+					// get name
+					const name_index = url.match(/[?]/)
+					const name = url.slice(0, name_index.index)
+					url = url.slice(name.length + 1)
 
-						// get issuer
-						const issuer = url
-						names.push(name)
-						secrets.push(secret)
-						issuers.push(issuer)
+					// get secret
+					const secret_index = url.match(/[&]/)
+					const secret = url.slice(7, secret_index.index)
+					url = url.slice(secret.length + 14 + 1)
 
-						if (images.length === i + 1) {
-							let str = ""
-							for (let j = 0; j < names.length; j++) {
-								const substr = `\nName:   ${names[j]} \nSecret: ${secrets[j]} \nIssuer: ${issuers[j]} \nType:   OTP_TOTP\n`
-								str += substr
-							}
+					// get issuer
+					const issuer = url
+					names.push(name)
+					secrets.push(secret)
+					issuers.push(issuer)
 
-							let corrects_str = ""
-							for (let k = 0; k < corrects.length; k++) {
-								if (k === corrects.length - 1) {
-									corrects_str += `${element}.`
-								} else {
-									corrects_str += `${element}, `
-								}
-							}
-
-							dialog
-								.showMessageBox({
-									title: "Authme",
-									buttons: [lang.button.close],
-									type: "info",
-									noLink: true,
-									defaultId: 0,
-									message: `${lang.import_dialog.correct_qrcode_found_0} ${corrects_str} ${lang.import_dialog.correct_qrcode_found_1}`,
-								})
-								.then(() => {
-									dialog
-										.showSaveDialog({
-											title: lang.import_dialog.save_file,
-											filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
-											defaultPath: "~/import.authme",
-										})
-										.then((result) => {
-											canceled = result.canceled
-											output = result.filePath
-
-											/**
-											 * .authme import file
-											 * @type {LibAuthmeFile}
-											 */
-											const save_file = {
-												role: "import",
-												encrypted: false,
-												codes: Buffer.from(str).toString("base64"),
-												date: time.timestamp(),
-												version: 3,
-											}
-
-											if (canceled === false) {
-												fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
-													if (err) {
-														logger.error(`Error creating file - ${err}`)
-													} else {
-														logger.log("File created")
-													}
-												})
-											} else {
-												return logger.warn("Saving canceled")
-											}
-										})
-								})
+					if (images.length === i + 1) {
+						let str = ""
+						for (let j = 0; j < names.length; j++) {
+							const substr = `\nName:   ${names[j]} \nSecret: ${secrets[j]} \nIssuer: ${issuers[j]} \nType:   OTP_TOTP\n`
+							str += substr
 						}
-					} else {
-						dialog.showMessageBox({
-							title: "Authme",
-							buttons: [lang.button.close],
-							type: "error",
-							noLink: true,
-							message: `${lang.import_dialog.wrong_qrcode_found_0} ${element}. ${lang.import_dialog.wrong_qrcode_found_1}`,
-						})
 
-						return logger.error("Wrong QR code found (QR)")
+						const saveFile = async () => {
+							const result = await dialog.showSaveDialog({
+								title: lang.import_dialog.save_file,
+								filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
+								defaultPath: "~/import.authme",
+							})
+
+							canceled = result.canceled
+							output = result.filePath
+
+							/**
+							 * .authme import file
+							 * @type {LibAuthmeFile}
+							 */
+							const save_file = {
+								role: "import",
+								encrypted: false,
+								codes: Buffer.from(str).toString("base64"),
+								date: time.timestamp(),
+								version: 3,
+							}
+
+							if (canceled === false) {
+								fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
+									if (err) {
+										logger.error(`Error creating file - ${err}`)
+									} else {
+										logger.log("File created")
+									}
+								})
+							} else {
+								return logger.warn("Saving canceled")
+							}
+						}
+
+						const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
+
+						if (save_exists === true) {
+							await dialog.showMessageBox({
+								title: "Authme",
+								buttons: [lang.button.close],
+								type: "info",
+								noLink: true,
+								defaultId: 0,
+								message: `${lang.import_dialog.correct_qrcode_found_0} ${lang.import_dialog.correct_qrcode_found_1}`,
+							})
+
+							saveFile()
+						} else {
+							const result = await dialog.showMessageBox({
+								title: "Authme",
+								buttons: [lang.button.yes, lang.button.no],
+								type: "info",
+								noLink: true,
+								defaultId: 1,
+								cancelId: 1,
+								message: `${lang.import_dialog.correct_qrcode_found_2} ${lang.import_dialog.correct_qrcode_found_3}`,
+							})
+
+							if (result.response === 1) {
+								ipc.invoke("importedCodes", Buffer.from(str).toString("base64"))
+							} else {
+								ipc.invoke("importedCodes", Buffer.from(str).toString("base64"))
+
+								saveFile()
+							}
+						}
 					}
-				})
+				} else {
+					dialog.showMessageBox({
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						noLink: true,
+						message: `${lang.import_dialog.wrong_qrcode_found_0} ${element}. ${lang.import_dialog.wrong_qrcode_found_1}`,
+					})
+
+					return logger.error("Wrong QR code found (QR)")
+				}
 			}
 		}
 	},
@@ -184,7 +198,7 @@ module.exports = {
 
 				reader
 					.decodeFromCamera(video)
-					.then((res) => {
+					.then(async (res) => {
 						if (res.data.startsWith("otpauth://totp/")) {
 							// construct
 							let url = res.data.replaceAll(/\s/g, "")
@@ -205,51 +219,73 @@ module.exports = {
 
 							const str = `\nName:   ${name} \nSecret: ${secret} \nIssuer: ${issuer} \nType:   OTP_TOTP\n`
 
-							dialog
-								.showMessageBox({
+							const saveFile = async () => {
+								const result = await dialog.showSaveDialog({
+									title: lang.import_dialog.save_file,
+									filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
+									defaultPath: "~/import.authme",
+								})
+
+								canceled = result.canceled
+								output = result.filePath
+
+								/**
+								 * .authme import file
+								 * @type {LibAuthmeFile}
+								 */
+								const save_file = {
+									role: "import",
+									encrypted: false,
+									codes: Buffer.from(str).toString("base64"),
+									date: time.timestamp(),
+									version: 3,
+								}
+
+								if (canceled === false) {
+									fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
+										if (err) {
+											logger.error(`Error creating file - ${err}`)
+										} else {
+											logger.log("File created")
+										}
+									})
+								} else {
+									return logger.warn("Saving canceled")
+								}
+							}
+
+							const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
+
+							if (save_exists === true) {
+								await dialog.showMessageBox({
 									title: "Authme",
 									buttons: [lang.button.close],
 									type: "info",
 									noLink: true,
 									defaultId: 0,
-									message: lang.import_dialog.qrcode_found,
+									message: `${lang.import_dialog.correct_qrcode_found_0} ${lang.import_dialog.correct_qrcode_found_1}`,
 								})
-								.then(() => {
-									dialog
-										.showSaveDialog({
-											title: lang.import_dialog.save_file,
-											filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
-											defaultPath: "~/import.authme",
-										})
-										.then((result) => {
-											canceled = result.canceled
-											output = result.filePath
 
-											/**
-											 * .authme import file
-											 * @type {LibAuthmeFile}
-											 */
-											const save_file = {
-												role: "import",
-												encrypted: false,
-												codes: Buffer.from(str).toString("base64"),
-												date: time.timestamp(),
-												version: 3,
-											}
-
-											if (canceled === false) {
-												fs.writeFile(output, JSON.stringify(save_file, null, "\t"), (err) => {
-													if (err) {
-														logger.error(`Error creating file - ${err}`)
-													} else {
-														logger.log("File created")
-													}
-												})
-											} else {
-												return logger.warn("Saving canceled")
-											}
-										})
+								saveFile()
+							} else {
+								const result = await dialog.showMessageBox({
+									title: "Authme",
+									buttons: [lang.button.yes, lang.button.no],
+									type: "info",
+									noLink: true,
+									defaultId: 1,
+									cancelId: 1,
+									message: `${lang.import_dialog.correct_qrcode_found_2} ${lang.import_dialog.correct_qrcode_found_3}`,
 								})
+
+								if (result.response === 1) {
+									ipc.invoke("importedCodes", Buffer.from(str).toString("base64"))
+								} else {
+									ipc.invoke("importedCodes", Buffer.from(str).toString("base64"))
+
+									saveFile()
+								}
+							}
 						} else {
 							dialog.showMessageBox({
 								title: "Authme",
@@ -386,7 +422,7 @@ module.exports = {
 						type: "info",
 						noLink: true,
 						defaultId: 0,
-						message: "QR codes found on camera! \n\nNow select where do you want to save the file!",
+						message: "QR codes found on the screen! \n\nNow select where do you want to save the file!",
 					})
 					.then(() => {
 						dialog
@@ -430,7 +466,7 @@ module.exports = {
 					buttons: [lang.button.close],
 					type: "error",
 					noLink: true,
-					message: "Wrong QR code found on camera! \n\nMake sure this is a correct QR code and try again!",
+					message: "Wrong QR code found on the screen! \n\nMake sure this is a correct QR code and try again!",
 				})
 
 				return logger.error("Wrong QR code found (QR)")

@@ -101,7 +101,7 @@ const loadFile = () => {
 					text = Buffer.from(loaded.codes, "base64").toString()
 					save_text = text
 
-					processdata(text)
+					processData(text)
 				} else {
 					dialog.showMessageBox({
 						title: "Authme",
@@ -118,20 +118,31 @@ const loadFile = () => {
 }
 
 /**
- * Process data from saved source
- * @param {String} text
+ * Automatically import when creating import file
+ * @param {string} res
  */
-const processdata = (text) => {
+const importedCodes = (res) => {
+	const text = Buffer.from(res, "base64").toString()
+	save_text = text
+
+	processData(text)
+}
+
+/**
+ * Process data from saved source
+ * @param {string} text
+ */
+const processData = (text) => {
 	const data = convert.fromText(text, sort_number)
 
-	go(data)
+	generateCodeElements(data)
 }
 
 /**
  * Start creating 2FA elements
  * @param {LibImportFile} data
  */
-const go = (data) => {
+const generateCodeElements = (data) => {
 	document.querySelector("#search").style.display = "grid"
 	document.querySelector(".h1").style.marginBottom = "0px"
 	document.querySelector(".content").style.top = "80px"
@@ -643,7 +654,7 @@ const loadCodes = async () => {
 
 				prev = true
 
-				processdata(decrypted.toString())
+				processData(decrypted.toString())
 
 				decrypted.fill(0)
 				password.fill(0)

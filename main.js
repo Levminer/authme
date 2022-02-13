@@ -1574,6 +1574,17 @@ ipc.handle("statistics", () => {
 })
 
 /**
+ * Receive imported codes and send to application
+ */
+ipc.handle("importedCodes", (event, res) => {
+	window_application.webContents.executeJavaScript("location.reload()")
+
+	setTimeout(() => {
+		window_application.webContents.executeJavaScript(`importedCodes("${res}")`)
+	}, 150)
+})
+
+/**
  * Logger path
  */
 const logs = () => {
