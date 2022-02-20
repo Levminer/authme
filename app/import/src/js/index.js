@@ -12,7 +12,7 @@ const { gaImport, gaCamera } = require(path.join(__dirname, "src", "js", "ga.js"
  * Send error to main process
  */
 window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "import", error: error })
+	ipc.send("rendererError", { renderer: "import", error })
 }
 
 /**

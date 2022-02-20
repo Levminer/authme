@@ -78,7 +78,7 @@
 		}
 	},
 	"dependencies": {
-		"@6c65726f79/custom-titlebar": "^0.9.0",
+		"@6c65726f79/custom-titlebar": "^0.9.1",
 		"@electron/remote": "^2.0.4",
 		"@levminer/languages": "file:languages",
 		"@levminer/lib": "file:lib",
@@ -96,20 +96,18 @@
 	"devDependencies": {
 		"@tailwindcss/forms": "^0.4.0",
 		"concurrently": "^7.0.0",
-		"electron": "^17.0.1",
+		"electron": "^17.0.0",
 		"electron-builder": "^22.14.13",
 		"eslint": "^8.9.0",
-		"eslint-config-node": "^4.1.0",
-		"eslint-config-prettier": "^8.3.0",
-		"eslint-config-promise": "^2.0.2",
-		"eslint-config-standard": "^16.0.3",
+		"eslint-config-prettier": "^8.4.0",
+		"eslint-config-standard": "^17.0.0-1",
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-promise": "^6.0.0",
-		"eslint-plugin-standard": "^5.0.0",
 		"prettier": "^2.5.1",
-		"sass": "^1.49.7",
-		"tailwindcss": "^3.0.22"
+		"prettier-plugin-tailwindcss": "^0.1.7",
+		"sass": "^1.49.8",
+		"tailwindcss": "^3.0.23"
 	},
 	"engines": {
 		"node": ">=16.0.0",

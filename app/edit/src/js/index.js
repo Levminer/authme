@@ -9,7 +9,7 @@ const fs = require("fs")
  * Send error to main process
  */
 window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "edit", error: error })
+	ipc.send("rendererError", { renderer: "edit", error })
 }
 
 /**

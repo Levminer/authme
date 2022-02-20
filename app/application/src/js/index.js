@@ -10,7 +10,7 @@ const fs = require("fs")
  * Send error to main process
  */
 window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "application", error: error })
+	ipc.send("rendererError", { renderer: "application", error })
 }
 
 /**
@@ -640,7 +640,7 @@ const loadCodes = async () => {
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
 	}
 
-	fs.readFile(path.join(folder_path, "codes", "codes.authme"), (err, content) => {
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), async (err, content) => {
 		if (err) {
 			logger.warn("The file codes.authme don't exists")
 
@@ -660,21 +660,19 @@ const loadCodes = async () => {
 				password.fill(0)
 				key.fill(0)
 			} else {
-				dialog
-					.showMessageBox({
-						title: "Authme",
-						buttons: [lang.button.close, lang.application_dialog.guide],
-						defaultId: 0,
-						cancelId: 0,
-						type: "error",
-						noLink: true,
-						message: "The saved codes are only compatible with Authme 2. \n\nPlease read the migration guide!",
-					})
-					.then((result) => {
-						if (result.response === 1) {
-							shell.openExternal("https://docs.authme.levminer.com/migration")
-						}
-					})
+				const result = await dialog.showMessageBox({
+					title: "Authme",
+					buttons: [lang.button.close, lang.application_dialog.guide],
+					defaultId: 0,
+					cancelId: 0,
+					type: "error",
+					noLink: true,
+					message: "The saved codes are only compatible with Authme 2. \n\nPlease read the migration guide!",
+				})
+
+				if (result.response === 1) {
+					shell.openExternal("https://docs.authme.levminer.com/migration")
+				}
 			}
 		}
 	})
@@ -885,7 +883,7 @@ const infoBar = async () => {
 	const bar_link = document.querySelector(".barLink")
 	const info_bar = document.querySelector(".infoBar")
 
-	if (opens % 5 === 0) {
+	if (opens % 4 === 0) {
 		switch (random) {
 			case 0:
 				info_bar.style.display = "flex"
