@@ -232,7 +232,7 @@ module.exports = {
 		"Starts with: (otpauth://totp/).",
 		"Detailed steps",
 		"Migration 2FA QR code",
-		"A migration QR code is what you can export, and contains all of your codes.",
+		"A migration QR code is what you can export, and contains all of your already imported codes.",
 		"Example: (Google Authenticator).",
 		"Starts with: (otpauth-migration://).",
 		"Detailed steps",
@@ -242,7 +242,7 @@ module.exports = {
 		"Choose images that contain a 2FA QR code.",
 		"Use webcam",
 		"Use your webcam to scan 2FA QR codes.",
-		"Capture from screen",
+		"Capture screen",
 		"Capture a 2FA QR code from your screen.",
 		"Stop"
     ],

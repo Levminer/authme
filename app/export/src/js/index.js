@@ -66,15 +66,15 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
  * Read settings
  * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 /**
  * Refresh settings
  */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
 
 		logger.log("Settings refresh completed")
@@ -232,13 +232,7 @@ const exportCodes = async () => {
 		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
-		let /** @type {LibStorage} */ storage
-
-		if (dev === false) {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		}
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 		password = Buffer.from(storage.password, "base64")
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))

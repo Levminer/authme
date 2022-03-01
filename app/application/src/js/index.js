@@ -67,7 +67,7 @@ if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
 }
 
 // eslint-disable-next-line
-let prev = false
+let saved_codes = false
 let text
 let save_text
 const query = []
@@ -155,30 +155,15 @@ const generateCodeElements = (data) => {
 	const secrets = data.secrets
 	const issuers = data.issuers
 
-	/**
-	 * Load storage
-	 * @type {LibStorage}
-	 */
-	let storage
+	// Load storage
+	const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-	if (dev === false) {
-		storage = JSON.parse(localStorage.getItem("storage"))
+	storage.issuers = issuers
 
-		storage.issuers = issuers
-
-		localStorage.setItem("storage", JSON.stringify(storage))
-	} else {
-		storage = JSON.parse(localStorage.getItem("dev_storage"))
-
-		storage.issuers = issuers
-
-		localStorage.setItem("dev_storage", JSON.stringify(storage))
-	}
+	// Save storage
+	dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
 
 	const generate = () => {
-		// counter
-		let counter = 0
-
 		for (let i = 0; i < names.length; i++) {
 			// create div
 			const element = document.createElement("div")
@@ -186,24 +171,24 @@ const generateCodeElements = (data) => {
 			// set div elements
 			if (blur_state === true && description_state === true) {
 				element.innerHTML = `
-					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.name}</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
+							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">${lang.text.code}</p>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.time}</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
+							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${counter}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${i}">Description</p>
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -214,23 +199,23 @@ const generateCodeElements = (data) => {
 					`
 			} else if (blur_state === true) {
 				element.innerHTML = `
-					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.name}</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
+							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${counter}">${lang.text.code}</p>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.time}</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
+							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -241,24 +226,24 @@ const generateCodeElements = (data) => {
 					`
 			} else if (description_state === true) {
 				element.innerHTML = `					
-					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.name}</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
+							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">${lang.text.code}</p>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.time}</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
+							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${counter}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${i}">Description</p>
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -269,23 +254,23 @@ const generateCodeElements = (data) => {
 					`
 			} else {
 				element.innerHTML = `					
-					<div id="codes${counter}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.name}</h3>
-							<h2 id="name${counter}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
+							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${counter}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${counter}">${lang.text.code}</p>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
 							<h3>${lang.text.time}</h3>
-							<h2 id="time${counter}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
+							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${counter}" class="buttoni w-[194px] mb-4">
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -304,10 +289,10 @@ const generateCodeElements = (data) => {
 			}
 
 			// elements
-			const name = document.querySelector(`#name${counter}`)
-			const code = document.querySelector(`#code${counter}`)
-			const time = document.querySelector(`#time${counter}`)
-			const text = document.querySelector(`#text${counter}`)
+			const name = document.querySelector(`#name${i}`)
+			const code = document.querySelector(`#code${i}`)
+			const time = document.querySelector(`#time${i}`)
+			const text = document.querySelector(`#text${i}`)
 
 			// add to query
 			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
@@ -337,9 +322,6 @@ const generateCodeElements = (data) => {
 				const grid = document.querySelector(`#codes${i}`)
 				grid.style.height = "310px"
 			}
-
-			// add one to counter
-			counter++
 		}
 	}
 
@@ -360,14 +342,8 @@ const generateCodeElements = (data) => {
 		}, 100)
 	}
 
-	// set block count
-	for (let i = 0; i < names.length; i++) {
-		const block = document.querySelector(`#codes${i}`)
-		block.style.display = "grid"
-	}
-
 	// prev
-	if (prev === false) {
+	if (saved_codes === false) {
 		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "block"
 	} else {
@@ -402,7 +378,7 @@ const refreshCodes = (secrets) => {
 
 /**
  * Copy 2FA code
- * @param {Number} id
+ * @param {number} id
  */
 const copyCode = (id) => {
 	const button = document.querySelector(`#copy${id}`)
@@ -413,20 +389,20 @@ const copyCode = (id) => {
 
 	// copied button
 	button.innerHTML = `
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-			 	</svg>
-				${lang.button.copied}
-				`
+	<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+	</svg>
+	${lang.button.copied}
+	`
 
 	// copy button
 	setTimeout(() => {
 		button.innerHTML = `
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-					</svg>
-					${lang.button.copy}
-					`
+		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+		</svg>
+		${lang.button.copy}
+		`
 
 		// reset search bar
 		setTimeout(() => {
@@ -565,17 +541,7 @@ const saveCodes = async () => {
 		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
-		/**
-		 * Load storage
-		 * @type {LibStorage}
-		 */
-		let storage
-
-		if (dev === false) {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		}
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 		password = Buffer.from(storage.password, "base64")
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
@@ -624,17 +590,7 @@ const loadCodes = async () => {
 		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
-		/**
-		 * Load storage
-		 * @type {LibStorage}
-		 */
-		let storage
-
-		if (dev === false) {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		}
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 		password = Buffer.from(storage.password, "base64")
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
@@ -652,7 +608,7 @@ const loadCodes = async () => {
 			if (codes_file.version === 3) {
 				const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-				prev = true
+				saved_codes = true
 
 				processData(decrypted.toString())
 

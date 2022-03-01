@@ -330,25 +330,7 @@ const createSave = () => {
 
 				saveModifications()
 
-				/**
-				 * Load storage
-				 * @type {LibStorage}
-				 */
-				let storage
-
-				if (dev === false) {
-					storage = JSON.parse(localStorage.getItem("storage"))
-
-					storage.issuers = issuers
-
-					localStorage.setItem("storage", JSON.stringify(storage))
-				} else {
-					storage = JSON.parse(localStorage.getItem("dev_storage"))
-
-					storage.issuers = issuers
-
-					localStorage.setItem("dev_storage", JSON.stringify(storage))
-				}
+				const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 				reloadApplication()
 				reloadSettingsWindow()
@@ -367,17 +349,7 @@ const saveModifications = async () => {
 		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
-		/**
-		 * Load storage
-		 * @type {LibStorage}
-		 */
-		let storage
-
-		if (dev === false) {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		}
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 		password = Buffer.from(storage.password, "base64")
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
@@ -549,17 +521,7 @@ const loadCodes = async () => {
 						password = Buffer.from(await ipc.invoke("request_password"))
 						key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 					} else {
-						/**
-						 * Load storage
-						 * @type {LibStorage}
-						 */
-						let storage
-
-						if (dev === false) {
-							storage = JSON.parse(localStorage.getItem("storage"))
-						} else {
-							storage = JSON.parse(localStorage.getItem("dev_storage"))
-						}
+						const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 						password = Buffer.from(storage.password, "base64")
 						key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
@@ -604,17 +566,7 @@ const loadCodes = async () => {
 					password = Buffer.from(await ipc.invoke("request_password"))
 					key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 				} else {
-					/**
-					 * Load storage
-					 * @type {LibStorage}
-					 */
-					let storage
-
-					if (dev === false) {
-						storage = JSON.parse(localStorage.getItem("storage"))
-					} else {
-						storage = JSON.parse(localStorage.getItem("dev_storage"))
-					}
+					const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 					password = Buffer.from(storage.password, "base64")
 					key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
@@ -707,25 +659,9 @@ const deleteCodes = () => {
 					}
 				})
 
-				/**
-				 * Load storage
-				 * @type {LibStorage}
-				 */
-				let storage
+				const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-				if (dev === false) {
-					storage = JSON.parse(localStorage.getItem("storage"))
-
-					storage.issuers = undefined
-
-					localStorage.setItem("storage", JSON.stringify(storage))
-				} else {
-					storage = JSON.parse(localStorage.getItem("dev_storage"))
-
-					storage.issuers = undefined
-
-					localStorage.setItem("dev_storage", JSON.stringify(storage))
-				}
+				storage.issuers = undefined
 
 				reloadApplication()
 				reloadSettingsWindow()

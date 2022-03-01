@@ -7,14 +7,14 @@
 		<script defer src="./src/js/index.js"></script>
 		<script defer src="./src/js/shortcuts.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/global.css" />
-		<link rel="stylesheet" href="../../src/tailwind.css" />
+		<link rel="stylesheet" href="../.././styles/global.css" />
+		<link rel="stylesheet" href="../../styles/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 	</head>
 	<body>
-		<div class="h-screen flex">
+		<div class="flex h-screen">
 			<!-- sidebar -->
-			<div class="h-screen bg-gray-900 flex flex-col justify-between overflow-visible">
+			<div class="flex h-screen flex-col justify-between overflow-visible bg-gray-900">
 				<div class="flex flex-col">
 					<div class="mb-1 mt-5 mr-4 ml-4">
 						<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
@@ -69,35 +69,35 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex-1 flex overflow-hidden">
+			<div class="flex flex-1 overflow-hidden">
 				<!-- page -->
-				<div class="flex-1 overflow-y-scroll w-4/5 bg-gray-800">
+				<div class="w-4/5 flex-1 overflow-y-scroll bg-gray-800">
 					<!-- build number -->
-					<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
-						<div class="container flex flex-row items-center justify-center py-2 mx-auto">
+					<div class="build sticky top-0 z-10 hidden w-full bg-black font-bold text-white">
+						<div class="container mx-auto flex flex-row items-center justify-center py-2">
 							<div class="flex">
-								<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
+								<h5 class="build-content m-0 mx-3 flex flex-row text-center font-bold">You are running a pre release version of Authme!</h5>
 							</div>
 						</div>
 					</div>
 
 					<!-- manual update -->
-					<div class="w-full text-white bg-popup-blue font-bold update hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+					<div class="bg-popup-blue update hidden w-full font-bold text-white">
+						<div class="container mx-auto flex flex-row items-center justify-between px-6 py-4">
 							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<svg xmlns="http://www.w3.org/2000/svg" class="relative top-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
 								</svg>
 
-								<p class="mx-3 flex flex-row relative top-3">
+								<p class="relative top-3 mx-3 flex flex-row">
 									New Authme version available. Please update your app!
-									<button type="button" onclick="manualUpdate()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="manualUpdate()" class="relative -top-2.5 mr-2 ml-3 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
 										</svg>
 										Manual update
 									</button>
-									<button type="button" onclick="releaseNotes()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="releaseNotes()" class="relative -top-2.5 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
 										</svg>
@@ -105,7 +105,7 @@
 									</button>
 								</p>
 							</div>
-							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+							<a onclick="this.parentElement.style.display='none'" class="transform cursor-pointer rounded-md p-1 transition-colors duration-200 hover:text-gray-800">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 								</svg>
@@ -114,22 +114,22 @@
 					</div>
 
 					<!-- auto update -->
-					<div class="w-full text-white bg-popup-blue font-bold autoupdate hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+					<div class="bg-popup-blue autoupdate hidden w-full font-bold text-white">
+						<div class="container mx-auto flex flex-row items-center justify-between px-6 py-4">
 							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<svg xmlns="http://www.w3.org/2000/svg" class="relative top-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
 								</svg>
 
-								<div class="mx-3 flex flex-row relative top-3">
+								<div class="relative top-3 mx-3 flex flex-row">
 									<p id="updateText" class="mr-3" data-loc>New Authme version available. Starting the update...</p>
-									<button type="button" id="updateButton" onclick="updateRestart()" class="hidden mr-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" id="updateButton" onclick="updateRestart()" class="relative -top-2.5 mr-3 hidden cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 										</svg>
 										<span data-loc>Restart</span>
 									</button>
-									<button type="button" onclick="releaseNotes()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="releaseNotes()" class="relative -top-2.5 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
 										</svg>
@@ -137,7 +137,7 @@
 									</button>
 								</div>
 							</div>
-							<a onclick="this.parentElement.style.display='none'" id="updateClose" class="hidden p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+							<a onclick="this.parentElement.style.display='none'" id="updateClose" class="hidden transform cursor-pointer rounded-md p-1 transition-colors duration-200 hover:text-gray-800">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 								</svg>
@@ -146,30 +146,30 @@
 					</div>
 
 					<!-- info -->
-					<div class="w-full text-white bg-popup-yellow font-bold info hidden">
-						<div class="container flex flex-row items-center justify-between px-6 py-4 mx-auto">
+					<div class="bg-popup-yellow info hidden w-full font-bold text-white">
+						<div class="container mx-auto flex flex-row items-center justify-between px-6 py-4">
 							<div class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative top-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<svg xmlns="http://www.w3.org/2000/svg" class="relative top-2 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 								</svg>
 
-								<p class="mx-3 flex flex-row relative top-3">
+								<p class="relative top-3 mx-3 flex flex-row">
 									<span data-loc>Enjoying Authme?</span>
-									<button type="button" onclick="rateAuthme()" class="ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="rateAuthme()" class="relative -top-2.5 ml-3 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
 										</svg>
 										<span data-loc>Rate on Microsoft Store</span>
 									</button>
 
-									<button type="button" onclick="starAuthme()" class="mr-2 ml-3 py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="starAuthme()" class="relative -top-2.5 mr-2 ml-3 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
 										</svg>
 										<span data-loc>Star on GitHub</span>
 									</button>
 
-									<button type="button" onclick="provideFeedback()" class="py-1 px-3 relative -top-2.5 bg-white hover:bg-transparent text-black border-2 border-white hover:text-white cursor-pointer transition ease-in duration-200 text-center text-base font-bold rounded-full">
+									<button type="button" onclick="provideFeedback()" class="relative -top-2.5 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
 										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
 										</svg>
@@ -177,7 +177,7 @@
 									</button>
 								</p>
 							</div>
-							<a onclick="this.parentElement.style.display='none'" class="p-1 transition-colors duration-200 transform rounded-md hover:text-gray-800 cursor-pointer">
+							<a onclick="this.parentElement.style.display='none'" class="transform cursor-pointer rounded-md p-1 transition-colors duration-200 hover:text-gray-800">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 								</svg>
@@ -186,8 +186,8 @@
 					</div>
 
 					<!-- header -->
-					<div id="header" class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
-						<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
+					<div id="header" class="mx-auto mt-40 w-3/5 rounded-2xl bg-gray-700 text-center">
+						<img src="../../img/header.png" class="relative top-5 h-16 w-16" />
 						<h2 data-loc>Settings</h2>
 						<h4 data-loc>You can configure the app settings here.</h4>
 						<button class="buttoni mb-6" onclick="hide()">
@@ -199,50 +199,50 @@
 					</div>
 
 					<!-- settings -->
-					<div class="mx-auto text-center mt-20 mb-20 pt-5 pb-10 rounded-2xl bg-gray-700 w-3/5">
+					<div class="mx-auto mt-20 mb-20 w-3/5 rounded-2xl bg-gray-700 pt-5 pb-10 text-center">
 						<div id="setting" class="tabcontent">
 							<h3 data-loc>Launch on startup</h3>
 							<h4 data-loc>Start Authme after your computer started. Authme will start on the system tray.</h4>
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
+								<div class="relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 									<input id="tgl0" onclick="launchStartup()" type="checkbox" class="toggle" />
-									<label for="tgl0" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+									<label for="tgl0" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label>
 								</div>
-								<span id="tgt0" class="text-black text-xl">-</span>
+								<span id="tgt0" class="text-xl text-black">-</span>
 							</div>
 							<hr />
 							<h3 data-loc>Close app to tray</h3>
 							<h4 data-loc>When closing Authme the app will not quit. You can open Authme from the system tray.</h4>
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-								<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
+								<div class="relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 									<input id="tgl1" onclick="closeTray()" type="checkbox" class="toggle" />
-									<label for="tgl1" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+									<label for="tgl1" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label>
 								</div>
-								<span id="tgt1" class="text-black text-xl">-</span>
+								<span id="tgt1" class="text-xl text-black">-</span>
 							</div>
 							<hr />
 							<div class="windowCapture">
 								<h3 data-loc>Window capture</h3>
 								<h4 data-loc>Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.</h4>
-								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
-									<div class="relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+								<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
+									<div class="relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 										<input id="tgl2" onclick="toggleWindowCapture()" type="checkbox" class="toggle" />
-										<label for="tgl2" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+										<label for="tgl2" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label>
 									</div>
-									<span id="tgt2" class="text-black text-xl">Off</span>
+									<span id="tgt2" class="text-xl text-black">Off</span>
 								</div>
 								<hr />
 							</div>
 							<div>
 								<h3 data-loc>Hardware acceleration</h3>
 								<h4 data-loc>Uses GPU for smoother experience. Enable this option if you experience frame drops or lags.</h4>
-								<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+								<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
 									<a href="#" onclick="hardwareAcceleration()">
-										<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+										<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 											<input tabindex="-1" id="tgl7" type="checkbox" class="toggle" />
-											<label for="tgl7" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+											<label for="tgl7" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label></div
 									></a>
-									<span id="tgt7" class="text-black text-xl">-</span>
+									<span id="tgt7" class="text-xl text-black">-</span>
 								</div>
 								<hr />
 							</div>
@@ -250,7 +250,7 @@
 							<h4 data-loc>Choose which language should Authme use by default. The translations are not perfect and changing the language requires a restart.</h4>
 							<div class="relative inline-block">
 								<button id="languageButton" class="buttoni" onclick="languageDropdown()">
-									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+									<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" viewBox="0 0 36 36">
 										<path fill="#B22334" d="M35.445 7C34.752 5.809 33.477 5 32 5H18v2h17.445zM0 25h36v2H0zm18-8h18v2H18zm0-4h18v2H18zM0 21h36v2H0zm4 10h28c1.477 0 2.752-.809 3.445-2H.555c.693 1.191 1.968 2 3.445 2zM18 9h18v2H18z" />
 										<path fill="#EEE" d="M.068 27.679c.017.093.036.186.059.277.026.101.058.198.092.296.089.259.197.509.333.743L.555 29h34.89l.002-.004c.135-.233.243-.483.332-.741.034-.099.067-.198.093-.301.023-.09.042-.182.059-.275.041-.22.069-.446.069-.679H0c0 .233.028.458.068.679zM0 23h36v2H0zm0-4v2h36v-2H18zm18-4h18v2H18zm0-4h18v2H18zM0 9c0-.233.03-.457.068-.679C.028 8.542 0 8.767 0 9zm.555-2l-.003.005L.555 7zM.128 8.044c.025-.102.06-.199.092-.297-.034.098-.066.196-.092.297zM18 9h18c0-.233-.028-.459-.069-.68-.017-.092-.035-.184-.059-.274-.027-.103-.059-.203-.094-.302-.089-.258-.197-.507-.332-.74.001-.001 0-.003-.001-.004H18v2z" />
 										<path fill="#3C3B6E" d="M18 5H4C1.791 5 0 6.791 0 9v10h18V5z" />
@@ -262,9 +262,9 @@
 									English (US)
 								</button>
 
-								<div id="languageContent" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
-									<a href="#" onclick="languageDropdownChoose('en')" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+								<div id="languageContent" class="animation absolute right-0 z-20 mt-2 hidden w-72 overflow-hidden rounded-2xl border-2 border-white bg-white">
+									<a href="#" onclick="languageDropdownChoose('en')" class="block transform px-2 py-2 text-xl text-black no-underline duration-200 ease-in hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" viewBox="0 0 36 36">
 											<path fill="#B22334" d="M35.445 7C34.752 5.809 33.477 5 32 5H18v2h17.445zM0 25h36v2H0zm18-8h18v2H18zm0-4h18v2H18zM0 21h36v2H0zm4 10h28c1.477 0 2.752-.809 3.445-2H.555c.693 1.191 1.968 2 3.445 2zM18 9h18v2H18z" />
 											<path fill="#EEE" d="M.068 27.679c.017.093.036.186.059.277.026.101.058.198.092.296.089.259.197.509.333.743L.555 29h34.89l.002-.004c.135-.233.243-.483.332-.741.034-.099.067-.198.093-.301.023-.09.042-.182.059-.275.041-.22.069-.446.069-.679H0c0 .233.028.458.068.679zM0 23h36v2H0zm0-4v2h36v-2H18zm18-4h18v2H18zm0-4h18v2H18zM0 9c0-.233.03-.457.068-.679C.028 8.542 0 8.767 0 9zm.555-2l-.003.005L.555 7zM.128 8.044c.025-.102.06-.199.092-.297-.034.098-.066.196-.092.297zM18 9h18c0-.233-.028-.459-.069-.68-.017-.092-.035-.184-.059-.274-.027-.103-.059-.203-.094-.302-.089-.258-.197-.507-.332-.74.001-.001 0-.003-.001-.004H18v2z" />
 											<path fill="#3C3B6E" d="M18 5H4C1.791 5 0 6.791 0 9v10h18V5z" />
@@ -275,8 +275,8 @@
 										</svg>
 										English (US)
 									</a>
-									<a href="#" onclick="languageDropdownChoose('hu')" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
+									<a href="#" onclick="languageDropdownChoose('hu')" class="block transform px-2 py-2 text-xl text-black no-underline duration-200 ease-in hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" viewBox="0 0 36 36">
 											<path fill="#EEE" d="M0 14h36v8H0z" />
 											<path fill="#CD2A3E" d="M32 5H4C1.791 5 0 6.791 0 9v5h36V9c0-2.209-1.791-4-4-4z" />
 											<path fill="#436F4D" d="M4 31h28c2.209 0 4-1.791 4-4v-5H0v5c0 2.209 1.791 4 4 4z" />
@@ -290,13 +290,13 @@
 							<h4 data-loc>Choose which display should Authme open by default. Authme will fall back to the primary display if the chosen one is not available.</h4>
 							<div class="relative inline-block">
 								<button id="displayButton" class="buttoni" onclick="display()">
-									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 									</svg>
 									Display #1
 								</button>
 
-								<div id="displayContent" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
+								<div id="displayContent" class="animation absolute right-0 z-20 mt-2 hidden w-72 overflow-hidden rounded-2xl border-2 border-white bg-white">
 									<!-- displays -->
 								</div>
 							</div>
@@ -312,7 +312,7 @@
 							<hr />
 							<h3 data-loc>Open folders</h3>
 							<h4 data-loc>You can open the folders Authme uses. Editing or deleting files might cause problems.</h4>
-							<div class="flex justify-center gap-3 flex-row flex-wrap">
+							<div class="flex flex-row flex-wrap justify-center gap-3">
 								<button class="buttoni" onclick="authmeFolder()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
@@ -335,7 +335,7 @@
 							<hr />
 							<h3 data-loc>Logs</h3>
 							<h4 data-loc>You can view the logs for debugging. You can view all the logs in the settings folder.</h4>
-							<div class="flex justify-center gap-3 flex-row flex-wrap">
+							<div class="flex flex-row flex-wrap justify-center gap-3">
 								<button class="buttoni" onclick="latestLog()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -358,27 +358,27 @@
 
 							<div class="relative inline-block">
 								<button id="sortButton" class="buttoni" onclick="sortDropdown()">
-									<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 									</svg>
 									<span class="sortDefault">Default</span>
 								</button>
 
-								<div id="sortContent" class="animation hidden absolute right-0 z-20 w-72 mt-2 bg-white rounded-2xl overflow-hidden border-white border-2">
-									<a href="#" onclick="sortDropdownChoose(0)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<div id="sortContent" class="animation absolute right-0 z-20 mt-2 hidden w-72 overflow-hidden rounded-2xl border-2 border-white bg-white">
+									<a href="#" onclick="sortDropdownChoose(0)" class="block transform px-2 py-2 text-xl text-black no-underline duration-200 ease-in hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 										</svg>
 										<span class="sortContentDefault">Default</span>
 									</a>
-									<a href="#" onclick="sortDropdownChoose(1)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<a href="#" onclick="sortDropdownChoose(1)" class="block transform px-2 py-2 text-xl text-black no-underline duration-200 ease-in hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
 										</svg>
 										A-Z
 									</a>
-									<a href="#" onclick="sortDropdownChoose(2)" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-										<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<a href="#" onclick="sortDropdownChoose(2)" class="block transform px-2 py-2 text-xl text-black no-underline duration-200 ease-in hover:bg-gray-600 hover:text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 										</svg>
 										Z-A
@@ -389,50 +389,50 @@
 							<hr />
 							<h3 data-loc>Codes description</h3>
 							<h4 data-loc>The saved codes description will be visible. You can copy it after clicking it.</h4>
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
 								<a href="#" onclick="codesDescription()">
-									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 										<input tabindex="-1" id="tgl3" type="checkbox" class="toggle" />
-										<label for="tgl3" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+										<label for="tgl3" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label></div
 								></a>
-								<span id="tgt3" class="text-black text-xl">-</span>
+								<span id="tgt3" class="text-xl text-black">-</span>
 							</div>
 							<br />
 							<hr />
 							<h3 data-loc>Blur codes</h3>
 							<h4 data-loc>Blur the saved codes. You can still copy the codes or hover over the codes to show them.</h4>
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
 								<a href="#" onclick="blurCodes()">
-									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 										<input tabindex="-1" id="tgl4" type="checkbox" class="toggle" />
-										<label for="tgl4" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label>
+										<label for="tgl4" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label>
 									</div>
 								</a>
-								<span id="tgt4" class="text-black text-xl">-</span>
+								<span id="tgt4" class="text-xl text-black">-</span>
 							</div>
 							<br />
 							<hr />
 							<h3 data-loc>Search history</h3>
 							<h4 data-loc>Save the latest code you searched for. Works even after restart.</h4>
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
 								<a href="#" onclick="searchHistory()">
-									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 										<input tabindex="-1" id="tgl5" type="checkbox" class="toggle" />
-										<label for="tgl5" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+										<label for="tgl5" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label></div
 								></a>
-								<span id="tgt5" class="text-black text-xl">-</span>
+								<span id="tgt5" class="text-xl text-black">-</span>
 							</div>
 							<br />
 							<hr />
 							<h3 data-loc>Reset search after copy</h3>
 							<h4 data-loc>Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.</h4>
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
 								<a href="#" onclick="resetCopy()">
-									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 										<input tabindex="-1" id="tgl6" type="checkbox" class="toggle" />
-										<label for="tgl6" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+										<label for="tgl6" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label></div
 								></a>
-								<span id="tgt6" class="text-black text-xl">-</span>
+								<span id="tgt6" class="text-xl text-black">-</span>
 							</div>
 						</div>
 
@@ -460,7 +460,7 @@
 
 						<!-- experimental -->
 						<div id="experimental" class="tabcontent part hidden">
-							<div class="md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mt-5">
+							<div class="mx-auto mt-5 rounded-2xl bg-gray-800 md:w-4/5 lg:w-2/3">
 								<h4 class="pt-5" data-loc>These features are under development and can be unstable! Use it at your own risk!</h4>
 								<button class="buttoni mb-8" onclick="experimentalDocs()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -478,13 +478,20 @@
 								<h4>You can turn on Import screen capture. You can scan QR codes from your screen.</h4>
 							</div>
 
-							<div class="flex justify-center items-center w-72 h-[68px] bg-white mx-auto rounded-full">
+							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
 								<a href="#" onclick="screenCapture()">
-									<div class="pointer-events-none relative inline-block w-10 mr-2 align-middle select-none bg-gray-900 border-2 border-gray-900 rounded-full">
+									<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
 										<input tabindex="-1" id="tgl8" type="checkbox" class="toggle" />
-										<label for="tgl8" class="toggle-bg block overflow-hidden h-6 rounded-full bg-white cursor-pointer"></label></div
+										<label for="tgl8" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label></div
 								></a>
-								<span id="tgt8" class="text-black text-xl">-</span>
+								<span id="tgt8" class="text-xl text-black">-</span>
+							</div>
+							<hr />
+							<div class="relative inline-block">
+								<h3>Backup</h3>
+								<h4>You can create backup codes and backup files.</h4>
+								<button class="buttoni" onclick="backupCode()">Backup code</button>
+								<button class="buttoni" onclick="backupFile()">Backup file</button>
 							</div>
 						</div>
 					</div>

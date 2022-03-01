@@ -7,8 +7,8 @@
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/global.css" />
-		<link rel="stylesheet" href="../../src/tailwind.css" />
+		<link rel="stylesheet" href="../.././styles/global.css" />
+		<link rel="stylesheet" href="../../styles/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 	</head>
 	<body>
@@ -50,14 +50,14 @@
 				<div class="flex flex-row justify-center pb-5">
 					<div class="my-3 ml-3 mr-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
 						<h4 data-loc class="m-0 mb-3">TOTP 2FA QR code</h4>
-						<h5 data-loc class="m-0">A TOTP QR code is that you find mostly everywhere if you want to setup 2FA.</h5>
+						<h5 data-loc class="m-0">A TOTP QR code is that you find mostly everywhere, if you want to setup 2FA.</h5>
 						<h5 data-loc class="m-0">Example: (Google, Facebook, Microsoft).</h5>
 						<h5 data-loc class="m-0">Starts with: (otpauth://totp/).</h5>
 						<a data-loc class="link pt-3 !text-lg" href="#totp" onclick="totpLink()">Detailed steps</a>
 					</div>
 					<div class="my-3 mr-3 ml-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
 						<h4 data-loc class="m-0 mb-3">Migration 2FA QR code</h4>
-						<h5 data-loc class="m-0">A migration QR code is what you can export, and contains all of your codes.</h5>
+						<h5 data-loc class="m-0">A migration QR code is what you can export, and contains all of your already imported codes.</h5>
 						<h5 data-loc class="m-0">Example: (Google Authenticator).</h5>
 						<h5 data-loc class="m-0">Starts with: (otpauth-migration://).</h5>
 						<a data-loc class="link pt-3 !text-lg" href="#migration" onclick="migrationLink()">Detailed steps</a>
@@ -94,7 +94,7 @@
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 							</svg>
-							<span data-loc>Capture from screen</span>
+							<span data-loc>Capture screen</span>
 						</button>
 						<h5 data-loc class="m-0 pt-4 pb-6">Capture a 2FA QR code from your screen.</h5>
 					</div>

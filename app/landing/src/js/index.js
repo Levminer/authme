@@ -143,17 +143,7 @@ const hashPasswords = async () => {
 	settings.security.password = hashed
 	settings.security.key = aes.generateSalt().toString("base64")
 
-	/**
-	 * Load storage
-	 * @type {LibStorage}
-	 */
-	let storage
-
-	if (dev === true) {
-		storage = JSON.parse(localStorage.getItem("dev_storage"))
-	} else {
-		storage = JSON.parse(localStorage.getItem("storage"))
-	}
+	const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 	storage.require_password = settings.security.require_password
 	storage.password = hashed
@@ -161,11 +151,7 @@ const hashPasswords = async () => {
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
-	if (dev === true) {
-		localStorage.setItem("dev_storage", JSON.stringify(storage))
-	} else {
-		localStorage.setItem("storage", JSON.stringify(storage))
-	}
+	dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
 
 	setInterval(() => {
 		password_input.fill(0)
@@ -206,27 +192,13 @@ const noPassword = () => {
 
 				settings.security.require_password = false
 
-				/**
-				 * Load storage
-				 * @type {LibStorage}
-				 */
-				let storage
-
-				if (dev === true) {
-					storage = JSON.parse(localStorage.getItem("dev_storage"))
-				} else {
-					storage = JSON.parse(localStorage.getItem("storage"))
-				}
+				const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 				storage.require_password = settings.security.require_password
 				storage.password = password.toString("base64")
 				storage.key = salt.toString("base64")
 
-				if (dev === true) {
-					localStorage.setItem("dev_storage", JSON.stringify(storage))
-				} else {
-					localStorage.setItem("storage", JSON.stringify(storage))
-				}
+				dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
 
 				fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
