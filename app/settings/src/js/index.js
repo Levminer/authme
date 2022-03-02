@@ -4,6 +4,7 @@ const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
+const { backupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
 
 /**
  * Send error to main process
@@ -194,8 +195,12 @@ if (sort_number === 1) {
 
 // display
 drp1.innerHTML = `
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+	<line x1="7" y1="20" x2="17" y2="20"></line>
+	<line x1="9" y1="16" x2="9" y2="20"></line>
+	<line x1="15" y1="16" x2="15" y2="20"></line>
 	</svg>
 	${lang.text.display} #${settings.settings.default_display}
 	`
@@ -1059,8 +1064,12 @@ for (let i = 1; i < displays.length + 1; i++) {
 
 	element.innerHTML = `
 	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+	<line x1="7" y1="20" x2="17" y2="20"></line>
+	<line x1="9" y1="16" x2="9" y2="20"></line>
+	<line x1="15" y1="16" x2="15" y2="20"></line>
 	</svg>
 	${lang.text.display} #${i}
 	</a>
@@ -1092,8 +1101,12 @@ const display = () => {
 const displayChoose = (id) => {
 	const toggle = () => {
 		drp1.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+		<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+		<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+		<line x1="7" y1="20" x2="17" y2="20"></line>
+		<line x1="9" y1="16" x2="9" y2="20"></line>
+		<line x1="15" y1="16" x2="15" y2="20"></line>
 		</svg>
 		${lang.text.display} #${id}
 		`
