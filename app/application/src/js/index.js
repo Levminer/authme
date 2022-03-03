@@ -423,6 +423,8 @@ const copyCode = (id) => {
  * Search codes
  */
 const search = () => {
+	document.querySelector(".infoBar").style.display = "none"
+
 	const search = document.querySelector("#search")
 	const input = search.value.toLowerCase()
 	let i = 0
