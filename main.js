@@ -55,6 +55,7 @@ let manual_update = false
 let password_buffer = null
 let tray = null
 let menu = null
+let lang = null
 
 /**
  * Check if running in development mode
@@ -282,30 +283,6 @@ if (settings.settings.hardware_acceleration === false) {
 	app.disableHardwareAcceleration()
 }
 
-/* Set language */
-let lang = en
-let locale = "en"
-
-if (settings.settings.language !== null) {
-	locale = settings.settings.language
-} else {
-	locale = app.getLocale().slice(0, 2)
-}
-
-switch (locale) {
-	case "en":
-		lang = en
-		break
-
-	case "hu":
-		lang = hu
-		break
-
-	default:
-		lang = en
-		break
-}
-
 /**
  * Show application window from tray
  */
@@ -402,6 +379,30 @@ const exitFromTray = () => {
  */
 const createWindows = () => {
 	logger.log("Started creating windows")
+
+	/* Set language */
+	lang = en
+	let locale = "en"
+
+	if (settings.settings.language !== null) {
+		locale = settings.settings.language
+	} else {
+		locale = app.getLocale().slice(0, 2).toLowerCase()
+	}
+
+	switch (locale) {
+		case "en":
+			lang = en
+			break
+
+		case "hu":
+			lang = hu
+			break
+
+		default:
+			lang = en
+			break
+	}
 
 	/**
 	 * Window Controls Overlay
