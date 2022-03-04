@@ -37,7 +37,7 @@ module.exports = {
 	},
 
 	"dialog": {
-		"error": "Error occurred while running Authme.",
+		"error": "Error occurred while running Authme. You may continue using the program, but it is recommended to restart!",
 		"integrity": "Failed to check the integrity of the files. \n\nYou or someone messed with the settings file, shutting down for security reasons!",
 		"support": "Authme is a free, open source software. \n\nIf you like the app, please consider supporting!",
 		"feedback": "Thank you for providing feedback! \n\nPlease report issues or feature requests on GitHub or by Email.",
@@ -58,7 +58,8 @@ module.exports = {
 		"copied": "Copied",
 		"help": "Help",
 		"exit": "Exit",
-		"report": "Report"
+		"report": "Report",
+		"restart": "Restart",
 	},
 
 	"text": {
@@ -272,10 +273,10 @@ module.exports = {
 		"You can export the 2FA codes you saved.",
 		"Close window",
 		"Export codes",
-		"If you saved your codes you can export the secrets and the saved QR codes.",
+		"Your saved codes can be exported here. Ideal if you want to use your codes elsewhere or for a security backup.",
 		"Confirm",
 		"Save exported codes",
-		"Save your exported 2FA codes to use it elsewhere.",
+		"You can save your exported 2FA codes, so you can use them elsewhere, and keeping a backup of your codes is always a good idea.",
 		"Export .authme file",
 		"Ideal to import for Authme or other Authme apps.",
 		"Export .html file",
@@ -296,7 +297,7 @@ module.exports = {
 		"You can restore the latest save. If you load your codes below it will overwrite the current save!",
 		"Restore",
 		"Load saved codes",
-		"You can load the 2FA codes you saved. After that you can edit or delete them and you can add more codes.",
+		"Load your saved 2FA codes. You can edit or delete your codes, or you can even add new codes here.",
 		"Confirm",
 		"Edit mode",
 		"Now you can modify existing codes or add more codes.",

@@ -19,7 +19,7 @@ module.exports = {
         "settings": "Beállítások",
         "exit": "Kilépés",
         "view": "Nézet",
-        "reset": "Zoom Visszaállítás",
+        "reset": "Zoom Visszaállítása",
         "zoom_in": "Nagyítás",
         "zoom_out": "Kicsinyítés",
         "tools": "Eszközök",
@@ -37,7 +37,7 @@ module.exports = {
     },
 
 	"dialog": {
-		"error": "Hiba történt az Authme futtatása közben.",
+		"error": "Hiba történt az Authme futtatása közben. Használhatod tovább a programot, de ajánlott egy újraindítás!",
 		"integrity": "Nem sikerült a fájlok biztonságának ellenőrzése. \n\nTe vagy valaki más szerkesztette a beállítások fájlt, Authme leállítása biztonsági okokból!",
 		"support": "Authme egy ingyenes, nyílt forráskódú program. \n\nHa tetszik az alkalmazás kérlek támogass!",
 		"feedback": "Köszönöm a visszajelzést! \n\nKérlek a hibákat vagy az ötleteket a GitHub-on vagy Email-be jelezd.",
@@ -58,7 +58,8 @@ module.exports = {
 		"copied": "Másolva",
 		"help": "Segítség",
 		"exit": "Kilépés",
-		"report": "Jelentés"
+		"report": "Jelentés",
+		"restart": "Újraindítás",
 	},
 
 	"text": {
@@ -272,10 +273,10 @@ module.exports = {
 		"Itt exportálhatod az elmentett 2FA kódjaidat.",
 		"Ablak bezárása",
 		"Kódok exportálása",
-		"Ha elmentetted a kódjaidat akkor exportálhatod a QR-kódokat és az adatokat.",
+		"Az elmentett kódjaidat itt tudod exportálni. Ideális ha máshol is akarod használni a kódjaidat vagy egy biztonsági mentéshez.",
 		"Megerősítés",
 		"Exportált kódok mentése",
-		"Mentsd el a 2FA kódjaidat hogy máshol is tudd azokat használni.",
+		"El tudod mententi a 2FA kódjaidat hogy máshol használd azokat, vagy egy biztonsági mentés mindig jó ötlet.",
 		".authme fájl",
 		"Ideális ha az Authme-be vagy más Authme alkalmzásba akarsz importálni.",
 		".html fájl",
@@ -296,7 +297,7 @@ module.exports = {
 		"Vissza tudod állítani az előző mentést. Ha lentebb betöltöd a kódjaidat az felül fogja írni a jelenlegi mentést.",
 		"Visszaállítás",
 		"Kódok betöltése",
-		"Be tutod tölteni a mentett kódjaidat. Ezután tudod szerkeszteni azokat, vagy újakat hozzáadni.",
+		"A mentett 2FA kódok betöltése. Ezután tudod szerkeszteni a meglévő kódjaidat, vagy újakat hozzáadni.",
 		"Megerősítés",
 		"Szerkesztő mód",
 		"Most már tudod szerkeszteni a kódjaidat, vagy újakat hozzáadni.",

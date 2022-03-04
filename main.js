@@ -55,7 +55,7 @@ let manual_update = false
 let password_buffer = null
 let tray = null
 let menu = null
-let lang = null
+let lang = en
 
 /**
  * Check if running in development mode
