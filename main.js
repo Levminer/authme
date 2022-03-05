@@ -1524,6 +1524,13 @@ ipc.on("reloadSettingsWindow", () => {
 })
 
 /**
+ * Reload export window
+ */
+ipc.on("reloadSettingsWindow", () => {
+	window_export.reload()
+})
+
+/**
  * Receive error from renderer
  */
 ipc.on("rendererError", (event, data) => {

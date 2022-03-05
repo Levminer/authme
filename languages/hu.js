@@ -66,6 +66,7 @@ module.exports = {
 		"name": "Név",
 		"code": "Kód",
 		"time": "Idő",
+		"description": "Leírás",
 		"latest_save": "Legfrisebb mentés",
 		"display": "Monitor",
 		"default": "Alapértelmezett",
@@ -311,6 +312,7 @@ module.exports = {
 	"edit_dialog": {
 		"load_rollback": "Biztos vissza akarod állítani a legutóbbi mentést? \n\nEzzel fölülírod a jelenleg mentett kódjaidat!",
 		"rollback_successful": "Visszaállítás sikeres! \n\nMenj vissza a főoldalra hogy megtekintsd a kódjaidat!",
+		"edit_code": "Kattints a mentésre az oldal tetején a változtatások mentéséhez! \n\nA művelet visszavonásához kattints a több opcióra és visszaállítás.",
 		"delete_code": "Biztos ki akarod törölni ezt a kódot? \n\nA művelet visszavonásához kattints a több opcióra és visszaállítás.",
 		"create_save": "Biztos menteni akarod a változtatásokat? \n\nEzzel felülírod a jelenlegi kódjaidat!",
 		"codes_added": "Kódok hozzáadva. \n\nGörgess le!",

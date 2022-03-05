@@ -1,6 +1,6 @@
 const { aes, convert, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
-const { app, dialog } = require("@electron/remote")
+const { app, dialog, BrowserWindow } = require("@electron/remote")
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
@@ -52,10 +52,11 @@ const settings_refresher = setInterval(() => {
 
 	if (file.security.require_password !== null || file.security.password !== null) {
 		clearInterval(settings_refresher)
-
-		logger.log("Settings refresh completed")
 	}
-}, 100)
+}, 500)
+
+// Get current window
+const currentWindow = BrowserWindow.getFocusedWindow()
 
 /**
  * Build number
@@ -84,9 +85,9 @@ let cache = true
 
 fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
 	if (err) {
-		logger.warn("Cache file don't exist")
+		logger.warn("Rollback file don't exist")
 	} else {
-		logger.log("Cache file exists")
+		logger.log("Rollback file exists")
 
 		rollback_con.style.display = "block"
 
@@ -109,7 +110,7 @@ fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
  */
 const loadRollback = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -130,7 +131,7 @@ const loadRollback = () => {
 							} else {
 								logger.log("rollback successful, codes.authme file created")
 
-								dialog.showMessageBox({
+								dialog.showMessageBox(currentWindow, {
 									title: "Authme",
 									buttons: [lang.button.close],
 									type: "info",
@@ -142,8 +143,9 @@ const loadRollback = () => {
 					}
 				})
 
-				reloadApplication()
+				reloadApplicationWindow()
 				reloadSettingsWindow()
+				reloadExportWindow()
 			}
 		})
 }
@@ -159,7 +161,7 @@ const issuers = []
  * Process data from saved file
  * @param {String} text
  */
-const processdata = (text) => {
+const processData = (text) => {
 	const data = convert.fromText(text, 0)
 
 	for (let i = 0; i < data.names.length; i++) {
@@ -168,7 +170,7 @@ const processdata = (text) => {
 		issuers.push(data.issuers[i])
 	}
 
-	go()
+	generateEditElements()
 }
 
 // block counter
@@ -177,7 +179,7 @@ let counter = 0
 /**
  * Start creating edit elements
  */
-const go = () => {
+const generateEditElements = () => {
 	document.querySelector(".codes_container").innerHTML = ""
 
 	if (cache === true) {
@@ -195,20 +197,22 @@ const go = () => {
 		const div = document.createElement("div")
 
 		div.innerHTML = `
-		<div id="grid${[counter]}" class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
-		<div class="flex justify-center items-center">
-		<h3 id="names${[counter]}">Name</h3>
-		</div>
-		<div class="flex justify-center items-center">
-		<input class="input w-[320px]" type="text" id="edit_inp_${[counter]}" value="${names[counter]}" readonly/>
-		</div>
-		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
-		<button class="buttonr button" id="edit_but_${[counter]}" onclick="edit(${[counter]})">
+		<div id="grid${[counter]}" class="flex flex-col md:w-4/5 lg:w-2/3 p-4 mx-auto rounded-2xl bg-gray-800 mb-20">
+			<div class="flex flex-col justify-center items-center">
+				<h3 class="m-0 mb-4">${lang.text.name}</h3>
+				<input class="input w-[320px]" type="text" id="edit_issuer_${[counter]}" value="${issuers[counter]}" readonly/>
+			</div>
+			<div class="flex flex-col justify-center items-center">
+				<h3 class="my-4">${lang.text.description}</h3>
+				<input class="input w-[320px]" type="text" id="edit_name_${[counter]}" value="${names[counter]}" readonly/>
+			</div>
+		<div class="flex justify-center items-center mt-6 mb-2 gap-3">
+		<button class="buttonr button" id="edit_but_${[counter]}" onclick="editCode(${[counter]})">
 		<svg id="edit_svg_${[counter]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttonr button" id="del_but_${[counter]}" onclick="del(${[counter]})">
+		<button class="buttonr button" id="del_but_${[counter]}" onclick="deleteCode(${[counter]})">
 		<svg id="del_svg_${[counter]}" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
@@ -220,8 +224,6 @@ const go = () => {
 		div.setAttribute("id", counter)
 		codes_container.appendChild(div)
 
-		document.querySelector(`#names${[counter]}`).textContent = `${issuers[counter]}`
-
 		counter++
 	}
 
@@ -229,45 +231,64 @@ const go = () => {
 }
 
 /**
- * Edit mode
+ * Edit selected code
  */
 let edit_mode = false
 
-const edit = (number) => {
-	const edit_but = document.querySelector(`#edit_but_${number}`)
-	const edit_inp = document.querySelector(`#edit_inp_${number}`)
+const editCode = (number) => {
+	const edit_button = document.querySelector(`#edit_but_${number}`)
+	const issuer_input = document.querySelector(`#edit_issuer_${number}`)
+	const name_input = document.querySelector(`#edit_name_${number}`)
 
-	edit_inp.focus()
-	const length = edit_inp.value.length
-	edit_inp.setSelectionRange(length, length)
+	name_input.focus()
+	const length = name_input.value.length
+	name_input.setSelectionRange(length, length)
 
 	if (edit_mode === false) {
-		edit_but.style.color = "green"
-		edit_but.style.borderColor = "green"
+		edit_button.style.color = "green"
+		edit_button.style.borderColor = "green"
 
-		edit_inp.style.borderColor = "green"
-		edit_inp.readOnly = false
+		issuer_input.style.borderColor = "green"
+		issuer_input.readOnly = false
+
+		name_input.style.borderColor = "green"
+		name_input.readOnly = false
 
 		edit_mode = true
 	} else {
-		edit_but.style.color = ""
-		edit_but.style.borderColor = "white"
+		edit_button.style.color = ""
+		edit_button.style.borderColor = "white"
 
-		edit_inp.style.borderColor = "white"
-		edit_inp.readOnly = true
+		issuer_input.style.borderColor = "white"
+		issuer_input.readOnly = true
 
-		const inp_value = document.querySelector(`#edit_inp_${number}`)
+		name_input.style.borderColor = "white"
+		name_input.readOnly = true
 
-		names[number] = inp_value.value
+		const issuer_value = document.querySelector(`#edit_issuer_${number}`).value
+		const name_value = document.querySelector(`#edit_name_${number}`).value
+
+		issuers[number] = issuer_value
+		names[number] = name_value
 
 		edit_mode = false
+
+		dialog.showMessageBox(currentWindow, {
+			title: "Authme",
+			buttons: [lang.button.close],
+			type: "info",
+			defaultId: 0,
+			cancelId: 0,
+			noLink: true,
+			message: lang.edit_dialog.edit_code,
+		})
 	}
 }
 
 /**
- * Delete specified code
+ * Delete selected code
  */
-const del = (number) => {
+const deleteCode = (number) => {
 	const del_but = document.querySelector(`#del_but_${number}`)
 
 	del_but.style.color = "red"
@@ -276,7 +297,7 @@ const del = (number) => {
 	counter = 0
 
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			type: "warning",
@@ -297,7 +318,7 @@ const del = (number) => {
 				secrets.splice(number, 1)
 				issuers.splice(number, 1)
 
-				go()
+				generateEditElements()
 			} else {
 				del_but.style.color = ""
 				del_but.style.borderColor = "white"
@@ -312,7 +333,7 @@ let save_text = ""
 
 const createSave = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -332,8 +353,13 @@ const createSave = () => {
 
 				const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-				reloadApplication()
+				storage.issuers = issuers
+
+				dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+
+				reloadApplicationWindow()
 				reloadSettingsWindow()
+				reloadExportWindow()
 			}
 		})
 }
@@ -380,7 +406,7 @@ const saveModifications = async () => {
  */
 const addCodes = () => {
 	dialog
-		.showOpenDialog({
+		.showOpenDialog(currentWindow, {
 			title: lang.application_dialog.choose_import_file,
 			properties: ["openFile", "multiSelections"],
 			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
@@ -417,9 +443,9 @@ const addCodes = () => {
 									issuers.push(imported.issuers[i])
 								}
 
-								go()
+								generateEditElements()
 							} else {
-								dialog.showMessageBox({
+								dialog.showMessageBox(currentWindow, {
 									title: "Authme",
 									buttons: [lang.button.close],
 									defaultId: 0,
@@ -433,7 +459,7 @@ const addCodes = () => {
 					})
 				}
 
-				dialog.showMessageBox({
+				dialog.showMessageBox(currentWindow, {
 					title: "Authme",
 					buttons: [lang.button.close],
 					defaultId: 0,
@@ -478,7 +504,7 @@ const createRollback = () => {
 const loadError = () => {
 	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
-			dialog.showMessageBox({
+			dialog.showMessageBox(currentWindow, {
 				title: "Authme",
 				buttons: [lang.button.close],
 				type: "error",
@@ -494,7 +520,7 @@ const loadError = () => {
  */
 const loadCodes = async () => {
 	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
-		const result = await dialog.showMessageBox({
+		const result = await dialog.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -507,7 +533,7 @@ const loadCodes = async () => {
 		if (result.response === 0) {
 			fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 				if (err) {
-					dialog.showMessageBox({
+					dialog.showMessageBox(currentWindow, {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",
@@ -538,7 +564,7 @@ const loadCodes = async () => {
 
 							const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-							processdata(decrypted.toString())
+							processData(decrypted.toString())
 
 							decrypted.fill(0)
 							password.fill(0)
@@ -551,7 +577,7 @@ const loadCodes = async () => {
 	} else {
 		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 			if (err) {
-				dialog.showMessageBox({
+				dialog.showMessageBox(currentWindow, {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -583,7 +609,7 @@ const loadCodes = async () => {
 
 						const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-						processdata(decrypted.toString())
+						processData(decrypted.toString())
 
 						decrypted.fill(0)
 						password.fill(0)
@@ -605,7 +631,7 @@ const hide = () => {
 /**
  * Send reload events
  */
-const reloadApplication = () => {
+const reloadApplicationWindow = () => {
 	ipc.send("reloadApplicationWindow")
 }
 
@@ -613,12 +639,16 @@ const reloadSettingsWindow = () => {
 	ipc.send("reloadSettingsWindow")
 }
 
+const reloadExportWindow = () => {
+	ipc.send("reloadExportWindow")
+}
+
 /**
  * Revert all current changes
  */
 const revertChanges = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -637,9 +667,9 @@ const revertChanges = () => {
 /**
  * Delete all codes
  */
-const deleteCodes = () => {
+const deleteAllCodes = () => {
 	dialog
-		.showMessageBox({
+		.showMessageBox(currentWindow, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -663,8 +693,11 @@ const deleteCodes = () => {
 
 				storage.issuers = undefined
 
-				reloadApplication()
+				dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+
+				reloadApplicationWindow()
 				reloadSettingsWindow()
+				reloadExportWindow()
 
 				setTimeout(() => {
 					location.reload()

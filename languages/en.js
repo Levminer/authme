@@ -66,6 +66,7 @@ module.exports = {
 		"name": "Name",
 		"code": "Code",
 		"time": "Time",
+		"description": "Description",
 		"latest_save": "Latest save",
 		"display": "Display",
 		"default": "Default",
@@ -311,6 +312,7 @@ module.exports = {
 	"edit_dialog": {
 		"load_rollback": "Are you sure you want to rollback to the latest save? \n\nThis will overwrite your saved codes!",
 		"rollback_successful": "Rollback successful! \n\nGo back to the main page to check out the changes!",
+		"edit_code": "Click save modifications on the top of the page to save the changes! \n\nIf you want to revert this, click more options and revert changes.",
 		"delete_code": "Are you sure you want to delete this code? \n\nIf you want to revert this, click more options and revert changes.",
 		"create_save": "Are you sure you want to save the modified code(s)? \n\nThis will overwrite your saved codes!",
 		"codes_added": "Code(s) added! \n\nScroll down to view them!",
