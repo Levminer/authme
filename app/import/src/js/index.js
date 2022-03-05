@@ -179,7 +179,12 @@ const qrConvert = (data) => {
 	url = url.slice(secret.length + 14 + 1)
 
 	// get issuer
-	const issuer = url
+	let issuer = url
+
+	// check if issuer is empty
+	if (issuer === "") {
+		issuer = name
+	}
 
 	// add to final string
 	return `\nName:   ${name} \nSecret: ${secret} \nIssuer: ${issuer} \nType:   OTP_TOTP\n`
