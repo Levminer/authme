@@ -1533,8 +1533,27 @@ ipc.on("reloadSettingsWindow", () => {
 /**
  * Receive error from renderer
  */
-ipc.on("rendererError", (event, data) => {
+ipc.on("rendererError", async (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
+
+	if (dev === false) {
+		const result = await dialog.showMessageBox({
+			title: "Authme",
+			buttons: [lang.button.report, lang.button.close, lang.button.restart],
+			defaultId: 0,
+			cancelId: 1,
+			noLink: true,
+			type: "error",
+			message: `${lang.dialog.error} \n\n${data.error}`,
+		})
+
+		if (result.response === 0) {
+			shell.openExternal("https://github.com/Levminer/authme/issues/")
+		} else if (result.response === 2) {
+			app.relaunch()
+			app.exit()
+		}
+	}
 })
 
 /**
