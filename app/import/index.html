@@ -7,25 +7,25 @@
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/global.css" />
-		<link rel="stylesheet" href="../../src/tailwind.css" />
+		<link rel="stylesheet" href="../.././styles/global.css" />
+		<link rel="stylesheet" href="../../styles/tailwind.css" />
 		<link rel="stylesheet" href="./src/css/index.css" />
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
-			<div class="container flex flex-row items-center justify-center py-2 mx-auto">
+		<div class="build sticky top-0 z-10 hidden w-full bg-black font-bold text-white">
+			<div class="container mx-auto flex flex-row items-center justify-center py-2">
 				<div class="flex">
-					<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
+					<h5 class="build-content m-0 mx-3 flex flex-row text-center font-bold">You are running a pre release version of Authme!</h5>
 				</div>
 			</div>
 		</div>
 
 		<!-- header -->
-		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
-			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
+		<div class="mx-auto mt-40 w-3/5 rounded-2xl bg-gray-700 text-center">
+			<img src="../../img/header.png" class="relative top-5 h-16 w-16" />
 			<h2>Import</h2>
-			<h4 data-loc>You can create your import file from QR codes and Google Authenticator QR codes.</h4>
+			<h4 data-loc>You can create your import file here, see supported QR codes for more information.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -35,87 +35,88 @@
 		</div>
 
 		<!-- content -->
-		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center p-1">
-			<div class="choose">
-				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
-					<h3 class="pt-5" data-loc>QR code</h3>
-					<details class="details mb-8">
-						<summary data-loc class="summary">Instructions</summary>
-						<h4>
-							<span data-loc> Just screenshot the QR code(s) you want to import, save them on your computer, and choose the image(s) you saved.</span>
-							<br />
-							<br />
-							<span data-loc>If you need more steps or help:</span>
-							<br />
-							<a data-loc class="link" href="#qrLink" onclick="qrLink()">Detailed steps</a>
-						</h4>
-					</details>
-					<div class="flex flex-row justify-center gap-3 flex-wrap">
-						<button class="buttoni mb-8" onclick="qrImport()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-							</svg>
-							<span data-loc>Choose image(s)</span>
-						</button>
-						<button class="buttoni mb-8" onclick="qrCamera()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-							</svg>
-							<span data-loc>Use webcam</span>
-						</button>
-						<button class="buttoni mb-8 screenCapture hidden" onclick="qrScreen()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-							</svg>
-							Screen capture
-						</button>
-					</div>
-					<video id="qrVideo" class="hidden mx-auto" autoplay></video>
-					<button class="buttoni mb-5 mt-5 hidden" id="qrStop">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-						</svg>
-						Stop
-					</button>
-				</div>
+		<div class="relative m-auto mt-20 mb-60 w-3/5 rounded-2xl bg-gray-700 p-1 text-center">
+			<!-- supported qr code -->
+			<div class="mx-auto mb-20 w-2/3 rounded-2xl bg-gray-800">
+				<h3 data-loc class="pt-5">Supported QR codes</h3>
+				<h4 data-loc>List of the currently supported QR codes. You can import from more types at the same time.</h4>
+				<button class="buttoni mb-8" onclick="examplesLink()">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+					</svg>
+					<span data-loc>Examples</span>
+				</button>
 
-				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20" id="choose">
-					<h3 class="pt-5" data-loc>Google Authenticator QR code</h3>
-					<details class="details mb-8">
-						<summary data-loc class="summary">Instructions</summary>
-						<h4>
-							<span data-loc>Tap on the three dots on the top right corner of the screen and export your accounts, take a picture of the export QR code(s), and choose the image(s) you saved and transferred to your computer.</span>
-							<br />
-							<br />
-							<span data-loc>If you need more steps or help:</span>
-							<br />
-							<a data-loc class="link" href="#gaLink" onclick="gaLink()">Detailed steps</a>
-						</h4>
-					</details>
-					<div class="flex flex-row justify-center gap-3 flex-wrap">
-						<button class="buttoni mb-8" onclick="gaImport()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+				<div class="flex flex-row justify-center pb-5">
+					<div class="my-3 ml-3 mr-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
+						<h4 data-loc class="m-0 mb-3">TOTP 2FA QR code</h4>
+						<h5 data-loc class="m-0">A TOTP QR code is that you find mostly everywhere, if you want to setup 2FA.</h5>
+						<h5 data-loc class="m-0">Example: (Google, Facebook, Microsoft).</h5>
+						<h5 data-loc class="m-0">Starts with: (otpauth://totp/).</h5>
+						<a data-loc class="link pt-3 !text-lg" href="#totp" onclick="totpLink()">Detailed steps</a>
+					</div>
+					<div class="my-3 mr-3 ml-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
+						<h4 data-loc class="m-0 mb-3">Migration 2FA QR code</h4>
+						<h5 data-loc class="m-0">A migration QR code is what you can export, and contains all of your already imported codes.</h5>
+						<h5 data-loc class="m-0">Example: (Google Authenticator).</h5>
+						<h5 data-loc class="m-0">Starts with: (otpauth-migration://).</h5>
+						<a data-loc class="link pt-3 !text-lg" href="#migration" onclick="migrationLink()">Detailed steps</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- create import file -->
+			<div class="mx-auto mb-10 w-2/3 rounded-2xl bg-gray-800">
+				<h3 class="pt-5" data-loc>Create import file</h3>
+				<h4 data-loc>Create your import file here. Choose the most convenient way for you.</h4>
+				<div class="flex flex-col flex-wrap items-center justify-center gap-3">
+					<div class="chooseImages m-1">
+						<button class="buttoni" onclick="chooseImages()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<line x1="15" y1="8" x2="15.01" y2="8"></line>
+								<rect x="4" y="4" width="16" height="16" rx="3"></rect>
+								<path d="M4 15l4 -4a3 5 0 0 1 3 0l5 5"></path>
+								<path d="M14 14l1 -1a3 5 0 0 1 3 0l2 2"></path>
 							</svg>
-							<span data-loc>Choose image(s)</span>
+							<span data-loc>Choose images</span>
 						</button>
-						<button class="buttoni mb-8" onclick="gaCamera()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+						<h5 data-loc class="m-0 pt-4">Choose images that contain a 2FA QR code.</h5>
+					</div>
+					<div class="useWebcam m-1">
+						<button class="buttoni" onclick="useWebcam()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<circle cx="12" cy="10" r="7"></circle>
+								<circle cx="12" cy="10" r="3"></circle>
+								<path d="M8 16l-2.091 3.486a1 1 0 0 0 .857 1.514h10.468a1 1 0 0 0 .857 -1.514l-2.091 -3.486"></path>
 							</svg>
 							<span data-loc>Use webcam</span>
 						</button>
+						<h5 data-loc class="m-0 pt-4">Use your webcam to scan 2FA QR codes.</h5>
 					</div>
-					<video id="gaVideo" class="hidden mx-auto" autoplay></video>
-					<button class="buttoni mb-5 mt-5 hidden" id="gaStop">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-						</svg>
-						Stop
-					</button>
+					<div class="screenCapture m-1 hidden">
+						<button class="buttoni w-[576px] sm:w-72" onclick="captureFromScreen()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+								<line x1="7" y1="20" x2="17" y2="20"></line>
+								<line x1="9" y1="16" x2="9" y2="20"></line>
+								<line x1="15" y1="16" x2="15" y2="20"></line>
+							</svg>
+							<span data-loc>Capture screen</span>
+						</button>
+						<h5 data-loc class="m-0 pt-4 pb-6">Capture a 2FA QR code from your screen.</h5>
+					</div>
 				</div>
+				<!-- video -->
+				<video id="qrVideo" class="mx-auto mb-8 hidden" autoplay></video>
+				<button class="buttoni mb-8 hidden" id="qrStop">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span data-loc>Stop</span>
+				</button>
 			</div>
 		</div>
 	</body>

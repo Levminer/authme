@@ -52,8 +52,10 @@ let reload = false
 let tray_minimized = false
 let update_seen = false
 let manual_update = false
+let password_buffer = null
 let tray = null
 let menu = null
+let lang = en
 
 /**
  * Check if running in development mode
@@ -68,14 +70,6 @@ if (app.isPackaged === false) {
 	})
 
 	dev = true
-}
-
-/**
- * Check if the build is pre release
- */
-let pre_release = false
-if (number.startsWith("alpha") || number.startsWith("beta")) {
-	pre_release = true
 }
 
 /**
@@ -289,30 +283,6 @@ if (settings.settings.hardware_acceleration === false) {
 	app.disableHardwareAcceleration()
 }
 
-/* Set language */
-let lang = en
-let locale = "en"
-
-if (settings.settings.language !== null) {
-	locale = settings.settings.language
-} else {
-	locale = app.getLocale().slice(0, 2)
-}
-
-switch (locale) {
-	case "en":
-		lang = en
-		break
-
-	case "hu":
-		lang = hu
-		break
-
-	default:
-		lang = en
-		break
-}
-
 /**
  * Show application window from tray
  */
@@ -409,6 +379,30 @@ const exitFromTray = () => {
  */
 const createWindows = () => {
 	logger.log("Started creating windows")
+
+	/* Set language */
+	lang = en
+	let locale = "en"
+
+	if (settings.settings.language !== null) {
+		locale = settings.settings.language
+	} else {
+		locale = app.getLocale().slice(0, 2).toLowerCase()
+	}
+
+	switch (locale) {
+		case "en":
+			lang = en
+			break
+
+		case "hu":
+			lang = hu
+			break
+
+		default:
+			lang = en
+			break
+	}
 
 	/**
 	 * Window Controls Overlay
@@ -664,8 +658,6 @@ const createWindows = () => {
 					window_application.hide()
 				}, 100)
 
-				show_tray = true
-
 				application_shown = false
 
 				createTray()
@@ -684,7 +676,6 @@ const createWindows = () => {
 			setTimeout(() => {
 				window_settings.hide()
 			}, 100)
-			show_tray = true
 
 			settings_shown = false
 		}
@@ -700,7 +691,6 @@ const createWindows = () => {
 			setTimeout(() => {
 				window_import.hide()
 			}, 100)
-			show_tray = true
 
 			import_shown = false
 		}
@@ -716,7 +706,6 @@ const createWindows = () => {
 			setTimeout(() => {
 				window_export.hide()
 			}, 100)
-			show_tray = true
 
 			export_shown = false
 		}
@@ -732,7 +721,6 @@ const createWindows = () => {
 			setTimeout(() => {
 				window_edit.hide()
 			}, 100)
-			show_tray = true
 
 			edit_shown = false
 		}
@@ -890,10 +878,10 @@ const createWindows = () => {
 		logger.log(`Downloading auto update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
 
 		window_application.webContents.send("updateInfo", {
-			download_percent: download_percent,
-			download_speed: download_speed,
-			download_transferred: download_transferred,
-			download_total: download_total,
+			download_percent,
+			download_speed,
+			download_transferred,
+			download_total,
 		})
 	})
 
@@ -941,12 +929,12 @@ const createWindows = () => {
 		})
 	}
 
-	if (settings.statistics.rate === true || settings.statistics.feedback === true) {
-		if (opens % 50 === 0) {
+	if (settings.statistics.rate === true && settings.statistics.feedback === true) {
+		if (opens % 100 === 0) {
 			openInfo()
 		}
-	} else if (settings.statistics.rate === true && settings.statistics.feedback === true) {
-		if (opens % 100 === 0) {
+	} else if (settings.statistics.rate === true || settings.statistics.feedback === true) {
+		if (opens % 50 === 0) {
 			openInfo()
 		}
 	} else {
@@ -963,26 +951,24 @@ app.whenReady()
 	.then(() => {
 		logger.log("Starting app")
 
-		process.on("uncaughtException", (error) => {
+		process.on("uncaughtException", async (error) => {
 			logger.error("Error occurred while starting", error.stack)
 
-			dialog
-				.showMessageBox({
-					title: "Authme",
-					buttons: [lang.button.report, lang.button.close, lang.button.exit],
-					defaultId: 0,
-					cancelId: 1,
-					noLink: true,
-					type: "error",
-					message: `${lang.dialog.error} \n\n${error.stack}`,
-				})
-				.then((result) => {
-					if (result.response === 0) {
-						shell.openExternal("https://github.com/Levminer/authme/issues/")
-					} else if (result.response === 2) {
-						app.exit()
-					}
-				})
+			const result = await dialog.showMessageBox({
+				title: "Authme",
+				buttons: [lang.button.report, lang.button.close, lang.button.exit],
+				defaultId: 0,
+				cancelId: 1,
+				noLink: true,
+				type: "error",
+				message: `${lang.dialog.error} \n\n${error.stack}`,
+			})
+
+			if (result.response === 0) {
+				shell.openExternal("https://github.com/Levminer/authme/issues/")
+			} else if (result.response === 2) {
+				app.exit()
+			}
 		})
 
 		// Set application Id
@@ -1538,10 +1524,36 @@ ipc.on("reloadSettingsWindow", () => {
 })
 
 /**
+ * Reload export window
+ */
+ipc.on("reloadSettingsWindow", () => {
+	window_export.reload()
+})
+
+/**
  * Receive error from renderer
  */
-ipc.on("rendererError", (event, data) => {
+ipc.on("rendererError", async (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
+
+	if (dev === false) {
+		const result = await dialog.showMessageBox({
+			title: "Authme",
+			buttons: [lang.button.report, lang.button.close, lang.button.restart],
+			defaultId: 0,
+			cancelId: 1,
+			noLink: true,
+			type: "error",
+			message: `${lang.dialog.error} \n\n${data.error}`,
+		})
+
+		if (result.response === 0) {
+			shell.openExternal("https://github.com/Levminer/authme/issues/")
+		} else if (result.response === 2) {
+			app.relaunch()
+			app.exit()
+		}
+	}
 })
 
 /**
@@ -1574,6 +1586,17 @@ ipc.handle("statistics", () => {
 })
 
 /**
+ * Receive imported codes and send to application
+ */
+ipc.handle("importedCodes", (event, res) => {
+	window_application.webContents.executeJavaScript("location.reload()")
+
+	setTimeout(() => {
+		window_application.webContents.executeJavaScript(`importedCodes("${res}")`)
+	}, 150)
+})
+
+/**
  * Logger path
  */
 const logs = () => {
@@ -1586,7 +1609,7 @@ const logs = () => {
  * About dialog
  */
 const version = () => {
-	const message = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
+	const text = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
 
@@ -1598,12 +1621,12 @@ const version = () => {
 			cancelId: 1,
 			noLink: true,
 			type: "info",
-			message: message,
+			message: text,
 			icon: path.join(__dirname, "img/tray.png"),
 		})
 		.then((result) => {
 			if (result.response === 0) {
-				clipboard.writeText(message)
+				clipboard.writeText(text)
 			}
 		})
 }

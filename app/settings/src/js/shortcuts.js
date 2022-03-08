@@ -127,17 +127,7 @@ const createGlobalShortcuts = () => {
 
 createGlobalShortcuts()
 
-/**
- * Load storage
- * @type {LibStorage}
- */
-let storage
-
-if (dev === false) {
-	storage = JSON.parse(localStorage.getItem("storage"))
-} else {
-	storage = JSON.parse(localStorage.getItem("dev_storage"))
-}
+let /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 /**
  * Edit, reset, delete codes
@@ -645,11 +635,7 @@ const generateQuickShortcuts = (issuers) => {
  * Check if codes saved on main page
  */
 const checkForIssuers = () => {
-	if (dev === false) {
-		storage = JSON.parse(localStorage.getItem("storage"))
-	} else {
-		storage = JSON.parse(localStorage.getItem("dev_storage"))
-	}
+	storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 	const issuers = storage.issuers
 

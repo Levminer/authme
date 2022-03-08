@@ -4,12 +4,13 @@ const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
+const { backupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
 
 /**
  * Send error to main process
  */
 window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "settings", error: error })
+	ipc.send("rendererError", { renderer: "settings", error })
 }
 
 /**
@@ -74,8 +75,6 @@ const settings_refresher = setInterval(() => {
 
 	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
-
-		logger.log("Settings refresh completed")
 	}
 }, 100)
 
@@ -194,8 +193,12 @@ if (sort_number === 1) {
 
 // display
 drp1.innerHTML = `
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+	<line x1="7" y1="20" x2="17" y2="20"></line>
+	<line x1="9" y1="16" x2="9" y2="20"></line>
+	<line x1="15" y1="16" x2="15" y2="20"></line>
 	</svg>
 	${lang.text.display} #${settings.settings.default_display}
 	`
@@ -225,16 +228,10 @@ switch (settings.settings.language) {
 		break
 
 	default:
-		drp2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 36 36">
-			<path fill="#B22334" d="M35.445 7C34.752 5.809 33.477 5 32 5H18v2h17.445zM0 25h36v2H0zm18-8h18v2H18zm0-4h18v2H18zM0 21h36v2H0zm4 10h28c1.477 0 2.752-.809 3.445-2H.555c.693 1.191 1.968 2 3.445 2zM18 9h18v2H18z" />
-			<path fill="#EEE" d="M.068 27.679c.017.093.036.186.059.277.026.101.058.198.092.296.089.259.197.509.333.743L.555 29h34.89l.002-.004c.135-.233.243-.483.332-.741.034-.099.067-.198.093-.301.023-.09.042-.182.059-.275.041-.22.069-.446.069-.679H0c0 .233.028.458.068.679zM0 23h36v2H0zm0-4v2h36v-2H18zm18-4h18v2H18zm0-4h18v2H18zM0 9c0-.233.03-.457.068-.679C.028 8.542 0 8.767 0 9zm.555-2l-.003.005L.555 7zM.128 8.044c.025-.102.06-.199.092-.297-.034.098-.066.196-.092.297zM18 9h18c0-.233-.028-.459-.069-.68-.017-.092-.035-.184-.059-.274-.027-.103-.059-.203-.094-.302-.089-.258-.197-.507-.332-.74.001-.001 0-.003-.001-.004H18v2z" />
-			<path fill="#3C3B6E" d="M18 5H4C1.791 5 0 6.791 0 9v10h18V5z" />
-			<path
-			fill="#FFF"
-			d="M2.001 7.726l.618.449-.236.725L3 8.452l.618.448-.236-.725L4 7.726h-.764L3 7l-.235.726zm2 2l.618.449-.236.725.617-.448.618.448-.236-.725L6 9.726h-.764L5 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 9l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 9l-.235.726zm-8 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L5 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L9 13l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L13 13l-.235.726zm-6-6l.618.449-.236.725L7 8.452l.618.448-.236-.725L8 7.726h-.764L7 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 7l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 7l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 11l-.235.726zM6.383 12.9L7 12.452l.618.448-.236-.725.618-.449h-.764L7 11l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 11l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 11l-.235.726zm-12 4l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L3 15l-.235.726zM6.383 16.9L7 16.452l.618.448-.236-.725.618-.449h-.764L7 15l-.235.726h-.764l.618.449zm3.618-1.174l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L11 15l-.235.726zm4 0l.618.449-.236.725.617-.448.618.448-.236-.725.618-.449h-.764L15 15l-.235.726z"
-			/>
-			</svg>
-			English (US)`
+		drp2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+		</svg>
+		${lang.text.default}`
 		break
 }
 
@@ -687,6 +684,15 @@ const languageDropdownChoose = (id) => {
 
 				settings.settings.language = "hu"
 				break
+
+			default:
+				language_button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+				</svg>
+				${lang.text.default}`
+
+				settings.settings.language = null
+				break
 		}
 
 		save()
@@ -1059,8 +1065,12 @@ for (let i = 1; i < displays.length + 1; i++) {
 
 	element.innerHTML = `
 	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+	<line x1="7" y1="20" x2="17" y2="20"></line>
+	<line x1="9" y1="16" x2="9" y2="20"></line>
+	<line x1="15" y1="16" x2="15" y2="20"></line>
 	</svg>
 	${lang.text.display} #${i}
 	</a>
@@ -1092,8 +1102,12 @@ const display = () => {
 const displayChoose = (id) => {
 	const toggle = () => {
 		drp1.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+		<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+		<rect x="3" y="4" width="18" height="12" rx="1"></rect>
+		<line x1="7" y1="20" x2="17" y2="20"></line>
+		<line x1="9" y1="16" x2="9" y2="20"></line>
+		<line x1="15" y1="16" x2="15" y2="20"></line>
 		</svg>
 		${lang.text.display} #${id}
 		`

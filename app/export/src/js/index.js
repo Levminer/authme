@@ -10,7 +10,7 @@ const fs = require("fs")
  * Send error to main process
  */
 window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "export", error: error })
+	ipc.send("rendererError", { renderer: "export", error })
 }
 
 /**
@@ -66,36 +66,34 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
  * Read settings
  * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 /**
  * Refresh settings
  */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
-
-		logger.log("Settings refresh completed")
 	}
-}, 100)
+}, 500)
 
 /**
  * Process data from saved file
  * @param {String} text
  */
-const processdata = (text) => {
+const processData = (text) => {
 	const converted = convert.fromText(text, 0)
 
-	go(converted)
+	createElements(converted)
 }
 
 /**
  * Start creating export elements
  * @param {LibImportFile} data
  */
-const go = (data) => {
+const createElements = (data) => {
 	const names = data.names
 	const secrets = data.secrets
 	const issuers = data.issuers
@@ -122,38 +120,9 @@ const go = (data) => {
 }
 
 /**
- * Save .txt file
- */
-const saveFile = () => {
-	dialog
-		.showSaveDialog({
-			title: lang.import_dialog.save_file,
-			filters: [{ name: lang.export_dialog.text_file, extensions: ["txt"] }],
-			defaultPath: "~/authme_export.txt",
-		})
-		.then((result) => {
-			canceled = result.canceled
-			output = result.filePath
-
-			if (canceled === false) {
-				fs.writeFile(output, file, (err) => {
-					if (err) {
-						return logger.error(`Error creating file - ${err}`)
-					} else {
-						return logger.log("Text file created")
-					}
-				})
-			}
-		})
-		.catch((err) => {
-			logger.error(`Failed to save - ${err}`)
-		})
-}
-
-/**
  * Save .authme file
  */
-const newSaveFile = () => {
+const saveFile = () => {
 	dialog
 		.showSaveDialog({
 			title: lang.import_dialog.save_file,
@@ -261,13 +230,7 @@ const exportCodes = async () => {
 		password = Buffer.from(await ipc.invoke("request_password"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
-		let /** @type {LibStorage} */ storage
-
-		if (dev === false) {
-			storage = JSON.parse(localStorage.getItem("storage"))
-		} else {
-			storage = JSON.parse(localStorage.getItem("dev_storage"))
-		}
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 		password = Buffer.from(storage.password, "base64")
 		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
@@ -286,7 +249,7 @@ const exportCodes = async () => {
 
 			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
-			processdata(decrypted.toString())
+			processData(decrypted.toString())
 			file = decrypted.toString()
 
 			decrypted.fill(0)

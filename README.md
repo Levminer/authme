@@ -18,6 +18,8 @@
 
 -   Also available on: [Microsoft Store](https://link.levminer.com/authme-ms-store), [winget](https://winget.run/pkg/Levminer/Authme)
 
+<img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
+
 ## Latest Alpha
 
 -   Latest alpha version for advanced users.
@@ -27,8 +29,6 @@
 [![Linux Download](https://img.shields.io/badge/Linux-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/linux)
 [![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/mac)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
-
-<img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
 
 ## Features
 

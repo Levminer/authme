@@ -7,22 +7,22 @@
 		<!-- js -->
 		<script defer src="./src/js/index.js"></script>
 		<!-- css -->
-		<link rel="stylesheet" href="../.././src/global.css" />
-		<link rel="stylesheet" href="../.././src/tailwind.css" />
+		<link rel="stylesheet" href="../.././styles/global.css" />
+		<link rel="stylesheet" href="../../styles/tailwind.css" />
 	</head>
 	<body>
 		<!-- build number -->
-		<div class="w-full text-white bg-black font-bold build hidden z-10 top-0 sticky">
-			<div class="container flex flex-row items-center justify-center py-2 mx-auto">
+		<div class="build sticky top-0 z-10 hidden w-full bg-black font-bold text-white">
+			<div class="container mx-auto flex flex-row items-center justify-center py-2">
 				<div class="flex">
-					<h5 class="mx-3 flex flex-row m-0 font-bold build-content text-center">You are running a pre release version of Authme!</h5>
+					<h5 class="build-content m-0 mx-3 flex flex-row text-center font-bold">You are running a pre release version of Authme!</h5>
 				</div>
 			</div>
 		</div>
 
 		<!-- header -->
-		<div class="mx-auto rounded-2xl bg-gray-700 w-3/5 text-center mt-40">
-			<img src="../../img/header.png" class="h-16 w-16 relative top-5" />
+		<div class="mx-auto mt-40 w-3/5 rounded-2xl bg-gray-700 text-center">
+			<img src="../../img/header.png" class="relative top-5 h-16 w-16" />
 			<h2 data-loc>Edit codes</h2>
 			<h4 data-loc>You can edit or delete your existing codes and you can add more codes.</h4>
 			<button class="buttoni mb-6" onclick="hide()">
@@ -34,61 +34,75 @@
 		</div>
 
 		<!-- content -->
-		<div class="bg-gray-700 w-3/5 m-auto mt-20 mb-60 rounded-2xl relative text-center p-1">
+		<div class="relative m-auto mt-20 mb-60 w-3/5 rounded-2xl bg-gray-700 p-1 text-center">
 			<!-- rollback -->
-			<div class="mx-auto rounded-2xl hidden bg-gray-800 w-2/3 rollback mt-20">
+			<div class="rollback mx-auto mt-20 hidden w-2/3 rounded-2xl bg-gray-800">
 				<h3 data-loc id="rollbackText" class="pt-5">Restore</h3>
 				<h4 data-loc>You can restore the latest save. If you load your codes below it will overwrite the current save!</h4>
 				<button class="buttoni mb-5" onclick="loadRollback()">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+						<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+						<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+						<path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+						<line x1="12" y1="9" x2="12" y2="12"></line>
+						<line x1="12" y1="15" x2="12.01" y2="15"></line>
 					</svg>
 					<span data-loc>Restore</span>
 				</button>
 			</div>
 			<!-- load codes -->
-			<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mb-20 mt-20 beforeLoad">
+			<div class="beforeLoad mx-auto mb-20 mt-20 w-2/3 rounded-2xl bg-gray-800">
 				<h3 data-loc id="rollbackBut" class="pt-5">Load saved codes</h3>
-				<h4 data-loc>You can load the 2FA codes you saved. After that you can edit or delete them and you can add more codes.</h4>
+				<h4 data-loc>Load your saved 2FA codes. You can edit or delete your codes, or you can even add new codes here.</h4>
 				<button class="buttoni mb-5" onclick="loadCodes()">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>
-					<span data-loc>Load codes</span>
+					<span data-loc>Confirm</span>
 				</button>
 			</div>
 			<!-- save codes and add codes -->
 			<div class="afterLoad hidden">
-				<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 mt-20 mb-20">
+				<div class="mx-auto mt-20 mb-20 w-2/3 rounded-2xl bg-gray-800">
 					<h3 data-loc id="rollbackBut" class="pt-5">Edit mode</h3>
 					<h4 data-loc>Now you can modify existing codes or add more codes.</h4>
-					<div class="flex flex-row justify-center gap-3 flex-wrap pb-5">
+					<div class="flex flex-row flex-wrap justify-center gap-3 pb-5">
 						<button class="buttoni" onclick="createSave()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"></path>
+								<circle cx="12" cy="14" r="2"></circle>
+								<polyline points="14 4 14 8 8 8 8 4"></polyline>
 							</svg>
 							<span data-loc>Save modifications</span>
 						</button>
 
 						<button class="buttoni" onclick="addCodes()">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+								<circle cx="12" cy="12" r="9"></circle>
+								<line x1="9" y1="12" x2="15" y2="12"></line>
+								<line x1="12" y1="9" x2="12" y2="15"></line>
 							</svg>
 							<span data-loc>Add codes</span>
 						</button>
 					</div>
 					<div class="mx-auto pb-5">
-						<details class="details mb-5 transform ease-in duration-200">
-							<summary data-loc class="summary font-bold mb-3 cursor-pointer">More options</summary>
-							<div class="flex flex-row justify-center gap-3 flex-wrap">
+						<details class="details mb-5 transform duration-200 ease-in">
+							<summary data-loc class="summary mb-3 cursor-pointer font-bold">More options</summary>
+							<div class="flex flex-row flex-wrap justify-center gap-3">
 								<button class="buttoni" onclick="revertChanges()">
-									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+										<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+										<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+										<path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+										<line x1="12" y1="9" x2="12" y2="12"></line>
+										<line x1="12" y1="15" x2="12.01" y2="15"></line>
 									</svg>
 									<span data-loc>Revert changes</span>
 								</button>
 
-								<button class="buttoni" onclick="deleteCodes()">
+								<button class="buttoni" onclick="deleteAllCodes()">
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 									</svg>
