@@ -1,5 +1,6 @@
 ### Authme 3.1.1 (2022. March 8.)
 
+-   [[f866442](https://github.com/Levminer/authme/commit/f866442)] Update changelog (2022-03-08)
 -   [[67403bd](https://github.com/Levminer/authme/commit/67403bd)] Update localization (2022-03-06)
 -   [[37c5cd4](https://github.com/Levminer/authme/commit/37c5cd4)] Update packages (2022-03-06)
 -   [[8db041c](https://github.com/Levminer/authme/commit/8db041c)] Display renderer error (2022-03-06)
@@ -89,7 +90,7 @@
 -   [[7ad2118](https://github.com/Levminer/authme/commit/7ad2118)] Update packages (2022-01-07)
 -   [[f374b88](https://github.com/Levminer/authme/commit/f374b88)] Update readme (2022-01-07)
 -   [[285f473](https://github.com/Levminer/authme/commit/285f473)] Settings better wording (2022-01-06)
--   [[efaa065](https://githugit log --pretty=format:'\* [[%h](https://github.com/Levminer/authme/commit/%h)] %s (%cs)' --since=5.weeks > log.txtb.com/Levminer/authme/commit/efaa065)] Improve startup time (2022-01-05)
+-   [[efaa065](https://github.com/Levminer/authme/commit/efaa065)] Improve startup time (2022-01-05)
 -   [[f8771c4](https://github.com/Levminer/authme/commit/f8771c4)] Fix manual update and quick shortcuts (2022-01-02)
 -   [[7cafbe6](https://github.com/Levminer/authme/commit/7cafbe6)] Fix release notes (2021-12-29)
 -   [[b703350](https://github.com/Levminer/authme/commit/b703350)] Bump version (2021-12-28)
