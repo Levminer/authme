@@ -17,7 +17,7 @@
 			<div class="flex h-screen flex-col justify-between overflow-visible bg-gray-900">
 				<div class="flex flex-col">
 					<div class="mb-1 mt-5 mr-4 ml-4">
-						<button id="setting " class="buttonm settings" onclick="menu(event, 'setting')">
+						<button id="general " class="buttonm general" onclick="menu('general')">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
 								<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -26,7 +26,7 @@
 						</button>
 					</div>
 					<div class="mb-1 mt-1 mr-4 ml-4">
-						<button id="codes " class="buttonm codes" onclick="menu(event, 'codes')">
+						<button id="codes " class="buttonm codes" onclick="menu('codes')">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
 							</svg>
@@ -34,7 +34,7 @@
 						</button>
 					</div>
 					<div class="mb-1 mt-1 mr-4 ml-4">
-						<button id="shortcuts " class="buttonm shortcuts" onclick="menu(event, 'shortcuts')">
+						<button id="shortcuts " class="buttonm shortcuts" onclick="menu('shortcuts')">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
 								<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
 								<rect x="2" y="6" width="20" height="12" rx="2"></rect>
@@ -50,7 +50,7 @@
 						</button>
 					</div>
 					<div class="mb-1 mt-1 mr-4 ml-4">
-						<button id="experimental " class="buttonm experimental" onclick="menu(event, 'experimental')">
+						<button id="experimental " class="buttonm experimental" onclick="menu('experimental')">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
 							</svg>
@@ -214,7 +214,7 @@
 
 					<!-- settings -->
 					<div class="mx-auto mt-20 mb-20 w-3/5 rounded-2xl bg-gray-700 pt-5 pb-10 text-center">
-						<div id="setting" class="tabcontent">
+						<div id="general" class="tabcontent">
 							<h3 data-loc>Launch on startup</h3>
 							<h4 data-loc>Start Authme after your computer started. Authme will start on the system tray.</h4>
 							<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">

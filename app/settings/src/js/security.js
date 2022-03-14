@@ -30,8 +30,9 @@ module.exports = {
 				const salt = aes.generateSalt()
 				const backup_key = aes.generateRandomKey(salt)
 
-				console.log(backup_key.toString("base64"))
 				const backup_file = aes.encrypt(decrypted, backup_key)
+
+				console.log(backup_file.toString("base64"))
 
 				decrypted.fill(0)
 				password.fill(0)

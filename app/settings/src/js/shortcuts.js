@@ -127,7 +127,7 @@ const createGlobalShortcuts = () => {
 
 createGlobalShortcuts()
 
-let /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 /**
  * Edit, reset, delete codes

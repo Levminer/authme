@@ -806,8 +806,8 @@ const hide = () => {
 /**
  * Menu
  */
-document.querySelector(".settings").disabled = true
-document.querySelector(".settings").classList.add("buttonmselected")
+document.querySelector(".general").disabled = true
+document.querySelector(".general").classList.add("buttonmselected")
 let shortcut = false
 
 /**
@@ -815,22 +815,25 @@ let shortcut = false
  */
 const removeButtonStyles = () => {
 	document.querySelector(".shortcuts").classList.remove("buttonmselected")
-	document.querySelector(".settings").classList.remove("buttonmselected")
+	document.querySelector(".general").classList.remove("buttonmselected")
 	document.querySelector(".experimental").classList.remove("buttonmselected")
 	document.querySelector(".codes").classList.remove("buttonmselected")
 }
 
 // control menu
-const menu = (evt, name) => {
+const menu = (name) => {
 	let i
 
 	if (name === "shortcuts") {
+		storage.settings_page = "shortcuts"
+		dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+
 		removeButtonStyles()
 
 		document.querySelector(".shortcuts").classList.add("buttonmselected")
 
 		document.querySelector(".shortcuts").disabled = true
-		document.querySelector(".settings").disabled = false
+		document.querySelector(".general").disabled = false
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
@@ -838,15 +841,19 @@ const menu = (evt, name) => {
 
 		shortcut = true
 
-		checkForIssuers()
+		setTimeout(() => {
+			checkForIssuers()
+		}, 100)
 
 		ipc.send("shortcuts")
-	} else if (name === "setting") {
+	} else if (name === "general") {
+		storage.settings_page = "general"
+
 		removeButtonStyles()
 
-		document.querySelector(".settings").classList.add("buttonmselected")
+		document.querySelector(".general").classList.add("buttonmselected")
 
-		document.querySelector(".settings").disabled = true
+		document.querySelector(".general").disabled = true
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
@@ -859,12 +866,14 @@ const menu = (evt, name) => {
 			shortcut = false
 		}
 	} else if (name === "experimental") {
+		storage.settings_page = "experimental"
+
 		removeButtonStyles()
 
 		document.querySelector(".experimental").classList.add("buttonmselected")
 
 		document.querySelector(".experimental").disabled = true
-		document.querySelector(".settings").disabled = false
+		document.querySelector(".general").disabled = false
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = false
 
@@ -876,12 +885,14 @@ const menu = (evt, name) => {
 			shortcut = false
 		}
 	} else if (name === "codes") {
+		storage.settings_page = "codes"
+
 		removeButtonStyles()
 
 		document.querySelector(".codes").classList.add("buttonmselected")
 
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".settings").disabled = false
+		document.querySelector(".general").disabled = false
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = true
 
@@ -905,7 +916,14 @@ const menu = (evt, name) => {
 	}
 
 	document.getElementById(name).style.display = "block"
-	evt.currentTarget.className += " active"
+
+	dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+}
+
+let /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+if (storage.settings_page !== "general" && storage.settings_page !== undefined) {
+	menu(storage.settings_page)
 }
 
 /**
