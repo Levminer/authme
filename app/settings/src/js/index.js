@@ -1,10 +1,10 @@
 const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
-const { convert, localization } = require("@levminer/lib")
+const { convert, localization, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { backupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
+const { createBackupFile, loadBackupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
 
 /**
  * Send error to main process
@@ -16,7 +16,7 @@ window.onerror = (error) => {
 /**
  * Start logger
  */
-logger.getWindow("application")
+logger.getWindow("settings")
 
 /**
  * Localization
@@ -72,6 +72,8 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
  */
 const settings_refresher = setInterval(() => {
 	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 	if (settings.security.require_password !== null || settings.security.password !== null) {
 		clearInterval(settings_refresher)
@@ -786,6 +788,11 @@ const cacheFolder = () => {
  * Open latest log
  */
 const latestLog = () => {
+	logger.log("Used issuers", storage.issuers)
+	logger.log("Settings", settings.settings)
+	logger.log("Security", settings.security)
+	logger.log("Experimental features", settings.experimental)
+
 	ipc.send("logs")
 }
 
@@ -948,6 +955,8 @@ const about = () => {
  */
 const reload = () => {
 	ipc.send("reloadApplicationWindow")
+
+	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 }
 
 /**
