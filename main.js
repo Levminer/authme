@@ -1560,15 +1560,15 @@ ipc.on("rendererError", async (event, data) => {
  * Logger events
  */
 ipc.on("loggerLog", (event, data) => {
-	logger.rendererLog(data.id, data.message, data.log)
+	logger.rendererLog(data.window, data.message, data.arg)
 })
 
 ipc.on("loggerWarn", (event, data) => {
-	logger.rendererWarn(data.id, data.message, data.warn)
+	logger.rendererWarn(data.window, data.message, data.arg)
 })
 
 ipc.on("loggerError", (event, data) => {
-	logger.rendererError(data.id, data.message, data.error)
+	logger.rendererError(data.window, data.message, data.arg)
 })
 
 /**
