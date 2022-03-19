@@ -132,20 +132,20 @@
 		<div class="content relative mx-auto mt-20 mb-60 rounded-2xl bg-gray-700 p-1 text-center md:w-9/12 lg:w-3/5">
 			<h1 class="h1 mb-5">Authme</h1>
 			<div class="mx-auto hidden w-2/3 rounded-2xl bg-gray-800 pb-5" id="choose">
-				<h3 data-loc class="pt-3">Choose your import file</h3>
-				<h4 data-loc>If you don't have an import file containing your 2FA codes please create one!</h4>
+				<h3 data-loc class="pt-3">Import your codes</h3>
+				<h4 data-loc>Create your import file from your 2FA codes, or if you have an import file choose it.</h4>
 				<div class="flex flex-row flex-wrap items-center justify-center gap-3">
-					<button class="buttoni" id="input" onclick="loadFile()">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" />
-						</svg>
-						<span data-loc>Choose import file</span>
-					</button>
 					<button class="buttoni" onclick="createFile()">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
 						</svg>
 						<span data-loc>Create import file</span>
+					</button>
+					<button class="buttoni" id="input" onclick="loadFile()">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" />
+						</svg>
+						<span data-loc>Choose import file</span>
 					</button>
 				</div>
 			</div>
