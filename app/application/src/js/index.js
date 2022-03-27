@@ -64,10 +64,8 @@ if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
 	document.querySelector("#choose").style.display = "block"
 }
 
-// eslint-disable-next-line
 let saved_codes = false
-let text
-let save_text
+let save_text = ""
 const query = []
 const description_query = []
 const name_query = []
@@ -96,10 +94,9 @@ const loadFile = () => {
 				const /** @type{LibAuthmeFile} */ loaded = JSON.parse(fs.readFileSync(filepath.toString(), "utf-8"))
 
 				if (loaded.role === "import" || loaded.role === "export") {
-					text = Buffer.from(loaded.codes, "base64").toString()
-					save_text = text
+					save_text = Buffer.from(loaded.codes, "base64").toString()
 
-					processData(text)
+					processData(save_text)
 				} else {
 					dialog.showMessageBox({
 						title: "Authme",
@@ -119,11 +116,55 @@ const loadFile = () => {
  * Automatically import when creating import file
  * @param {string} res
  */
-const importedCodes = (res) => {
+const importCodes = (res) => {
 	const text = Buffer.from(res, "base64").toString()
 	save_text = text
 
 	processData(text)
+}
+
+/**
+ * Automatically import when creating import file
+ * @param {string} res
+ */
+const importExistingCodes = async (res) => {
+	let password
+	let key
+
+	if (settings.security.require_password === true) {
+		password = Buffer.from(await ipc.invoke("request_password"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+	} else {
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), async (err, content) => {
+		if (err) {
+			logger.error(err)
+		}
+
+		const codes_file = JSON.parse(content)
+
+		const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+		const text = Buffer.from(res, "base64").toString()
+		save_text = decrypted + text
+
+		for (let i = 0; i < query.length; i++) {
+			document.querySelector(`#codes${i}`).remove()
+		}
+
+		document.querySelector("#save").style.display = "block"
+
+		processData(save_text)
+
+		decrypted.fill(0)
+		password.fill(0)
+		key.fill(0)
+	})
 }
 
 /**

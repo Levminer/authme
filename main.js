@@ -1588,11 +1588,22 @@ ipc.handle("statistics", () => {
 /**
  * Receive imported codes and send to application
  */
-ipc.handle("importedCodes", (event, res) => {
+ipc.handle("importCodes", (event, res) => {
 	window_application.webContents.executeJavaScript("location.reload()")
 
 	setTimeout(() => {
-		window_application.webContents.executeJavaScript(`importedCodes("${res}")`)
+		window_application.webContents.executeJavaScript(`importCodes("${res}")`)
+	}, 150)
+})
+
+/**
+ * Receive imported codes and send to application
+ */
+ipc.handle("importExistingCodes", (event, res) => {
+	window_application.webContents.executeJavaScript("location.reload()")
+
+	setTimeout(() => {
+		window_application.webContents.executeJavaScript(`importExistingCodes("${res}")`)
 	}, 150)
 })
 
