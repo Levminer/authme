@@ -195,7 +195,6 @@ const settings_file = {
 			name: true,
 			description: false,
 		},
-		default_display: 1,
 		language: null,
 		sort: null,
 	},
@@ -414,31 +413,10 @@ const createWindows = () => {
 	}
 
 	/**
-	 * Open Authme on selected display
-	 */
-	const displays = screen.getAllDisplays()
-	const primary_display = screen.getPrimaryDisplay()
-
-	// Remove primary display
-	for (let i = 0; i < displays.length; i++) {
-		if (displays[i].id === primary_display.id) {
-			displays.splice(i, 1)
-		}
-	}
-
-	// Add primary display
-	displays.splice(0, 0, primary_display)
-
-	// Get selected display
-	const display = displays[settings.settings.default_display - 1]
-
-	/**
 	 * Create windows
 	 */
 	window_landing = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -461,8 +439,6 @@ const createWindows = () => {
 
 	window_confirm = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -485,8 +461,6 @@ const createWindows = () => {
 
 	window_application = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -509,8 +483,6 @@ const createWindows = () => {
 
 	window_settings = new BrowserWindow({
 		title: "Authme Settings",
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -533,8 +505,6 @@ const createWindows = () => {
 
 	window_import = new BrowserWindow({
 		title: "Authme Import",
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -557,8 +527,6 @@ const createWindows = () => {
 
 	window_export = new BrowserWindow({
 		title: "Authme Export",
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -581,8 +549,6 @@ const createWindows = () => {
 
 	window_edit = new BrowserWindow({
 		title: "Authme Edit codes",
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,

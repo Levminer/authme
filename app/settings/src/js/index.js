@@ -1,4 +1,4 @@
-const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
+const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
 const { convert, localization, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
@@ -87,7 +87,6 @@ const currentWindow = BrowserWindow.getFocusedWindow()
  * Elements
  */
 const drp0 = document.querySelector("#sortButton")
-const drp1 = document.querySelector("#displayButton")
 const drp2 = document.querySelector("#languageButton")
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
@@ -192,18 +191,6 @@ if (sort_number === 1) {
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
 	</svg> Z-A`
 }
-
-// display
-drp1.innerHTML = `
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
-	<line x1="7" y1="20" x2="17" y2="20"></line>
-	<line x1="9" y1="16" x2="9" y2="20"></line>
-	<line x1="15" y1="16" x2="15" y2="20"></line>
-	</svg>
-	${lang.text.display} #${settings.settings.default_display}
-	`
 
 // language
 switch (settings.settings.language) {
@@ -965,8 +952,6 @@ const reload = () => {
 window.addEventListener("click", (event) => {
 	const sort_content = document.querySelector("#sortContent")
 	const sort_button = document.querySelector("#sortButton")
-	const display_content = document.querySelector("#displayContent")
-	const display_button = document.querySelector("#displayButton")
 	const language_content = document.querySelector("#languageContent")
 	const language_button = document.querySelector("#languageButton")
 
@@ -974,12 +959,6 @@ window.addEventListener("click", (event) => {
 		sort_content.style.display = ""
 
 		sort_shown = false
-	}
-
-	if (event.target != display_button) {
-		display_content.style.display = ""
-
-		display_shown = false
 	}
 
 	if (event.target != language_button) {
@@ -1057,90 +1036,6 @@ const screenCapture = () => {
 
 			screen_capture_state = true
 		}
-	}
-
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: lang.settings_dialog.restart,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
-}
-
-/**
- * Get screens
- */
-const displays = screen.getAllDisplays()
-const display_content = document.querySelector("#displayContent")
-
-for (let i = 1; i < displays.length + 1; i++) {
-	const element = document.createElement("a")
-
-	element.innerHTML = `
-	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
-	<line x1="7" y1="20" x2="17" y2="20"></line>
-	<line x1="9" y1="16" x2="9" y2="20"></line>
-	<line x1="15" y1="16" x2="15" y2="20"></line>
-	</svg>
-	${lang.text.display} #${i}
-	</a>
-	`
-
-	display_content.appendChild(element)
-}
-
-/**
- * Toggle default display dropdown
- */
-let display_shown = false
-const display = () => {
-	if (display_shown === false) {
-		display_content.style.visibility = "visible"
-
-		setTimeout(() => {
-			display_content.style.display = "block"
-		}, 10)
-
-		display_shown = true
-	} else {
-		display_content.style.display = ""
-
-		display_shown = false
-	}
-}
-
-const displayChoose = (id) => {
-	const toggle = () => {
-		drp1.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-		<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-		<rect x="3" y="4" width="18" height="12" rx="1"></rect>
-		<line x1="7" y1="20" x2="17" y2="20"></line>
-		<line x1="9" y1="16" x2="9" y2="20"></line>
-		<line x1="15" y1="16" x2="15" y2="20"></line>
-		</svg>
-		${lang.text.display} #${id}
-		`
-
-		settings.settings.default_display = id
-		save()
 	}
 
 	dialog
