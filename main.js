@@ -134,7 +134,7 @@ const release_date = date
 const build_number = number
 
 // Send Authme info to renderer
-ipc.handle("info", (event) => {
+ipc.handle("info", () => {
 	return { authme_version, release_date, build_number }
 })
 
@@ -176,6 +176,7 @@ if (dev === false) {
 
 /**
  * Settings
+ * @type{LibSettings}
  */
 const settings_file = {
 	info: {
@@ -322,17 +323,16 @@ const showAppFromTray = () => {
 
 			confirm_shown = true
 			application_shown = true
-
-			createTray()
 		} else {
 			window_confirm.hide()
 
 			confirm_shown = false
 			application_shown = false
-
-			createTray()
 		}
 	}
+
+	createTray()
+	createMenu()
 }
 
 /**
@@ -732,11 +732,7 @@ const createWindows = () => {
 
 		// Hide window if launch on startup on
 		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
-			application_shown = false
-
-			window_application.hide()
-
-			reload = true
+			showAppFromTray()
 		}
 
 		// Check for manual update
@@ -841,7 +837,7 @@ const createWindows = () => {
 		const download_transferred = Math.trunc(progress.transferred / 1000000)
 		const download_total = Math.trunc(progress.total / 1000000)
 
-		logger.log(`Downloading auto update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
+		logger.log(`Downloading update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
 
 		window_application.webContents.send("updateInfo", {
 			download_percent,
@@ -1085,10 +1081,6 @@ contextmenu({
 			},
 			visible: dev === true,
 		},
-		actions.separator(),
-		actions.copyImage({
-			transform: (content) => content,
-		}),
 		actions.separator(),
 		actions.copy({
 			transform: (content) => content,
@@ -1344,39 +1336,6 @@ ipc.on("about", () => {
 })
 
 /**
- * Abort execution
- */
-ipc.on("abort", () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.help, lang.button.close],
-			type: "error",
-			defaultId: 0,
-			cancelId: 1,
-			noLink: true,
-			message: lang.dialog.integrity,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				shell.openExternal("https://github.com/Levminer/authme/issues")
-			} else if (result.response === 1) {
-				app.exit()
-			}
-		})
-
-	window_application.destroy()
-	window_settings.destroy()
-	window_import.destroy()
-	window_export.destroy()
-	window_edit.destroy()
-
-	process.on("uncaughtException", (error) => {
-		logger.error("Execution aborted", error.stack)
-	})
-})
-
-/**
  * Display release notes
  */
 ipc.on("releaseNotes", () => {
@@ -1458,7 +1417,7 @@ ipc.on("provideFeedback", () => {
 /**
  * Receive password from confirm page
  */
-ipc.on("send_password", (event, data) => {
+ipc.handle("sendPassword", (event, data) => {
 	password_buffer = Buffer.from(data)
 
 	window_application.webContents.executeJavaScript("loadCodes()")
@@ -1467,7 +1426,7 @@ ipc.on("send_password", (event, data) => {
 /**
  * Send password to requesting page
  */
-ipc.handle("request_password", (event) => {
+ipc.handle("requestPassword", () => {
 	return password_buffer
 })
 
@@ -1492,7 +1451,7 @@ ipc.on("reloadSettingsWindow", () => {
 /**
  * Reload export window
  */
-ipc.on("reloadSettingsWindow", () => {
+ipc.on("reloadExportWindow", () => {
 	window_export.reload()
 })
 
@@ -1554,22 +1513,22 @@ ipc.handle("statistics", () => {
 /**
  * Receive imported codes and send to application
  */
-ipc.handle("importCodes", (event, res) => {
+ipc.handle("importCodes", (event, codes) => {
 	window_application.webContents.executeJavaScript("location.reload()")
 
 	setTimeout(() => {
-		window_application.webContents.executeJavaScript(`importCodes("${res}")`)
+		window_application.webContents.executeJavaScript(`importCodes("${codes}")`)
 	}, 150)
 })
 
 /**
  * Receive imported codes and send to application
  */
-ipc.handle("importExistingCodes", (event, res) => {
+ipc.handle("importExistingCodes", (event, codes) => {
 	window_application.webContents.executeJavaScript("location.reload()")
 
 	setTimeout(() => {
-		window_application.webContents.executeJavaScript(`importExistingCodes("${res}")`)
+		window_application.webContents.executeJavaScript(`importExistingCodes("${codes}")`)
 	}, 150)
 })
 

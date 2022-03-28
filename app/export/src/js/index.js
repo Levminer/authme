@@ -227,7 +227,7 @@ const exportCodes = async () => {
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(await ipc.invoke("request_password"))
+		password = Buffer.from(await ipc.invoke("requestPassword"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))

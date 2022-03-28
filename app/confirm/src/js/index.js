@@ -158,7 +158,7 @@ const unhashPassword = async () => {
 	const compare = await bcrypt.compare(password_input.toString(), settings.security.password).then(logger.log("Passwords compared!"))
 
 	if (compare == true) {
-		ipc.send("send_password", password_input)
+		ipc.invoke("sendPassword", password_input)
 
 		text.style.color = "#28A443"
 		text.textContent = lang.landing_text.passwords_match
