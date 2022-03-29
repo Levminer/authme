@@ -39,44 +39,26 @@ module.exports = {
 			const track = stream.getTracks()[0]
 
 			const video = document.querySelector("#qrVideo")
-			video.style.display = "flex"
 			video.srcObject = stream
 
-			const button = document.querySelector("#qrStop")
-			button.style.display = "inline"
-
-			button.addEventListener("click", () => {
-				video.style.display = "none"
-				button.style.display = "none"
-
-				reader.stop()
-				track.stop()
-			})
+			code_found = false
 
 			const reader = new QrcodeDecoder()
-			const res = await reader.decodeFromVideo(video)
 
-			if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
-				if (res.data.startsWith("otpauth://totp/")) {
-					string += qrConvert(res.data)
-				} else {
-					string += gaConvert(res.data)
-				}
+			reader.decodeFromVideo(video).then(async (res) => {
+				code_found = true
 
-				const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
+				if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
+					qrcode_found = true
 
-				if (save_exists === true) {
-					await dialog.showMessageBox(currentWindow, {
-						title: "Authme",
-						buttons: [lang.button.close],
-						type: "info",
-						noLink: true,
-						defaultId: 0,
-						message: `${lang.import_dialog.correct_qrcode_found_0} ${lang.import_dialog.correct_qrcode_found_1}`,
-					})
+					if (res.data.startsWith("otpauth://totp/")) {
+						string += qrConvert(res.data)
+					} else {
+						string += gaConvert(res.data)
+					}
 
-					saveFile(string)
-				} else {
+					const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
+
 					const result = await dialog.showMessageBox(currentWindow, {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
@@ -84,36 +66,55 @@ module.exports = {
 						noLink: true,
 						defaultId: 1,
 						cancelId: 1,
-						message: `${lang.import_dialog.correct_qrcode_found_2} ${lang.import_dialog.correct_qrcode_found_3}`,
+						message: `${lang.import_dialog.correct_qrcode_found_0} ${lang.import_dialog.correct_qrcode_found_1}`,
 					})
 
-					if (result.response === 1) {
-						ipc.invoke("importedCodes", Buffer.from(string).toString("base64"))
-					} else {
-						ipc.invoke("importedCodes", Buffer.from(string).toString("base64"))
+					if (result.response === 0) {
+						if (save_exists === true) {
+							ipc.invoke("importExistingCodes", Buffer.from(string).toString("base64"))
+						} else {
+							ipc.invoke("importCodes", Buffer.from(string).toString("base64"))
+						}
 
 						saveFile(string)
+					} else {
+						if (save_exists === true) {
+							ipc.invoke("importExistingCodes", Buffer.from(string).toString("base64"))
+						} else {
+							ipc.invoke("importCodes", Buffer.from(string).toString("base64"))
+						}
 					}
+
+					reader.stop()
+					track.stop()
+				} else {
+					dialog.showMessageBox(currentWindow, {
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						noLink: true,
+						message: lang.import_dialog.wrong_qrcode,
+					})
+
+					reader.stop()
+					track.stop()
 				}
-			} else if (res.data !== "") {
-				dialog.showMessageBox(currentWindow, {
-					title: "Authme",
-					buttons: [lang.button.close],
-					type: "error",
-					noLink: true,
-					message: lang.import_dialog.wrong_qrcode,
-				})
+			})
 
-				return logger.error("Wrong QR code found (QR)")
-			}
+			setTimeout(() => {
+				if (code_found === false) {
+					dialog.showMessageBox(currentWindow, {
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						noLink: true,
+						message: lang.import_dialog.no_qrcode_captured,
+					})
 
-			if (res.data !== "") {
-				video.style.display = "none"
-				button.style.display = "none"
-
-				reader.stop()
-				track.stop()
-			}
+					reader.stop()
+					track.stop()
+				}
+			}, 1000)
 		}
 	},
 }
