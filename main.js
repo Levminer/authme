@@ -163,7 +163,7 @@ if (dev === false) {
 	if (lock === false) {
 		logger.log("Already running, shutting down")
 
-		app.exit()
+		app.quit()
 	} else {
 		app.on("second-instance", () => {
 			logger.log("Already running, focusing window")
@@ -238,6 +238,12 @@ const settings_file = {
 		rated: null,
 		feedback: null,
 	},
+	window: {
+		x: 0,
+		y: 0,
+		height: 1900,
+		width: 1000,
+	},
 }
 
 // Create settings if not exists
@@ -267,6 +273,17 @@ if (settings.settings.language === undefined) {
 
 if (settings.settings.sort === undefined) {
 	settings.settings.sort = null
+
+	saveSettings()
+}
+
+if (settings.window === undefined) {
+	settings.window = {
+		x: 0,
+		y: 0,
+		height: 1900,
+		width: 1000,
+	}
 
 	saveSettings()
 }
@@ -370,7 +387,7 @@ const exitFromTray = () => {
 	tray_minimized = false
 
 	logger.log("Exited from tray")
-	app.exit()
+	app.quit()
 }
 
 /**
@@ -413,6 +430,29 @@ const createWindows = () => {
 	}
 
 	/**
+	 * Listen to app quit
+	 */
+	app.on("quit", (event) => {
+		event.preventDefault()
+
+		saveSettings()
+
+		app.exit()
+	})
+
+	/**
+	 * Set window bounds
+	 */
+	const positionWindow = () => {
+		settings.window = window_application.getBounds()
+
+		window_settings.setBounds(settings.window)
+		window_import.setBounds(settings.window)
+		window_export.setBounds(settings.window)
+		window_edit.setBounds(settings.window)
+	}
+
+	/**
 	 * Create windows
 	 */
 	window_landing = new BrowserWindow({
@@ -439,6 +479,8 @@ const createWindows = () => {
 
 	window_confirm = new BrowserWindow({
 		title: `Authme (${authme_version})`,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -461,6 +503,8 @@ const createWindows = () => {
 
 	window_application = new BrowserWindow({
 		title: `Authme (${authme_version})`,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -483,6 +527,8 @@ const createWindows = () => {
 
 	window_settings = new BrowserWindow({
 		title: "Authme Settings",
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -505,6 +551,8 @@ const createWindows = () => {
 
 	window_import = new BrowserWindow({
 		title: "Authme Import",
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -527,6 +575,8 @@ const createWindows = () => {
 
 	window_export = new BrowserWindow({
 		title: "Authme Export",
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -549,6 +599,8 @@ const createWindows = () => {
 
 	window_edit = new BrowserWindow({
 		title: "Authme Edit codes",
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -567,6 +619,13 @@ const createWindows = () => {
 			nodeIntegration: true,
 			contextIsolation: false,
 		},
+	})
+
+	/**
+	 * Window moved
+	 */
+	window_application.on("move", () => {
+		positionWindow()
 	})
 
 	// Enable remote module
@@ -591,13 +650,13 @@ const createWindows = () => {
 	 * Window states
 	 */
 	window_landing.on("close", () => {
-		app.exit()
+		app.quit()
 
 		logger.log("Application exited from landing window")
 	})
 
 	window_confirm.on("close", () => {
-		app.exit()
+		app.quit()
 
 		logger.log("Application exited from confirm window")
 	})
@@ -608,14 +667,14 @@ const createWindows = () => {
 				password_buffer.fill(0)
 			} catch (error) {}
 
-			app.exit()
+			app.quit()
 		} else {
 			if (tray_minimized === false) {
 				try {
 					password_buffer.fill(0)
 				} catch (error) {}
 
-				app.exit()
+				app.quit()
 
 				logger.log("Application exited from application window")
 			} else {
@@ -631,12 +690,14 @@ const createWindows = () => {
 			}
 		}
 
+		saveSettings()
+
 		logger.log("Application closed")
 	})
 
 	window_settings.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
 			setTimeout(() => {
@@ -651,7 +712,7 @@ const createWindows = () => {
 
 	window_import.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
 			setTimeout(() => {
@@ -666,7 +727,7 @@ const createWindows = () => {
 
 	window_export.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
 			setTimeout(() => {
@@ -681,7 +742,7 @@ const createWindows = () => {
 
 	window_edit.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
 			setTimeout(() => {
@@ -929,7 +990,7 @@ app.whenReady()
 			if (result.response === 0) {
 				shell.openExternal("https://github.com/Levminer/authme/issues/")
 			} else if (result.response === 2) {
-				app.exit()
+				app.quit()
 			}
 		})
 
@@ -1038,7 +1099,7 @@ app.whenReady()
 				if (result.response === 0) {
 					shell.openExternal("https://github.com/Levminer/authme/issues/")
 				} else if (result.response === 2) {
-					app.exit()
+					app.quit()
 				}
 			})
 	})
@@ -1476,7 +1537,7 @@ ipc.on("rendererError", async (event, data) => {
 			shell.openExternal("https://github.com/Levminer/authme/issues/")
 		} else if (result.response === 2) {
 			app.relaunch()
-			app.exit()
+			app.quit()
 		}
 	}
 })
@@ -1785,7 +1846,7 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.exit,
 					click: () => {
 						tray_minimized = false
-						app.exit()
+						app.quit()
 
 						logger.log("App exited from menu")
 					},

@@ -373,7 +373,7 @@ const clearData = () => {
 
 							// exit aoo
 							setTimeout(() => {
-								app.exit()
+								app.quit()
 							}, 300)
 						}
 					})
@@ -926,7 +926,7 @@ if (storage.settings_page !== "general" && storage.settings_page !== undefined) 
 const restart = () => {
 	setTimeout(() => {
 		app.relaunch()
-		app.exit()
+		app.quit()
 	}, 300)
 }
 
