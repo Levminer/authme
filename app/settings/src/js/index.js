@@ -719,35 +719,10 @@ const save = () => {
 }
 
 /**
- * Feedback buttons
- */
-const rateAuthme = () => {
-	ipc.send("rateAuthme")
-}
-
-const starAuthme = () => {
-	ipc.send("starAuthme")
-}
-
-/**
  * Send feedback
  */
 const provideFeedback = () => {
 	ipc.send("provideFeedback")
-}
-
-/**
- * Hide info dialog
- */
-const showInfo = () => {
-	document.querySelector(".info").style.display = "block"
-}
-
-/**
- * Hide update dialog
- */
-const showUpdate = () => {
-	document.querySelector(".update").style.display = "block"
 }
 
 /**
@@ -967,50 +942,6 @@ window.addEventListener("click", (event) => {
 		language_shown = false
 	}
 })
-
-/**
- * Display release notes
- */
-const releaseNotes = () => {
-	ipc.send("releaseNotes")
-}
-
-/**
- * Download manual update
- */
-const manualUpdate = () => {
-	ipc.send("manualUpdate")
-}
-
-/**
- * Display auto update download info
- */
-ipc.on("updateInfo", (event, info) => {
-	document.querySelector("#updateText").textContent = `${lang.popup.downloading_update} ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
-})
-
-/**
- * Display auto update popup if update available
- */
-const updateAvailable = () => {
-	document.querySelector(".autoupdate").style.display = "block"
-}
-
-/**
- * Display restart button if download finished
- */
-const updateDownloaded = () => {
-	document.querySelector("#updateText").textContent = lang.popup.update_downloaded
-	document.querySelector("#updateButton").style.display = "block"
-	document.querySelector("#updateClose").style.display = "block"
-}
-
-/**
- * Restart app after the download finished
- */
-const updateRestart = () => {
-	ipc.send("updateRestart")
-}
 
 /**
  * Toggle import screen capture
