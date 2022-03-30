@@ -797,6 +797,7 @@ const createWindows = () => {
 	 * Event when landing window opens
 	 */
 	window_confirm.on("show", () => {
+		// Hide window if launch on startup on
 		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
 			confirm_shown = false
 
@@ -1386,38 +1387,6 @@ ipc.on("about", () => {
  */
 ipc.on("releaseNotes", () => {
 	releaseNotes()
-})
-
-/**
- * Look for manual update
- */
-ipc.on("manualUpdate", () => {
-	axios
-		.get("https://api.levminer.com/api/v1/authme/releases")
-		.then((res) => {
-			if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
-				dialog
-					.showMessageBox({
-						title: "Authme",
-						buttons: ["Download", lang.button.close],
-						defaultId: 0,
-						cancelId: 1,
-						noLink: true,
-						type: "info",
-						message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${authme_version}`,
-					})
-					.then((result) => {
-						if (result.response === 0) {
-							shell.openExternal("https://authme.levminer.com/#downloads")
-						}
-					})
-			}
-		})
-		.catch((error) => {
-			dialog.showErrorBox("Authme", "Error getting latest update. \n\nTry again later!")
-
-			logger.error("Error getting latest update", error.stack)
-		})
 })
 
 /**

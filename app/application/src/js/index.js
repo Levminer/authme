@@ -847,7 +847,7 @@ const releaseNotes = () => {
  * Download manual update
  */
 const manualUpdate = () => {
-	ipc.send("manualUpdate")
+	shell.openExternal("https://authme.levminer.com/#downloads")
 }
 
 /**

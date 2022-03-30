@@ -386,7 +386,7 @@ const clearData = () => {
 
 							// exit aoo
 							setTimeout(() => {
-								app.quit()
+								app.exit()
 							}, 300)
 						}
 					})
@@ -901,8 +901,12 @@ const menu = (name) => {
 
 let /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-if (storage.settings_page !== "general" && storage.settings_page !== undefined) {
-	menu(storage.settings_page)
+try {
+	if (storage.settings_page !== "general" && storage.settings_page !== undefined) {
+		menu(storage.settings_page)
+	}
+} catch (error) {
+	console.log("Error getting settings page")
 }
 
 /**
