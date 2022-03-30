@@ -430,17 +430,6 @@ const createWindows = () => {
 	}
 
 	/**
-	 * Listen to app quit
-	 */
-	app.on("quit", (event) => {
-		event.preventDefault()
-
-		saveSettings()
-
-		app.exit()
-	})
-
-	/**
 	 * Set window bounds
 	 */
 	const positionWindow = () => {
@@ -690,6 +679,10 @@ const createWindows = () => {
 			}
 		}
 
+		const window_position = settings.window
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+		settings.window = window_position
+
 		saveSettings()
 
 		logger.log("Application closed")
@@ -776,10 +769,6 @@ const createWindows = () => {
 				.then((res) => {
 					if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
 						window_application.webContents.executeJavaScript("showUpdate()")
-
-						window_settings.on("show", () => {
-							window_settings.webContents.executeJavaScript("showUpdate()")
-						})
 
 						logger.log("Manual update found!")
 					} else {
@@ -945,10 +934,6 @@ const createWindows = () => {
 	const openInfo = () => {
 		window_application.on("show", () => {
 			window_application.webContents.executeJavaScript("showInfo()")
-		})
-
-		window_settings.on("show", () => {
-			window_settings.webContents.executeJavaScript("showInfo()")
 		})
 	}
 
