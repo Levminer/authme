@@ -42,15 +42,20 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
  * Read settings
  * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 /**
  * Refresh settings
  */
 const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	try {
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
+		if (settings.security.require_password !== null || settings.security.password !== null) {
+			clearInterval(settings_refresher)
+		}
+	} catch (error) {
+		logger.error("Error refreshing settings and storage")
 		clearInterval(settings_refresher)
 	}
 }, 500)

@@ -70,12 +70,18 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 /**
  * Refresh settings
  */
+
 const settings_refresher = setInterval(() => {
-	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	try {
+		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+		/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-	if (settings.security.require_password !== null || settings.security.password !== null) {
+		if (settings.security.require_password !== null || settings.security.password !== null) {
+			clearInterval(settings_refresher)
+		}
+	} catch (error) {
+		logger.error("Error refreshing settings and storage")
 		clearInterval(settings_refresher)
 	}
 }, 100)
@@ -185,11 +191,18 @@ const sort_number = settings.settings.sort
 if (sort_number === 1) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-	</svg> A-Z`
+	</svg>
+	<span class="pointer-events-none">A-Z</span>`
 } else if (sort_number === 2) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-	</svg> Z-A`
+	</svg> 
+	<span class="pointer-events-none">Z-A</span>`
+} else {
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+	</svg>
+	<span class="pointer-events-none">${lang.text.default}</span>`
 }
 
 // language
@@ -553,9 +566,6 @@ const hardwareAcceleration = () => {
  * Sort codes dropdown
  */
 let sort_shown = false
-
-document.querySelector(".sortDefault").textContent = lang.text.default
-document.querySelector(".sortContentDefault").textContent = lang.text.default
 
 // show dropdown
 const sortDropdown = () => {
