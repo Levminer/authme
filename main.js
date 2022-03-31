@@ -163,7 +163,7 @@ if (dev === false) {
 	if (lock === false) {
 		logger.log("Already running, shutting down")
 
-		app.quit()
+		app.exit()
 	} else {
 		app.on("second-instance", () => {
 			logger.log("Already running, focusing window")
@@ -384,10 +384,26 @@ const settingsFromTray = () => {
  * Exit app from tray
  */
 const exitFromTray = () => {
-	tray_minimized = false
+	saveWindowPosition()
 
-	logger.log("Exited from tray")
-	app.quit()
+	try {
+		password_buffer.fill(0)
+	} catch (error) {}
+
+	app.exit()
+
+	logger.log("App exited from tray")
+}
+
+/**
+ * Save window position
+ */
+const saveWindowPosition = () => {
+	const window_position = settings.window
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	settings.window = window_position
+
+	saveSettings()
 }
 
 /**
@@ -639,23 +655,21 @@ const createWindows = () => {
 	 * Window states
 	 */
 	window_landing.on("close", () => {
-		app.quit()
+		app.exit()
 
 		logger.log("Application exited from landing window")
 	})
 
 	window_confirm.on("close", () => {
-		app.quit()
+		app.exit()
 
 		logger.log("Application exited from confirm window")
 	})
 
 	window_application.on("close", async (event) => {
-		if (dev === true) {
-			try {
-				password_buffer.fill(0)
-			} catch (error) {}
+		saveWindowPosition()
 
+		if (dev === true) {
 			app.quit()
 		} else {
 			if (tray_minimized === false) {
@@ -668,9 +682,8 @@ const createWindows = () => {
 				logger.log("Application exited from application window")
 			} else {
 				event.preventDefault()
-				setTimeout(() => {
-					window_application.hide()
-				}, 100)
+
+				window_application.hide()
 
 				application_shown = false
 
@@ -678,12 +691,6 @@ const createWindows = () => {
 				createMenu()
 			}
 		}
-
-		const window_position = settings.window
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
-		settings.window = window_position
-
-		saveSettings()
 
 		logger.log("Application closed")
 	})
@@ -693,9 +700,8 @@ const createWindows = () => {
 			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_settings.hide()
-			}, 100)
+
+			window_settings.hide()
 
 			settings_shown = false
 		}
@@ -708,9 +714,8 @@ const createWindows = () => {
 			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_import.hide()
-			}, 100)
+
+			window_import.hide()
 
 			import_shown = false
 		}
@@ -723,9 +728,8 @@ const createWindows = () => {
 			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_export.hide()
-			}, 100)
+
+			window_export.hide()
 
 			export_shown = false
 		}
@@ -738,9 +742,8 @@ const createWindows = () => {
 			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_edit.hide()
-			}, 100)
+
+			window_edit.hide()
 
 			edit_shown = false
 		}
@@ -976,7 +979,7 @@ app.whenReady()
 			if (result.response === 0) {
 				shell.openExternal("https://github.com/Levminer/authme/issues/")
 			} else if (result.response === 2) {
-				app.quit()
+				app.exit()
 			}
 		})
 
@@ -1085,7 +1088,7 @@ app.whenReady()
 				if (result.response === 0) {
 					shell.openExternal("https://github.com/Levminer/authme/issues/")
 				} else if (result.response === 2) {
-					app.quit()
+					app.exit()
 				}
 			})
 	})
@@ -1491,7 +1494,7 @@ ipc.on("rendererError", async (event, data) => {
 			shell.openExternal("https://github.com/Levminer/authme/issues/")
 		} else if (result.response === 2) {
 			app.relaunch()
-			app.quit()
+			app.exit()
 		}
 	}
 })
@@ -1545,6 +1548,13 @@ ipc.handle("importExistingCodes", (event, codes) => {
 	setTimeout(() => {
 		window_application.webContents.executeJavaScript(`importExistingCodes("${codes}")`)
 	}, 150)
+})
+
+/**
+ * Save window position
+ */
+ipc.handle("saveWindowPosition", () => {
+	saveWindowPosition()
 })
 
 /**
@@ -1799,8 +1809,13 @@ const createMenu = () => {
 					label: lang.menu.exit,
 					accelerator: shortcuts ? "" : settings.shortcuts.exit,
 					click: () => {
-						tray_minimized = false
-						app.quit()
+						saveWindowPosition()
+
+						try {
+							password_buffer.fill(0)
+						} catch (error) {}
+
+						app.exit()
 
 						logger.log("App exited from menu")
 					},

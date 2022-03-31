@@ -1,4 +1,4 @@
-const { Menu, getCurrentWindow } = require("@electron/remote")
+const { Menu, getCurrentWindow, app } = require("@electron/remote")
 const Titlebar = require("@6c65726f79/custom-titlebar")
 const { ipcRenderer: ipc } = require("electron")
 
@@ -12,7 +12,9 @@ document.addEventListener("keydown", (event) => {
 	}
 
 	if (event.altKey && event.code === "F4") {
-		event.preventDefault()
+		ipc.invoke("saveWindowPosition")
+
+		app.exit()
 	}
 })
 
