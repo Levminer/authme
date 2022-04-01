@@ -70,7 +70,7 @@ const text = document.querySelector("#text")
 /**
  * Create storage
  */
-const storage = {}
+let storage = {}
 
 if (dev === false) {
 	temp_storage = localStorage.getItem("storage")
@@ -143,7 +143,7 @@ const hashPasswords = async () => {
 	settings.security.password = hashed
 	settings.security.key = aes.generateSalt().toString("base64")
 
-	const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 	storage.require_password = settings.security.require_password
 	storage.password = hashed
@@ -192,7 +192,7 @@ const noPassword = () => {
 
 				settings.security.require_password = false
 
-				const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+				/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 				storage.require_password = settings.security.require_password
 				storage.password = password.toString("base64")

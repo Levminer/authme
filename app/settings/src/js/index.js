@@ -70,21 +70,20 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 /**
  * Refresh settings
  */
+if (settings.security.require_password !== null) {
+	const settings_refresher = setInterval(() => {
+		try {
+			settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-const settings_refresher = setInterval(() => {
-	try {
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+			/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-		/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
-
-		if (settings.security.require_password !== null || settings.security.password !== null) {
+			clearInterval(settings_refresher)
+		} catch (error) {
+			logger.error("Error refreshing settings and storage")
 			clearInterval(settings_refresher)
 		}
-	} catch (error) {
-		logger.error("Error refreshing settings and storage")
-		clearInterval(settings_refresher)
-	}
-}, 100)
+	}, 100)
+}
 
 // Get current window
 const currentWindow = BrowserWindow.getFocusedWindow()

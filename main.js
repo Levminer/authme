@@ -48,7 +48,7 @@ let edit_shown = false
  */
 let authenticated = false
 let shortcuts = false
-let reload = false
+let hidden = false
 let tray_minimized = false
 let update_seen = false
 let manual_update = false
@@ -784,8 +784,15 @@ const createWindows = () => {
 		}
 
 		// Hide window if launch on startup on
-		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
-			showAppFromTray()
+		if (hidden === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+			application_shown = false
+
+			window_application.hide()
+
+			hidden = true
+
+			createTray()
+			createMenu()
 		}
 
 		// Check for manual update
@@ -801,12 +808,16 @@ const createWindows = () => {
 	 */
 	window_confirm.on("show", () => {
 		// Hide window if launch on startup on
-		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+		if (hidden === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+			application_shown = false
 			confirm_shown = false
 
 			window_confirm.hide()
 
-			reload = true
+			hidden = true
+
+			createTray()
+			createMenu()
 		}
 	})
 

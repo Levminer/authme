@@ -48,18 +48,18 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 /**
  * Refresh settings
  */
-const settings_refresher = setInterval(() => {
-	try {
-		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+if (settings.security.require_password !== null) {
+	const settings_refresher = setInterval(() => {
+		try {
+			settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		if (settings.security.require_password !== null || settings.security.password !== null) {
+			clearInterval(settings_refresher)
+		} catch (error) {
+			logger.error("Error refreshing settings and storage")
 			clearInterval(settings_refresher)
 		}
-	} catch (error) {
-		logger.error("Error refreshing settings and storage")
-		clearInterval(settings_refresher)
-	}
-}, 100)
+	}, 100)
+}
 
 /**
  * Show quick start div

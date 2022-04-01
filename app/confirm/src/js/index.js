@@ -106,7 +106,7 @@ const check_integrity = () => {
 						shell.openExternal("https://github.com/Levminer/authme/issues")
 					}
 
-					app.quit()
+					app.exit()
 				})
 		}
 	} catch (error) {
@@ -126,7 +126,7 @@ const check_integrity = () => {
 					shell.openExternal("https://github.com/Levminer/authme/issues")
 				}
 
-				app.quit()
+				app.exit()
 			})
 	}
 }
