@@ -83,7 +83,7 @@ const sort_number = settings.settings.sort
 /**
  * Load file first time from dialog
  */
-const loadFile = () => {
+const chooseImportFile = () => {
 	dialog
 		.showOpenDialog({
 			title: lang.application_dialog.choose_import_file,
@@ -186,13 +186,10 @@ const processData = (text) => {
  * @param {LibImportFile} data
  */
 const generateCodeElements = (data) => {
-	document.querySelector("#search").style.display = "grid"
-	document.querySelector(".h1").style.marginBottom = "0px"
-	document.querySelector(".content").style.top = "80px"
+	document.querySelector("#searchContainer").style.display = "inline-block"
+	document.querySelector(".content").style.top = "100px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
-	document.querySelector("#searchIcon").style.display = "inline-block"
-	document.querySelector("#filterIcon").style.display = "inline-block"
 
 	const names = data.names
 	const secrets = data.secrets
@@ -271,6 +268,12 @@ const generateCodeElements = (data) => {
 			// set div in html
 			document.querySelector(".content").appendChild(element)
 
+			// remove margin from first element
+			if (i === 0) {
+				element.style.marginTop = "-24px"
+			}
+
+			// add padding to last element
 			if (i == names.length - 1) {
 				element.style.paddingBottom = "8px"
 			}
@@ -306,8 +309,8 @@ const generateCodeElements = (data) => {
 			time.textContent = remaining_time
 
 			if (description_state === true) {
-				const grid = document.querySelector(`#codes${i}`)
-				grid.style.height = "310px"
+				const element = document.querySelector(`#codes${i}`)
+				element.style.height = "310px"
 			}
 		}
 	}
@@ -335,11 +338,7 @@ const generateCodeElements = (data) => {
 
 	// prev
 	if (saved_codes === false) {
-		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "block"
-	} else {
-		document.querySelector("#input").style.display = "none"
-		document.querySelector("#search").style.display = "grid"
 	}
 }
 
@@ -740,23 +739,23 @@ const provideFeedback = () => {
 	ipc.send("provideFeedback")
 }
 
-const createFile = () => {
+const importPage = () => {
 	ipc.send("toggleImport")
 }
 
-const configureSettings = () => {
+const settingsPage = () => {
 	ipc.send("toggleSettings")
 }
 
-const supportDevelopment = () => {
+const support = () => {
 	ipc.send("support")
 }
 
-const readDocs = () => {
+const help = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import")
 }
 
-const sampleImport = () => {
+const sampleFile = () => {
 	shell.openExternal("https://github.com/Levminer/authme/blob/dev/samples/authme/authme_import_sample.zip?raw=true")
 }
 
