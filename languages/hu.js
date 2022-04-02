@@ -193,8 +193,6 @@ module.exports = {
 		"Alapértelmezett",
 		"Kódok leírása",
 		"A mentett kódok leírása látható lesz. Kattintás után másolhatod a leírást.",
-		"Kódok elhomályosítása",
-		"A megjelenített kódok elhomályosítása. Ugyanúgy kitudod másolni vagy megjeleníteni a kódokat ha föléviszed az egeret.",
 		"Keresési előzmények",
 		"A legutóbbi keresés mentése. Újraindítás után is működik.",
 		"Keresés törlése másolás után",

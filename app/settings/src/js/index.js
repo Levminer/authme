@@ -99,8 +99,6 @@ const tgl1 = document.querySelector("#tgl1")
 const tgt1 = document.querySelector("#tgt1")
 const tgl3 = document.querySelector("#tgl3")
 const tgt3 = document.querySelector("#tgt3")
-const tgl4 = document.querySelector("#tgl4")
-const tgt4 = document.querySelector("#tgt4")
 const tgl5 = document.querySelector("#tgl5")
 const tgt5 = document.querySelector("#tgt5")
 const tgl6 = document.querySelector("#tgl6")
@@ -152,16 +150,6 @@ if (codes_description_state === true) {
 } else {
 	tgt3.textContent = "Off"
 	tgl3.checked = false
-}
-
-// blur codes
-let blur_codes_state = settings.settings.blur_codes
-if (blur_codes_state === true) {
-	tgt4.textContent = "On"
-	tgl4.checked = true
-} else {
-	tgt4.textContent = "Off"
-	tgl4.checked = false
 }
 
 // search history
@@ -416,36 +404,6 @@ const codesDescription = () => {
 			tgl3.checked = true
 
 			codes_description_state = true
-		}
-	}
-
-	toggle()
-	reload()
-}
-
-/**
- * Blur codes
- */
-const blurCodes = () => {
-	const toggle = () => {
-		if (blur_codes_state === true) {
-			settings.settings.blur_codes = false
-
-			save()
-
-			tgt4.textContent = "Off"
-			tgl4.checked = false
-
-			blur_codes_state = false
-		} else {
-			settings.settings.blur_codes = true
-
-			save()
-
-			tgt4.textContent = "On"
-			tgl4.checked = true
-
-			blur_codes_state = true
 		}
 	}
 

@@ -188,7 +188,6 @@ const settings_file = {
 		launch_on_startup: true,
 		close_to_tray: true,
 		codes_description: false,
-		blur_codes: false,
 		reset_after_copy: false,
 		search_history: true,
 		hardware_acceleration: false,

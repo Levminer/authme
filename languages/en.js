@@ -193,8 +193,6 @@ module.exports = {
 		"Default",
 		"Codes description",
 		"The saved codes description will be visible. You can copy it after clicking it.",
-		"Blur codes",
-		"Blur the saved codes. You can still copy the codes or hover over the codes to show them.",
 		"Search history",
 		"Save the latest code you searched for. Works even after restart.",
 		"Reset search after copy",

@@ -77,7 +77,6 @@ const name_query = []
 
 const description_state = settings.settings.codes_description
 const copy_state = settings.settings.reset_after_copy
-const blur_state = settings.settings.blur_codes
 const search_state = settings.settings.search_history
 const sort_number = settings.settings.sort
 
@@ -212,63 +211,7 @@ const generateCodeElements = (data) => {
 			// create div
 			const element = document.createElement("div")
 
-			// set div elements
-			if (blur_state === true && description_state === true) {
-				element.innerHTML = `
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
-					<div class="flex flex-row justify-center items-center">
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
-							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${i}">${lang.text.code}</p>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
-							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
-						</div>
-					</div>
-					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${i}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-							</svg>
-							${lang.button.copy}
-						</button>
-					</div>
-					</div>
-					`
-			} else if (blur_state === true) {
-				element.innerHTML = `
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
-					<div class="flex flex-row justify-center items-center">
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
-							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${i}">${lang.text.code}</p>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
-							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
-						</div>
-					</div>
-					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-							</svg>
-							${lang.button.copy}
-						</button>
-					</div>
-					</div>
-					`
-			} else if (description_state === true) {
+			if (description_state === true) {
 				element.innerHTML = `					
 					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
