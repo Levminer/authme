@@ -75,10 +75,10 @@ const query = []
 const description_query = []
 const name_query = []
 
-const description_state = settings.settings.codes_description
-const copy_state = settings.settings.reset_after_copy
-const search_state = settings.settings.search_history
-const sort_number = settings.settings.sort
+const codes_description = settings.settings.codes_description
+const reset_after_copy = settings.settings.reset_after_copy
+const search_history = settings.settings.search_history
+const sort = settings.settings.sort
 
 /**
  * Load file first time from dialog
@@ -176,7 +176,7 @@ const importExistingCodes = async (res) => {
  * @param {string} text
  */
 const processData = (text) => {
-	const data = convert.fromText(text, sort_number)
+	const data = convert.fromText(text, sort)
 
 	generateCodeElements(data)
 }
@@ -208,26 +208,25 @@ const generateCodeElements = (data) => {
 			// create div
 			const element = document.createElement("div")
 
-			if (description_state === true) {
+			if (codes_description === false) {
 				element.innerHTML = `					
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
+							<h3 class="mt-4">${lang.text.name}</h3>
 							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${i}">${lang.text.code}</p>
+							<h3 class="relative -top-1 mt-4">${lang.text.code}</h3>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
+							<h3 class="mt-4">${lang.text.time}</h3>
 							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${i}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] relative top-1 mb-8">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -238,23 +237,24 @@ const generateCodeElements = (data) => {
 					`
 			} else {
 				element.innerHTML = `					
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-4 rounded-2xl mx-auto flex flex-col h-[310px]">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
+							<h3 class="mt-4">${lang.text.name}</h3>
 							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${i}">${lang.text.code}</p>
+							<h3 class="relative -top-1 mt-4">${lang.text.code}</h3>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
+							<h3 class="mt-4">${lang.text.time}</h3>
 							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
+						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-[10px] mt-1" id="description${i}">Description</p>
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] relative top-1">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -282,7 +282,7 @@ const generateCodeElements = (data) => {
 			const name = document.querySelector(`#name${i}`)
 			const code = document.querySelector(`#code${i}`)
 			const time = document.querySelector(`#time${i}`)
-			const text = document.querySelector(`#text${i}`)
+			const description = document.querySelector(`#description${i}`)
 
 			// add to query
 			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
@@ -290,8 +290,8 @@ const generateCodeElements = (data) => {
 			description_query.push(names[i].toLowerCase().trim())
 
 			// setting elements
-			if (description_state === true) {
-				text.textContent = names[i]
+			if (codes_description === true) {
+				description.textContent = names[i]
 			}
 
 			// generate token
@@ -307,11 +307,6 @@ const generateCodeElements = (data) => {
 			name.textContent = issuers[i]
 			code.textContent = token
 			time.textContent = remaining_time
-
-			if (description_state === true) {
-				const element = document.querySelector(`#codes${i}`)
-				element.style.height = "310px"
-			}
 		}
 	}
 
@@ -328,7 +323,7 @@ const generateCodeElements = (data) => {
 	// search history
 	const search_history = settings.search_history.latest
 
-	if (search_history !== null && search_history !== "" && search_state === true) {
+	if (search_history !== null && search_history !== "" && search_history === true) {
 		document.querySelector("#search").value = settings.search_history.latest
 
 		setTimeout(() => {
@@ -396,7 +391,7 @@ const copyCode = (id) => {
 
 		// reset search bar
 		setTimeout(() => {
-			if (copy_state === true) {
+			if (reset_after_copy === true) {
 				for (let i = 0; i < query.length; i++) {
 					const div = document.querySelector(`#codes${[i]}`)
 					div.style.display = "grid"
@@ -421,7 +416,7 @@ const search = () => {
 	let no_results = 0
 
 	// save result
-	if (search_state === true) {
+	if (search_history === true) {
 		settings.search_history.latest = input
 		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 	}
