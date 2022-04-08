@@ -197,8 +197,6 @@ module.exports = {
 		"A legutóbbi keresés mentése. Újraindítás után is működik.",
 		"Keresés törlése másolás után",
 		"A keresőmező törlése keresés után. Hasznos ha sok kódot másolsz.",
-		"Gyors másolás gyorsgombok",
-		"Készíthetsz gyorsgombokat a leggyakrabban használt kódjaidhoz, hogy gyorsan ki tudd másolni azokat. A gyorsgombok nem működnek ezen a lapon, menj át egy mások beállítás lapra hogy aktiváld azokat!",
 		"Gyorsgombok",
 		"Itt tudod módosítani a gyorsgombokat. A gyorsgombok nem működnek ezen a lapon, menj át egy mások beállítás lapra hogy aktiváld azokat!",
 		"Globális gyorsgombok",

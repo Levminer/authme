@@ -521,6 +521,8 @@ const showInfo = () => {
  * Save imported codes to disk
  */
 const saveCodes = async () => {
+	ipc.send("reloadSettingsWindow")
+
 	let password
 	let key
 
@@ -678,29 +680,6 @@ document.querySelector("#checkbox1").addEventListener("click", () => {
 		search()
 	}, 100)
 })
-
-/**
- * Quick copy shortcuts
- * @param {string} key
- */
-const quickCopy = (key) => {
-	for (let i = 0; i < name_query.length; i++) {
-		if (key.toLowerCase() === name_query[i]) {
-			const input = document.querySelector(`#code${[i]}`).textContent
-			const time = document.querySelector(`#time${[i]}`).textContent
-
-			clipboard.writeText(input)
-
-			const notification = new Notification({ title: "Authme", body: `${key} 2FA code copied to the clipboard (${time}s remaining).` })
-
-			notification.show()
-
-			setTimeout(() => {
-				notification.close()
-			}, 3000)
-		}
-	}
-}
 
 /**
  * Build number

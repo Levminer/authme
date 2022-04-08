@@ -197,8 +197,6 @@ module.exports = {
 		"Save the latest code you searched for. Works even after restart.",
 		"Reset search after copy",
 		"Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.",
-		"Quick copy shortcuts",
-		"You can create a shortcut for your most used codes to copy quickly. Shortcuts not work on this tab, go to any other settings tab to reactivate them!",
 		"Shortcuts",
 		"You can modify the shortcuts. Shortcuts not work on this tab, go to any other settings tab to reactivate them!",
 		"Global shortcuts",

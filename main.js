@@ -228,7 +228,6 @@ const settings_file = {
 		settings: "CmdOrCtrl+Shift+s",
 		exit: "CmdOrCtrl+Shift+d",
 	},
-	quick_shortcuts: {},
 	search_history: {
 		latest: null,
 	},
@@ -1015,7 +1014,6 @@ app.whenReady()
 
 		createTray()
 		createMenu()
-		quickShortcuts()
 
 		/**
 		 * App controller
@@ -1679,20 +1677,6 @@ const feedback = () => {
 }
 
 /**
- * Register quick shortcuts
- */
-const quickShortcuts = () => {
-	const keys = Object.keys(settings.quick_shortcuts)
-	const values = Object.values(settings.quick_shortcuts)
-
-	for (let i = 0; i < keys.length; i++) {
-		globalShortcut.register(values[i], () => {
-			window_application.webContents.executeJavaScript(`quickCopy("${keys[i]}")`)
-		})
-	}
-}
-
-/**
  * Lock Authme when PC goes to sleep or locked
  */
 power.on("lock-screen", () => {
@@ -2149,7 +2133,6 @@ ipc.on("shortcuts", () => {
 			})
 		}
 
-		quickShortcuts()
 		createTray()
 		createMenu()
 

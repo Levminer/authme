@@ -127,8 +127,6 @@ const createGlobalShortcuts = () => {
 
 createGlobalShortcuts()
 
-/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
-
 /**
  * Edit, reset, delete codes
  */
@@ -472,6 +470,8 @@ const hk_delete = (value) => {
  * @param {Number} value
  */
 const hk_reset = (value) => {
+	ipc.send("shortcuts")
+
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
 	btn_name = document.querySelector(`#hk${value}_button_reset`)
@@ -586,138 +586,6 @@ const hk_reset = (value) => {
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
-}
-
-/**
- * Generate quick shortcut menus
- * @param {string[]} issuers
- */
-const generateQuickShortcuts = (issuers) => {
-	for (let i = 0; i < issuers.length; i++) {
-		let content = "None"
-
-		if (settings.quick_shortcuts[issuers[i]] !== undefined) {
-			content = settings.quick_shortcuts[issuers[i]]
-		}
-
-		const element = `
-		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
-		<div class="flex justify-center items-center">
-		<h3 id="issuers${i}">Shortcut</h3>
-		</div>
-		<div class="flex justify-center items-center">
-		<input class="input" disabled type="text" id="qs${i}_input" value="${content}"/>
-		</div>
-		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
-		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
-		<svg id="qs${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-		</svg>
-		</button>
-		<button class="buttonr button" id="qs${i}_button_delete" onclick="qsDelete(${i})">
-		<svg id="qs${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-		</svg>
-		</button>
-		</div>
-		</div>
-		`
-
-		const div = document.createElement("div")
-		div.innerHTML = element
-		document.querySelector(".quickShortcutsDiv").appendChild(div)
-
-		document.querySelector(`#issuers${i}`).textContent = `${issuers[i]}`
-	}
-}
-
-/**
- * Check if codes saved on main page
- */
-const checkForIssuers = () => {
-	storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
-
-	const issuers = storage.issuers
-
-	if (issuers !== undefined) {
-		generateQuickShortcuts(issuers)
-	} else {
-		document.querySelector(".quickShortcutsDiv").innerHTML = `
-		<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 -mt-16">
-		<h4 class="pt-5">${lang.text.quick_shortcuts}</h4>
-		<button class="buttoni mb-8" onclick="location.reload()">
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-		</svg>
-		${lang.text.refresh}
-		</button>
-		</div>
-		`
-	}
-}
-
-/**
- * Edit selected quick shortcuts
- * @param {number} value
- */
-const qsEdit = (value) => {
-	const issuers = storage.issuers
-	id = value
-	inp_name = document.querySelector(`#qs${value}_input`)
-	btn_name = document.querySelector(`#qs${value}_button_edit`)
-	svg_name = document.querySelector(`#qs${value}_svg_edit`)
-
-	if (modify === true) {
-		document.addEventListener("keydown", call, true)
-
-		inp_name.value = "Press any key combination"
-		inp_name.style.borderColor = "green"
-		btn_name.style.borderColor = "green"
-		svg_name.style.color = "green"
-
-		modify = false
-	} else if (inp_name.value !== "Press any key combination") {
-		document.removeEventListener("keydown", call, true)
-		svg_name.style.color = ""
-		btn_name.style.border = ""
-		inp_name.style.border = ""
-
-		modify = true
-	} else {
-		document.removeEventListener("keydown", call, true)
-		svg_name.style.color = ""
-		btn_name.style.border = ""
-		inp_name.style.border = ""
-
-		document.querySelector(`#qs${value}_input`).value = "None"
-		modify = true
-	}
-
-	const input = document.querySelector(`#qs${value}_input`).value
-
-	if (input !== "Press any key combination" && input !== "None") {
-		settings.quick_shortcuts[issuers[id]] = input
-
-		save()
-	} else if (input === "None") {
-		delete settings.quick_shortcuts[issuers[value]]
-
-		save()
-	}
-}
-
-/**
- * Delete selected quick shortcut
- * @param {number} value
- */
-const qsDelete = (value) => {
-	const issuers = storage.issuers
-	inp_name = document.querySelector(`#qs${value}_input`)
-	btn_name = document.querySelector(`#qs${value}_button_delete`)
-	svg_name = document.querySelector(`#qs${value}_svg_delete`)
-
-	inp_name.value = "None"
-
 	svg_name.style.color = "red"
 	btn_name.style.borderColor = "red"
 
