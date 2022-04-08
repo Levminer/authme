@@ -2,6 +2,7 @@ const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
 const { convert, localization, time } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
+const bcrypt = require("bcryptjs")
 const path = require("path")
 const fs = require("fs")
 const { createBackupFile, loadBackupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
@@ -757,7 +758,10 @@ const removeButtonStyles = () => {
 }
 
 // control menu
+
 const menu = (name) => {
+	storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
 	let i
 
 	if (name === "shortcuts") {
@@ -965,4 +969,51 @@ const screenCapture = () => {
 /* Experimental docs */
 const experimentalDocs = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=experimental-features")
+}
+
+/**
+ * Show password
+ */
+let password_shown = false
+
+const showPassword = (id) => {
+	if (password_shown === false) {
+		document.querySelector(`#password_input${id}`).setAttribute("type", "text")
+
+		document.querySelector(`#show_pass_${id}`).style.display = "none"
+		document.querySelector(`#show_pass_${id}1`).style.display = "flex"
+
+		password_shown = true
+	} else {
+		document.querySelector(`#password_input${id}`).setAttribute("type", "password")
+
+		document.querySelector(`#show_pass_${id}`).style.display = "flex"
+		document.querySelector(`#show_pass_${id}1`).style.display = "none"
+
+		password_shown = false
+	}
+}
+
+/* Show/hide load backup file dialog */
+const loadBackupFileDialog = () => {
+	const dialog = document.querySelector(".dialog1")
+	const close_dialog = document.querySelector(".dialog1Close")
+
+	close_dialog.addEventListener("click", () => {
+		dialog.close()
+	})
+
+	dialog.showModal()
+}
+
+/* Show/hide change password dialog */
+const changePasswordDialog = () => {
+	const dialog = document.querySelector(".dialog0")
+	const close_dialog = document.querySelector(".dialog0Close")
+
+	close_dialog.addEventListener("click", () => {
+		dialog.close()
+	})
+
+	dialog.showModal()
 }
