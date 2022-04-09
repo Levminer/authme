@@ -951,11 +951,11 @@ const createWindows = () => {
 		})
 	}
 
-	if (settings.statistics.rate === true && settings.statistics.feedback === true) {
+	if (settings.statistics.rated === true && settings.statistics.feedback === true) {
 		if (opens % 100 === 0) {
 			openInfo()
 		}
-	} else if (settings.statistics.rate === true || settings.statistics.feedback === true) {
+	} else if (settings.statistics.rated === true || settings.statistics.feedback === true) {
 		if (opens % 50 === 0) {
 			openInfo()
 		}

@@ -322,10 +322,10 @@ const generateCodeElements = (data) => {
 		}
 	}, 500)
 
-	// search history
-	const search_history = settings.search_history.latest
+	// latest search from history
+	const latest_search = settings.search_history.latest
 
-	if (search_history !== null && search_history !== "" && search_history === true) {
+	if (latest_search !== null && latest_search.trim() !== "" && search_history === true) {
 		document.querySelector("#search").value = settings.search_history.latest
 
 		setTimeout(() => {

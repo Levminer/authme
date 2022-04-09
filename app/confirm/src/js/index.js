@@ -181,11 +181,6 @@ const unhashPassword = async () => {
 }
 
 /**
- * Forget password
- */
-const forgotPassword = () => {}
-
-/**
  * Show more options div
  */
 let more_options_shown = false
