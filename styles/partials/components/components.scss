@@ -106,3 +106,16 @@
 dialog[open] {
 	animation: fadeEffect 0.5s;
 }
+
+/* tooltip */
+.tooltipContainer:hover .tooltip {
+	animation: fadeEffect 0.5s;
+	visibility: visible;
+	z-index: 50;
+}
+
+.tooltipContainer > svg {
+	animation: fadeEffect 0.5s;
+	position: relative;
+	top: 1rem;
+}

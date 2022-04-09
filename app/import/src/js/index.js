@@ -91,15 +91,6 @@ const buildNumber = async () => {
 buildNumber()
 
 /**
- * Show experimental import screen capture
- */
-if (settings.experimental.screen_capture === true) {
-	document.querySelector(".screenCapture").style.display = "block"
-} else {
-	document.querySelector(".useWebcam").style.paddingBottom = "40px"
-}
-
-/**
  * Save created file
  * @param {string} string
  */

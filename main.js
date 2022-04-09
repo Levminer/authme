@@ -198,9 +198,6 @@ const settings_file = {
 		language: null,
 		sort: null,
 	},
-	experimental: {
-		screen_capture: false,
-	},
 	security: {
 		require_password: null,
 		password: null,

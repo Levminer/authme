@@ -232,7 +232,7 @@ module.exports = {
 		"Choose images",
 		"Choose images that contain a 2FA QR code.",
 		"Use webcam",
-		"Use your webcam to scan 2FA QR codes.",
+		"Use your webcam to scan a 2FA QR code.",
 		"Capture screen",
 		"Capture a 2FA QR code from your screen.",
 		"Stop"

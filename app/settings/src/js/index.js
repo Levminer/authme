@@ -105,18 +105,6 @@ const tgl6 = document.querySelector("#tgl6")
 const tgt6 = document.querySelector("#tgt6")
 const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
-const tgl8 = document.querySelector("#tgl8")
-const tgt8 = document.querySelector("#tgt8")
-
-// import screen capture
-let screen_capture_state = settings.experimental.screen_capture
-if (screen_capture_state === true) {
-	tgt8.textContent = "On"
-	tgl8.checked = true
-} else {
-	tgt8.textContent = "Off"
-	tgl8.checked = false
-}
 
 // launch on startup
 let launch_startup_state = settings.settings.launch_on_startup
@@ -893,54 +881,6 @@ window.addEventListener("click", (event) => {
 		language_shown = false
 	}
 })
-
-/**
- * Toggle import screen capture
- */
-const screenCapture = () => {
-	const toggle = () => {
-		if (screen_capture_state === true) {
-			settings.experimental.screen_capture = false
-
-			save()
-
-			tgt8.textContent = "Off"
-			tgl8.checked = false
-
-			screen_capture_state = false
-		} else {
-			settings.experimental.screen_capture = true
-
-			save()
-
-			tgt8.textContent = "On"
-			tgl8.checked = true
-
-			screen_capture_state = true
-		}
-	}
-
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: lang.settings_dialog.restart,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
-}
 
 /* Experimental docs */
 const experimentalDocs = () => {

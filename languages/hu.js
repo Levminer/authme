@@ -232,9 +232,9 @@ module.exports = {
 		"Képek kiválasztása",
 		"Válassz olyan képeket amik 2FA QR-kódokat tartalmaznak.",
 		"Webkamera",
-		"Használd a webkamerádat a a 2FA QR-kódok beszkenneléséhez.",
+		"Használd a webkamerádat a 2FA QR-kód beszkenneléséhez.",
 		"Képernyő felvétel",
-		"2FA QR-kódok rögzítése a képernyődről.",
+		"2FA QR-kód importálása a képernyődről.",
 		"Stop"
     ],
 
