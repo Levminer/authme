@@ -23,7 +23,7 @@ module.exports = {
 
 				qrHandleStream(stream)
 			} catch (error) {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -59,7 +59,7 @@ module.exports = {
 
 					const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
 
-					const result = await dialog.showMessageBox(currentWindow, {
+					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						type: "info",
@@ -88,7 +88,7 @@ module.exports = {
 					reader.stop()
 					track.stop()
 				} else {
-					dialog.showMessageBox(currentWindow, {
+					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",
@@ -103,7 +103,7 @@ module.exports = {
 
 			setTimeout(() => {
 				if (code_found === false) {
-					dialog.showMessageBox(currentWindow, {
+					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",

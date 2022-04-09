@@ -6,7 +6,7 @@ module.exports = {
 	chooseImages: async () => {
 		let string = ""
 
-		const open_dialog = await dialog.showOpenDialog(currentWindow, {
+		const open_dialog = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 			title: lang.import_dialog.choose_images,
 			properties: ["openFile", "multiSelections"],
 			filters: [{ name: lang.import_dialog.image_file, extensions: ["jpg", "jpeg", "png", "bmp"] }],
@@ -20,7 +20,7 @@ module.exports = {
 			const res = await reader.decodeFromImage(images[i])
 
 			if (res === false) {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -39,7 +39,7 @@ module.exports = {
 				if (images.length === i + 1) {
 					const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
 
-					const result = await dialog.showMessageBox(currentWindow, {
+					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						type: "info",
@@ -66,7 +66,7 @@ module.exports = {
 					}
 				}
 			} else {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",

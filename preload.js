@@ -27,15 +27,15 @@ document.addEventListener("drop", (event) => event.preventDefault())
 /**
  * Title bar
  */
-const currentWindow = getCurrentWindow()
+const current_window = getCurrentWindow()
 let titlebar
 let loaded = false
 
 if (process.platform === "win32") {
-	currentWindow.webContents.once("dom-ready", () => {
+	current_window.webContents.once("dom-ready", () => {
 		titlebar = new Titlebar({
 			menu: Menu.getApplicationMenu(),
-			browserWindow: currentWindow,
+			browserWindow: current_window,
 			backgroundColor: "#000000",
 			icon: "../../img/icon.png",
 			unfocusEffect: false,

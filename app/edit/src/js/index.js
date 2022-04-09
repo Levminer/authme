@@ -62,9 +62,6 @@ if (settings.security.require_password === null && settings.security.password ==
 	}, 500)
 }
 
-// Get current window
-const currentWindow = BrowserWindow.getFocusedWindow()
-
 /**
  * Build number
  */
@@ -117,7 +114,7 @@ fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
  */
 const loadRollback = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -138,7 +135,7 @@ const loadRollback = () => {
 							} else {
 								logger.log("rollback successful, codes.authme file created")
 
-								dialog.showMessageBox(currentWindow, {
+								dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 									title: "Authme",
 									buttons: [lang.button.close],
 									type: "info",
@@ -280,7 +277,7 @@ const editCode = (number) => {
 
 		edit_mode = false
 
-		dialog.showMessageBox(currentWindow, {
+		dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.close],
 			type: "info",
@@ -304,7 +301,7 @@ const deleteCode = (number) => {
 	counter = 0
 
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			type: "warning",
@@ -340,7 +337,7 @@ let save_text = ""
 
 const createSave = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -413,7 +410,7 @@ const saveModifications = async () => {
  */
 const addCodes = () => {
 	dialog
-		.showOpenDialog(currentWindow, {
+		.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 			title: lang.application_dialog.choose_import_file,
 			properties: ["openFile", "multiSelections"],
 			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
@@ -452,7 +449,7 @@ const addCodes = () => {
 
 								generateEditElements()
 							} else {
-								dialog.showMessageBox(currentWindow, {
+								dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 									title: "Authme",
 									buttons: [lang.button.close],
 									defaultId: 0,
@@ -466,7 +463,7 @@ const addCodes = () => {
 					})
 				}
 
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					defaultId: 0,
@@ -511,7 +508,7 @@ const createRollback = () => {
 const loadError = () => {
 	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
-			dialog.showMessageBox(currentWindow, {
+			dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 				title: "Authme",
 				buttons: [lang.button.close],
 				type: "error",
@@ -527,7 +524,7 @@ const loadError = () => {
  */
 const loadCodes = async () => {
 	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
-		const result = await dialog.showMessageBox(currentWindow, {
+		const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -540,7 +537,7 @@ const loadCodes = async () => {
 		if (result.response === 0) {
 			fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 				if (err) {
-					dialog.showMessageBox(currentWindow, {
+					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",
@@ -584,7 +581,7 @@ const loadCodes = async () => {
 	} else {
 		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 			if (err) {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -655,7 +652,7 @@ const reloadExportWindow = () => {
  */
 const revertChanges = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -676,7 +673,7 @@ const revertChanges = () => {
  */
 const deleteAllCodes = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,

@@ -314,10 +314,8 @@ const toggleWindowCaptureSwitch = () => {
  * Clear all data
  */
 const clearData = () => {
-	const current_window = BrowserWindow.getFocusedWindow()
-
 	dialog
-		.showMessageBox(current_window, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.no],
 			defaultId: 1,
@@ -329,7 +327,7 @@ const clearData = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
-					.showMessageBox(current_window, {
+					.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						defaultId: 1,
