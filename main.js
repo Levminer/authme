@@ -917,22 +917,26 @@ const createWindows = () => {
 	/**
 	 * Create global shortcuts
 	 */
-	if (settings.global_shortcuts.show !== "None") {
-		globalShortcut.register(settings.global_shortcuts.show, () => {
-			showAppFromTray()
-		})
-	}
+	try {
+		if (settings.global_shortcuts.show !== "None") {
+			globalShortcut.register(settings.global_shortcuts.show, () => {
+				showAppFromTray()
+			})
+		}
 
-	if (settings.global_shortcuts.settings !== "None") {
-		globalShortcut.register(settings.global_shortcuts.settings, () => {
-			settingsFromTray()
-		})
-	}
+		if (settings.global_shortcuts.settings !== "None") {
+			globalShortcut.register(settings.global_shortcuts.settings, () => {
+				settingsFromTray()
+			})
+		}
 
-	if (settings.global_shortcuts.exit !== "None") {
-		globalShortcut.register(settings.global_shortcuts.exit, () => {
-			exitFromTray()
-		})
+		if (settings.global_shortcuts.exit !== "None") {
+			globalShortcut.register(settings.global_shortcuts.exit, () => {
+				exitFromTray()
+			})
+		}
+	} catch (error) {
+		logger.error("Failed to create global shortcuts!")
 	}
 
 	/**
@@ -2100,7 +2104,7 @@ const createMenu = () => {
 /**
  * Toggle shortcuts
  */
-ipc.on("shortcuts", () => {
+ipc.handle("toggleShortcuts", () => {
 	if (shortcuts === false) {
 		shortcuts = true
 
@@ -2138,4 +2142,36 @@ ipc.on("shortcuts", () => {
 
 		logger.log("Shortcuts enabled")
 	}
+})
+
+/**
+ * Refresh shortcuts
+ */
+ipc.handle("refreshShortcuts", () => {
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+	globalShortcut.unregisterAll()
+
+	if (settings.global_shortcuts.show !== "None") {
+		globalShortcut.register(settings.global_shortcuts.show, () => {
+			showAppFromTray()
+		})
+	}
+
+	if (settings.global_shortcuts.settings !== "None") {
+		globalShortcut.register(settings.global_shortcuts.settings, () => {
+			settingsFromTray()
+		})
+	}
+
+	if (settings.global_shortcuts.exit !== "None") {
+		globalShortcut.register(settings.global_shortcuts.exit, () => {
+			exitFromTray()
+		})
+	}
+
+	createTray()
+	createMenu()
+
+	logger.log("Shortcuts refreshed")
 })

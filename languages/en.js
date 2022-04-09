@@ -69,8 +69,7 @@ module.exports = {
 		"description": "Description",
 		"latest_save": "Latest save",
 		"default": "Default",
-		"quick_shortcuts": "Please save your 2FA codes on the main page and click reload to be able to create quick shortcuts!",
-		"refresh": "Refresh",
+		"key_combination": "Press a key combination"
 	},
 
 	"landing": [
@@ -197,10 +196,11 @@ module.exports = {
 		"Save the latest code you searched for. Works even after restart.",
 		"Reset search after copy",
 		"Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.",
-		"Shortcuts",
-		"You can modify the shortcuts. Shortcuts not work on this tab, go to any other settings tab to reactivate them!",
 		"Global shortcuts",
-		"You can modify the global shortcuts. Shortcuts not work on this tab, go to any other settings tab to reactivate them!",
+		"You can use these shortcuts everywhere, even outside the application. Use english characters only, during editing shortcuts don't work.",
+		"Shortcuts",
+		"You can use these shortcuts inside the application only. Use english characters only, during editing shortcuts don't work.",
+		"Experimental features",
 		"These features are under development and can be unstable! Use it at your own risk!",
 		"Features",
     ],

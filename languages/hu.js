@@ -69,8 +69,7 @@ module.exports = {
 		"description": "Leírás",
 		"latest_save": "Legfrisebb mentés",
 		"default": "Alapértelmezett",
-		"quick_shortcuts": "Kérlek mentsd el a 2FA kódjaidat a főoldalon és kattints a frissítésre!",
-		"refresh": "Frissítés",
+		"key_combination": "Nyomj le egy kombinációt"
 	},
 
 	"landing": [
@@ -197,10 +196,11 @@ module.exports = {
 		"A legutóbbi keresés mentése. Újraindítás után is működik.",
 		"Keresés törlése másolás után",
 		"A keresőmező törlése keresés után. Hasznos ha sok kódot másolsz.",
-		"Gyorsgombok",
-		"Itt tudod módosítani a gyorsgombokat. A gyorsgombok nem működnek ezen a lapon, menj át egy mások beállítás lapra hogy aktiváld azokat!",
 		"Globális gyorsgombok",
-		"Itt tudod módosítani a globális gyorsgombokat. A gyorsgombok nem működnek ezen a lapon, menj át egy mások beállítás lapra hogy aktiváld azokat!",
+		"Ezeket a gyorsgombokat bárhol hasznáhatod, még az alkalmazáson kívűl is. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
+		"Gyorsgombok",
+		"Ezeket a gyorsgombokat csak az alkalmazáson belül használhatod. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
+		"Kísérleti funkciók",
 		"Ezek a fukciók fejlesztés alatt állnak és instabilak lehetnek! Csak saját felelősségre!",
 		"Funkciók",
     ],

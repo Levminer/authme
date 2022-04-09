@@ -88,9 +88,6 @@ if (settings.security.require_password === null && settings.security.password ==
 	}, 100)
 }
 
-// Get current window
-const currentWindow = BrowserWindow.getFocusedWindow()
-
 /**
  * Elements
  */
@@ -329,8 +326,10 @@ const toggleWindowCaptureSwitch = () => {
  * Clear all data
  */
 const clearData = () => {
+	const current_window = BrowserWindow.getFocusedWindow()
+
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(current_window, {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.no],
 			defaultId: 1,
@@ -342,7 +341,7 @@ const clearData = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
-					.showMessageBox(currentWindow, {
+					.showMessageBox(current_window, {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						defaultId: 1,
@@ -747,7 +746,6 @@ const hide = () => {
  */
 document.querySelector(".general").disabled = true
 document.querySelector(".general").classList.add("buttonmselected")
-let shortcut = false
 
 /**
  * Remove menu button styles
@@ -782,12 +780,6 @@ const menu = (name) => {
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 
 		shortcut = true
-
-		setTimeout(() => {
-			checkForIssuers()
-		}, 100)
-
-		ipc.send("shortcuts")
 	} else if (name === "general") {
 		storage.settings_page = "general"
 
@@ -801,12 +793,6 @@ const menu = (name) => {
 		document.querySelector(".codes").disabled = false
 
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
 	} else if (name === "experimental") {
 		storage.settings_page = "experimental"
 
@@ -820,12 +806,6 @@ const menu = (name) => {
 		document.querySelector(".codes").disabled = false
 
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
 	} else if (name === "codes") {
 		storage.settings_page = "codes"
 
@@ -839,12 +819,6 @@ const menu = (name) => {
 		document.querySelector(".codes").disabled = true
 
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")
