@@ -1,3 +1,5 @@
+const { dialog, desktopCapturer, BrowserWindow } = require("@electron/remote")
+
 module.exports = {
 	/**
 	 * Read QR code from screen capture
@@ -5,7 +7,16 @@ module.exports = {
 	captureFromScreen: () => {
 		let string = ""
 
-		desktopCapturer.getSources({ types: ["screen"] }).then(async (sources) => {
+		desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } }).then(async (sources) => {
+			const thumbnail = sources[0].thumbnail.toDataURL()
+
+			document.querySelector(".thumbnail").src = thumbnail
+			document.querySelector(".thumbnailContainer").style.display = "block"
+
+			document.querySelector(".removeThumbnail").addEventListener("click", () => {
+				document.querySelector(".thumbnailContainer").style.display = "none"
+			})
+
 			try {
 				const stream = await navigator.mediaDevices.getUserMedia({
 					audio: false,
