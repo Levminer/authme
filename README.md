@@ -8,7 +8,7 @@
 
 ## Latest Release
 
--   Latest release version for standard users.
+-   Latest release version for users that want a stable and polished experience.
 
 [![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release)](https://github.com/Levminer/authme/releases)
 [![Windows Download](https://img.shields.io/badge/Windows-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/windows)
@@ -16,13 +16,13 @@
 [![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/mac)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/releases)
 
--   Also available on: [Microsoft Store](https://link.levminer.com/authme-ms-store), [winget](https://winget.run/pkg/Levminer/Authme)
+-   Also available on: [Microsoft Store](https://link.levminer.com/authme-ms-store), [winget](https://winstall.app/apps/Levminer.Authme)
 
 <img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
 
 ## Latest Alpha
 
--   Latest alpha version for advanced users.
+-   Latest alpha version for users that want to try out new features early.
 
 [![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&color=blue)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 [![Windows Download](https://img.shields.io/badge/Windows-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/windows)
@@ -32,9 +32,13 @@
 
 ## Features
 
--   🔒 Secure: Your codes is secured by AES 256bit encryption and your own password.
--   🗄️ Import: You can directly import from Google Authenticator or from any 2FA QR code you screenshot.
--   ⌨️ Shortcuts: Easily open Authme with custom shortcuts and it can also start when your system starts.
+-   🔒 Secure by design: Your codes is secured by AES 256bit encryption and your own password.
+-   🔑 Import codes: Import form any 2FA TOTP QR code or import directly from Google Authenticator.
+-   ⌨️ Many shortcuts: Easily open Authme with custom shortcuts and the app will start with your system for quick and easy access.
+-   📡 Completely offline: You own your data, internet is only required for updates.
+-   💻 Privacy in mind: Authme is hidden from video capture and screenshots.
+-   📃 Easy export: You can export your 2FA codes anytime, you can export everything very easily.
+
 
 ## How to use
 
