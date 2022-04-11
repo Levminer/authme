@@ -73,13 +73,13 @@ const text = document.querySelector("#text")
 let storage = {}
 
 if (dev === false) {
-	temp_storage = localStorage.getItem("storage")
+	const temp_storage = localStorage.getItem("storage")
 
 	if (temp_storage === null) {
 		localStorage.setItem("storage", JSON.stringify(storage))
 	}
 } else {
-	temp_storage = localStorage.getItem("dev_storage")
+	const temp_storage = localStorage.getItem("dev_storage")
 
 	if (temp_storage === null) {
 		localStorage.setItem("dev_storage", JSON.stringify(storage))
@@ -131,7 +131,7 @@ const hashPasswords = async () => {
 	const password_input = Buffer.from(document.querySelector("#password_input1").value)
 
 	const salt = await bcrypt.genSalt(10)
-	const hashed = await bcrypt.hash(password_input.toString(), salt).then(logger.log("Hash completed!"))
+	const hashed = await bcrypt.hash(password_input.toString(), salt)
 
 	/**
 	 * Read settings
@@ -196,7 +196,7 @@ const noPassword = () => {
 
 				storage.require_password = settings.security.require_password
 				storage.password = password.toString("base64")
-				storage.key = salt.toString("base64")
+				storage.key = salt
 
 				dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
 

@@ -137,8 +137,8 @@ const saveFile = () => {
 			defaultPath: "~/export.authme",
 		})
 		.then((result) => {
-			canceled = result.canceled
-			output = result.filePath
+			const canceled = result.canceled
+			const output = result.filePath
 
 			/**
 			 * .authme export file
@@ -178,8 +178,8 @@ const saveQrCodes = () => {
 			defaultPath: "~/authme_export.html",
 		})
 		.then((result) => {
-			canceled = result.canceled
-			output = result.filePath
+			const canceled = result.canceled
+			const output = result.filePath
 
 			if (canceled === false) {
 				let string = ""
@@ -252,7 +252,7 @@ const exportCodes = async () => {
 
 			error()
 		} else {
-			const codes_file = JSON.parse(content)
+			const codes_file = JSON.parse(content.toString())
 
 			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 

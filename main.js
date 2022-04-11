@@ -2084,7 +2084,7 @@ const createMenu = () => {
 		},
 	]
 
-	// Set menu
+	// @ts-ignore Set menu
 	menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
 

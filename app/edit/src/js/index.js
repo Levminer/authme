@@ -225,7 +225,7 @@ const generateEditElements = () => {
 		</div>
 		`
 
-		div.setAttribute("id", counter)
+		div.setAttribute("id", counter.toString())
 		codes_container.appendChild(div)
 
 		counter++
@@ -241,8 +241,8 @@ let edit_mode = false
 
 const editCode = (number) => {
 	const edit_button = document.querySelector(`#edit_but_${number}`)
-	const issuer_input = document.querySelector(`#edit_issuer_${number}`)
-	const name_input = document.querySelector(`#edit_name_${number}`)
+	const /** @type{HTMLInputElement} */ issuer_input = document.querySelector(`#edit_issuer_${number}`)
+	const /** @type{HTMLInputElement} */ name_input = document.querySelector(`#edit_name_${number}`)
 
 	name_input.focus()
 	const length = name_input.value.length
@@ -416,8 +416,8 @@ const addCodes = () => {
 			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		})
 		.then((result) => {
-			canceled = result.canceled
-			files = result.filePaths
+			const canceled = result.canceled
+			const files = result.filePaths
 
 			if (canceled === false) {
 				for (let i = 0; i < files.length; i++) {
@@ -430,8 +430,6 @@ const addCodes = () => {
 							const /** @type{LibAuthmeFile} */ loaded = JSON.parse(input.toString())
 
 							if (loaded.role === "import" || loaded.role === "export") {
-								data = []
-
 								const container = document.querySelector(".codes_container")
 								container.innerHTML = ""
 
@@ -564,7 +562,7 @@ const loadCodes = async () => {
 							password.fill(0)
 							key.fill(0)
 						} else {
-							const codes_file = JSON.parse(content)
+							const codes_file = JSON.parse(content.toString())
 
 							const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
@@ -609,7 +607,7 @@ const loadCodes = async () => {
 						password.fill(0)
 						key.fill(0)
 					} else {
-						const codes_file = JSON.parse(content)
+						const codes_file = JSON.parse(content.toString())
 
 						const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 

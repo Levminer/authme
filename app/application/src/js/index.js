@@ -93,8 +93,8 @@ const chooseImportFile = () => {
 			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		})
 		.then((result) => {
-			canceled = result.canceled
-			filepath = result.filePaths
+			const canceled = result.canceled
+			const filepath = result.filePaths
 
 			if (canceled === false) {
 				const /** @type{LibAuthmeFile} */ loaded = JSON.parse(fs.readFileSync(filepath.toString(), "utf-8"))
@@ -149,10 +149,10 @@ const importExistingCodes = async (res) => {
 
 	fs.readFile(path.join(folder_path, "codes", "codes.authme"), async (err, content) => {
 		if (err) {
-			logger.error(err)
+			logger.error("Error loading codes", err)
 		}
 
-		const codes_file = JSON.parse(content)
+		const codes_file = JSON.parse(content.toString())
 
 		const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
@@ -308,7 +308,7 @@ const generateCodeElements = (data) => {
 			// set content
 			name.textContent = issuers[i]
 			code.textContent = token
-			time.textContent = remaining_time
+			time.textContent = remaining_time.toString()
 		}
 	}
 
@@ -341,7 +341,7 @@ const generateCodeElements = (data) => {
 
 /**
  * Refresh codes every 500ms
- * @param {number} secrets
+ * @param {string[]} secrets
  */
 const refreshCodes = (secrets) => {
 	for (let i = 0; i < secrets.length; i++) {
@@ -359,7 +359,7 @@ const refreshCodes = (secrets) => {
 
 		// set content
 		code.textContent = token
-		time.textContent = remaining
+		time.textContent = remaining.toString()
 	}
 }
 
@@ -594,7 +594,7 @@ const loadCodes = async () => {
 			password.fill(0)
 			key.fill(0)
 		} else {
-			const codes_file = JSON.parse(content)
+			const codes_file = JSON.parse(content.toString())
 
 			if (codes_file.version === 3) {
 				const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)

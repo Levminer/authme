@@ -1,7 +1,6 @@
 module.exports = {
 	/**
 	 * Read QR code(s) from image(s)
-	 * @param {string[]} images
 	 */
 	chooseImages: async () => {
 		let string = ""

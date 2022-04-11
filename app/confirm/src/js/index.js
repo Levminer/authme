@@ -70,8 +70,9 @@ const text = document.querySelector("#text")
 /**
  * Confirm password on enter press
  */
-document.querySelector("#password_input").addEventListener("keypress", (e) => {
-	if (e.key === "Enter") {
+document.querySelector("#password_input").addEventListener("keypress", (event) => {
+	// @ts-ignore
+	if (event.key === "Enter") {
 		check_integrity()
 
 		setTimeout(() => {
@@ -155,7 +156,7 @@ const unhashPassword = async () => {
 	// compare
 	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input.toString(), settings.security.password).then(logger.log("Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), settings.security.password)
 
 	if (compare == true) {
 		ipc.invoke("sendPassword", password_input)

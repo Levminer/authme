@@ -239,7 +239,7 @@ module.exports = {
     ],
 
 	"import_dialog": {
-		"import_qrcode": "Importálás QR-kódokból",
+		"choose_images": "Importálás QR-kódokból",
 		"image_file": "Kép fájl",
 		"save_file": "Fájl mentése",
 		"no_webcam": "Nem található webkamera! \n\nEllenőrizd hogy a webkamerád megfelelően működik vagy nem használja más alkamazás.",

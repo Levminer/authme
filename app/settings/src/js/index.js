@@ -338,14 +338,12 @@ const clearData = () => {
 					})
 					.then(async (result) => {
 						if (result.response === 0) {
-							// clear codes
-							await fs.promises.rm(folder_path, { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting settings folder", err.stack)
-								} else {
-									logger.log("Setting folder deleted")
-								}
-							})
+							// delete folders
+							try {
+								await fs.promises.rm(folder_path, { recursive: true, force: true })
+							} catch (error) {
+								logger.log("Error deleting folders", error)
+							}
 
 							// remove startup shortcut
 							if (dev === false) {
@@ -763,9 +761,8 @@ const menu = (name) => {
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		shortcut = true
 	} else if (name === "general") {
 		storage.settings_page = "general"
 
@@ -778,6 +775,7 @@ const menu = (name) => {
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 	} else if (name === "experimental") {
 		storage.settings_page = "experimental"
@@ -791,6 +789,7 @@ const menu = (name) => {
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 	} else if (name === "codes") {
 		storage.settings_page = "codes"
@@ -804,6 +803,7 @@ const menu = (name) => {
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = true
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
 	}
 
@@ -910,7 +910,7 @@ const showPassword = (id) => {
 
 /* Show/hide load backup file dialog */
 const loadBackupFileDialog = () => {
-	const dialog = document.querySelector(".dialog1")
+	const /** @type{LibDialogElement} */ dialog = document.querySelector(".dialog1")
 	const close_dialog = document.querySelector(".dialog1Close")
 
 	close_dialog.addEventListener("click", () => {
@@ -922,7 +922,7 @@ const loadBackupFileDialog = () => {
 
 /* Show/hide change password dialog */
 const changePasswordDialog = () => {
-	const dialog = document.querySelector(".dialog0")
+	const /** @type{LibDialogElement} */ dialog = document.querySelector(".dialog0")
 	const close_dialog = document.querySelector(".dialog0Close")
 
 	close_dialog.addEventListener("click", () => {
