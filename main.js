@@ -48,7 +48,7 @@ let edit_shown = false
  */
 let authenticated = false
 let shortcuts = false
-let reload = false
+let hidden = false
 let tray_minimized = false
 let update_seen = false
 let manual_update = false
@@ -134,7 +134,7 @@ const release_date = date
 const build_number = number
 
 // Send Authme info to renderer
-ipc.handle("info", (event) => {
+ipc.handle("info", () => {
 	return { authme_version, release_date, build_number }
 })
 
@@ -176,6 +176,7 @@ if (dev === false) {
 
 /**
  * Settings
+ * @type{LibSettings}
  */
 const settings_file = {
 	info: {
@@ -187,7 +188,6 @@ const settings_file = {
 		launch_on_startup: true,
 		close_to_tray: true,
 		codes_description: false,
-		blur_codes: false,
 		reset_after_copy: false,
 		search_history: true,
 		hardware_acceleration: false,
@@ -195,12 +195,8 @@ const settings_file = {
 			name: true,
 			description: false,
 		},
-		default_display: 1,
 		language: null,
 		sort: null,
-	},
-	experimental: {
-		screen_capture: false,
 	},
 	security: {
 		require_password: null,
@@ -229,7 +225,6 @@ const settings_file = {
 		settings: "CmdOrCtrl+Shift+s",
 		exit: "CmdOrCtrl+Shift+d",
 	},
-	quick_shortcuts: {},
 	search_history: {
 		latest: null,
 	},
@@ -237,6 +232,12 @@ const settings_file = {
 		opens: 0,
 		rated: null,
 		feedback: null,
+	},
+	window: {
+		x: 0,
+		y: 0,
+		height: 1900,
+		width: 1000,
 	},
 }
 
@@ -267,6 +268,17 @@ if (settings.settings.language === undefined) {
 
 if (settings.settings.sort === undefined) {
 	settings.settings.sort = null
+
+	saveSettings()
+}
+
+if (settings.window === undefined) {
+	settings.window = {
+		x: 0,
+		y: 0,
+		height: 1900,
+		width: 1000,
+	}
 
 	saveSettings()
 }
@@ -323,17 +335,16 @@ const showAppFromTray = () => {
 
 			confirm_shown = true
 			application_shown = true
-
-			createTray()
 		} else {
 			window_confirm.hide()
 
 			confirm_shown = false
 			application_shown = false
-
-			createTray()
 		}
 	}
+
+	createTray()
+	createMenu()
 }
 
 /**
@@ -368,10 +379,26 @@ const settingsFromTray = () => {
  * Exit app from tray
  */
 const exitFromTray = () => {
-	tray_minimized = false
+	saveWindowPosition()
 
-	logger.log("Exited from tray")
+	try {
+		password_buffer.fill(0)
+	} catch (error) {}
+
 	app.exit()
+
+	logger.log("App exited from tray")
+}
+
+/**
+ * Save window position
+ */
+const saveWindowPosition = () => {
+	const window_position = settings.window
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	settings.window = window_position
+
+	saveSettings()
 }
 
 /**
@@ -414,31 +441,22 @@ const createWindows = () => {
 	}
 
 	/**
-	 * Open Authme on selected display
+	 * Set window bounds
 	 */
-	const displays = screen.getAllDisplays()
-	const primary_display = screen.getPrimaryDisplay()
+	const positionWindow = () => {
+		settings.window = window_application.getBounds()
 
-	// Remove primary display
-	for (let i = 0; i < displays.length; i++) {
-		if (displays[i].id === primary_display.id) {
-			displays.splice(i, 1)
-		}
+		window_settings.setBounds(settings.window)
+		window_import.setBounds(settings.window)
+		window_export.setBounds(settings.window)
+		window_edit.setBounds(settings.window)
 	}
-
-	// Add primary display
-	displays.splice(0, 0, primary_display)
-
-	// Get selected display
-	const display = displays[settings.settings.default_display - 1]
 
 	/**
 	 * Create windows
 	 */
 	window_landing = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		x: display.bounds.x,
-		y: display.bounds.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -461,8 +479,8 @@ const createWindows = () => {
 
 	window_confirm = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		x: display.bounds.x,
-		y: display.bounds.y,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -485,8 +503,8 @@ const createWindows = () => {
 
 	window_application = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		x: display.bounds.x,
-		y: display.bounds.y,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -509,8 +527,8 @@ const createWindows = () => {
 
 	window_settings = new BrowserWindow({
 		title: "Authme Settings",
-		x: display.bounds.x,
-		y: display.bounds.y,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -533,8 +551,8 @@ const createWindows = () => {
 
 	window_import = new BrowserWindow({
 		title: "Authme Import",
-		x: display.bounds.x,
-		y: display.bounds.y,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -557,8 +575,8 @@ const createWindows = () => {
 
 	window_export = new BrowserWindow({
 		title: "Authme Export",
-		x: display.bounds.x,
-		y: display.bounds.y,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -581,8 +599,8 @@ const createWindows = () => {
 
 	window_edit = new BrowserWindow({
 		title: "Authme Edit codes",
-		x: display.bounds.x,
-		y: display.bounds.y,
+		x: settings.window.x,
+		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -601,6 +619,13 @@ const createWindows = () => {
 			nodeIntegration: true,
 			contextIsolation: false,
 		},
+	})
+
+	/**
+	 * Window moved
+	 */
+	window_application.on("move", () => {
+		positionWindow()
 	})
 
 	// Enable remote module
@@ -637,26 +662,23 @@ const createWindows = () => {
 	})
 
 	window_application.on("close", async (event) => {
-		if (dev === true) {
-			try {
-				password_buffer.fill(0)
-			} catch (error) {}
+		saveWindowPosition()
 
-			app.exit()
+		if (dev === true) {
+			app.quit()
 		} else {
 			if (tray_minimized === false) {
 				try {
 					password_buffer.fill(0)
 				} catch (error) {}
 
-				app.exit()
+				app.quit()
 
 				logger.log("Application exited from application window")
 			} else {
 				event.preventDefault()
-				setTimeout(() => {
-					window_application.hide()
-				}, 100)
+
+				window_application.hide()
 
 				application_shown = false
 
@@ -670,12 +692,11 @@ const createWindows = () => {
 
 	window_settings.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_settings.hide()
-			}, 100)
+
+			window_settings.hide()
 
 			settings_shown = false
 		}
@@ -685,12 +706,11 @@ const createWindows = () => {
 
 	window_import.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_import.hide()
-			}, 100)
+
+			window_import.hide()
 
 			import_shown = false
 		}
@@ -700,12 +720,11 @@ const createWindows = () => {
 
 	window_export.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_export.hide()
-			}, 100)
+
+			window_export.hide()
 
 			export_shown = false
 		}
@@ -715,12 +734,11 @@ const createWindows = () => {
 
 	window_edit.on("close", (event) => {
 		if (dev === true) {
-			app.exit()
+			app.quit()
 		} else {
 			event.preventDefault()
-			setTimeout(() => {
-				window_edit.hide()
-			}, 100)
+
+			window_edit.hide()
 
 			edit_shown = false
 		}
@@ -750,10 +768,6 @@ const createWindows = () => {
 					if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
 						window_application.webContents.executeJavaScript("showUpdate()")
 
-						window_settings.on("show", () => {
-							window_settings.webContents.executeJavaScript("showUpdate()")
-						})
-
 						logger.log("Manual update found!")
 					} else {
 						logger.log("No manual update found!")
@@ -765,12 +779,15 @@ const createWindows = () => {
 		}
 
 		// Hide window if launch on startup on
-		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+		if (hidden === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
 			application_shown = false
 
 			window_application.hide()
 
-			reload = true
+			hidden = true
+
+			createTray()
+			createMenu()
 		}
 
 		// Check for manual update
@@ -785,12 +802,17 @@ const createWindows = () => {
 	 * Event when landing window opens
 	 */
 	window_confirm.on("show", () => {
-		if (reload === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+		// Hide window if launch on startup on
+		if (hidden === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
+			application_shown = false
 			confirm_shown = false
 
 			window_confirm.hide()
 
-			reload = true
+			hidden = true
+
+			createTray()
+			createMenu()
 		}
 	})
 
@@ -875,7 +897,7 @@ const createWindows = () => {
 		const download_transferred = Math.trunc(progress.transferred / 1000000)
 		const download_total = Math.trunc(progress.total / 1000000)
 
-		logger.log(`Downloading auto update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
+		logger.log(`Downloading update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
 
 		window_application.webContents.send("updateInfo", {
 			download_percent,
@@ -892,22 +914,26 @@ const createWindows = () => {
 	/**
 	 * Create global shortcuts
 	 */
-	if (settings.global_shortcuts.show !== "None") {
-		globalShortcut.register(settings.global_shortcuts.show, () => {
-			showAppFromTray()
-		})
-	}
+	try {
+		if (settings.global_shortcuts.show !== "None") {
+			globalShortcut.register(settings.global_shortcuts.show, () => {
+				showAppFromTray()
+			})
+		}
 
-	if (settings.global_shortcuts.settings !== "None") {
-		globalShortcut.register(settings.global_shortcuts.settings, () => {
-			settingsFromTray()
-		})
-	}
+		if (settings.global_shortcuts.settings !== "None") {
+			globalShortcut.register(settings.global_shortcuts.settings, () => {
+				settingsFromTray()
+			})
+		}
 
-	if (settings.global_shortcuts.exit !== "None") {
-		globalShortcut.register(settings.global_shortcuts.exit, () => {
-			exitFromTray()
-		})
+		if (settings.global_shortcuts.exit !== "None") {
+			globalShortcut.register(settings.global_shortcuts.exit, () => {
+				exitFromTray()
+			})
+		}
+	} catch (error) {
+		logger.error("Failed to create global shortcuts!")
 	}
 
 	/**
@@ -923,17 +949,13 @@ const createWindows = () => {
 		window_application.on("show", () => {
 			window_application.webContents.executeJavaScript("showInfo()")
 		})
-
-		window_settings.on("show", () => {
-			window_settings.webContents.executeJavaScript("showInfo()")
-		})
 	}
 
-	if (settings.statistics.rate === true && settings.statistics.feedback === true) {
+	if (settings.statistics.rated === true && settings.statistics.feedback === true) {
 		if (opens % 100 === 0) {
 			openInfo()
 		}
-	} else if (settings.statistics.rate === true || settings.statistics.feedback === true) {
+	} else if (settings.statistics.rated === true || settings.statistics.feedback === true) {
 		if (opens % 50 === 0) {
 			openInfo()
 		}
@@ -993,7 +1015,6 @@ app.whenReady()
 
 		createTray()
 		createMenu()
-		quickShortcuts()
 
 		/**
 		 * App controller
@@ -1119,10 +1140,6 @@ contextmenu({
 			},
 			visible: dev === true,
 		},
-		actions.separator(),
-		actions.copyImage({
-			transform: (content) => content,
-		}),
 		actions.separator(),
 		actions.copy({
 			transform: (content) => content,
@@ -1378,75 +1395,10 @@ ipc.on("about", () => {
 })
 
 /**
- * Abort execution
- */
-ipc.on("abort", () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.help, lang.button.close],
-			type: "error",
-			defaultId: 0,
-			cancelId: 1,
-			noLink: true,
-			message: lang.dialog.integrity,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				shell.openExternal("https://github.com/Levminer/authme/issues")
-			} else if (result.response === 1) {
-				app.exit()
-			}
-		})
-
-	window_application.destroy()
-	window_settings.destroy()
-	window_import.destroy()
-	window_export.destroy()
-	window_edit.destroy()
-
-	process.on("uncaughtException", (error) => {
-		logger.error("Execution aborted", error.stack)
-	})
-})
-
-/**
  * Display release notes
  */
 ipc.on("releaseNotes", () => {
 	releaseNotes()
-})
-
-/**
- * Look for manual update
- */
-ipc.on("manualUpdate", () => {
-	axios
-		.get("https://api.levminer.com/api/v1/authme/releases")
-		.then((res) => {
-			if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
-				dialog
-					.showMessageBox({
-						title: "Authme",
-						buttons: ["Download", lang.button.close],
-						defaultId: 0,
-						cancelId: 1,
-						noLink: true,
-						type: "info",
-						message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${authme_version}`,
-					})
-					.then((result) => {
-						if (result.response === 0) {
-							shell.openExternal("https://authme.levminer.com/#downloads")
-						}
-					})
-			}
-		})
-		.catch((error) => {
-			dialog.showErrorBox("Authme", "Error getting latest update. \n\nTry again later!")
-
-			logger.error("Error getting latest update", error.stack)
-		})
 })
 
 /**
@@ -1492,7 +1444,7 @@ ipc.on("provideFeedback", () => {
 /**
  * Receive password from confirm page
  */
-ipc.on("send_password", (event, data) => {
+ipc.handle("sendPassword", (event, data) => {
 	password_buffer = Buffer.from(data)
 
 	window_application.webContents.executeJavaScript("loadCodes()")
@@ -1501,7 +1453,7 @@ ipc.on("send_password", (event, data) => {
 /**
  * Send password to requesting page
  */
-ipc.handle("request_password", (event) => {
+ipc.handle("requestPassword", () => {
 	return password_buffer
 })
 
@@ -1526,7 +1478,7 @@ ipc.on("reloadSettingsWindow", () => {
 /**
  * Reload export window
  */
-ipc.on("reloadSettingsWindow", () => {
+ipc.on("reloadExportWindow", () => {
 	window_export.reload()
 })
 
@@ -1560,15 +1512,15 @@ ipc.on("rendererError", async (event, data) => {
  * Logger events
  */
 ipc.on("loggerLog", (event, data) => {
-	logger.rendererLog(data.id, data.message, data.log)
+	logger.rendererLog(data.window, data.message, data.arg)
 })
 
 ipc.on("loggerWarn", (event, data) => {
-	logger.rendererWarn(data.id, data.message, data.warn)
+	logger.rendererWarn(data.window, data.message, data.arg)
 })
 
 ipc.on("loggerError", (event, data) => {
-	logger.rendererError(data.id, data.message, data.error)
+	logger.rendererError(data.window, data.message, data.arg)
 })
 
 /**
@@ -1588,12 +1540,30 @@ ipc.handle("statistics", () => {
 /**
  * Receive imported codes and send to application
  */
-ipc.handle("importedCodes", (event, res) => {
+ipc.handle("importCodes", (event, codes) => {
 	window_application.webContents.executeJavaScript("location.reload()")
 
 	setTimeout(() => {
-		window_application.webContents.executeJavaScript(`importedCodes("${res}")`)
+		window_application.webContents.executeJavaScript(`importCodes("${codes}")`)
 	}, 150)
+})
+
+/**
+ * Receive imported codes and send to application
+ */
+ipc.handle("importExistingCodes", (event, codes) => {
+	window_application.webContents.executeJavaScript("location.reload()")
+
+	setTimeout(() => {
+		window_application.webContents.executeJavaScript(`importExistingCodes("${codes}")`)
+	}, 150)
+})
+
+/**
+ * Save window position
+ */
+ipc.handle("saveWindowPosition", () => {
+	saveWindowPosition()
 })
 
 /**
@@ -1705,20 +1675,6 @@ const feedback = () => {
 				shell.openExternal("mailto:authme@levminer.com?subject=Authme feedback")
 			}
 		})
-}
-
-/**
- * Register quick shortcuts
- */
-const quickShortcuts = () => {
-	const keys = Object.keys(settings.quick_shortcuts)
-	const values = Object.values(settings.quick_shortcuts)
-
-	for (let i = 0; i < keys.length; i++) {
-		globalShortcut.register(values[i], () => {
-			window_application.webContents.executeJavaScript(`quickCopy("${keys[i]}")`)
-		})
-	}
 }
 
 /**
@@ -1848,7 +1804,12 @@ const createMenu = () => {
 					label: lang.menu.exit,
 					accelerator: shortcuts ? "" : settings.shortcuts.exit,
 					click: () => {
-						tray_minimized = false
+						saveWindowPosition()
+
+						try {
+							password_buffer.fill(0)
+						} catch (error) {}
+
 						app.exit()
 
 						logger.log("App exited from menu")
@@ -2123,7 +2084,7 @@ const createMenu = () => {
 		},
 	]
 
-	// Set menu
+	// @ts-ignore Set menu
 	menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
 
@@ -2140,7 +2101,7 @@ const createMenu = () => {
 /**
  * Toggle shortcuts
  */
-ipc.on("shortcuts", () => {
+ipc.handle("toggleShortcuts", () => {
 	if (shortcuts === false) {
 		shortcuts = true
 
@@ -2173,10 +2134,41 @@ ipc.on("shortcuts", () => {
 			})
 		}
 
-		quickShortcuts()
 		createTray()
 		createMenu()
 
 		logger.log("Shortcuts enabled")
 	}
+})
+
+/**
+ * Refresh shortcuts
+ */
+ipc.handle("refreshShortcuts", () => {
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+
+	globalShortcut.unregisterAll()
+
+	if (settings.global_shortcuts.show !== "None") {
+		globalShortcut.register(settings.global_shortcuts.show, () => {
+			showAppFromTray()
+		})
+	}
+
+	if (settings.global_shortcuts.settings !== "None") {
+		globalShortcut.register(settings.global_shortcuts.settings, () => {
+			settingsFromTray()
+		})
+	}
+
+	if (settings.global_shortcuts.exit !== "None") {
+		globalShortcut.register(settings.global_shortcuts.exit, () => {
+			exitFromTray()
+		})
+	}
+
+	createTray()
+	createMenu()
+
+	logger.log("Shortcuts refreshed")
 })

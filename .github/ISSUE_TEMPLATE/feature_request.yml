@@ -1,6 +1,6 @@
 name: Feature Request
 description: Use this template for creating a feature request.
-labels: "Type: Feature"
+labels: ["Type: Feature"]
 assignees:
   - Levminer
 body:
@@ -9,7 +9,7 @@ body:
     label: Before the feature request.
     description: Please ensure you've completed all of the following.
     options:
-      - label: I have searched the [Github Issues](https://www.github.com/electron/levminer/issues) for a feature request that matches the one I want to file, without success.
+      - label: I have searched the [Github Issues](https://www.github.com/levminer/authme/issues) for a feature request that matches the one I want to file, without success.
         required: true
 - type: textarea
   attributes:

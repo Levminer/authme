@@ -4,27 +4,27 @@
 
 @layer components {
 	.checkbox {
-		@apply outline-none form-checkbox rounded-full relative border-2 -top-0.5 focus:ring-white text-black cursor-pointer transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+		@apply form-checkbox relative -top-0.5 transform cursor-pointer rounded-full border-2 text-black outline-none duration-200 ease-in focus:ring-white motion-reduce:transform-none motion-reduce:transition-none;
 	}
 
 	.toggle {
-		@apply checked:right-1 checked:bg-white outline-none focus:outline-none right-5 duration-200 ease-in absolute block w-4 h-4 rounded-full top-1 bg-black appearance-none cursor-pointer motion-reduce:transition-none motion-reduce:transform-none;
+		@apply absolute right-5 top-1 block h-4 w-4 cursor-pointer appearance-none rounded-full bg-black outline-none duration-200 ease-in checked:right-1 checked:bg-white focus:outline-none motion-reduce:transform-none motion-reduce:transition-none;
 	}
 
 	.buttoni {
-		@apply bg-white rounded-2xl border-2 border-white w-72 cursor-pointer px-8 py-[16.5px] text-xl hover:bg-transparent hover:text-white transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+		@apply w-72 transform cursor-pointer rounded-2xl border-2 border-white bg-white px-8 py-[16.5px] text-xl font-medium duration-200 ease-in hover:bg-transparent hover:text-white motion-reduce:transform-none motion-reduce:transition-none;
 	}
 
 	.buttonm {
-		@apply text-white bg-black rounded-2xl text-left border-2 border-black w-60 cursor-pointer px-8 py-[16.5px] text-xl hover:!bg-gray-700 hover:!border-gray-700 transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+		@apply w-60 transform cursor-pointer rounded-2xl border-2 border-black bg-black px-8 py-[16.5px] text-left text-xl font-medium text-white duration-200 ease-in hover:!border-gray-700 hover:!bg-gray-700 motion-reduce:transform-none motion-reduce:transition-none;
 	}
 
 	.buttonr {
-		@apply bg-white rounded-2xl border-2 border-white w-[88px] cursor-pointer px-8 py-[16.5px] text-xl hover:bg-transparent hover:text-white hover:bg-gray-700 transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+		@apply w-[88px] transform cursor-pointer rounded-2xl border-2 border-white bg-white px-8 py-[16.5px] text-xl duration-200 ease-in hover:bg-transparent hover:bg-gray-700 hover:text-white motion-reduce:transform-none motion-reduce:transition-none;
 	}
 
 	.input {
-		@apply bg-white text-black rounded-2xl border-2 border-white w-[220px] cursor-text px-8 py-[18px] text-lg text-center hover:bg-transparent hover:text-white transform duration-200 ease-in motion-reduce:transition-none motion-reduce:transform-none;
+		@apply w-[220px] transform cursor-text rounded-2xl border-2 border-white bg-white px-8 py-[18px] text-center text-lg font-medium text-black duration-200 ease-in hover:bg-transparent hover:text-white motion-reduce:transform-none motion-reduce:transition-none;
 	}
 
 	.details {
@@ -32,7 +32,11 @@
 	}
 
 	.summary {
-		@apply font-bold cursor-pointer;
+		@apply cursor-pointer font-bold;
+	}
+
+	.tooltip {
+		@apply invisible absolute -mt-6 rounded-xl bg-white p-2 text-black;
 	}
 }
 
@@ -46,22 +50,22 @@
 	}
 
 	summary {
-		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl w-max mx-auto;
+		@apply focus-visible:ring-popup-magenta mx-auto w-max focus-visible:rounded-2xl focus-visible:ring-4;
 	}
 
 	a {
-		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+		@apply focus-visible:ring-popup-magenta focus-visible:rounded-2xl focus-visible:ring-4;
 	}
 
 	p {
-		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+		@apply focus-visible:ring-popup-magenta focus-visible:rounded-2xl focus-visible:ring-4;
 	}
 
 	svg {
-		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+		@apply focus-visible:ring-popup-magenta focus-visible:rounded-2xl focus-visible:ring-4;
 	}
 
 	h3 {
-		@apply focus-visible:ring-popup-magenta focus-visible:ring-4 focus-visible:rounded-2xl;
+		@apply focus-visible:ring-popup-magenta focus-visible:rounded-2xl focus-visible:ring-4;
 	}
 }

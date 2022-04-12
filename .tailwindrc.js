@@ -27,10 +27,6 @@ module.exports = {
 				},
 			},
 
-			fontFamily: {
-				sans: ["Arial", "Helvetica", "sans-serif"],
-			},
-
 			borderRadius: {
 				"2xl": "30px",
 			},

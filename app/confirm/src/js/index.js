@@ -70,8 +70,9 @@ const text = document.querySelector("#text")
 /**
  * Confirm password on enter press
  */
-document.querySelector("#password_input").addEventListener("keypress", (e) => {
-	if (e.key === "Enter") {
+document.querySelector("#password_input").addEventListener("keypress", (event) => {
+	// @ts-ignore
+	if (event.key === "Enter") {
 		check_integrity()
 
 		setTimeout(() => {
@@ -155,10 +156,10 @@ const unhashPassword = async () => {
 	// compare
 	const password_input = Buffer.from(document.querySelector("#password_input").value)
 
-	const compare = await bcrypt.compare(password_input.toString(), settings.security.password).then(logger.log("Passwords compared!"))
+	const compare = await bcrypt.compare(password_input.toString(), settings.security.password)
 
 	if (compare == true) {
-		ipc.send("send_password", password_input)
+		ipc.invoke("sendPassword", password_input)
 
 		text.style.color = "#28A443"
 		text.textContent = lang.landing_text.passwords_match
@@ -179,11 +180,6 @@ const unhashPassword = async () => {
 		tries++
 	}
 }
-
-/**
- * Forget password
- */
-const forgotPassword = () => {}
 
 /**
  * Show more options div

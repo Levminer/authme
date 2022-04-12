@@ -1,10 +1,11 @@
-const { shell, app, dialog, BrowserWindow, screen } = require("@electron/remote")
-const { convert, localization } = require("@levminer/lib")
+const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
+const { convert, localization, time, password } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
+const bcrypt = require("bcryptjs")
 const path = require("path")
 const fs = require("fs")
-const { backupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
+const { createBackupFile, loadBackupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
 
 /**
  * Send error to main process
@@ -16,7 +17,7 @@ window.onerror = (error) => {
 /**
  * Start logger
  */
-logger.getWindow("application")
+logger.getWindow("settings")
 
 /**
  * Localization
@@ -70,22 +71,27 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 /**
  * Refresh settings
  */
-const settings_refresher = setInterval(() => {
-	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+if (settings.security.require_password === null && settings.security.password === null) {
+	const settings_refresher = setInterval(() => {
+		try {
+			settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (settings.security.require_password !== null || settings.security.password !== null) {
-		clearInterval(settings_refresher)
-	}
-}, 100)
+			/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-// Get current window
-const currentWindow = BrowserWindow.getFocusedWindow()
+			if (settings.security.require_password !== null || settings.security.password !== null) {
+				clearInterval(settings_refresher)
+			}
+		} catch (error) {
+			logger.error("Error refreshing settings and storage")
+			clearInterval(settings_refresher)
+		}
+	}, 100)
+}
 
 /**
  * Elements
  */
 const drp0 = document.querySelector("#sortButton")
-const drp1 = document.querySelector("#displayButton")
 const drp2 = document.querySelector("#languageButton")
 const tgl0 = document.querySelector("#tgl0")
 const tgt0 = document.querySelector("#tgt0")
@@ -93,26 +99,12 @@ const tgl1 = document.querySelector("#tgl1")
 const tgt1 = document.querySelector("#tgt1")
 const tgl3 = document.querySelector("#tgl3")
 const tgt3 = document.querySelector("#tgt3")
-const tgl4 = document.querySelector("#tgl4")
-const tgt4 = document.querySelector("#tgt4")
 const tgl5 = document.querySelector("#tgl5")
 const tgt5 = document.querySelector("#tgt5")
 const tgl6 = document.querySelector("#tgl6")
 const tgt6 = document.querySelector("#tgt6")
 const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
-const tgl8 = document.querySelector("#tgl8")
-const tgt8 = document.querySelector("#tgt8")
-
-// import screen capture
-let screen_capture_state = settings.experimental.screen_capture
-if (screen_capture_state === true) {
-	tgt8.textContent = "On"
-	tgl8.checked = true
-} else {
-	tgt8.textContent = "Off"
-	tgl8.checked = false
-}
 
 // launch on startup
 let launch_startup_state = settings.settings.launch_on_startup
@@ -148,16 +140,6 @@ if (codes_description_state === true) {
 	tgl3.checked = false
 }
 
-// blur codes
-let blur_codes_state = settings.settings.blur_codes
-if (blur_codes_state === true) {
-	tgt4.textContent = "On"
-	tgl4.checked = true
-} else {
-	tgt4.textContent = "Off"
-	tgl4.checked = false
-}
-
 // search history
 let search_state = settings.settings.search_history
 if (search_state === true) {
@@ -184,24 +166,19 @@ const sort_number = settings.settings.sort
 if (sort_number === 1) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-	</svg> A-Z`
+	</svg>
+	<span class="pointer-events-none">A-Z</span>`
 } else if (sort_number === 2) {
 	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-	</svg> Z-A`
-}
-
-// display
-drp1.innerHTML = `
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
-	<line x1="7" y1="20" x2="17" y2="20"></line>
-	<line x1="9" y1="16" x2="9" y2="20"></line>
-	<line x1="15" y1="16" x2="15" y2="20"></line>
+	</svg> 
+	<span class="pointer-events-none">Z-A</span>`
+} else {
+	drp0.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative top-1 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
 	</svg>
-	${lang.text.display} #${settings.settings.default_display}
-	`
+	<span class="pointer-events-none">${lang.text.default}</span>`
+}
 
 // language
 switch (settings.settings.language) {
@@ -338,7 +315,7 @@ const toggleWindowCaptureSwitch = () => {
  */
 const clearData = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.no],
 			defaultId: 1,
@@ -350,7 +327,7 @@ const clearData = () => {
 		.then((result) => {
 			if (result.response === 0) {
 				dialog
-					.showMessageBox(currentWindow, {
+					.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						defaultId: 1,
@@ -361,14 +338,12 @@ const clearData = () => {
 					})
 					.then(async (result) => {
 						if (result.response === 0) {
-							// clear codes
-							await fs.promises.rm(folder_path, { recursive: true, force: true }, (err) => {
-								if (err) {
-									return logger.error("Error deleting settings folder", err.stack)
-								} else {
-									logger.log("Setting folder deleted")
-								}
-							})
+							// delete folders
+							try {
+								await fs.promises.rm(folder_path, { recursive: true, force: true })
+							} catch (error) {
+								logger.log("Error deleting folders", error)
+							}
 
 							// remove startup shortcut
 							if (dev === false) {
@@ -415,36 +390,6 @@ const codesDescription = () => {
 			tgl3.checked = true
 
 			codes_description_state = true
-		}
-	}
-
-	toggle()
-	reload()
-}
-
-/**
- * Blur codes
- */
-const blurCodes = () => {
-	const toggle = () => {
-		if (blur_codes_state === true) {
-			settings.settings.blur_codes = false
-
-			save()
-
-			tgt4.textContent = "Off"
-			tgl4.checked = false
-
-			blur_codes_state = false
-		} else {
-			settings.settings.blur_codes = true
-
-			save()
-
-			tgt4.textContent = "On"
-			tgl4.checked = true
-
-			blur_codes_state = true
 		}
 	}
 
@@ -564,9 +509,6 @@ const hardwareAcceleration = () => {
  * Sort codes dropdown
  */
 let sort_shown = false
-
-document.querySelector(".sortDefault").textContent = lang.text.default
-document.querySelector(".sortContentDefault").textContent = lang.text.default
 
 // show dropdown
 const sortDropdown = () => {
@@ -730,35 +672,10 @@ const save = () => {
 }
 
 /**
- * Feedback buttons
- */
-const rateAuthme = () => {
-	ipc.send("rateAuthme")
-}
-
-const starAuthme = () => {
-	ipc.send("starAuthme")
-}
-
-/**
  * Send feedback
  */
 const provideFeedback = () => {
 	ipc.send("provideFeedback")
-}
-
-/**
- * Hide info dialog
- */
-const showInfo = () => {
-	document.querySelector(".info").style.display = "block"
-}
-
-/**
- * Hide update dialog
- */
-const showUpdate = () => {
-	document.querySelector(".update").style.display = "block"
 }
 
 /**
@@ -786,6 +703,11 @@ const cacheFolder = () => {
  * Open latest log
  */
 const latestLog = () => {
+	logger.log("Used issuers", storage.issuers)
+	logger.log("Settings", settings.settings)
+	logger.log("Security", settings.security)
+	logger.log("Experimental features", settings.experimental)
+
 	ipc.send("logs")
 }
 
@@ -806,92 +728,83 @@ const hide = () => {
 /**
  * Menu
  */
-document.querySelector(".settings").disabled = true
-document.querySelector(".settings").classList.add("buttonmselected")
-let shortcut = false
+document.querySelector(".general").disabled = true
+document.querySelector(".general").classList.add("buttonmselected")
 
 /**
  * Remove menu button styles
  */
 const removeButtonStyles = () => {
 	document.querySelector(".shortcuts").classList.remove("buttonmselected")
-	document.querySelector(".settings").classList.remove("buttonmselected")
+	document.querySelector(".general").classList.remove("buttonmselected")
 	document.querySelector(".experimental").classList.remove("buttonmselected")
 	document.querySelector(".codes").classList.remove("buttonmselected")
 }
 
 // control menu
-const menu = (evt, name) => {
+
+const menu = (name) => {
+	storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
 	let i
 
 	if (name === "shortcuts") {
+		storage.settings_page = "shortcuts"
+		dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+
 		removeButtonStyles()
 
 		document.querySelector(".shortcuts").classList.add("buttonmselected")
 
 		document.querySelector(".shortcuts").disabled = true
-		document.querySelector(".settings").disabled = false
+		document.querySelector(".general").disabled = false
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
+	} else if (name === "general") {
+		storage.settings_page = "general"
 
-		shortcut = true
-
-		checkForIssuers()
-
-		ipc.send("shortcuts")
-	} else if (name === "setting") {
 		removeButtonStyles()
 
-		document.querySelector(".settings").classList.add("buttonmselected")
+		document.querySelector(".general").classList.add("buttonmselected")
 
-		document.querySelector(".settings").disabled = true
+		document.querySelector(".general").disabled = true
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".experimental").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
 	} else if (name === "experimental") {
+		storage.settings_page = "experimental"
+
 		removeButtonStyles()
 
 		document.querySelector(".experimental").classList.add("buttonmselected")
 
 		document.querySelector(".experimental").disabled = true
-		document.querySelector(".settings").disabled = false
+		document.querySelector(".general").disabled = false
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = false
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
 	} else if (name === "codes") {
+		storage.settings_page = "codes"
+
 		removeButtonStyles()
 
 		document.querySelector(".codes").classList.add("buttonmselected")
 
 		document.querySelector(".experimental").disabled = false
-		document.querySelector(".settings").disabled = false
+		document.querySelector(".general").disabled = false
 		document.querySelector(".shortcuts").disabled = false
 		document.querySelector(".codes").disabled = true
 
+		// @ts-ignore
 		window.location = `${`${window.location}`.replace(/#[A-Za-z0-9_]*$/, "")}#header`
-
-		if (shortcut === true) {
-			ipc.send("shortcuts")
-
-			shortcut = false
-		}
 	}
 
 	const tabcontent = document.getElementsByClassName("tabcontent")
@@ -905,7 +818,18 @@ const menu = (evt, name) => {
 	}
 
 	document.getElementById(name).style.display = "block"
-	evt.currentTarget.className += " active"
+
+	dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+}
+
+let /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+try {
+	if (storage.settings_page !== "general" && storage.settings_page !== undefined) {
+		menu(storage.settings_page)
+	}
+} catch (error) {
+	console.log("Error getting settings page")
 }
 
 /**
@@ -914,7 +838,7 @@ const menu = (evt, name) => {
 const restart = () => {
 	setTimeout(() => {
 		app.relaunch()
-		app.exit()
+		app.quit()
 	}, 300)
 }
 
@@ -930,6 +854,8 @@ const about = () => {
  */
 const reload = () => {
 	ipc.send("reloadApplicationWindow")
+
+	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 }
 
 /**
@@ -938,8 +864,6 @@ const reload = () => {
 window.addEventListener("click", (event) => {
 	const sort_content = document.querySelector("#sortContent")
 	const sort_button = document.querySelector("#sortButton")
-	const display_content = document.querySelector("#displayContent")
-	const display_button = document.querySelector("#displayButton")
 	const language_content = document.querySelector("#languageContent")
 	const language_button = document.querySelector("#languageButton")
 
@@ -949,12 +873,6 @@ window.addEventListener("click", (event) => {
 		sort_shown = false
 	}
 
-	if (event.target != display_button) {
-		display_content.style.display = ""
-
-		display_shown = false
-	}
-
 	if (event.target != language_button) {
 		language_content.style.display = ""
 
@@ -962,183 +880,66 @@ window.addEventListener("click", (event) => {
 	}
 })
 
-/**
- * Display release notes
- */
-const releaseNotes = () => {
-	ipc.send("releaseNotes")
-}
-
-/**
- * Download manual update
- */
-const manualUpdate = () => {
-	ipc.send("manualUpdate")
-}
-
-/**
- * Display auto update download info
- */
-ipc.on("updateInfo", (event, info) => {
-	document.querySelector("#updateText").textContent = `${lang.popup.downloading_update} ${info.download_percent}% - ${info.download_speed}MB/s (${info.download_transferred}MB/${info.download_total}MB)`
-})
-
-/**
- * Display auto update popup if update available
- */
-const updateAvailable = () => {
-	document.querySelector(".autoupdate").style.display = "block"
-}
-
-/**
- * Display restart button if download finished
- */
-const updateDownloaded = () => {
-	document.querySelector("#updateText").textContent = lang.popup.update_downloaded
-	document.querySelector("#updateButton").style.display = "block"
-	document.querySelector("#updateClose").style.display = "block"
-}
-
-/**
- * Restart app after the download finished
- */
-const updateRestart = () => {
-	ipc.send("updateRestart")
-}
-
-/**
- * Toggle import screen capture
- */
-const screenCapture = () => {
-	const toggle = () => {
-		if (screen_capture_state === true) {
-			settings.experimental.screen_capture = false
-
-			save()
-
-			tgt8.textContent = "Off"
-			tgl8.checked = false
-
-			screen_capture_state = false
-		} else {
-			settings.experimental.screen_capture = true
-
-			save()
-
-			tgt8.textContent = "On"
-			tgl8.checked = true
-
-			screen_capture_state = true
-		}
-	}
-
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: lang.settings_dialog.restart,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
-}
-
-/**
- * Get screens
- */
-const displays = screen.getAllDisplays()
-const display_content = document.querySelector("#displayContent")
-
-for (let i = 1; i < displays.length + 1; i++) {
-	const element = document.createElement("a")
-
-	element.innerHTML = `
-	<a href="#" onclick="displayChoose(${i})" class="block no-underline text-xl px-2 py-2 transform duration-200 ease-in text-black hover:bg-gray-600 hover:text-white">
-	<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-	<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-	<rect x="3" y="4" width="18" height="12" rx="1"></rect>
-	<line x1="7" y1="20" x2="17" y2="20"></line>
-	<line x1="9" y1="16" x2="9" y2="20"></line>
-	<line x1="15" y1="16" x2="15" y2="20"></line>
-	</svg>
-	${lang.text.display} #${i}
-	</a>
-	`
-
-	display_content.appendChild(element)
-}
-
-/**
- * Toggle default display dropdown
- */
-let display_shown = false
-const display = () => {
-	if (display_shown === false) {
-		display_content.style.visibility = "visible"
-
-		setTimeout(() => {
-			display_content.style.display = "block"
-		}, 10)
-
-		display_shown = true
-	} else {
-		display_content.style.display = ""
-
-		display_shown = false
-	}
-}
-
-const displayChoose = (id) => {
-	const toggle = () => {
-		drp1.innerHTML = `
-		<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1 h-6 w-6 pointer-events-none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-		<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-		<rect x="3" y="4" width="18" height="12" rx="1"></rect>
-		<line x1="7" y1="20" x2="17" y2="20"></line>
-		<line x1="9" y1="16" x2="9" y2="20"></line>
-		<line x1="15" y1="16" x2="15" y2="20"></line>
-		</svg>
-		${lang.text.display} #${id}
-		`
-
-		settings.settings.default_display = id
-		save()
-	}
-
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.yes, lang.button.no, lang.button.cancel],
-			defaultId: 2,
-			cancelId: 2,
-			noLink: true,
-			type: "warning",
-			message: lang.settings_dialog.restart,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				toggle()
-				restart()
-			}
-
-			if (result.response === 1) {
-				toggle()
-			}
-		})
-}
-
 /* Experimental docs */
 const experimentalDocs = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=experimental-features")
+}
+
+/**
+ * Show password
+ */
+let password_shown = false
+
+const showPassword = (id) => {
+	if (password_shown === false) {
+		document.querySelector(`#password_input${id}`).setAttribute("type", "text")
+
+		document.querySelector(`#show_pass_${id}`).style.display = "none"
+		document.querySelector(`#show_pass_${id}1`).style.display = "flex"
+
+		password_shown = true
+	} else {
+		document.querySelector(`#password_input${id}`).setAttribute("type", "password")
+
+		document.querySelector(`#show_pass_${id}`).style.display = "flex"
+		document.querySelector(`#show_pass_${id}1`).style.display = "none"
+
+		password_shown = false
+	}
+}
+
+/* Show/hide load backup file dialog */
+const loadBackupFileDialog = () => {
+	const /** @type{LibDialogElement} */ dialog1 = document.querySelector(".dialog1")
+	const close_dialog = document.querySelector(".dialog1Close")
+
+	close_dialog.addEventListener("click", () => {
+		dialog1.close()
+	})
+
+	dialog1.showModal()
+}
+
+/* Show/hide change password dialog */
+const changePasswordDialog = () => {
+	const /** @type{LibDialogElement} */ dialog0 = document.querySelector(".dialog0")
+	const close_dialog = document.querySelector(".dialog0Close")
+
+	close_dialog.addEventListener("click", () => {
+		dialog0.close()
+	})
+
+	if (settings.security.require_password == true) {
+		dialog0.showModal()
+	} else {
+		dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+			title: "Authme",
+			buttons: [lang.button.close],
+			defaultId: 1,
+			cancelId: 1,
+			noLink: true,
+			type: "error",
+			message: "You are using Authme without a password! \n\n You can't change your generated password!",
+		})
+	}
 }

@@ -1,12 +1,11 @@
 module.exports = {
 	/**
 	 * Read QR code(s) from image(s)
-	 * @param {string[]} images
 	 */
 	chooseImages: async () => {
 		let string = ""
 
-		const open_dialog = await dialog.showOpenDialog(currentWindow, {
+		const open_dialog = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 			title: lang.import_dialog.choose_images,
 			properties: ["openFile", "multiSelections"],
 			filters: [{ name: lang.import_dialog.image_file, extensions: ["jpg", "jpeg", "png", "bmp"] }],
@@ -20,7 +19,7 @@ module.exports = {
 			const res = await reader.decodeFromImage(images[i])
 
 			if (res === false) {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -39,39 +38,34 @@ module.exports = {
 				if (images.length === i + 1) {
 					const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
 
-					if (save_exists === true) {
-						await dialog.showMessageBox(currentWindow, {
-							title: "Authme",
-							buttons: [lang.button.close],
-							type: "info",
-							noLink: true,
-							defaultId: 0,
-							message: `${lang.import_dialog.correct_qrcode_found_0} ${lang.import_dialog.correct_qrcode_found_1}`,
-						})
+					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+						title: "Authme",
+						buttons: [lang.button.yes, lang.button.no],
+						type: "info",
+						noLink: true,
+						defaultId: 1,
+						cancelId: 1,
+						message: `${lang.import_dialog.correct_qrcode_found_0} ${lang.import_dialog.correct_qrcode_found_1}`,
+					})
+
+					if (result.response === 0) {
+						if (save_exists === true) {
+							ipc.invoke("importExistingCodes", Buffer.from(string).toString("base64"))
+						} else {
+							ipc.invoke("importCodes", Buffer.from(string).toString("base64"))
+						}
 
 						saveFile(string)
 					} else {
-						const result = await dialog.showMessageBox(currentWindow, {
-							title: "Authme",
-							buttons: [lang.button.yes, lang.button.no],
-							type: "info",
-							noLink: true,
-							defaultId: 1,
-							cancelId: 1,
-							message: `${lang.import_dialog.correct_qrcode_found_2} ${lang.import_dialog.correct_qrcode_found_3}`,
-						})
-
-						if (result.response === 1) {
-							ipc.invoke("importedCodes", Buffer.from(string).toString("base64"))
+						if (save_exists === true) {
+							ipc.invoke("importExistingCodes", Buffer.from(string).toString("base64"))
 						} else {
-							ipc.invoke("importedCodes", Buffer.from(string).toString("base64"))
-
-							saveFile(string)
+							ipc.invoke("importCodes", Buffer.from(string).toString("base64"))
 						}
 					}
 				}
 			} else {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",

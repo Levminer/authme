@@ -1,6 +1,6 @@
 name: Bug Report
 description: Use this template for reporting a bug.
-labels: "Type: Bug"
+labels: ["Type: Bug"]
 assignees:
   - Levminer
 body:
@@ -9,29 +9,15 @@ body:
     label: Before the bug report.
     description: Please ensure you've completed all of the following.
     options:
-      - label: I have searched the [Github Issues](https://www.github.com/electron/levminer/issues) for a bug that matches the one I want to file, without success.
+      - label: I have searched the [Github Issues](https://www.github.com/levminer/authme/issues) for a bug that matches the one I want to file, without success.
         required: true
-- type: dropdown
-  attributes:
-    label: What operating system are you using?
-    options:
-      - Windows
-      - Mac
-      - Linux
-  validations:
-    required: true
-- type: input
-  attributes:
-    label: Operating system version
-    description: On Windows, click Start button > Settings > System > About. On macOS, click the Apple Menu > About This Mac. On Linux, use lsb_release or uname -a.
-    placeholder: "Windows 10 21H1"
-  validations:
-    required: true
 - type: textarea
   attributes:
-    label: Authme version info
-    description: Paste version informations here (Top menu > Info > About Dialog > Copy).
+    label: Authme/System information
+    description: Paste the version information here (Top menu > Info > About Dialog > Copy) or Ctrl/Cmd + O.
     placeholder: "Authme: 2.6.0 ..."
+  validations:
+    required: true
 - type: textarea
   attributes:
     label: Authme log

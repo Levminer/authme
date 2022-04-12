@@ -51,17 +51,17 @@ const createShortcuts = () => {
 		<input class="input" disabled type="text" id="hk${i}_input" />
 		</div>
 		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
-		<button class="buttonr button" id="hk${i}_button_edit" onclick="hk_edit(${i})">
+		<button class="buttonr button" id="hk${i}_button_edit" onclick="editShortcut(${i})">
 		<svg id="hk${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttonr button" id="hk${i}_button_reset" onclick="hk_reset(${i})">
+		<button class="buttonr button" id="hk${i}_button_reset" onclick="resetShortcut(${i})">
 		<svg id="hk${i}_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 		</svg>
 		</button>
-		<button class="buttonr button" id="hk${i}_button_delete" onclick="hk_delete(${i})">
+		<button class="buttonr button" id="hk${i}_button_delete" onclick="deleteShortcut(${i})">
 		<svg id="hk${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
@@ -99,17 +99,17 @@ const createGlobalShortcuts = () => {
 		<input class="input" disabled type="text" id="hk${i}_input" />
 		</div>
 		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
-		<button class="buttonr button" id="hk${i}_button_edit" onclick="hk_edit(${i})">
+		<button class="buttonr button" id="hk${i}_button_edit" onclick="editShortcut(${i})">
 		<svg id="hk${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
 		</svg>
 		</button>
-		<button class="buttonr button" id="hk${i}_button_reset" onclick="hk_reset(${i})">
+		<button class="buttonr button" id="hk${i}_button_reset" onclick="resetShortcut(${i})">
 		<svg id="hk${i}_svg_reset" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
 		</svg>
 		</button>
-		<button class="buttonr button" id="hk${i}_button_delete" onclick="hk_delete(${i})">
+		<button class="buttonr button" id="hk${i}_button_delete" onclick="deleteShortcut(${i})">
 		<svg id="hk${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
 		</svg>
@@ -126,8 +126,6 @@ const createGlobalShortcuts = () => {
 }
 
 createGlobalShortcuts()
-
-let /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
 /**
  * Edit, reset, delete codes
@@ -175,162 +173,80 @@ hk100.value = settings.global_shortcuts.show
 hk101.value = settings.global_shortcuts.settings
 hk102.value = settings.global_shortcuts.exit
 
+/* Test if a character is ASCII */
+const isASCII = (str) => {
+	// eslint-disable-next-line no-control-regex
+	return /^[\x00-\x7F]*$/.test(str)
+}
+
 /**
  * Detect pressed keys
  * @param {KeyboardEvent} event
  */
 const call = (event) => {
+	let key = event.key
+
+	if (isASCII(event.key) === false) {
+		key = "a"
+	}
+
+	if (key === "Control" || key === "Shift" || key === "Alt") {
+		key = "a"
+	}
+
 	if (event.ctrlKey === true) {
-		inp_name.value = `CmdOrCtrl+${event.key.toLowerCase()}`
+		inp_name.value = `CmdOrCtrl+${key.toLowerCase()}`
 	}
 
 	if (event.altKey === true) {
-		inp_name.value = `Alt+${event.key.toLowerCase()}`
+		inp_name.value = `Alt+${key.toLowerCase()}`
 	}
 
 	if (event.shiftKey === true) {
-		inp_name.value = `Shift+${event.key.toLowerCase()}`
+		inp_name.value = `Shift+${key.toLowerCase()}`
 	}
 
 	if (event.ctrlKey === true && event.shiftKey === true) {
-		inp_name.value = `CmdOrCtrl+Shift+${event.key.toLowerCase()}`
+		inp_name.value = `CmdOrCtrl+Shift+${key.toLowerCase()}`
 	}
 
 	if (event.ctrlKey === true && event.altKey === true) {
-		inp_name.value = `CmdOrCtrl+Alt+${event.key.toLowerCase()}`
+		inp_name.value = `CmdOrCtrl+Alt+${key.toLowerCase()}`
 	}
 
 	if (event.shiftKey === true && event.altKey === true) {
-		inp_name.value = `Shift+Alt+${event.key.toLowerCase()}`
+		inp_name.value = `Shift+Alt+${key.toLowerCase()}`
 	}
 }
 
 /**
  * Edit selected shortcut
- * @param {Number} value
+ * @param {number} value
  */
-const hk_edit = (value) => {
+const editShortcut = (value) => {
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
 	btn_name = document.querySelector(`#hk${value}_button_edit`)
 	svg_name = document.querySelector(`#hk${value}_svg_edit`)
 
+	setTimeout(() => {
+		ipc.invoke("toggleShortcuts")
+	}, 100)
+
 	if (modify === true) {
 		document.addEventListener("keydown", call, true)
 
-		inp_name.value = "Press any key combination"
+		inp_name.value = lang.text.key_combination
 		inp_name.style.borderColor = "green"
 		btn_name.style.borderColor = "green"
 		svg_name.style.color = "green"
 
 		modify = false
-	} else if (inp_name.value !== "Press any key combination") {
+	} else if (inp_name.value !== lang.text.key_combination) {
 		document.removeEventListener("keydown", call, true)
 		svg_name.style.color = ""
 		btn_name.style.border = ""
 		inp_name.style.border = ""
-
-		switch (id) {
-			case 0:
-				const hk0 = document.querySelector("#hk0_input").value
-
-				settings.shortcuts.show = hk0
-				break
-			case 1:
-				const hk1 = document.querySelector("#hk1_input").value
-
-				settings.shortcuts.settings = hk1
-				break
-			case 2:
-				const hk2 = document.querySelector("#hk2_input").value
-
-				settings.shortcuts.exit = hk2
-				break
-			case 3:
-				const hk3 = document.querySelector("#hk3_input").value
-
-				settings.shortcuts.zoom_reset = hk3
-				break
-			case 4:
-				const hk4 = document.querySelector("#hk4_input").value
-
-				settings.shortcuts.zoom_in = hk4
-				break
-			case 5:
-				const hk5 = document.querySelector("#hk5_input").value
-
-				settings.shortcuts.zoom_out = hk5
-				break
-
-			case 6:
-				const hk6 = document.querySelector("#hk6_input").value
-
-				settings.shortcuts.edit = hk6
-				break
-			case 7:
-				const hk7 = document.querySelector("#hk7_input").value
-
-				settings.shortcuts.import = hk7
-				break
-			case 8:
-				const hk8 = document.querySelector("#hk8_input").value
-
-				settings.shortcuts.export = hk8
-				break
-			case 9:
-				const hk9 = document.querySelector("#hk9_input").value
-
-				settings.shortcuts.docs = hk9
-				break
-			case 10:
-				const hk10 = document.querySelector("#hk10_input").value
-
-				settings.shortcuts.release = hk10
-				break
-			case 11:
-				const hk11 = document.querySelector("#hk11_input").value
-
-				settings.shortcuts.support = hk11
-				break
-			case 12:
-				const hk12 = document.querySelector("#hk12_input").value
-
-				settings.shortcuts.licenses = hk12
-				break
-			case 13:
-				const hk13 = document.querySelector("#hk13_input").value
-
-				settings.shortcuts.update = hk13
-				break
-			case 14:
-				const hk14 = document.querySelector("#hk14_input").value
-
-				settings.shortcuts.info = hk14
-				break
-
-			// global shortcuts
-			case 100:
-				const hk100 = document.querySelector("#hk100_input").value
-
-				settings.global_shortcuts.show = hk100
-				break
-			case 101:
-				const hk101 = document.querySelector("#hk101_input").value
-
-				settings.global_shortcuts.settings = hk101
-				break
-			case 102:
-				const hk102 = document.querySelector("#hk102_input").value
-
-				settings.global_shortcuts.exit = hk102
-				break
-
-			default:
-				console.warn("No save file found")
-				break
-		}
-
-		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 
 		modify = true
 	} else {
@@ -342,13 +258,121 @@ const hk_edit = (value) => {
 		document.querySelector(`#hk${value}_input`).value = "None"
 		modify = true
 	}
+
+	switch (id) {
+		case 0:
+			const hk0 = document.querySelector("#hk0_input").value
+
+			settings.shortcuts.show = hk0
+			break
+		case 1:
+			const hk1 = document.querySelector("#hk1_input").value
+
+			settings.shortcuts.settings = hk1
+			break
+		case 2:
+			const hk2 = document.querySelector("#hk2_input").value
+
+			settings.shortcuts.exit = hk2
+			break
+		case 3:
+			const hk3 = document.querySelector("#hk3_input").value
+
+			settings.shortcuts.zoom_reset = hk3
+			break
+		case 4:
+			const hk4 = document.querySelector("#hk4_input").value
+
+			settings.shortcuts.zoom_in = hk4
+			break
+		case 5:
+			const hk5 = document.querySelector("#hk5_input").value
+
+			settings.shortcuts.zoom_out = hk5
+			break
+
+		case 6:
+			const hk6 = document.querySelector("#hk6_input").value
+
+			settings.shortcuts.edit = hk6
+			break
+		case 7:
+			const hk7 = document.querySelector("#hk7_input").value
+
+			settings.shortcuts.import = hk7
+			break
+		case 8:
+			const hk8 = document.querySelector("#hk8_input").value
+
+			settings.shortcuts.export = hk8
+			break
+		case 9:
+			const hk9 = document.querySelector("#hk9_input").value
+
+			settings.shortcuts.docs = hk9
+			break
+		case 10:
+			const hk10 = document.querySelector("#hk10_input").value
+
+			settings.shortcuts.release = hk10
+			break
+		case 11:
+			const hk11 = document.querySelector("#hk11_input").value
+
+			settings.shortcuts.support = hk11
+			break
+		case 12:
+			const hk12 = document.querySelector("#hk12_input").value
+
+			settings.shortcuts.licenses = hk12
+			break
+		case 13:
+			const hk13 = document.querySelector("#hk13_input").value
+
+			settings.shortcuts.update = hk13
+			break
+		case 14:
+			const hk14 = document.querySelector("#hk14_input").value
+
+			settings.shortcuts.info = hk14
+			break
+
+		// global shortcuts
+		case 100:
+			const hk100 = document.querySelector("#hk100_input").value
+
+			settings.global_shortcuts.show = hk100
+			break
+		case 101:
+			const hk101 = document.querySelector("#hk101_input").value
+
+			settings.global_shortcuts.settings = hk101
+			break
+		case 102:
+			const hk102 = document.querySelector("#hk102_input").value
+
+			settings.global_shortcuts.exit = hk102
+			break
+
+		default:
+			logger.warn("No save file found")
+			break
+	}
+
+	if (inp_name.value != lang.text.key_combination) {
+		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
+	}
+
+	setTimeout(() => {
+		ipc.invoke("refreshShortcuts")
+	}, 100)
 }
 
 /**
  * Delete selected shortcut
- * @param {Number} value
+ * @param {number} value
  */
-const hk_delete = (value) => {
+const deleteShortcut = (value) => {
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
 	btn_name = document.querySelector(`#hk${value}_button_delete`)
@@ -460,18 +484,20 @@ const hk_delete = (value) => {
 			break
 
 		default:
-			console.warn("No save file found")
+			logger.warn("No save file found")
 			break
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
+
+	ipc.invoke("refreshShortcuts")
 }
 
 /**
  * Reset selected shortcut to its default value
- * @param {Number} value
+ * @param {number} value
  */
-const hk_reset = (value) => {
+const resetShortcut = (value) => {
 	id = value
 	inp_name = document.querySelector(`#hk${value}_input`)
 	btn_name = document.querySelector(`#hk${value}_button_reset`)
@@ -581,152 +607,11 @@ const hk_reset = (value) => {
 			break
 
 		default:
-			console.warn("No save file found")
+			logger.warn("No save file found")
 			break
 	}
 
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
-}
 
-/**
- * Generate quick shortcut menus
- * @param {string[]} issuers
- */
-const generateQuickShortcuts = (issuers) => {
-	for (let i = 0; i < issuers.length; i++) {
-		let content = "None"
-
-		if (settings.quick_shortcuts[issuers[i]] !== undefined) {
-			content = settings.quick_shortcuts[issuers[i]]
-		}
-
-		const element = `
-		<div class="flex flex-col md:w-4/5 lg:w-2/3 mx-auto rounded-2xl bg-gray-800 mb-20">
-		<div class="flex justify-center items-center">
-		<h3 id="issuers${i}">Shortcut</h3>
-		</div>
-		<div class="flex justify-center items-center">
-		<input class="input" disabled type="text" id="qs${i}_input" value="${content}"/>
-		</div>
-		<div class="flex justify-center items-center mb-10 mt-5 gap-2">
-		<button class="buttonr button" id="qs${i}_button_edit" onclick="qsEdit(${i})">
-		<svg id="qs${i}_svg_edit" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-		</svg>
-		</button>
-		<button class="buttonr button" id="qs${i}_button_delete" onclick="qsDelete(${i})">
-		<svg id="qs${i}_svg_delete" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-		</svg>
-		</button>
-		</div>
-		</div>
-		`
-
-		const div = document.createElement("div")
-		div.innerHTML = element
-		document.querySelector(".quickShortcutsDiv").appendChild(div)
-
-		document.querySelector(`#issuers${i}`).textContent = `${issuers[i]}`
-	}
-}
-
-/**
- * Check if codes saved on main page
- */
-const checkForIssuers = () => {
-	storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
-
-	const issuers = storage.issuers
-
-	if (issuers !== undefined) {
-		generateQuickShortcuts(issuers)
-	} else {
-		document.querySelector(".quickShortcutsDiv").innerHTML = `
-		<div class="mx-auto rounded-2xl bg-gray-800 w-2/3 -mt-16">
-		<h4 class="pt-5">${lang.text.quick_shortcuts}</h4>
-		<button class="buttoni mb-8" onclick="location.reload()">
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-		</svg>
-		${lang.text.refresh}
-		</button>
-		</div>
-		`
-	}
-}
-
-/**
- * Edit selected quick shortcuts
- * @param {number} value
- */
-const qsEdit = (value) => {
-	const issuers = storage.issuers
-	id = value
-	inp_name = document.querySelector(`#qs${value}_input`)
-	btn_name = document.querySelector(`#qs${value}_button_edit`)
-	svg_name = document.querySelector(`#qs${value}_svg_edit`)
-
-	if (modify === true) {
-		document.addEventListener("keydown", call, true)
-
-		inp_name.value = "Press any key combination"
-		inp_name.style.borderColor = "green"
-		btn_name.style.borderColor = "green"
-		svg_name.style.color = "green"
-
-		modify = false
-	} else if (inp_name.value !== "Press any key combination") {
-		document.removeEventListener("keydown", call, true)
-		svg_name.style.color = ""
-		btn_name.style.border = ""
-		inp_name.style.border = ""
-
-		modify = true
-	} else {
-		document.removeEventListener("keydown", call, true)
-		svg_name.style.color = ""
-		btn_name.style.border = ""
-		inp_name.style.border = ""
-
-		document.querySelector(`#qs${value}_input`).value = "None"
-		modify = true
-	}
-
-	const input = document.querySelector(`#qs${value}_input`).value
-
-	if (input !== "Press any key combination" && input !== "None") {
-		settings.quick_shortcuts[issuers[id]] = input
-
-		save()
-	} else if (input === "None") {
-		delete settings.quick_shortcuts[issuers[value]]
-
-		save()
-	}
-}
-
-/**
- * Delete selected quick shortcut
- * @param {number} value
- */
-const qsDelete = (value) => {
-	const issuers = storage.issuers
-	inp_name = document.querySelector(`#qs${value}_input`)
-	btn_name = document.querySelector(`#qs${value}_button_delete`)
-	svg_name = document.querySelector(`#qs${value}_svg_delete`)
-
-	inp_name.value = "None"
-
-	svg_name.style.color = "red"
-	btn_name.style.borderColor = "red"
-
-	setTimeout(() => {
-		svg_name.style.color = ""
-		btn_name.style.border = ""
-	}, 500)
-
-	delete settings.quick_shortcuts[issuers[value]]
-
-	save()
+	ipc.invoke("refreshShortcuts")
 }

@@ -71,13 +71,20 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 /**
  * Refresh settings
  */
-const settings_refresher = setInterval(() => {
-	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+if (settings.security.require_password === null && settings.security.password === null) {
+	const settings_refresher = setInterval(() => {
+		try {
+			settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (settings.security.require_password !== null || settings.security.password !== null) {
-		clearInterval(settings_refresher)
-	}
-}, 500)
+			if (settings.security.require_password !== null || settings.security.password !== null) {
+				clearInterval(settings_refresher)
+			}
+		} catch (error) {
+			logger.error("Error refreshing settings")
+			clearInterval(settings_refresher)
+		}
+	}, 500)
+}
 
 /**
  * Process data from saved file
@@ -130,8 +137,8 @@ const saveFile = () => {
 			defaultPath: "~/export.authme",
 		})
 		.then((result) => {
-			canceled = result.canceled
-			output = result.filePath
+			const canceled = result.canceled
+			const output = result.filePath
 
 			/**
 			 * .authme export file
@@ -171,8 +178,8 @@ const saveQrCodes = () => {
 			defaultPath: "~/authme_export.html",
 		})
 		.then((result) => {
-			canceled = result.canceled
-			output = result.filePath
+			const canceled = result.canceled
+			const output = result.filePath
 
 			if (canceled === false) {
 				let string = ""
@@ -227,7 +234,7 @@ const exportCodes = async () => {
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(await ipc.invoke("request_password"))
+		password = Buffer.from(await ipc.invoke("requestPassword"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -245,7 +252,7 @@ const exportCodes = async () => {
 
 			error()
 		} else {
-			const codes_file = JSON.parse(content)
+			const codes_file = JSON.parse(content.toString())
 
 			const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 

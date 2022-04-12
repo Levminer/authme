@@ -48,13 +48,20 @@ let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "se
 /**
  * Refresh settings
  */
-const settings_refresher = setInterval(() => {
-	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+if (settings.security.require_password === null && settings.security.password === null) {
+	const settings_refresher = setInterval(() => {
+		try {
+			settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (settings.security.require_password !== null || settings.security.password !== null) {
-		clearInterval(settings_refresher)
-	}
-}, 100)
+			if (settings.security.require_password !== null || settings.security.password !== null) {
+				clearInterval(settings_refresher)
+			}
+		} catch (error) {
+			logger.error("Error refreshing settings")
+			clearInterval(settings_refresher)
+		}
+	}, 100)
+}
 
 /**
  * Show quick start div
@@ -64,24 +71,21 @@ if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
 	document.querySelector("#choose").style.display = "block"
 }
 
-// eslint-disable-next-line
 let saved_codes = false
-let text
-let save_text
+let save_text = ""
 const query = []
 const description_query = []
 const name_query = []
 
-const description_state = settings.settings.codes_description
-const copy_state = settings.settings.reset_after_copy
-const blur_state = settings.settings.blur_codes
-const search_state = settings.settings.search_history
-const sort_number = settings.settings.sort
+const codes_description = settings.settings.codes_description
+const reset_after_copy = settings.settings.reset_after_copy
+const search_history = settings.settings.search_history
+const sort = settings.settings.sort
 
 /**
  * Load file first time from dialog
  */
-const loadFile = () => {
+const chooseImportFile = () => {
 	dialog
 		.showOpenDialog({
 			title: lang.application_dialog.choose_import_file,
@@ -89,17 +93,16 @@ const loadFile = () => {
 			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		})
 		.then((result) => {
-			canceled = result.canceled
-			filepath = result.filePaths
+			const canceled = result.canceled
+			const filepath = result.filePaths
 
 			if (canceled === false) {
 				const /** @type{LibAuthmeFile} */ loaded = JSON.parse(fs.readFileSync(filepath.toString(), "utf-8"))
 
 				if (loaded.role === "import" || loaded.role === "export") {
-					text = Buffer.from(loaded.codes, "base64").toString()
-					save_text = text
+					save_text = Buffer.from(loaded.codes, "base64").toString()
 
-					processData(text)
+					processData(save_text)
 				} else {
 					dialog.showMessageBox({
 						title: "Authme",
@@ -119,7 +122,7 @@ const loadFile = () => {
  * Automatically import when creating import file
  * @param {string} res
  */
-const importedCodes = (res) => {
+const importCodes = (res) => {
 	const text = Buffer.from(res, "base64").toString()
 	save_text = text
 
@@ -127,11 +130,55 @@ const importedCodes = (res) => {
 }
 
 /**
+ * Automatically import when creating import file
+ * @param {string} res
+ */
+const importExistingCodes = async (res) => {
+	let password
+	let key
+
+	if (settings.security.require_password === true) {
+		password = Buffer.from(await ipc.invoke("requestPassword"))
+		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
+	} else {
+		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+		password = Buffer.from(storage.password, "base64")
+		key = Buffer.from(aes.generateKey(password, Buffer.from(storage.key, "base64")))
+	}
+
+	fs.readFile(path.join(folder_path, "codes", "codes.authme"), async (err, content) => {
+		if (err) {
+			logger.error("Error loading codes", err)
+		}
+
+		const codes_file = JSON.parse(content.toString())
+
+		const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
+
+		const text = Buffer.from(res, "base64").toString()
+		save_text = decrypted + text
+
+		for (let i = 0; i < query.length; i++) {
+			document.querySelector(`#codes${i}`).remove()
+		}
+
+		document.querySelector("#save").style.display = "block"
+
+		processData(save_text)
+
+		decrypted.fill(0)
+		password.fill(0)
+		key.fill(0)
+	})
+}
+
+/**
  * Process data from saved source
  * @param {string} text
  */
 const processData = (text) => {
-	const data = convert.fromText(text, sort_number)
+	const data = convert.fromText(text, sort)
 
 	generateCodeElements(data)
 }
@@ -141,13 +188,10 @@ const processData = (text) => {
  * @param {LibImportFile} data
  */
 const generateCodeElements = (data) => {
-	document.querySelector("#search").style.display = "grid"
-	document.querySelector(".h1").style.marginBottom = "0px"
-	document.querySelector(".content").style.top = "80px"
+	document.querySelector("#searchContainer").style.display = "inline-block"
+	document.querySelector(".content").style.top = "100px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
-	document.querySelector("#searchIcon").style.display = "inline-block"
-	document.querySelector("#filterIcon").style.display = "inline-block"
 
 	const names = data.names
 	const secrets = data.secrets
@@ -166,82 +210,25 @@ const generateCodeElements = (data) => {
 			// create div
 			const element = document.createElement("div")
 
-			// set div elements
-			if (blur_state === true && description_state === true) {
-				element.innerHTML = `
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
-					<div class="flex flex-row justify-center items-center">
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
-							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${i}">${lang.text.code}</p>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
-							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
-						</div>
-					</div>
-					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${i}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-							</svg>
-							${lang.button.copy}
-						</button>
-					</div>
-					</div>
-					`
-			} else if (blur_state === true) {
-				element.innerHTML = `
+			if (codes_description === false) {
+				element.innerHTML = `					
 					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
+							<h3 class="mt-4">${lang.text.name}</h3>
 							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all filter blur-sm hover:blur-0" id="code${i}">${lang.text.code}</p>
+							<h3 class="relative -top-1 mt-4">${lang.text.code}</h3>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
+							<h3 class="mt-4">${lang.text.time}</h3>
 							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-							</svg>
-							${lang.button.copy}
-						</button>
-					</div>
-					</div>
-					`
-			} else if (description_state === true) {
-				element.innerHTML = `					
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-2 rounded-2xl mx-auto flex flex-col">
-					<div class="flex flex-row justify-center items-center">
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
-							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${i}">${lang.text.code}</p>
-						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
-							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
-						</div>
-					</div>
-					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-3" id="text${i}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] relative top-1 mb-8">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -252,23 +239,24 @@ const generateCodeElements = (data) => {
 					`
 			} else {
 				element.innerHTML = `					
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-4 rounded-2xl mx-auto flex flex-col h-[310px]">
 					<div class="flex flex-row justify-center items-center">
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.name}</h3>
+							<h3 class="mt-4">${lang.text.name}</h3>
 							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-2.5 select-all" id="code${i}">${lang.text.code}</p>
+							<h3 class="relative -top-1 mt-4">${lang.text.code}</h3>
+							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
 						</div>
 						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3>${lang.text.time}</h3>
+							<h3 class="mt-4">${lang.text.time}</h3>
 							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
 						</div>
 					</div>
 					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] mb-4">
+						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-[10px] mt-1" id="description${i}">Description</p>
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] relative top-1">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -282,6 +270,12 @@ const generateCodeElements = (data) => {
 			// set div in html
 			document.querySelector(".content").appendChild(element)
 
+			// remove margin from first element
+			if (i === 0) {
+				element.style.marginTop = "-24px"
+			}
+
+			// add padding to last element
 			if (i == names.length - 1) {
 				element.style.paddingBottom = "8px"
 			}
@@ -290,7 +284,7 @@ const generateCodeElements = (data) => {
 			const name = document.querySelector(`#name${i}`)
 			const code = document.querySelector(`#code${i}`)
 			const time = document.querySelector(`#time${i}`)
-			const text = document.querySelector(`#text${i}`)
+			const description = document.querySelector(`#description${i}`)
 
 			// add to query
 			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
@@ -298,8 +292,8 @@ const generateCodeElements = (data) => {
 			description_query.push(names[i].toLowerCase().trim())
 
 			// setting elements
-			if (description_state === true) {
-				text.textContent = names[i]
+			if (codes_description === true) {
+				description.textContent = names[i]
 			}
 
 			// generate token
@@ -314,25 +308,24 @@ const generateCodeElements = (data) => {
 			// set content
 			name.textContent = issuers[i]
 			code.textContent = token
-			time.textContent = remaining_time
-
-			if (description_state === true) {
-				const grid = document.querySelector(`#codes${i}`)
-				grid.style.height = "310px"
-			}
+			time.textContent = remaining_time.toString()
 		}
 	}
 
 	generate()
 
 	setInterval(() => {
-		refreshCodes(secrets)
+		try {
+			refreshCodes(secrets)
+		} catch (error) {
+			logger.error("Error refreshing codes")
+		}
 	}, 500)
 
-	// search history
-	const search_history = settings.search_history.latest
+	// latest search from history
+	const latest_search = settings.search_history.latest
 
-	if (search_history !== null && search_history !== "" && search_state === true) {
+	if (latest_search !== null && latest_search.trim() !== "" && search_history === true) {
 		document.querySelector("#search").value = settings.search_history.latest
 
 		setTimeout(() => {
@@ -342,17 +335,13 @@ const generateCodeElements = (data) => {
 
 	// prev
 	if (saved_codes === false) {
-		document.querySelector("#input").style.display = "none"
 		document.querySelector("#save").style.display = "block"
-	} else {
-		document.querySelector("#input").style.display = "none"
-		document.querySelector("#search").style.display = "grid"
 	}
 }
 
 /**
  * Refresh codes every 500ms
- * @param {number} secrets
+ * @param {string[]} secrets
  */
 const refreshCodes = (secrets) => {
 	for (let i = 0; i < secrets.length; i++) {
@@ -370,7 +359,7 @@ const refreshCodes = (secrets) => {
 
 		// set content
 		code.textContent = token
-		time.textContent = remaining
+		time.textContent = remaining.toString()
 	}
 }
 
@@ -404,7 +393,7 @@ const copyCode = (id) => {
 
 		// reset search bar
 		setTimeout(() => {
-			if (copy_state === true) {
+			if (reset_after_copy === true) {
 				for (let i = 0; i < query.length; i++) {
 					const div = document.querySelector(`#codes${[i]}`)
 					div.style.display = "grid"
@@ -429,7 +418,7 @@ const search = () => {
 	let no_results = 0
 
 	// save result
-	if (search_state === true) {
+	if (search_history === true) {
 		settings.search_history.latest = input
 		fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 	}
@@ -534,11 +523,13 @@ const showInfo = () => {
  * Save imported codes to disk
  */
 const saveCodes = async () => {
+	ipc.send("reloadSettingsWindow")
+
 	let password
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(await ipc.invoke("request_password"))
+		password = Buffer.from(await ipc.invoke("requestPassword"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -587,7 +578,7 @@ const loadCodes = async () => {
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(await ipc.invoke("request_password"))
+		password = Buffer.from(await ipc.invoke("requestPassword"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -603,7 +594,7 @@ const loadCodes = async () => {
 			password.fill(0)
 			key.fill(0)
 		} else {
-			const codes_file = JSON.parse(content)
+			const codes_file = JSON.parse(content.toString())
 
 			if (codes_file.version === 3) {
 				const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
@@ -693,29 +684,6 @@ document.querySelector("#checkbox1").addEventListener("click", () => {
 })
 
 /**
- * Quick copy shortcuts
- * @param {string} key
- */
-const quickCopy = (key) => {
-	for (let i = 0; i < name_query.length; i++) {
-		if (key.toLowerCase() === name_query[i]) {
-			const input = document.querySelector(`#code${[i]}`).textContent
-			const time = document.querySelector(`#time${[i]}`).textContent
-
-			clipboard.writeText(input)
-
-			const notification = new Notification({ title: "Authme", body: `${key} 2FA code copied to the clipboard (${time}s remaining).` })
-
-			notification.show()
-
-			setTimeout(() => {
-				notification.close()
-			}, 3000)
-		}
-	}
-}
-
-/**
  * Build number
  */
 const buildNumber = async () => {
@@ -747,23 +715,23 @@ const provideFeedback = () => {
 	ipc.send("provideFeedback")
 }
 
-const createFile = () => {
+const importPage = () => {
 	ipc.send("toggleImport")
 }
 
-const configureSettings = () => {
+const settingsPage = () => {
 	ipc.send("toggleSettings")
 }
 
-const supportDevelopment = () => {
+const support = () => {
 	ipc.send("support")
 }
 
-const readDocs = () => {
+const help = () => {
 	shell.openExternal("https://docs.authme.levminer.com/#/import")
 }
 
-const sampleImport = () => {
+const sampleFile = () => {
 	shell.openExternal("https://github.com/Levminer/authme/blob/dev/samples/authme/authme_import_sample.zip?raw=true")
 }
 
@@ -797,7 +765,7 @@ const releaseNotes = () => {
  * Download manual update
  */
 const manualUpdate = () => {
-	ipc.send("manualUpdate")
+	shell.openExternal("https://authme.levminer.com/#downloads")
 }
 
 /**

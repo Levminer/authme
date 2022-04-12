@@ -42,21 +42,25 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
  * Read settings
  * @type {LibSettings}
  */
-const settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+let settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 /**
  * Refresh settings
  */
-const settings_refresher = setInterval(() => {
-	file = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+if (settings.security.require_password === null && settings.security.password === null) {
+	const settings_refresher = setInterval(() => {
+		try {
+			settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-	if (file.security.require_password !== null || file.security.password !== null) {
-		clearInterval(settings_refresher)
-	}
-}, 500)
-
-// Get current window
-const currentWindow = BrowserWindow.getFocusedWindow()
+			if (settings.security.require_password !== null || settings.security.password !== null) {
+				clearInterval(settings_refresher)
+			}
+		} catch (error) {
+			logger.error("Error refreshing settings")
+			clearInterval(settings_refresher)
+		}
+	}, 500)
+}
 
 /**
  * Build number
@@ -110,7 +114,7 @@ fs.readFile(path.join(cache_path, "rollback.authme"), "utf-8", (err, data) => {
  */
 const loadRollback = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -131,7 +135,7 @@ const loadRollback = () => {
 							} else {
 								logger.log("rollback successful, codes.authme file created")
 
-								dialog.showMessageBox(currentWindow, {
+								dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 									title: "Authme",
 									buttons: [lang.button.close],
 									type: "info",
@@ -221,7 +225,7 @@ const generateEditElements = () => {
 		</div>
 		`
 
-		div.setAttribute("id", counter)
+		div.setAttribute("id", counter.toString())
 		codes_container.appendChild(div)
 
 		counter++
@@ -237,8 +241,8 @@ let edit_mode = false
 
 const editCode = (number) => {
 	const edit_button = document.querySelector(`#edit_but_${number}`)
-	const issuer_input = document.querySelector(`#edit_issuer_${number}`)
-	const name_input = document.querySelector(`#edit_name_${number}`)
+	const /** @type{HTMLInputElement} */ issuer_input = document.querySelector(`#edit_issuer_${number}`)
+	const /** @type{HTMLInputElement} */ name_input = document.querySelector(`#edit_name_${number}`)
 
 	name_input.focus()
 	const length = name_input.value.length
@@ -273,7 +277,7 @@ const editCode = (number) => {
 
 		edit_mode = false
 
-		dialog.showMessageBox(currentWindow, {
+		dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.close],
 			type: "info",
@@ -297,7 +301,7 @@ const deleteCode = (number) => {
 	counter = 0
 
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			type: "warning",
@@ -333,7 +337,7 @@ let save_text = ""
 
 const createSave = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -372,7 +376,7 @@ const saveModifications = async () => {
 	let key
 
 	if (settings.security.require_password === true) {
-		password = Buffer.from(await ipc.invoke("request_password"))
+		password = Buffer.from(await ipc.invoke("requestPassword"))
 		key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 	} else {
 		const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -406,14 +410,14 @@ const saveModifications = async () => {
  */
 const addCodes = () => {
 	dialog
-		.showOpenDialog(currentWindow, {
+		.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 			title: lang.application_dialog.choose_import_file,
 			properties: ["openFile", "multiSelections"],
 			filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		})
 		.then((result) => {
-			canceled = result.canceled
-			files = result.filePaths
+			const canceled = result.canceled
+			const files = result.filePaths
 
 			if (canceled === false) {
 				for (let i = 0; i < files.length; i++) {
@@ -426,8 +430,6 @@ const addCodes = () => {
 							const /** @type{LibAuthmeFile} */ loaded = JSON.parse(input.toString())
 
 							if (loaded.role === "import" || loaded.role === "export") {
-								data = []
-
 								const container = document.querySelector(".codes_container")
 								container.innerHTML = ""
 
@@ -445,7 +447,7 @@ const addCodes = () => {
 
 								generateEditElements()
 							} else {
-								dialog.showMessageBox(currentWindow, {
+								dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 									title: "Authme",
 									buttons: [lang.button.close],
 									defaultId: 0,
@@ -459,7 +461,7 @@ const addCodes = () => {
 					})
 				}
 
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					defaultId: 0,
@@ -504,7 +506,7 @@ const createRollback = () => {
 const loadError = () => {
 	fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", (err, data) => {
 		if (err) {
-			dialog.showMessageBox(currentWindow, {
+			dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 				title: "Authme",
 				buttons: [lang.button.close],
 				type: "error",
@@ -520,7 +522,7 @@ const loadError = () => {
  */
 const loadCodes = async () => {
 	if (fs.existsSync(path.join(folder_path, "rollbacks", "rollback.authme"))) {
-		const result = await dialog.showMessageBox(currentWindow, {
+		const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -533,7 +535,7 @@ const loadCodes = async () => {
 		if (result.response === 0) {
 			fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 				if (err) {
-					dialog.showMessageBox(currentWindow, {
+					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",
@@ -544,7 +546,7 @@ const loadCodes = async () => {
 					let key
 
 					if (settings.security.require_password === true) {
-						password = Buffer.from(await ipc.invoke("request_password"))
+						password = Buffer.from(await ipc.invoke("requestPassword"))
 						key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 					} else {
 						const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -560,7 +562,7 @@ const loadCodes = async () => {
 							password.fill(0)
 							key.fill(0)
 						} else {
-							const codes_file = JSON.parse(content)
+							const codes_file = JSON.parse(content.toString())
 
 							const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
@@ -577,7 +579,7 @@ const loadCodes = async () => {
 	} else {
 		fs.readFile(path.join(folder_path, "codes", "codes.authme"), "utf-8", async (err, data) => {
 			if (err) {
-				dialog.showMessageBox(currentWindow, {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -589,7 +591,7 @@ const loadCodes = async () => {
 				let key
 
 				if (settings.security.require_password === true) {
-					password = Buffer.from(await ipc.invoke("request_password"))
+					password = Buffer.from(await ipc.invoke("requestPassword"))
 					key = Buffer.from(aes.generateKey(password, Buffer.from(settings.security.key, "base64")))
 				} else {
 					const /** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -605,7 +607,7 @@ const loadCodes = async () => {
 						password.fill(0)
 						key.fill(0)
 					} else {
-						const codes_file = JSON.parse(content)
+						const codes_file = JSON.parse(content.toString())
 
 						const decrypted = aes.decrypt(Buffer.from(codes_file.codes, "base64"), key)
 
@@ -648,7 +650,7 @@ const reloadExportWindow = () => {
  */
 const revertChanges = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,
@@ -669,7 +671,7 @@ const revertChanges = () => {
  */
 const deleteAllCodes = () => {
 	dialog
-		.showMessageBox(currentWindow, {
+		.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",
 			buttons: [lang.button.yes, lang.button.cancel],
 			defaultId: 1,

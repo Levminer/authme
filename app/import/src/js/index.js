@@ -37,9 +37,6 @@ if (app.isPackaged === false) {
 	dev = true
 }
 
-// Get current window
-const currentWindow = BrowserWindow.getFocusedWindow()
-
 /**
  * Get Authme folder path
  */
@@ -91,20 +88,11 @@ const buildNumber = async () => {
 buildNumber()
 
 /**
- * Show experimental import screen capture
- */
-if (settings.experimental.screen_capture === true) {
-	document.querySelector(".screenCapture").style.display = "block"
-} else {
-	document.querySelector(".useWebcam").style.paddingBottom = "40px"
-}
-
-/**
  * Save created file
  * @param {string} string
  */
 const saveFile = async (string) => {
-	const result = await dialog.showSaveDialog(currentWindow, {
+	const result = await dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
 		title: lang.import_dialog.save_file,
 		filters: [{ name: lang.application_dialog.authme_file, extensions: ["authme"] }],
 		defaultPath: "~/import.authme",
