@@ -1,5 +1,6 @@
 ### Authme 3.2.0 (2022. April 12.)
 
+* [[c610a35](https://github.com/Levminer/authme/commit/c610a35)] Update readme and changelog (2022-04-11)
 * [[7b3d8c0](https://github.com/Levminer/authme/commit/7b3d8c0)] Experimental change passwords #183 (2022-04-11)
 * [[e7e5a7f](https://github.com/Levminer/authme/commit/e7e5a7f)] Update packages (2022-04-11)
 * [[0841e90](https://github.com/Levminer/authme/commit/0841e90)] Types (2022-04-11)

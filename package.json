@@ -33,7 +33,8 @@
 		"win": {
 			"target": [
 				"nsis",
-				"zip"
+				"zip",
+				"appx"
 			],
 			"icon": "img/icon.ico",
 			"artifactName": "authme-${version}-windows-x64-portable.zip"

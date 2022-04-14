@@ -14,12 +14,6 @@
 -   Follow Developing instructions
 -   Run build command: `npm run build` (You can only build for your own OS)
 
-## NPM commands
-
--   Start app: `npm run start`
--   Build app: `npm run build`
--   Lint app: `npm run lint`
-
 ## Contributing rules
 
 1. Use NPM
@@ -40,4 +34,4 @@
 
 ## Notes
 
--   Changelog: `git log --pretty=format:'* [[%h](https://github.com/Levminer/authme/commit/%h)] %s (%cs)' --since=5.weeks > log.txt`
+-   Changelog: `git log --pretty=format:'* [[%h](https://github.com/Levminer/authme/commit/%h)] %s (%cs)' 3.2.0..HEAD > log.txt`
