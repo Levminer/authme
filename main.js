@@ -37,7 +37,7 @@ let /** @type{BrowserWindow} */ window_edit
  */
 let landing_shown = false
 let confirm_shown = false
-let application_shown = true
+let application_shown = false
 let settings_shown = false
 let import_shown = false
 let export_shown = false
@@ -48,7 +48,6 @@ let edit_shown = false
  */
 let authenticated = false
 let shortcuts = false
-let hidden = false
 let tray_minimized = false
 let update_seen = false
 let manual_update = false
@@ -778,41 +777,11 @@ const createWindows = () => {
 				})
 		}
 
-		// Hide window if launch on startup on
-		if (hidden === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
-			application_shown = false
-
-			window_application.hide()
-
-			hidden = true
-
-			createTray()
-			createMenu()
-		}
-
 		// Check for manual update
 		if (update_seen == false && platform !== "windows") {
 			api()
 
 			update_seen = true
-		}
-	})
-
-	/**
-	 * Event when landing window opens
-	 */
-	window_confirm.on("show", () => {
-		// Hide window if launch on startup on
-		if (hidden === false && settings.settings.launch_on_startup === true && args[1] === "--hidden") {
-			application_shown = false
-			confirm_shown = false
-
-			window_confirm.hide()
-
-			hidden = true
-
-			createTray()
-			createMenu()
 		}
 	})
 
@@ -1046,8 +1015,12 @@ app.whenReady()
 					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 					setTimeout(() => {
-						window_confirm.maximize()
-						window_confirm.show()
+						if (args[1] !== "--hidden") {
+							window_confirm.maximize()
+							window_confirm.show()
+
+							confirm_shown = true
+						}
 
 						setTimeout(() => {
 							window_landing.destroy()
@@ -1063,8 +1036,12 @@ app.whenReady()
 					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 					setTimeout(() => {
-						window_application.maximize()
-						window_application.show()
+						if (args[1] !== "--hidden") {
+							window_application.maximize()
+							window_application.show()
+
+							application_shown = true
+						}
 
 						setTimeout(() => {
 							window_confirm.destroy()
