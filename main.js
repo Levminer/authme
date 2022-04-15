@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power, screen } = require("electron")
+const { app, BrowserWindow, Menu, Tray, shell, dialog, clipboard, globalShortcut, nativeTheme, ipcMain: ipc, powerMonitor: power } = require("electron")
 const { en, hu } = require("@levminer/languages")
 const logger = require("@levminer/lib/logger/main")
 const { autoUpdater } = require("electron-updater")
