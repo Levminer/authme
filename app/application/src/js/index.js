@@ -1,4 +1,4 @@
-const { app, shell, dialog, clipboard, Notification } = require("@electron/remote")
+const { app, shell, dialog } = require("@electron/remote")
 const { aes, convert, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
@@ -189,7 +189,6 @@ const processData = (text) => {
  */
 const generateCodeElements = (data) => {
 	document.querySelector("#searchContainer").style.display = "inline-block"
-	document.querySelector(".content").style.top = "100px"
 	document.querySelector("#choose").style.display = "none"
 	document.querySelector("#starting").style.display = "none"
 
