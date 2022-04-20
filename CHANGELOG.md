@@ -1,5 +1,6 @@
 ### Authme 3.2.1 (2022. April 19.)
 
+-   [[54460cc](https://github.com/Levminer/authme/commit/54460cc)] Update changelog (2022-04-18)
 -   [[f104196](https://github.com/Levminer/authme/commit/f104196)] Small optimizations (2022-04-15)
 -   [[d3fbc0f](https://github.com/Levminer/authme/commit/d3fbc0f)] Improve localization (2022-04-15)
 -   [[b194022](https://github.com/Levminer/authme/commit/b194022)] Fix app showing on startup #203 (2022-04-15)
