@@ -252,6 +252,8 @@ module.exports = {
 		"wrong_qrcode_found_1": "\n\nMake sure this is a correct QR code and try again!",
 		"capture_error": "Error starting capture!",
 		"no_qrcode_captured": "Not found any QR code on your screen! Make sure the QR code is visible or try to screenshot the QR code and import it as an image!",
+		"issuer_required": "The name field is required. \n\nPlease try again!",
+		"secret_required": "The secret field is required. \n\nPlease try again!",
 	},
 
 	"export": [
