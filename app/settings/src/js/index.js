@@ -5,7 +5,6 @@ const { ipcRenderer: ipc } = require("electron")
 const bcrypt = require("bcryptjs")
 const path = require("path")
 const fs = require("fs")
-const { createBackupFile, loadBackupFile, changePassword } = require(path.join(__dirname, "src", "js", "security.js"))
 
 /**
  * Send error to main process
@@ -25,23 +24,6 @@ logger.getWindow("settings")
 localization.localize("settings")
 
 const lang = localization.getLang()
-
-/**
- * Build number
- */
-const buildNumber = async () => {
-	const info = await ipc.invoke("info")
-
-	if (info.build_number.startsWith("alpha")) {
-		document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
-		document.querySelector(".build").style.display = "block"
-	} else if (info.build_number.startsWith("beta")) {
-		document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
-		document.querySelector(".build").style.display = "block"
-	}
-}
-
-buildNumber()
 
 /**
  * If running in development
@@ -394,7 +376,7 @@ const codesDescription = () => {
 	}
 
 	toggle()
-	reload()
+	reloadApplicationWindow()
 }
 
 /**
@@ -424,7 +406,7 @@ const searchHistory = () => {
 	}
 
 	toggle()
-	reload()
+	reloadApplicationWindow()
 }
 
 /**
@@ -454,7 +436,7 @@ const resetCopy = () => {
 	}
 
 	toggle()
-	reload()
+	reloadApplicationWindow()
 }
 
 /**
@@ -662,8 +644,6 @@ const languageDropdownChoose = (id) => {
 		})
 }
 
-// default
-
 /**
  * Save settings to disk
  */
@@ -676,27 +656,6 @@ const save = () => {
  */
 const provideFeedback = () => {
 	ipc.send("provideFeedback")
-}
-
-/**
- * Open Authme folder
- */
-const authmeFolder = () => {
-	shell.showItemInFolder(app.getPath("exe"))
-}
-
-/**
- * Open setting folder
- */
-const settingsFolder = () => {
-	shell.openPath(folder_path)
-}
-
-/**
- * Open cache folder
- */
-const cacheFolder = () => {
-	shell.openPath(path.join(app.getPath("appData"), "Authme"))
 }
 
 /*
@@ -716,6 +675,11 @@ const latestLog = () => {
  */
 const logsFolder = () => {
 	shell.openPath(path.join(folder_path, "logs"))
+}
+
+/* Experimental docs */
+const githubIssues = () => {
+	shell.openExternal("https://github.com/Levminer/authme/issues")
 }
 
 /**
@@ -852,7 +816,7 @@ const about = () => {
 /**
  * Reload application window
  */
-const reload = () => {
+const reloadApplicationWindow = () => {
 	ipc.send("reloadApplicationWindow")
 
 	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
@@ -880,7 +844,19 @@ window.addEventListener("click", (event) => {
 	}
 })
 
-/* Experimental docs */
-const githubIssues = () => {
-	shell.openExternal("https://github.com/Levminer/authme/issues")
+/**
+ * Build number
+ */
+const buildNumber = async () => {
+	const info = await ipc.invoke("info")
+
+	if (info.build_number.startsWith("alpha")) {
+		document.querySelector(".build-content").textContent = `You are running an alpha version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	} else if (info.build_number.startsWith("beta")) {
+		document.querySelector(".build-content").textContent = `You are running a beta version of Authme - Version ${info.authme_version} - Build ${info.build_number}`
+		document.querySelector(".build").style.display = "block"
+	}
 }
+
+buildNumber()
