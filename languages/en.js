@@ -200,9 +200,6 @@ module.exports = {
 		"You can use these shortcuts everywhere, even outside the application. Use english characters only, during editing shortcuts don't work.",
 		"Shortcuts",
 		"You can use these shortcuts inside the application only. Use english characters only, during editing shortcuts don't work.",
-		"Experimental features",
-		"These features are under development and can be unstable! Use it at your own risk!",
-		"Features",
     ],
 
 	"settings_dialog": {

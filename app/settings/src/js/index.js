@@ -881,65 +881,6 @@ window.addEventListener("click", (event) => {
 })
 
 /* Experimental docs */
-const experimentalDocs = () => {
-	shell.openExternal("https://docs.authme.levminer.com/#/settings?id=experimental-features")
-}
-
-/**
- * Show password
- */
-let password_shown = false
-
-const showPassword = (id) => {
-	if (password_shown === false) {
-		document.querySelector(`#password_input${id}`).setAttribute("type", "text")
-
-		document.querySelector(`#show_pass_${id}`).style.display = "none"
-		document.querySelector(`#show_pass_${id}1`).style.display = "flex"
-
-		password_shown = true
-	} else {
-		document.querySelector(`#password_input${id}`).setAttribute("type", "password")
-
-		document.querySelector(`#show_pass_${id}`).style.display = "flex"
-		document.querySelector(`#show_pass_${id}1`).style.display = "none"
-
-		password_shown = false
-	}
-}
-
-/* Show/hide load backup file dialog */
-const loadBackupFileDialog = () => {
-	const /** @type{LibDialogElement} */ dialog1 = document.querySelector(".dialog1")
-	const close_dialog = document.querySelector(".dialog1Close")
-
-	close_dialog.addEventListener("click", () => {
-		dialog1.close()
-	})
-
-	dialog1.showModal()
-}
-
-/* Show/hide change password dialog */
-const changePasswordDialog = () => {
-	const /** @type{LibDialogElement} */ dialog0 = document.querySelector(".dialog0")
-	const close_dialog = document.querySelector(".dialog0Close")
-
-	close_dialog.addEventListener("click", () => {
-		dialog0.close()
-	})
-
-	if (settings.security.require_password == true) {
-		dialog0.showModal()
-	} else {
-		dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-			title: "Authme",
-			buttons: [lang.button.close],
-			defaultId: 1,
-			cancelId: 1,
-			noLink: true,
-			type: "error",
-			message: "You are using Authme without a password! \n\n You can't change your generated password!",
-		})
-	}
+const githubIssues = () => {
+	shell.openExternal("https://github.com/Levminer/authme/issues")
 }

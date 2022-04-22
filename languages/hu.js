@@ -200,9 +200,6 @@ module.exports = {
 		"Ezeket a gyorsgombokat bárhol hasznáhatod, még az alkalmazáson kívűl is. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
 		"Gyorsgombok",
 		"Ezeket a gyorsgombokat csak az alkalmazáson belül használhatod. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
-		"Kísérleti funkciók",
-		"Ezek a fukciók fejlesztés alatt állnak és instabilak lehetnek! Csak saját felelősségre!",
-		"Funkciók",
     ],
 
 	"settings_dialog": {
