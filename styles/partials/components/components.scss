@@ -64,6 +64,11 @@
 	stroke: white;
 }
 
+.input::placeholder {
+	color: gray;
+	font-weight: normal;
+}
+
 /* button */
 .buttoni > svg {
 	position: relative;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = {
 	/**
 	 * Capture QR codes from the webcam

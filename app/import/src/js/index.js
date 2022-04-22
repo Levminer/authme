@@ -6,6 +6,7 @@ const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
 const { chooseImages } = require(path.join(__dirname, "src", "js", "images.js"))
+const { manualEntry } = require(path.join(__dirname, "src", "js", "manual.js"))
 const { useWebcam } = require(path.join(__dirname, "src", "js", "webcam.js"))
 const { captureFromScreen } = require(path.join(__dirname, "src", "js", "screen.js"))
 
@@ -200,4 +201,16 @@ const gaConvert = (data) => {
 	})
 
 	return return_string
+}
+
+/* Show/hide change password dialog */
+const manualEntryDialog = () => {
+	const /** @type{LibDialogElement} */ dialog0 = document.querySelector(".dialog0")
+	const close_dialog = document.querySelector(".dialog0Close")
+
+	close_dialog.addEventListener("click", () => {
+		dialog0.close()
+	})
+
+	dialog0.showModal()
 }

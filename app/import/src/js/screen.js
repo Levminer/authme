@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { dialog, desktopCapturer, BrowserWindow } = require("@electron/remote")
 
 module.exports = {

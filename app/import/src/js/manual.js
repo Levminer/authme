@@ -33,7 +33,13 @@ module.exports = {
 			return logger.warn("Secret field empty")
 		}
 
-		const string = `\nName:   ${manual_description.value} \nSecret: ${manual_secret.value} \nIssuer: ${manual_issuer.value} \nType:   OTP_TOTP\n`
+		let description = manual_description.value
+
+		if (description === "") {
+			description = manual_issuer.value
+		}
+
+		const string = `\nName:   ${description} \nSecret: ${manual_secret.value} \nIssuer: ${manual_issuer.value} \nType:   OTP_TOTP\n`
 
 		const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
 			title: "Authme",

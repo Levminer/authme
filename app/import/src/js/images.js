@@ -1,3 +1,4 @@
+// @ts-nocheck
 module.exports = {
 	/**
 	 * Read QR code(s) from image(s)
