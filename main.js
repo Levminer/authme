@@ -44,7 +44,6 @@ let tools_shown = false
  */
 let authenticated = false
 let shortcuts = false
-let tray_minimized = false
 let update_seen = false
 let manual_update = false
 let password_buffer = null
@@ -396,8 +395,6 @@ const saveWindowPosition = () => {
  * Create application windows
  */
 const createWindows = () => {
-	logger.log("Started creating windows")
-
 	/* Set language */
 	lang = en
 	let locale = "en"
@@ -515,7 +512,7 @@ const createWindows = () => {
 	})
 
 	window_settings = new BrowserWindow({
-		title: "Authme Settings",
+		title: "Authme (Settings)",
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -539,7 +536,7 @@ const createWindows = () => {
 	})
 
 	window_tools = new BrowserWindow({
-		title: "Authme Import",
+		title: "Authme (Import)",
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -604,7 +601,7 @@ const createWindows = () => {
 		if (dev === true) {
 			app.quit()
 		} else {
-			if (tray_minimized === false) {
+			if (settings.settings.close_to_tray === false) {
 				try {
 					password_buffer.fill(0)
 				} catch (error) {}
@@ -848,7 +845,7 @@ const createWindows = () => {
  */
 app.whenReady()
 	.then(() => {
-		logger.log("Starting app")
+		logger.log("App starting")
 
 		process.on("uncaughtException", async (error) => {
 			logger.error("Error occurred while starting", error.stack)
@@ -964,6 +961,8 @@ app.whenReady()
 				}
 			})
 		}
+
+		logger.log("App finished loading")
 	})
 	.catch((error) => {
 		logger.error("Error occurred while starting", error.stack)
@@ -1205,24 +1204,6 @@ ipc.on("enableWindowCapture", () => {
 	}
 
 	logger.log("Screen capture enabled")
-})
-
-/**
- * Disable close to tray
- */
-ipc.on("disableTray", () => {
-	tray_minimized = false
-
-	logger.log("Close to tray disabled")
-})
-
-/**
- * Enable close to tray
- */
-ipc.on("enableTray", () => {
-	tray_minimized = true
-
-	logger.log("Close to tray enabled")
 })
 
 /**
@@ -1693,27 +1674,31 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
 						const toggle = () => {
-							if (tools_shown === false) {
-								if (window_tools.getTitle() !== "Authme Edit codes") {
-									window_tools.loadFile("./app/edit/index.html")
-								}
-
+							if (window_tools.getTitle() !== "Authme (Edit codes)") {
+								window_tools.loadFile("./app/edit/index.html")
 								window_tools.setTitle("Authme Edit codes")
 
 								window_tools.maximize()
 								window_tools.show()
 
 								tools_shown = true
-
-								logger.log("Edit shown")
 							} else {
-								window_tools.hide()
+								if (tools_shown === false) {
+									window_tools.maximize()
+									window_tools.show()
 
-								window_application.focus()
+									tools_shown = true
 
-								tools_shown = false
+									logger.log("Edit shown")
+								} else {
+									window_tools.hide()
 
-								logger.log("Edit hidden")
+									window_application.focus()
+
+									tools_shown = false
+
+									logger.log("Edit hidden")
+								}
 							}
 						}
 
@@ -1733,27 +1718,31 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.import,
 					click: () => {
 						const toggle = () => {
-							if (tools_shown === false) {
-								if (window_tools.getTitle() !== "Authme Import") {
-									window_tools.loadFile("./app/import/index.html")
-								}
-
+							if (window_tools.getTitle() !== "Authme (Import)") {
+								window_tools.loadFile("./app/import/index.html")
 								window_tools.setTitle("Authme Import")
 
 								window_tools.maximize()
 								window_tools.show()
 
 								tools_shown = true
-
-								logger.log("Import shown")
 							} else {
-								window_tools.hide()
+								if (tools_shown === false) {
+									window_tools.maximize()
+									window_tools.show()
 
-								window_application.focus()
+									tools_shown = true
 
-								tools_shown = false
+									logger.log("Import shown")
+								} else {
+									window_tools.hide()
 
-								logger.log("Import hidden")
+									window_application.focus()
+
+									tools_shown = false
+
+									logger.log("Import hidden")
+								}
 							}
 						}
 
@@ -1773,27 +1762,31 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.export,
 					click: () => {
 						const toggle = () => {
-							if (tools_shown === false) {
-								if (window_tools.getTitle() !== "Authme Export") {
-									window_tools.loadFile("./app/export/index.html")
-								}
-
+							if (window_tools.getTitle() !== "Authme (Export)") {
+								window_tools.loadFile("./app/export/index.html")
 								window_tools.setTitle("Authme Export")
 
 								window_tools.maximize()
 								window_tools.show()
 
 								tools_shown = true
-
-								logger.log("Export shown")
 							} else {
-								window_tools.hide()
+								if (tools_shown === false) {
+									window_tools.maximize()
+									window_tools.show()
 
-								window_application.focus()
+									tools_shown = true
 
-								tools_shown = false
+									logger.log("Export shown")
+								} else {
+									window_tools.hide()
 
-								logger.log("Export hidden")
+									window_application.focus()
+
+									tools_shown = false
+
+									logger.log("Export hidden")
+								}
 							}
 						}
 

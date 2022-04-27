@@ -103,13 +103,9 @@ let close_tray_state = settings.settings.close_to_tray
 if (close_tray_state === true) {
 	tgt1.textContent = "On"
 	tgl1.checked = true
-
-	ipc.send("enableTray")
 } else {
 	tgt1.textContent = "Off"
 	tgl1.checked = false
-
-	ipc.send("disableTray")
 }
 
 // codes description
@@ -245,7 +241,7 @@ const closeTray = () => {
 		tgt1.textContent = "Off"
 		close_tray_state = false
 
-		ipc.send("disableTray")
+		ipc.invoke("saveWindowPosition")
 	} else {
 		settings.settings.close_to_tray = true
 
@@ -254,7 +250,7 @@ const closeTray = () => {
 		tgt1.textContent = "On"
 		close_tray_state = true
 
-		ipc.send("enableTray")
+		ipc.invoke("saveWindowPosition")
 	}
 }
 
