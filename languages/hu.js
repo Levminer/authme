@@ -73,22 +73,20 @@ module.exports = {
 	},
 
 	"landing": [
+		"Üdv!",
+		"Válaszd ki hogy akarod használn az Auhme-t. A 2FA kódjaid minden képpen titkosítva vannak.",
+		"Kötelező Jelszó",
+		"Be kell írnod a jelszavadat minden alkalommal amikor elindítod az Authme-t.",
+		"Folytatás",
+		"Ne kérjen jelszót",
+		"Ha nem akarsz beírni egy jelszót minden alkalommal amikor elindítod az Authme-t.",
+		"Megerősítés",
 		"Jelszó létrehozása",
 		"Hozz létre egy erős jelszót amivel titkosítva lesznek a 2FA kódjaid!",
 		"Jelszó",
 		"Jelszó megerősítése",
 		"Megerősítés",
-		"Több opció",
-		"Ne kérjen jelszót",
-		"Ha nem akarsz beírni egy jelszót minden alkalommal amikor elindítod az Authme-t.",
-		"Megerősítés",
-		"Ablak rögzítése",
-		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t.",
 	],
-
-	"landing_dialog": {
-		"no_password": "Biztos vagy benne? \n\nÍgy bárki megnézheti a 2FA kódjaidat akinek hozzáférése van a számítógépedhez!",
-	},
 
 	"landing_text": {
 		"maximum_password": "Maximum 64 karakter lehet a jelszavad hossza!",

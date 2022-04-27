@@ -73,22 +73,20 @@ module.exports = {
 	},
 
 	"landing": [
+		"Welcome to Authme!",
+		"Choose how you want to use Authme. Your 2FA codes are encrypted either way.",
+		"Require password",
+		"You have to type in your password every time you launch Authme.",
+		"Continue",
+		"Don't require password",
+		"If you don't want to type in your password every time you launch Authme.",
+		"Confirm",
 		"Create password",
 		"Create a strong password to encrypt your 2FA codes!",
 		"Password",
 		"Confirm password",
 		"Confirm",
-		"More options",
-		"Don't require password",
-		"If you don't want to type in your password every time you launch Authme.",
-		"Confirm",
-		"Window capture",
-		"Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.",
 	],
-
-	"landing_dialog": {
-		"no_password": "Are you sure? \n\nThis way everyone with access to your computer can access your 2FA codes too.",
-	},
 
 	"landing_text": {
 		"maximum_password": "Maximum password length is 64 characters!",

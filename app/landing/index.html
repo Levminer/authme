@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="../.././styles/global.css" />
 		<link rel="stylesheet" href="../../styles/tailwind.css" />
 		<!-- js -->
-		<script defer src="./src/js/index.js"></script>
+		<script defer src="./index.js"></script>
 	</head>
 	<body>
 		<!-- build number -->
@@ -21,9 +21,40 @@
 		</div>
 
 		<!-- content -->
-		<div class="relative m-auto mt-40 mb-60 w-3/5 rounded-2xl bg-gray-700 p-1 text-center">
+		<div class="relative m-auto mt-40 mb-60 rounded-2xl bg-gray-700 p-1 text-center md:w-11/12 xl:w-3/5">
 			<h1>Authme</h1>
-			<div class="mx-auto mb-16 w-2/3 rounded-2xl bg-gray-800" id="choose">
+
+			<div class="chooseLogin mx-auto mb-20 rounded-2xl bg-gray-800 md:w-11/12 xl:w-2/3">
+				<h3 data-loc class="pt-5">Welcome to Authme!</h3>
+				<h4 data-loc>Choose how you want to use Authme. Your 2FA codes are encrypted either way.</h4>
+
+				<div class="flex flex-row justify-center pb-5">
+					<div class="my-3 ml-3 mr-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
+						<h4 data-loc class="m-0 mb-3">Require password</h4>
+						<h5 data-loc class="m-0 mb-3">You have to type in your password every time you launch Authme.</h5>
+
+						<button class="buttoni my-2" onclick="requirePassword()">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							<span data-loc>Continue</span>
+						</button>
+					</div>
+					<div class="my-3 mr-3 ml-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
+						<h4 data-loc class="m-0 mb-3">Don't require password</h4>
+						<h5 data-loc class="m-0 mb-3">If you don't want to type in your password every time you launch Authme.</h5>
+
+						<button onclick="noPassword()" class="buttoni my-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							<span data-loc>Confirm</span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="createPassword mx-auto mb-16 hidden w-2/3 rounded-2xl bg-gray-800">
 				<h3 data-loc class="pt-3">Create password</h3>
 				<h4 data-loc id="text">Create a strong password to encrypt your 2FA codes!</h4>
 				<div class="flex select-none flex-row flex-wrap justify-center gap-3 pb-5">
@@ -56,34 +87,6 @@
 					</svg>
 					<span data-loc>Confirm</span>
 				</button>
-
-				<div class="mx-auto pb-3">
-					<details class="details mb-5 transform duration-200 ease-in" onclick="showMoreOptions()">
-						<summary data-loc class="summary mb-3 cursor-pointer font-bold">More options</summary>
-					</details>
-				</div>
-			</div>
-			<div>
-				<div id="more_options" class="animation invisible mx-auto mt-20 mb-20 hidden w-2/3 rounded-2xl bg-gray-800 pb-10">
-					<h3 data-loc class="pt-5">Don't require password</h3>
-					<h4 data-loc>If you don't want to type in your password every time you launch Authme.</h4>
-					<button onclick="noPassword()" class="buttoni mb-7">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-						</svg>
-						<span data-loc>Confirm</span>
-					</button>
-					<hr />
-					<h3 data-loc>Window capture</h3>
-					<h4 data-loc>Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.</h4>
-					<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
-						<div class="relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
-							<input onclick="toggleWindowCapture()" id="tgl0" type="checkbox" class="toggle absolute right-5 top-1 block h-4 w-4 cursor-pointer appearance-none rounded-full bg-black outline-none duration-200 ease-in checked:bg-white focus:outline-none" />
-							<label for="tgl0" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label>
-						</div>
-						<span id="tgt0" class="text-xl text-black">Off</span>
-					</div>
-				</div>
 			</div>
 		</div>
 	</body>
