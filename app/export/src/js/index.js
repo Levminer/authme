@@ -206,7 +206,7 @@ const saveQrCodes = () => {
  * Hide window
  */
 const hide = () => {
-	ipc.send("toggleExport")
+	ipc.invoke("toggleToolsWindow")
 }
 
 /**

@@ -28,9 +28,7 @@ let /** @type{BrowserWindow} */ window_landing
 let /** @type{BrowserWindow} */ window_confirm
 let /** @type{BrowserWindow} */ window_application
 let /** @type{BrowserWindow} */ window_settings
-let /** @type{BrowserWindow} */ window_import
-let /** @type{BrowserWindow} */ window_export
-let /** @type{BrowserWindow} */ window_edit
+let /** @type{BrowserWindow} */ window_tools
 
 /**
  * Window states
@@ -39,9 +37,7 @@ let landing_shown = false
 let confirm_shown = false
 let application_shown = false
 let settings_shown = false
-let import_shown = false
-let export_shown = false
-let edit_shown = false
+let tools_shown = false
 
 /**
  * Other states
@@ -309,15 +305,11 @@ const showAppFromTray = () => {
 		} else {
 			window_application.hide()
 			window_settings.hide()
-			window_import.hide()
-			window_export.hide()
-			window_edit.hide()
+			window_tools.hide()
 
 			application_shown = false
 			settings_shown = false
-			import_shown = false
-			export_shown = false
-			edit_shown = false
+			tools_shown = false
 
 			logger.log("App hidden from tray")
 		}
@@ -446,9 +438,7 @@ const createWindows = () => {
 		settings.window = window_application.getBounds()
 
 		window_settings.setBounds(settings.window)
-		window_import.setBounds(settings.window)
-		window_export.setBounds(settings.window)
-		window_edit.setBounds(settings.window)
+		window_tools.setBounds(settings.window)
 	}
 
 	/**
@@ -548,56 +538,8 @@ const createWindows = () => {
 		},
 	})
 
-	window_import = new BrowserWindow({
+	window_tools = new BrowserWindow({
 		title: "Authme Import",
-		x: settings.window.x,
-		y: settings.window.y,
-		width: 1900,
-		height: 1000,
-		minWidth: 1000,
-		minHeight: 600,
-		show: false,
-		titleBarStyle: wco ? "hidden" : null,
-		titleBarOverlay: wco
-			? {
-					color: "black",
-					symbolColor: "white",
-			  }
-			: null,
-		backgroundColor: "#0A0A0A",
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	})
-
-	window_export = new BrowserWindow({
-		title: "Authme Export",
-		x: settings.window.x,
-		y: settings.window.y,
-		width: 1900,
-		height: 1000,
-		minWidth: 1000,
-		minHeight: 600,
-		show: false,
-		titleBarStyle: wco ? "hidden" : null,
-		titleBarOverlay: wco
-			? {
-					color: "black",
-					symbolColor: "white",
-			  }
-			: null,
-		backgroundColor: "#0A0A0A",
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	})
-
-	window_edit = new BrowserWindow({
-		title: "Authme Edit codes",
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -632,18 +574,14 @@ const createWindows = () => {
 	remote.enable(window_confirm.webContents)
 	remote.enable(window_application.webContents)
 	remote.enable(window_settings.webContents)
-	remote.enable(window_import.webContents)
-	remote.enable(window_export.webContents)
-	remote.enable(window_edit.webContents)
+	remote.enable(window_tools.webContents)
 
 	// Load window files
 	window_landing.loadFile("./app/landing/index.html")
 	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
 	window_settings.loadFile("./app/settings/index.html")
-	window_import.loadFile("./app/import/index.html")
-	window_export.loadFile("./app/export/index.html")
-	window_edit.loadFile("./app/edit/index.html")
+	window_tools.loadFile("./app/import/index.html")
 
 	/**
 	 * Window states
@@ -703,43 +641,15 @@ const createWindows = () => {
 		logger.log("Settings closed")
 	})
 
-	window_import.on("close", (event) => {
+	window_tools.on("close", (event) => {
 		if (dev === true) {
 			app.quit()
 		} else {
 			event.preventDefault()
 
-			window_import.hide()
+			window_tools.hide()
 
-			import_shown = false
-		}
-
-		logger.log("Import closed")
-	})
-
-	window_export.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
-
-			window_export.hide()
-
-			export_shown = false
-		}
-
-		logger.log("Export closed")
-	})
-
-	window_edit.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
-
-			window_edit.hide()
-
-			edit_shown = false
+			tools_shown = false
 		}
 
 		logger.log("Edit closed")
@@ -752,9 +662,7 @@ const createWindows = () => {
 	window_confirm.setContentProtection(true)
 	window_application.setContentProtection(true)
 	window_settings.setContentProtection(true)
-	window_import.setContentProtection(true)
-	window_export.setContentProtection(true)
-	window_edit.setContentProtection(true)
+	window_tools.setContentProtection(true)
 
 	/**
 	 * Event when application window opens
@@ -1220,54 +1128,18 @@ ipc.on("toggleSettings", () => {
 /**
  * Show/Hide import
  */
-ipc.on("toggleImport", () => {
-	if (import_shown == false) {
-		window_import.maximize()
-		window_import.show()
-		import_shown = true
+ipc.handle("toggleToolsWindow", () => {
+	if (tools_shown == false) {
+		window_tools.maximize()
+		window_tools.show()
+		tools_shown = true
 
-		logger.log("Import shown")
+		logger.log("Tools shown")
 	} else {
-		window_import.hide()
-		import_shown = false
+		window_tools.hide()
+		tools_shown = false
 
-		logger.log("Import hidden")
-	}
-})
-
-/**
- * Show/Hide export
- */
-ipc.on("toggleExport", () => {
-	if (export_shown == false) {
-		window_export.maximize()
-		window_export.show()
-		export_shown = true
-
-		logger.log("Export shown")
-	} else {
-		window_export.hide()
-		export_shown = false
-
-		logger.log("Export hidden")
-	}
-})
-
-/**
- * Show/Hide edit
- */
-ipc.on("toggleEdit", () => {
-	if (edit_shown == false) {
-		window_edit.maximize()
-		window_edit.show()
-		edit_shown = true
-
-		logger.log("Edit shown")
-	} else {
-		window_edit.hide()
-		edit_shown = false
-
-		logger.log("Edit hidden")
+		logger.log("Tools hidden")
 	}
 })
 
@@ -1303,9 +1175,7 @@ ipc.on("disableWindowCapture", () => {
 
 	window_application.setContentProtection(true)
 	window_settings.setContentProtection(true)
-	window_import.setContentProtection(true)
-	window_export.setContentProtection(true)
-	window_edit.setContentProtection(true)
+	window_tools.setContentProtection(true)
 
 	if (authenticated === false) {
 		window_settings.webContents.executeJavaScript("toggleWindowCaptureSwitch()")
@@ -1328,9 +1198,7 @@ ipc.on("enableWindowCapture", () => {
 
 	window_application.setContentProtection(false)
 	window_settings.setContentProtection(false)
-	window_import.setContentProtection(false)
-	window_export.setContentProtection(false)
-	window_edit.setContentProtection(false)
+	window_tools.setContentProtection(false)
 
 	if (authenticated === false) {
 		window_settings.webContents.executeJavaScript("toggleWindowCaptureSwitch()")
@@ -1456,7 +1324,7 @@ ipc.on("reloadSettingsWindow", () => {
  * Reload export window
  */
 ipc.on("reloadExportWindow", () => {
-	window_export.reload()
+	window_tools.reload()
 })
 
 /**
@@ -1661,15 +1529,11 @@ power.on("lock-screen", () => {
 	if (settings.security.require_password === true) {
 		window_application.hide()
 		window_settings.hide()
-		window_import.hide()
-		window_export.hide()
-		window_edit.hide()
+		window_tools.hide()
 
 		application_shown = false
 		settings_shown = false
-		import_shown = false
-		export_shown = false
-		edit_shown = false
+		tools_shown = false
 
 		authenticated = false
 
@@ -1829,19 +1693,25 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
 						const toggle = () => {
-							if (edit_shown === false) {
-								window_edit.maximize()
-								window_edit.show()
+							if (tools_shown === false) {
+								if (window_tools.getTitle() !== "Authme Edit codes") {
+									window_tools.loadFile("./app/edit/index.html")
+								}
 
-								edit_shown = true
+								window_tools.setTitle("Authme Edit codes")
+
+								window_tools.maximize()
+								window_tools.show()
+
+								tools_shown = true
 
 								logger.log("Edit shown")
 							} else {
-								window_edit.hide()
+								window_tools.hide()
 
 								window_application.focus()
 
-								edit_shown = false
+								tools_shown = false
 
 								logger.log("Edit hidden")
 							}
@@ -1863,19 +1733,25 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.import,
 					click: () => {
 						const toggle = () => {
-							if (import_shown === false) {
-								window_import.maximize()
-								window_import.show()
+							if (tools_shown === false) {
+								if (window_tools.getTitle() !== "Authme Import") {
+									window_tools.loadFile("./app/import/index.html")
+								}
 
-								import_shown = true
+								window_tools.setTitle("Authme Import")
+
+								window_tools.maximize()
+								window_tools.show()
+
+								tools_shown = true
 
 								logger.log("Import shown")
 							} else {
-								window_import.hide()
+								window_tools.hide()
 
 								window_application.focus()
 
-								import_shown = false
+								tools_shown = false
 
 								logger.log("Import hidden")
 							}
@@ -1897,19 +1773,25 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.export,
 					click: () => {
 						const toggle = () => {
-							if (export_shown === false) {
-								window_export.maximize()
-								window_export.show()
+							if (tools_shown === false) {
+								if (window_tools.getTitle() !== "Authme Export") {
+									window_tools.loadFile("./app/export/index.html")
+								}
 
-								export_shown = true
+								window_tools.setTitle("Authme Export")
+
+								window_tools.maximize()
+								window_tools.show()
+
+								tools_shown = true
 
 								logger.log("Export shown")
 							} else {
-								window_export.hide()
+								window_tools.hide()
 
 								window_application.focus()
 
-								export_shown = false
+								tools_shown = false
 
 								logger.log("Export hidden")
 							}
@@ -2069,9 +1951,7 @@ const createMenu = () => {
 	if (window_application !== undefined && platform === "windows") {
 		window_application.webContents.send("refreshMenu")
 		window_settings.webContents.send("refreshMenu")
-		window_import.webContents.send("refreshMenu")
-		window_export.webContents.send("refreshMenu")
-		window_edit.webContents.send("refreshMenu")
+		window_tools.webContents.send("refreshMenu")
 	}
 }
 
