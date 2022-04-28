@@ -240,6 +240,7 @@ module.exports = {
 		"correct_qrcode_found_1": "\n\nEl akarod menteni az import fájlt a biztonság kedvéért?",
 		"wrong_qrcode_found_0": "Nem megfelelő QR-kód van ezeken a képeken:",
 		"wrong_qrcode_found_1": "\n\nGyőződj meg róla hogy ez egy jó QR-kód!",
+		"before_capture": "Miután bezárod ezt az üzenetet 10 másodperced lesz eljutni a QR-kódhóz. \n\nAz Authme készít egy képet a képernyődről, majd beimportálja a QR-kódot.",
 		"capture_error": "Nem sikerült a képernyő rögzítése!",
 		"no_qrcode_captured": "Nem sikerült QR-kódot találni a képernyődön! Győződj meg róla hogy a QR-kód látható vagy próbálj meg egy képernyőképet készíteni a QR-kódról és importáld be képként!",
 		"issuer_required": "A név megadása kötelező. \n\nPróbálkozz újra!",

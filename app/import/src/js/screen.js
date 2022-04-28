@@ -5,47 +5,69 @@ module.exports = {
 	/**
 	 * Read QR code from screen capture
 	 */
-	captureFromScreen: () => {
+	captureFromScreen: async () => {
+		const window = BrowserWindow.getFocusedWindow()
 		let string = ""
+		let counter = 0
 
-		desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } }).then(async (sources) => {
-			const thumbnail = sources[0].thumbnail.toDataURL()
-
-			document.querySelector(".thumbnail").src = thumbnail
-			document.querySelector(".thumbnailContainer").style.display = "block"
-
-			document.querySelector(".removeThumbnail").addEventListener("click", () => {
-				document.querySelector(".thumbnailContainer").style.display = "none"
-			})
-
-			try {
-				const stream = await navigator.mediaDevices.getUserMedia({
-					audio: false,
-					video: {
-						mandatory: {
-							chromeMediaSource: "desktop",
-							chromeMediaSourceId: sources[0].id,
-							minWidth: 1280,
-							maxWidth: 1280,
-							minHeight: 720,
-							maxHeight: 720,
-						},
-					},
-				})
-
-				qrHandleStream(stream)
-			} catch (error) {
-				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-					title: "Authme",
-					buttons: [lang.button.close],
-					type: "error",
-					noLink: true,
-					message: `${lang.import_dialog.capture_error} \n\n${error}`,
-				})
-
-				logger.error("Error starting capture!", error.stack)
-			}
+		await dialog.showMessageBox(window, {
+			title: "Authme",
+			buttons: [lang.button.close],
+			type: "info",
+			noLink: true,
+			defaultId: 1,
+			cancelId: 1,
+			message: `${lang.import_dialog.before_capture}`,
 		})
+
+		const interval = setInterval(() => {
+			counter++
+
+			if (counter === 10) {
+				clearInterval(interval)
+			}
+		}, 1000)
+
+		setTimeout(() => {
+			desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } }).then(async (sources) => {
+				const thumbnail = sources[0].thumbnail.toDataURL()
+
+				document.querySelector(".thumbnail").src = thumbnail
+				document.querySelector(".thumbnailContainer").style.display = "block"
+
+				document.querySelector(".removeThumbnail").addEventListener("click", () => {
+					document.querySelector(".thumbnailContainer").style.display = "none"
+				})
+
+				try {
+					const stream = await navigator.mediaDevices.getUserMedia({
+						audio: false,
+						video: {
+							mandatory: {
+								chromeMediaSource: "desktop",
+								chromeMediaSourceId: sources[0].id,
+								minWidth: 1280,
+								maxWidth: 1280,
+								minHeight: 720,
+								maxHeight: 720,
+							},
+						},
+					})
+
+					qrHandleStream(stream)
+				} catch (error) {
+					dialog.showMessageBox(window, {
+						title: "Authme",
+						buttons: [lang.button.close],
+						type: "error",
+						noLink: true,
+						message: `${lang.import_dialog.capture_error} \n\n${error}`,
+					})
+
+					logger.error("Error starting capture!", error.stack)
+				}
+			})
+		}, 5000)
 
 		const qrHandleStream = async (stream) => {
 			const track = stream.getTracks()[0]
@@ -71,7 +93,7 @@ module.exports = {
 
 					const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
 
-					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					const result = await dialog.showMessageBox(window, {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						type: "info",
@@ -100,7 +122,7 @@ module.exports = {
 					reader.stop()
 					track.stop()
 				} else {
-					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					dialog.showMessageBox(window, {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",
@@ -115,7 +137,7 @@ module.exports = {
 
 			setTimeout(() => {
 				if (code_found === false) {
-					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					dialog.showMessageBox(window, {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",

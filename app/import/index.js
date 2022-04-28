@@ -5,10 +5,10 @@ const QrcodeDecoder = require("qrcode-decoder").default
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { chooseImages } = require(path.join(__dirname, "src", "js", "images.js"))
-const { manualEntry } = require(path.join(__dirname, "src", "js", "manual.js"))
-const { useWebcam } = require(path.join(__dirname, "src", "js", "webcam.js"))
-const { captureFromScreen } = require(path.join(__dirname, "src", "js", "screen.js"))
+const { chooseImages } = require("./src/js/images")
+const { manualEntry } = require("./src/js/manual")
+const { captureFromScreen } = require("./src/js/screen")
+const { useWebcam } = require("./src/js/webcam")
 
 /**
  * Send error to main process
@@ -68,7 +68,7 @@ const examplesLink = () => {
  * Hide window
  */
 const hide = () => {
-	ipc.send("toggleImport")
+	ipc.invoke("toggleToolsWindow")
 }
 
 /**
