@@ -1676,7 +1676,7 @@ const createMenu = () => {
 						const toggle = () => {
 							if (window_tools.getTitle() !== "Authme (Edit codes)") {
 								window_tools.loadFile("./app/edit/index.html")
-								window_tools.setTitle("Authme Edit codes")
+								window_tools.setTitle("Authme (Edit codes)")
 
 								window_tools.maximize()
 								window_tools.show()
@@ -1720,7 +1720,7 @@ const createMenu = () => {
 						const toggle = () => {
 							if (window_tools.getTitle() !== "Authme (Import)") {
 								window_tools.loadFile("./app/import/index.html")
-								window_tools.setTitle("Authme Import")
+								window_tools.setTitle("Authme (Import)")
 
 								window_tools.maximize()
 								window_tools.show()
@@ -1764,7 +1764,7 @@ const createMenu = () => {
 						const toggle = () => {
 							if (window_tools.getTitle() !== "Authme (Export)") {
 								window_tools.loadFile("./app/export/index.html")
-								window_tools.setTitle("Authme Export")
+								window_tools.setTitle("Authme (Export)")
 
 								window_tools.maximize()
 								window_tools.show()
