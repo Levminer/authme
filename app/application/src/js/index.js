@@ -715,7 +715,7 @@ const provideFeedback = () => {
 }
 
 const importPage = () => {
-	ipc.invoke("toggleToolsWindow")
+	ipc.invoke("toggleImportWindow")
 }
 
 const settingsPage = () => {

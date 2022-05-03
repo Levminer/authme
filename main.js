@@ -1137,7 +1137,7 @@ ipc.on("toggleSettings", () => {
 })
 
 /**
- * Show/Hide import
+ * Show/Hide tools window
  */
 ipc.handle("toggleToolsWindow", () => {
 	if (tools_shown == false) {
@@ -1152,6 +1152,21 @@ ipc.handle("toggleToolsWindow", () => {
 
 		logger.log("Tools hidden")
 	}
+})
+
+/**
+ * Show import page
+ */
+ipc.handle("toggleImportWindow", () => {
+	if (window_tools.getTitle() !== "Authme (Import)") {
+		window_tools.loadFile("./app/import/index.html")
+		window_tools.setTitle("Authme (Import)")
+	}
+
+	window_tools.maximize()
+	window_tools.show()
+
+	logger.log("Import window shown/restored")
 })
 
 /**
@@ -1705,13 +1720,19 @@ const createMenu = () => {
 
 									logger.log("Edit shown")
 								} else {
-									window_tools.hide()
+									if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Edit codes)") {
+										window_tools.maximize()
+										window_tools.show()
 
-									window_application.focus()
+										logger.log("Edit restored")
+									} else {
+										window_tools.hide()
+										window_application.focus()
 
-									tools_shown = false
+										tools_shown = false
 
-									logger.log("Edit hidden")
+										logger.log("Edit hidden")
+									}
 								}
 							}
 						}
@@ -1749,13 +1770,19 @@ const createMenu = () => {
 
 									logger.log("Import shown")
 								} else {
-									window_tools.hide()
+									if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Import)") {
+										window_tools.maximize()
+										window_tools.show()
 
-									window_application.focus()
+										logger.log("Import restored")
+									} else {
+										window_tools.hide()
+										window_application.focus()
 
-									tools_shown = false
+										tools_shown = false
 
-									logger.log("Import hidden")
+										logger.log("Import hidden")
+									}
 								}
 							}
 						}
@@ -1793,13 +1820,19 @@ const createMenu = () => {
 
 									logger.log("Export shown")
 								} else {
-									window_tools.hide()
+									if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Export)") {
+										window_tools.maximize()
+										window_tools.show()
 
-									window_application.focus()
+										logger.log("Export restored")
+									} else {
+										window_tools.hide()
+										window_application.focus()
 
-									tools_shown = false
+										tools_shown = false
 
-									logger.log("Export hidden")
+										logger.log("Export hidden")
+									}
 								}
 							}
 						}
