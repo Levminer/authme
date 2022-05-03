@@ -37,8 +37,7 @@ process.on("uncaughtException", async (error) => {
 /**
  * Windows
  */
-let /** @type{BrowserWindow} */ window_landing
-let /** @type{BrowserWindow} */ window_confirm
+let /** @type{BrowserWindow} */ window_security
 let /** @type{BrowserWindow} */ window_application
 let /** @type{BrowserWindow} */ window_settings
 let /** @type{BrowserWindow} */ window_tools
@@ -333,13 +332,13 @@ const showAppFromTray = () => {
 		toggle()
 	} else if (settings.security.require_password === true) {
 		if (confirm_shown === false) {
-			window_confirm.maximize()
-			window_confirm.show()
+			window_security.maximize()
+			window_security.show()
 
 			confirm_shown = true
 			application_shown = true
 		} else {
-			window_confirm.hide()
+			window_security.hide()
 
 			confirm_shown = false
 			application_shown = false
@@ -471,32 +470,8 @@ const createWindows = () => {
 	/**
 	 * Create windows
 	 */
-	window_landing = new BrowserWindow({
+	window_security = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		width: 1900,
-		height: 1000,
-		minWidth: 1000,
-		minHeight: 600,
-		show: false,
-		titleBarStyle: wco ? "hidden" : null,
-		titleBarOverlay: wco
-			? {
-					color: "black",
-					symbolColor: "white",
-			  }
-			: null,
-		backgroundColor: "#0A0A0A",
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	})
-
-	window_confirm = new BrowserWindow({
-		title: `Authme (${authme_version})`,
-		x: settings.window.x,
-		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -597,35 +572,34 @@ const createWindows = () => {
 	})
 
 	// Enable remote module
-	remote.enable(window_landing.webContents)
-	remote.enable(window_confirm.webContents)
+	remote.enable(window_security.webContents)
 	remote.enable(window_application.webContents)
 	remote.enable(window_settings.webContents)
 	remote.enable(window_tools.webContents)
 
 	// Load window files
-	window_landing.loadFile("./app/landing/index.html")
-	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
 	window_settings.loadFile("./app/settings/index.html")
 	window_tools.loadFile("./app/import/index.html")
 
+	if (settings.security.require_password === null) {
+		window_security.loadFile("./app/landing/index.html")
+	} else if (settings.security.require_password === true) {
+		window_security.loadFile("./app/confirm/index.html")
+	} else {
+		window_security.close()
+	}
+
 	/**
 	 * Window states
 	 */
-	window_landing.on("close", () => {
+	window_security.on("close", () => {
 		app.exit()
 
 		logger.log("Application exited from landing window")
 	})
 
-	window_confirm.on("close", () => {
-		app.exit()
-
-		logger.log("Application exited from confirm window")
-	})
-
-	window_application.on("close", async (event) => {
+	window_application.on("close", (event) => {
 		saveWindowPosition()
 
 		if (dev === true) {
@@ -685,8 +659,7 @@ const createWindows = () => {
 	/**
 	 * Disables window capture by default
 	 */
-	window_landing.setContentProtection(true)
-	window_confirm.setContentProtection(true)
+	window_security.setContentProtection(true)
 	window_application.setContentProtection(true)
 	window_settings.setContentProtection(true)
 	window_tools.setContentProtection(true)
@@ -904,12 +877,12 @@ app.whenReady()
 		 * App controller
 		 */
 		if (settings.security.require_password === null) {
-			window_landing.on("ready-to-show", () => {
+			window_security.on("ready-to-show", () => {
 				if (authenticated === false) {
 					if (landing_shown === false) {
 						setTimeout(() => {
-							window_landing.maximize()
-							window_landing.show()
+							window_security.maximize()
+							window_security.show()
 						}, 100)
 
 						landing_shown = true
@@ -925,21 +898,17 @@ app.whenReady()
 		}
 
 		if (settings.security.require_password === true) {
-			window_confirm.on("ready-to-show", () => {
+			window_security.on("ready-to-show", () => {
 				if (authenticated === false) {
 					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 					setTimeout(() => {
 						if (args[1] !== "--hidden") {
-							window_confirm.maximize()
-							window_confirm.show()
+							window_security.maximize()
+							window_security.show()
 
 							confirm_shown = true
 						}
-
-						setTimeout(() => {
-							window_landing.destroy()
-						}, 100)
 					}, 100)
 				}
 			})
@@ -957,11 +926,6 @@ app.whenReady()
 
 							application_shown = true
 						}
-
-						setTimeout(() => {
-							window_confirm.destroy()
-							window_landing.destroy()
-						}, 100)
 					}, 100)
 
 					authenticated = true
@@ -970,6 +934,13 @@ app.whenReady()
 					createMenu()
 				}
 			})
+		}
+
+		// analytics
+		try {
+			axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, os: os_version, date: new Date() })
+		} catch (error) {
+			logger.error("Failed to post analytics", error)
 		}
 
 		logger.log("App finished loading")
@@ -1059,14 +1030,7 @@ ipc.on("toConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		setTimeout(() => {
-			window_confirm.maximize()
-			window_confirm.show()
-
-			setTimeout(() => {
-				window_landing.destroy()
-			}, 100)
-		}, 100)
+		window_security.loadFile("./app/confirm/index.html")
 	}
 })
 
@@ -1082,7 +1046,7 @@ ipc.on("toApplicationFromConfirm", () => {
 			window_application.show()
 
 			setTimeout(() => {
-				window_confirm.hide()
+				window_security.hide()
 			}, 100)
 		}, 100)
 
@@ -1103,12 +1067,6 @@ ipc.on("toApplicationFromLanding", () => {
 		setTimeout(() => {
 			window_application.maximize()
 			window_application.show()
-
-			setTimeout(() => {
-				setTimeout(() => {
-					window_landing.destroy()
-				}, 100)
-			}, 100)
 		}, 100)
 
 		authenticated = true
@@ -1166,6 +1124,8 @@ ipc.handle("toggleImportWindow", () => {
 	window_tools.maximize()
 	window_tools.show()
 
+	tools_shown = true
+
 	logger.log("Import window shown/restored")
 })
 
@@ -1192,11 +1152,7 @@ ipc.on("enableStartup", () => {
  */
 ipc.on("disableWindowCapture", () => {
 	try {
-		window_landing.setContentProtection(true)
-	} catch (error) {}
-
-	try {
-		window_confirm.setContentProtection(true)
+		window_security.setContentProtection(true)
 	} catch (error) {}
 
 	window_application.setContentProtection(true)
@@ -1215,11 +1171,7 @@ ipc.on("disableWindowCapture", () => {
  */
 ipc.on("enableWindowCapture", () => {
 	try {
-		window_landing.setContentProtection(true)
-	} catch (error) {}
-
-	try {
-		window_confirm.setContentProtection(true)
+		window_security.setContentProtection(true)
 	} catch (error) {}
 
 	window_application.setContentProtection(false)
@@ -1989,6 +1941,10 @@ const createMenu = () => {
 
 	// Reload menu
 	if (window_application !== undefined && platform === "windows") {
+		try {
+			window_security.webContents.send("refreshMenu")
+		} catch (error) {}
+
 		window_application.webContents.send("refreshMenu")
 		window_settings.webContents.send("refreshMenu")
 		window_tools.webContents.send("refreshMenu")
