@@ -12,11 +12,24 @@ const os = require("os")
 /**
  * Catch crash
  */
-process.on("uncaughtException", (error) => {
-	logger.error("Error on load", error.stack)
-	dialog.showErrorBox("Authme", `Authme crashed while starting. \n\nPlease open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme). \n\n${error.stack}`)
+process.on("uncaughtException", async (error) => {
+	const { stack } = require("@levminer/lib")
 
-	shell.openExternal("https://github.com/Levminer/authme/issues")
+	logger.error("Error on load", stack.clean(error.stack))
+	dialog.showErrorBox("Authme", `Authme crashed while starting, crash report sent. \n\nPlease restart Authme, if you want report this open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme/issues). \n\n${stack.clean(error.stack)}`)
+
+	try {
+		await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+			type: "load_crash",
+			version: app.getVersion(),
+			build: number,
+			os: `${os.type()} ${os.arch()} ${os.release()}`,
+			stack: stack.clean(error.stack),
+			date: new Date(),
+		})
+	} catch (error) {
+		logger.error("Failed to send crash report", error)
+	}
 
 	process.crash()
 })
@@ -389,6 +402,23 @@ const saveWindowPosition = () => {
 	settings.window = window_position
 
 	saveSettings()
+}
+
+const crashReport = async (crash_type, error) => {
+	try {
+		await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+			type: crash_type,
+			version: authme_version,
+			build: build_number,
+			os: os_version,
+			hardware: os_info,
+			stack: error,
+			options: JSON.stringify(settings),
+			date: new Date(),
+		})
+	} catch (error) {
+		logger.error(error)
+	}
 }
 
 /**
@@ -847,26 +877,6 @@ app.whenReady()
 	.then(() => {
 		logger.log("App starting")
 
-		process.on("uncaughtException", async (error) => {
-			logger.error("Error occurred while starting", error.stack)
-
-			const result = await dialog.showMessageBox({
-				title: "Authme",
-				buttons: [lang.button.report, lang.button.close, lang.button.exit],
-				defaultId: 0,
-				cancelId: 1,
-				noLink: true,
-				type: "error",
-				message: `${lang.dialog.error} \n\n${error.stack}`,
-			})
-
-			if (result.response === 0) {
-				shell.openExternal("https://github.com/Levminer/authme/issues/")
-			} else if (result.response === 2) {
-				app.exit()
-			}
-		})
-
 		// Set application Id
 		if (dev === false) {
 			app.setAppUserModelId("Authme")
@@ -965,7 +975,9 @@ app.whenReady()
 		logger.log("App finished loading")
 	})
 	.catch((error) => {
-		logger.error("Error occurred while starting", error.stack)
+		logger.error("Error occurred while ready event", error.stack)
+
+		crashReport("start_crash", error.stack)
 
 		dialog
 			.showMessageBox({
@@ -1324,6 +1336,8 @@ ipc.on("rendererError", async (event, data) => {
 			type: "error",
 			message: `${lang.dialog.error} \n\n${data.error}`,
 		})
+
+		crashReport("renderer_crash", `Error in ${data.renderer}: ${data.error}`)
 
 		if (result.response === 0) {
 			shell.openExternal("https://github.com/Levminer/authme/issues/")
