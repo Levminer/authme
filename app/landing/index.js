@@ -157,8 +157,6 @@ const hashPasswords = async () => {
 		password_input.fill(0)
 
 		ipc.send("toConfirm")
-
-		location.reload()
 	}, 100)
 }
 
@@ -191,12 +189,11 @@ const noPassword = () => {
 		password.fill(0)
 
 		ipc.send("toApplicationFromLanding")
-
-		location.reload()
 	}, 100)
 }
 
 const requirePassword = () => {
+	document.querySelector(".moreOptions").style.display = "none"
 	document.querySelector(".chooseLogin").style.display = "none"
 	document.querySelector(".createPassword").style.display = "block"
 }
@@ -231,3 +228,42 @@ document.querySelector("#show_pass_11").addEventListener("click", () => {
 	document.querySelector("#show_pass_1").style.display = "flex"
 	document.querySelector("#show_pass_11").style.display = "none"
 })
+
+/**
+ * Show more options div
+ */
+let more_options_shown = false
+
+const showMoreOptions = () => {
+	const more_options = document.querySelector(".moreOptions")
+
+	if (more_options_shown === false) {
+		more_options.style.visibility = "visible"
+
+		setTimeout(() => {
+			more_options.style.display = "block"
+		}, 10)
+
+		more_options_shown = true
+	} else {
+		more_options.style.display = "none"
+
+		more_options_shown = false
+	}
+}
+
+/**
+ * Toggles window capture state
+ */
+const toggleWindowCapture = () => {
+	const tgl0 = document.querySelector("#tgl0").checked
+	const tgt0 = document.querySelector("#tgt0")
+
+	if (tgl0 === false) {
+		ipc.send("disableWindowCapture")
+		tgt0.textContent = "Off"
+	} else {
+		tgt0.textContent = "On"
+		ipc.send("enableWindowCapture")
+	}
+}
