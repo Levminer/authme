@@ -153,6 +153,19 @@
 								</div>
 								<hr />
 							</div>
+							<div>
+								<h3 data-loc>Optional analytics</h3>
+								<h4 data-loc>Send optional analytics, the sent data is completely anonymous. This includes your Authme version and your OS version.</h4>
+								<div class="mx-auto flex h-[68px] w-72 items-center justify-center rounded-full bg-white">
+									<a href="#" onclick="optionalAnalytics()">
+										<div class="pointer-events-none relative mr-2 inline-block w-10 select-none rounded-full border-2 border-gray-900 bg-gray-900 align-middle">
+											<input tabindex="-1" id="tgl8" type="checkbox" class="toggle" />
+											<label for="tgl8" class="toggle-bg block h-6 cursor-pointer overflow-hidden rounded-full bg-white"></label></div
+									></a>
+									<span id="tgt8" class="text-xl text-black">-</span>
+								</div>
+								<hr />
+							</div>
 							<h3 data-loc>Language</h3>
 							<h4 data-loc>Choose which language should Authme use by default. The translations are not perfect and changing the language requires a restart.</h4>
 							<div class="relative inline-block">
@@ -193,15 +206,6 @@
 								</div>
 							</div>
 							<hr />
-							<h3 data-loc>Clear data</h3>
-							<h4 data-loc>Clear password, 2FA codes and all other settings. Be careful.</h4>
-							<button class="buttoni" onclick="clearData()">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-								</svg>
-								<span data-loc>Clear data</span>
-							</button>
-							<hr />
 							<h3 data-loc>Logs</h3>
 							<h4 data-loc>You can view the logs for debugging. You can view all the logs in the settings folder.</h4>
 							<div class="flex flex-row flex-wrap justify-center gap-3">
@@ -218,6 +222,15 @@
 									<span data-loc>Logs folder</span>
 								</button>
 							</div>
+							<hr />
+							<h3 data-loc>Clear data</h3>
+							<h4 data-loc>Clear password, 2FA codes and all other settings. Be careful.</h4>
+							<button class="buttoni" onclick="clearData()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+								</svg>
+								<span data-loc>Clear data</span>
+							</button>
 						</div>
 
 						<!-- codes -->

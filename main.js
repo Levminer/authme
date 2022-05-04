@@ -203,6 +203,7 @@ const settings_file = {
 		},
 		language: null,
 		sort: null,
+		analytics: true,
 	},
 	security: {
 		require_password: null,
@@ -285,6 +286,12 @@ if (settings.window === undefined) {
 		height: 1900,
 		width: 1000,
 	}
+
+	saveSettings()
+}
+
+if (settings.settings.analytics === undefined) {
+	settings.settings.analytics = true
 
 	saveSettings()
 }
@@ -936,11 +943,13 @@ app.whenReady()
 			})
 		}
 
-		// analytics
-		try {
-			axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, os: os_version, date: new Date() })
-		} catch (error) {
-			logger.error("Failed to post analytics", error)
+		// Optional analytics
+		if (settings.settings.analytics === true) {
+			try {
+				axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, os: os_version, date: new Date() })
+			} catch (error) {
+				logger.error("Failed to post analytics", error)
+			}
 		}
 
 		logger.log("App finished loading")
@@ -1171,7 +1180,7 @@ ipc.on("disableWindowCapture", () => {
  */
 ipc.on("enableWindowCapture", () => {
 	try {
-		window_security.setContentProtection(true)
+		window_security.setContentProtection(false)
 	} catch (error) {}
 
 	window_application.setContentProtection(false)
