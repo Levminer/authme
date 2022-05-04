@@ -81,11 +81,14 @@ module.exports = {
 		"Ne kérjen jelszót",
 		"Ha nem akarsz beírni egy jelszót minden alkalommal amikor elindítod az Authme-t.",
 		"Megerősítés",
+		"Több opció",
 		"Jelszó létrehozása",
 		"Hozz létre egy erős jelszót amivel titkosítva lesznek a 2FA kódjaid!",
 		"Jelszó",
 		"Jelszó megerősítése",
 		"Megerősítés",
+		"Ablak rögzítése",
+		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t.",
 	],
 
 	"landing_text": {
@@ -104,7 +107,7 @@ module.exports = {
 		"Megerősítés",
 		"Több opció",
 		"Ablak rögzítése",
-		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t."
+		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t.",
 	],
 
 	"confirm_text": {
@@ -219,11 +222,14 @@ module.exports = {
 		"Sokféleképpen tudod importálni a 2FA kódjaidat. Válaszd ki a számodra legkényelmesebb módot.",
 		"Képek kiválasztása",
 		"Válassz olyan képeket amik 2FA QR-kódokat tartalmaznak.",
-		"Webkamera",
-		"Használd a webkamerádat a 2FA QR-kód beszkenneléséhez.",
+		"Manuális hozzáadás",
+		"Írj be egy TOTP secret key-t és egy nevet manuálisan.",
+		"Több opció",
 		"Képernyő felvétel",
 		"2FA QR-kód importálása a képernyődről.",
-		"Stop"
+		"Webkamera",
+		"Használd a webkamerádat a 2FA QR-kód beszkenneléséhez.",
+		"Elrejtés",
     ],
 
 	"import_dialog": {

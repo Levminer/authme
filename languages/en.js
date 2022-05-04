@@ -81,11 +81,14 @@ module.exports = {
 		"Don't require password",
 		"If you don't want to type in your password every time you launch Authme.",
 		"Confirm",
+		"More options",
 		"Create password",
 		"Create a strong password to encrypt your 2FA codes!",
 		"Password",
 		"Confirm password",
 		"Confirm",
+		"Window capture",
+		"Allows screenshots and screen capture. You can record or screenshot the app until you restart Authme.",
 	],
 
 	"landing_text": {
@@ -219,11 +222,14 @@ module.exports = {
 		"You can import your 2FA codes many way. Choose the most convenient way for you.",
 		"Choose images",
 		"Choose images that contain a 2FA QR code.",
+		"Manual entry",
+		"Enter a TOTP secret key and name manually.",
+		"More options",
 		"Use webcam",
 		"Use your webcam to scan a 2FA QR code.",
 		"Capture screen",
 		"Capture a 2FA QR code from your screen.",
-		"Stop"
+		"Hide",
     ],
 
 	"import_dialog": {
