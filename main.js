@@ -1056,13 +1056,11 @@ ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		setTimeout(() => {
-			window_application.maximize()
-			window_application.show()
+		window_application.maximize()
+		window_application.show()
 
-			setTimeout(() => {
-				window_security.hide()
-			}, 100)
+		setTimeout(() => {
+			window_security.hide()
 		}, 100)
 
 		authenticated = true
@@ -1079,9 +1077,11 @@ ipc.on("toApplicationFromLanding", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
+		window_application.maximize()
+		window_application.show()
+
 		setTimeout(() => {
-			window_application.maximize()
-			window_application.show()
+			window_security.hide()
 		}, 100)
 
 		authenticated = true
@@ -1607,13 +1607,20 @@ const createMenu = () => {
 
 								logger.log("Settings shown")
 							} else {
-								window_settings.hide()
+								if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Settings)") {
+									window_settings.maximize()
+									window_settings.show()
 
-								window_application.focus()
+									logger.log("Edit restored")
+								} else {
+									window_settings.hide()
 
-								settings_shown = false
+									window_application.focus()
 
-								logger.log("Settings hidden")
+									settings_shown = false
+
+									logger.log("Settings hidden")
+								}
 							}
 						}
 
