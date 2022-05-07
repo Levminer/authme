@@ -1,11 +1,13 @@
 // @ts-nocheck
 const { dialog, desktopCapturer, BrowserWindow } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 
 module.exports = {
 	/**
 	 * Read QR code from screen capture
 	 */
 	captureFromScreen: async () => {
+		const button = document.querySelector(".screenButton")
 		const window = BrowserWindow.getFocusedWindow()
 		let string = ""
 		let counter = 0
@@ -23,51 +25,55 @@ module.exports = {
 		const interval = setInterval(() => {
 			counter++
 
+			button.textContent = `${10 - counter}s remaining`
+
 			if (counter === 10) {
 				clearInterval(interval)
 			}
 		}, 1000)
 
-		setTimeout(() => {
-			desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } }).then(async (sources) => {
-				const thumbnail = sources[0].thumbnail.toDataURL()
+		setTimeout(async () => {
+			const sources = await ipc.invoke("captureSources")
 
-				document.querySelector(".thumbnail").src = thumbnail
-				document.querySelector(".thumbnailContainer").style.display = "block"
+			const thumbnail = sources[0].thumbnail.toDataURL()
 
-				document.querySelector(".removeThumbnail").addEventListener("click", () => {
-					document.querySelector(".thumbnailContainer").style.display = "none"
+			document.querySelector(".thumbnail").src = thumbnail
+			document.querySelector(".thumbnailContainer").style.display = "block"
+
+			document.querySelector(".removeThumbnail").addEventListener("click", () => {
+				document.querySelector(".thumbnailContainer").style.display = "none"
+			})
+
+			try {
+				const stream = await navigator.mediaDevices.getUserMedia({
+					audio: false,
+					video: {
+						mandatory: {
+							chromeMediaSource: "desktop",
+							chromeMediaSourceId: sources[0].id,
+							minWidth: 1280,
+							maxWidth: 1280,
+							minHeight: 720,
+							maxHeight: 720,
+						},
+					},
 				})
 
-				try {
-					const stream = await navigator.mediaDevices.getUserMedia({
-						audio: false,
-						video: {
-							mandatory: {
-								chromeMediaSource: "desktop",
-								chromeMediaSourceId: sources[0].id,
-								minWidth: 1280,
-								maxWidth: 1280,
-								minHeight: 720,
-								maxHeight: 720,
-							},
-						},
-					})
+				qrHandleStream(stream)
+			} catch (error) {
+				dialog.showMessageBox(window, {
+					title: "Authme",
+					buttons: [lang.button.close],
+					type: "error",
+					noLink: true,
+					message: `${lang.import_dialog.capture_error} \n\n${error}`,
+				})
 
-					qrHandleStream(stream)
-				} catch (error) {
-					dialog.showMessageBox(window, {
-						title: "Authme",
-						buttons: [lang.button.close],
-						type: "error",
-						noLink: true,
-						message: `${lang.import_dialog.capture_error} \n\n${error}`,
-					})
+				logger.error("Error starting capture!", error.stack)
+			}
 
-					logger.error("Error starting capture!", error.stack)
-				}
-			})
-		}, 5000)
+			button.textContent = "Screen capture"
+		}, 10000)
 
 		const qrHandleStream = async (stream) => {
 			const track = stream.getTracks()[0]

@@ -1383,6 +1383,15 @@ ipc.handle("saveWindowPosition", () => {
 })
 
 /**
+ * Return desktop capture sources
+ */
+ipc.handle("captureSources", async () => {
+	const { desktopCapturer } = require("electron")
+
+	return await desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } })
+})
+
+/**
  * Logger path
  */
 const logs = () => {

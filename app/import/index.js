@@ -1,4 +1,4 @@
-const { app, dialog, shell, desktopCapturer, BrowserWindow } = require("@electron/remote")
+const { app, dialog, shell, BrowserWindow } = require("@electron/remote")
 const { qrcodeConverter, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const QrcodeDecoder = require("qrcode-decoder").default
