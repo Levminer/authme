@@ -16,19 +16,22 @@ process.on("uncaughtException", async (error) => {
 	const { stack } = require("@levminer/lib")
 
 	logger.error("Error on load", stack.clean(error.stack))
-	dialog.showErrorBox("Authme", `Authme crashed while starting, crash report sent. \n\nPlease restart Authme, if you want report this open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme/issues). \n\n${stack.clean(error.stack)}`)
 
-	try {
-		await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
-			type: "load_crash",
-			version: app.getVersion(),
-			build: number,
-			os: `${os.type()} ${os.arch()} ${os.release()}`,
-			stack: stack.clean(error.stack),
-			date: new Date(),
-		})
-	} catch (error) {
-		logger.error("Failed to send crash report", error)
+	if (app.isPackaged === false) {
+		dialog.showErrorBox("Authme", `Authme crashed while starting, crash report sent. \n\nPlease restart Authme, if you want report this open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme/issues). \n\n${stack.clean(error.stack)}`)
+
+		try {
+			await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+				type: "load_crash",
+				version: app.getVersion(),
+				build: number,
+				os: `${os.type()} ${os.arch()} ${os.release()}`,
+				stack: stack.clean(error.stack),
+				date: new Date(),
+			})
+		} catch (error) {
+			logger.error("Failed to send crash report", error)
+		}
 	}
 
 	process.crash()
@@ -411,19 +414,22 @@ const saveWindowPosition = () => {
 }
 
 const crashReport = async (crash_type, error) => {
-	try {
-		await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
-			type: crash_type,
-			version: authme_version,
-			build: build_number,
-			os: os_version,
-			hardware: os_info,
-			stack: error,
-			options: JSON.stringify(settings),
-			date: new Date(),
-		})
-	} catch (error) {
-		logger.error(error)
+	if (dev === false) {
+		try {
+			await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+				type: crash_type,
+				version: authme_version,
+				build: build_number,
+				os: os_version,
+				hardware: os_info,
+				stack: error,
+				lang: app.getLocaleCountryCode(),
+				options: JSON.stringify(settings),
+				date: new Date(),
+			})
+		} catch (error) {
+			logger.error(error)
+		}
 	}
 }
 
@@ -944,9 +950,9 @@ app.whenReady()
 		}
 
 		// Optional analytics
-		if (settings.settings.analytics === true) {
+		if (settings.settings.analytics === true && dev === false) {
 			try {
-				axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, os: os_version, date: new Date() })
+				axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, build: build_number, os: os_version, lang: app.getLocaleCountryCode(), date: new Date() })
 			} catch (error) {
 				logger.error("Failed to post analytics", error)
 			}
