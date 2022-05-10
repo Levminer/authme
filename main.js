@@ -12,11 +12,27 @@ const os = require("os")
 /**
  * Catch crash
  */
-process.on("uncaughtException", (error) => {
-	logger.error("Error on load", error.stack)
-	dialog.showErrorBox("Authme", `Authme crashed while starting. \n\nPlease open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme). \n\n${error.stack}`)
+process.on("uncaughtException", async (error) => {
+	const { stack } = require("@levminer/lib")
 
-	shell.openExternal("https://github.com/Levminer/authme/issues")
+	logger.error("Error on load", stack.clean(error.stack))
+
+	if (app.isPackaged === false) {
+		dialog.showErrorBox("Authme", `Authme crashed while starting, crash report sent. \n\nPlease restart Authme, if you want report this open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme/issues). \n\n${stack.clean(error.stack)}`)
+
+		try {
+			await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+				type: "load_crash",
+				version: app.getVersion(),
+				build: number,
+				os: `${os.type()} ${os.arch()} ${os.release()}`,
+				stack: stack.clean(error.stack),
+				date: new Date(),
+			})
+		} catch (error) {
+			logger.error("Failed to send crash report", error)
+		}
+	}
 
 	process.crash()
 })
@@ -24,13 +40,10 @@ process.on("uncaughtException", (error) => {
 /**
  * Windows
  */
-let /** @type{BrowserWindow} */ window_landing
-let /** @type{BrowserWindow} */ window_confirm
+let /** @type{BrowserWindow} */ window_security
 let /** @type{BrowserWindow} */ window_application
 let /** @type{BrowserWindow} */ window_settings
-let /** @type{BrowserWindow} */ window_import
-let /** @type{BrowserWindow} */ window_export
-let /** @type{BrowserWindow} */ window_edit
+let /** @type{BrowserWindow} */ window_tools
 
 /**
  * Window states
@@ -39,16 +52,13 @@ let landing_shown = false
 let confirm_shown = false
 let application_shown = false
 let settings_shown = false
-let import_shown = false
-let export_shown = false
-let edit_shown = false
+let tools_shown = false
 
 /**
  * Other states
  */
 let authenticated = false
 let shortcuts = false
-let tray_minimized = false
 let update_seen = false
 let manual_update = false
 let password_buffer = null
@@ -196,6 +206,7 @@ const settings_file = {
 		},
 		language: null,
 		sort: null,
+		analytics: true,
 	},
 	security: {
 		require_password: null,
@@ -282,6 +293,12 @@ if (settings.window === undefined) {
 	saveSettings()
 }
 
+if (settings.settings.analytics === undefined) {
+	settings.settings.analytics = true
+
+	saveSettings()
+}
+
 /**
  * Force dark mode
  */
@@ -309,15 +326,11 @@ const showAppFromTray = () => {
 		} else {
 			window_application.hide()
 			window_settings.hide()
-			window_import.hide()
-			window_export.hide()
-			window_edit.hide()
+			window_tools.hide()
 
 			application_shown = false
 			settings_shown = false
-			import_shown = false
-			export_shown = false
-			edit_shown = false
+			tools_shown = false
 
 			logger.log("App hidden from tray")
 		}
@@ -329,13 +342,13 @@ const showAppFromTray = () => {
 		toggle()
 	} else if (settings.security.require_password === true) {
 		if (confirm_shown === false) {
-			window_confirm.maximize()
-			window_confirm.show()
+			window_security.maximize()
+			window_security.show()
 
 			confirm_shown = true
 			application_shown = true
 		} else {
-			window_confirm.hide()
+			window_security.hide()
 
 			confirm_shown = false
 			application_shown = false
@@ -400,12 +413,30 @@ const saveWindowPosition = () => {
 	saveSettings()
 }
 
+const crashReport = async (crash_type, error) => {
+	if (dev === false) {
+		try {
+			await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+				type: crash_type,
+				version: authme_version,
+				build: build_number,
+				os: os_version,
+				hardware: os_info,
+				stack: error,
+				lang: app.getLocaleCountryCode(),
+				options: JSON.stringify(settings),
+				date: new Date(),
+			})
+		} catch (error) {
+			logger.error(error)
+		}
+	}
+}
+
 /**
  * Create application windows
  */
 const createWindows = () => {
-	logger.log("Started creating windows")
-
 	/* Set language */
 	lang = en
 	let locale = "en"
@@ -446,40 +477,14 @@ const createWindows = () => {
 		settings.window = window_application.getBounds()
 
 		window_settings.setBounds(settings.window)
-		window_import.setBounds(settings.window)
-		window_export.setBounds(settings.window)
-		window_edit.setBounds(settings.window)
+		window_tools.setBounds(settings.window)
 	}
 
 	/**
 	 * Create windows
 	 */
-	window_landing = new BrowserWindow({
+	window_security = new BrowserWindow({
 		title: `Authme (${authme_version})`,
-		width: 1900,
-		height: 1000,
-		minWidth: 1000,
-		minHeight: 600,
-		show: false,
-		titleBarStyle: wco ? "hidden" : null,
-		titleBarOverlay: wco
-			? {
-					color: "black",
-					symbolColor: "white",
-			  }
-			: null,
-		backgroundColor: "#0A0A0A",
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	})
-
-	window_confirm = new BrowserWindow({
-		title: `Authme (${authme_version})`,
-		x: settings.window.x,
-		y: settings.window.y,
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -525,7 +530,7 @@ const createWindows = () => {
 	})
 
 	window_settings = new BrowserWindow({
-		title: "Authme Settings",
+		title: "Authme (Settings)",
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -548,56 +553,8 @@ const createWindows = () => {
 		},
 	})
 
-	window_import = new BrowserWindow({
-		title: "Authme Import",
-		x: settings.window.x,
-		y: settings.window.y,
-		width: 1900,
-		height: 1000,
-		minWidth: 1000,
-		minHeight: 600,
-		show: false,
-		titleBarStyle: wco ? "hidden" : null,
-		titleBarOverlay: wco
-			? {
-					color: "black",
-					symbolColor: "white",
-			  }
-			: null,
-		backgroundColor: "#0A0A0A",
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	})
-
-	window_export = new BrowserWindow({
-		title: "Authme Export",
-		x: settings.window.x,
-		y: settings.window.y,
-		width: 1900,
-		height: 1000,
-		minWidth: 1000,
-		minHeight: 600,
-		show: false,
-		titleBarStyle: wco ? "hidden" : null,
-		titleBarOverlay: wco
-			? {
-					color: "black",
-					symbolColor: "white",
-			  }
-			: null,
-		backgroundColor: "#0A0A0A",
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-			nodeIntegration: true,
-			contextIsolation: false,
-		},
-	})
-
-	window_edit = new BrowserWindow({
-		title: "Authme Edit codes",
+	window_tools = new BrowserWindow({
+		title: "Authme (Import)",
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -628,45 +585,40 @@ const createWindows = () => {
 	})
 
 	// Enable remote module
-	remote.enable(window_landing.webContents)
-	remote.enable(window_confirm.webContents)
+	remote.enable(window_security.webContents)
 	remote.enable(window_application.webContents)
 	remote.enable(window_settings.webContents)
-	remote.enable(window_import.webContents)
-	remote.enable(window_export.webContents)
-	remote.enable(window_edit.webContents)
+	remote.enable(window_tools.webContents)
 
 	// Load window files
-	window_landing.loadFile("./app/landing/index.html")
-	window_confirm.loadFile("./app/confirm/index.html")
 	window_application.loadFile("./app/application/index.html")
 	window_settings.loadFile("./app/settings/index.html")
-	window_import.loadFile("./app/import/index.html")
-	window_export.loadFile("./app/export/index.html")
-	window_edit.loadFile("./app/edit/index.html")
+	window_tools.loadFile("./app/import/index.html")
+
+	if (settings.security.require_password === null) {
+		window_security.loadFile("./app/landing/index.html")
+	} else if (settings.security.require_password === true) {
+		window_security.loadFile("./app/confirm/index.html")
+	} else {
+		window_security.close()
+	}
 
 	/**
 	 * Window states
 	 */
-	window_landing.on("close", () => {
+	window_security.on("close", () => {
 		app.exit()
 
 		logger.log("Application exited from landing window")
 	})
 
-	window_confirm.on("close", () => {
-		app.exit()
-
-		logger.log("Application exited from confirm window")
-	})
-
-	window_application.on("close", async (event) => {
+	window_application.on("close", (event) => {
 		saveWindowPosition()
 
 		if (dev === true) {
 			app.quit()
 		} else {
-			if (tray_minimized === false) {
+			if (settings.settings.close_to_tray === false) {
 				try {
 					password_buffer.fill(0)
 				} catch (error) {}
@@ -703,43 +655,15 @@ const createWindows = () => {
 		logger.log("Settings closed")
 	})
 
-	window_import.on("close", (event) => {
+	window_tools.on("close", (event) => {
 		if (dev === true) {
 			app.quit()
 		} else {
 			event.preventDefault()
 
-			window_import.hide()
+			window_tools.hide()
 
-			import_shown = false
-		}
-
-		logger.log("Import closed")
-	})
-
-	window_export.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
-
-			window_export.hide()
-
-			export_shown = false
-		}
-
-		logger.log("Export closed")
-	})
-
-	window_edit.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
-
-			window_edit.hide()
-
-			edit_shown = false
+			tools_shown = false
 		}
 
 		logger.log("Edit closed")
@@ -748,13 +672,10 @@ const createWindows = () => {
 	/**
 	 * Disables window capture by default
 	 */
-	window_landing.setContentProtection(true)
-	window_confirm.setContentProtection(true)
+	window_security.setContentProtection(true)
 	window_application.setContentProtection(true)
 	window_settings.setContentProtection(true)
-	window_import.setContentProtection(true)
-	window_export.setContentProtection(true)
-	window_edit.setContentProtection(true)
+	window_tools.setContentProtection(true)
 
 	/**
 	 * Event when application window opens
@@ -940,27 +861,7 @@ const createWindows = () => {
  */
 app.whenReady()
 	.then(() => {
-		logger.log("Starting app")
-
-		process.on("uncaughtException", async (error) => {
-			logger.error("Error occurred while starting", error.stack)
-
-			const result = await dialog.showMessageBox({
-				title: "Authme",
-				buttons: [lang.button.report, lang.button.close, lang.button.exit],
-				defaultId: 0,
-				cancelId: 1,
-				noLink: true,
-				type: "error",
-				message: `${lang.dialog.error} \n\n${error.stack}`,
-			})
-
-			if (result.response === 0) {
-				shell.openExternal("https://github.com/Levminer/authme/issues/")
-			} else if (result.response === 2) {
-				app.exit()
-			}
-		})
+		logger.log("App starting")
 
 		// Set application Id
 		if (dev === false) {
@@ -989,12 +890,12 @@ app.whenReady()
 		 * App controller
 		 */
 		if (settings.security.require_password === null) {
-			window_landing.on("ready-to-show", () => {
+			window_security.on("ready-to-show", () => {
 				if (authenticated === false) {
 					if (landing_shown === false) {
 						setTimeout(() => {
-							window_landing.maximize()
-							window_landing.show()
+							window_security.maximize()
+							window_security.show()
 						}, 100)
 
 						landing_shown = true
@@ -1010,21 +911,17 @@ app.whenReady()
 		}
 
 		if (settings.security.require_password === true) {
-			window_confirm.on("ready-to-show", () => {
+			window_security.on("ready-to-show", () => {
 				if (authenticated === false) {
 					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 					setTimeout(() => {
 						if (args[1] !== "--hidden") {
-							window_confirm.maximize()
-							window_confirm.show()
+							window_security.maximize()
+							window_security.show()
 
 							confirm_shown = true
 						}
-
-						setTimeout(() => {
-							window_landing.destroy()
-						}, 100)
 					}, 100)
 				}
 			})
@@ -1042,11 +939,6 @@ app.whenReady()
 
 							application_shown = true
 						}
-
-						setTimeout(() => {
-							window_confirm.destroy()
-							window_landing.destroy()
-						}, 100)
 					}, 100)
 
 					authenticated = true
@@ -1056,9 +948,22 @@ app.whenReady()
 				}
 			})
 		}
+
+		// Optional analytics
+		if (settings.settings.analytics === true && dev === false) {
+			try {
+				axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, build: build_number, os: os_version, lang: app.getLocaleCountryCode(), date: new Date() })
+			} catch (error) {
+				logger.error("Failed to post analytics", error)
+			}
+		}
+
+		logger.log("App finished loading")
 	})
 	.catch((error) => {
-		logger.error("Error occurred while starting", error.stack)
+		logger.error("Error occurred while ready event", error.stack)
+
+		crashReport("start_crash", error.stack)
 
 		dialog
 			.showMessageBox({
@@ -1140,14 +1045,7 @@ ipc.on("toConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		setTimeout(() => {
-			window_confirm.maximize()
-			window_confirm.show()
-
-			setTimeout(() => {
-				window_landing.destroy()
-			}, 100)
-		}, 100)
+		window_security.loadFile("./app/confirm/index.html")
 	}
 })
 
@@ -1158,13 +1056,11 @@ ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		setTimeout(() => {
-			window_application.maximize()
-			window_application.show()
+		window_application.maximize()
+		window_application.show()
 
-			setTimeout(() => {
-				window_confirm.hide()
-			}, 100)
+		setTimeout(() => {
+			window_security.hide()
 		}, 100)
 
 		authenticated = true
@@ -1181,15 +1077,11 @@ ipc.on("toApplicationFromLanding", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		setTimeout(() => {
-			window_application.maximize()
-			window_application.show()
+		window_application.maximize()
+		window_application.show()
 
-			setTimeout(() => {
-				setTimeout(() => {
-					window_landing.destroy()
-				}, 100)
-			}, 100)
+		setTimeout(() => {
+			window_security.hide()
 		}, 100)
 
 		authenticated = true
@@ -1218,57 +1110,38 @@ ipc.on("toggleSettings", () => {
 })
 
 /**
- * Show/Hide import
+ * Show/Hide tools window
  */
-ipc.on("toggleImport", () => {
-	if (import_shown == false) {
-		window_import.maximize()
-		window_import.show()
-		import_shown = true
+ipc.handle("toggleToolsWindow", () => {
+	if (tools_shown == false) {
+		window_tools.maximize()
+		window_tools.show()
+		tools_shown = true
 
-		logger.log("Import shown")
+		logger.log("Tools shown")
 	} else {
-		window_import.hide()
-		import_shown = false
+		window_tools.hide()
+		tools_shown = false
 
-		logger.log("Import hidden")
+		logger.log("Tools hidden")
 	}
 })
 
 /**
- * Show/Hide export
+ * Show import page
  */
-ipc.on("toggleExport", () => {
-	if (export_shown == false) {
-		window_export.maximize()
-		window_export.show()
-		export_shown = true
-
-		logger.log("Export shown")
-	} else {
-		window_export.hide()
-		export_shown = false
-
-		logger.log("Export hidden")
+ipc.handle("toggleImportWindow", () => {
+	if (window_tools.getTitle() !== "Authme (Import)") {
+		window_tools.loadFile("./app/import/index.html")
+		window_tools.setTitle("Authme (Import)")
 	}
-})
 
-/**
- * Show/Hide edit
- */
-ipc.on("toggleEdit", () => {
-	if (edit_shown == false) {
-		window_edit.maximize()
-		window_edit.show()
-		edit_shown = true
+	window_tools.maximize()
+	window_tools.show()
 
-		logger.log("Edit shown")
-	} else {
-		window_edit.hide()
-		edit_shown = false
+	tools_shown = true
 
-		logger.log("Edit hidden")
-	}
+	logger.log("Import window shown/restored")
 })
 
 /**
@@ -1294,18 +1167,12 @@ ipc.on("enableStartup", () => {
  */
 ipc.on("disableWindowCapture", () => {
 	try {
-		window_landing.setContentProtection(true)
-	} catch (error) {}
-
-	try {
-		window_confirm.setContentProtection(true)
+		window_security.setContentProtection(true)
 	} catch (error) {}
 
 	window_application.setContentProtection(true)
 	window_settings.setContentProtection(true)
-	window_import.setContentProtection(true)
-	window_export.setContentProtection(true)
-	window_edit.setContentProtection(true)
+	window_tools.setContentProtection(true)
 
 	if (authenticated === false) {
 		window_settings.webContents.executeJavaScript("toggleWindowCaptureSwitch()")
@@ -1319,42 +1186,18 @@ ipc.on("disableWindowCapture", () => {
  */
 ipc.on("enableWindowCapture", () => {
 	try {
-		window_landing.setContentProtection(true)
-	} catch (error) {}
-
-	try {
-		window_confirm.setContentProtection(true)
+		window_security.setContentProtection(false)
 	} catch (error) {}
 
 	window_application.setContentProtection(false)
 	window_settings.setContentProtection(false)
-	window_import.setContentProtection(false)
-	window_export.setContentProtection(false)
-	window_edit.setContentProtection(false)
+	window_tools.setContentProtection(false)
 
 	if (authenticated === false) {
 		window_settings.webContents.executeJavaScript("toggleWindowCaptureSwitch()")
 	}
 
 	logger.log("Screen capture enabled")
-})
-
-/**
- * Disable close to tray
- */
-ipc.on("disableTray", () => {
-	tray_minimized = false
-
-	logger.log("Close to tray disabled")
-})
-
-/**
- * Enable close to tray
- */
-ipc.on("enableTray", () => {
-	tray_minimized = true
-
-	logger.log("Close to tray enabled")
 })
 
 /**
@@ -1456,7 +1299,7 @@ ipc.on("reloadSettingsWindow", () => {
  * Reload export window
  */
 ipc.on("reloadExportWindow", () => {
-	window_export.reload()
+	window_tools.reload()
 })
 
 /**
@@ -1475,6 +1318,8 @@ ipc.on("rendererError", async (event, data) => {
 			type: "error",
 			message: `${lang.dialog.error} \n\n${data.error}`,
 		})
+
+		crashReport("renderer_crash", `Error in ${data.renderer}: ${data.error}`)
 
 		if (result.response === 0) {
 			shell.openExternal("https://github.com/Levminer/authme/issues/")
@@ -1541,6 +1386,15 @@ ipc.handle("importExistingCodes", (event, codes) => {
  */
 ipc.handle("saveWindowPosition", () => {
 	saveWindowPosition()
+})
+
+/**
+ * Return desktop capture sources
+ */
+ipc.handle("captureSources", async () => {
+	const { desktopCapturer } = require("electron")
+
+	return await desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } })
 })
 
 /**
@@ -1661,15 +1515,11 @@ power.on("lock-screen", () => {
 	if (settings.security.require_password === true) {
 		window_application.hide()
 		window_settings.hide()
-		window_import.hide()
-		window_export.hide()
-		window_edit.hide()
+		window_tools.hide()
 
 		application_shown = false
 		settings_shown = false
-		import_shown = false
-		export_shown = false
-		edit_shown = false
+		tools_shown = false
 
 		authenticated = false
 
@@ -1757,13 +1607,20 @@ const createMenu = () => {
 
 								logger.log("Settings shown")
 							} else {
-								window_settings.hide()
+								if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Settings)") {
+									window_settings.maximize()
+									window_settings.show()
 
-								window_application.focus()
+									logger.log("Edit restored")
+								} else {
+									window_settings.hide()
 
-								settings_shown = false
+									window_application.focus()
 
-								logger.log("Settings hidden")
+									settings_shown = false
+
+									logger.log("Settings hidden")
+								}
 							}
 						}
 
@@ -1829,21 +1686,37 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.edit,
 					click: () => {
 						const toggle = () => {
-							if (edit_shown === false) {
-								window_edit.maximize()
-								window_edit.show()
+							if (window_tools.getTitle() !== "Authme (Edit codes)") {
+								window_tools.loadFile("./app/edit/index.html")
+								window_tools.setTitle("Authme (Edit codes)")
 
-								edit_shown = true
+								window_tools.maximize()
+								window_tools.show()
 
-								logger.log("Edit shown")
+								tools_shown = true
 							} else {
-								window_edit.hide()
+								if (tools_shown === false) {
+									window_tools.maximize()
+									window_tools.show()
 
-								window_application.focus()
+									tools_shown = true
 
-								edit_shown = false
+									logger.log("Edit shown")
+								} else {
+									if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Edit codes)") {
+										window_tools.maximize()
+										window_tools.show()
 
-								logger.log("Edit hidden")
+										logger.log("Edit restored")
+									} else {
+										window_tools.hide()
+										window_application.focus()
+
+										tools_shown = false
+
+										logger.log("Edit hidden")
+									}
+								}
 							}
 						}
 
@@ -1863,21 +1736,37 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.import,
 					click: () => {
 						const toggle = () => {
-							if (import_shown === false) {
-								window_import.maximize()
-								window_import.show()
+							if (window_tools.getTitle() !== "Authme (Import)") {
+								window_tools.loadFile("./app/import/index.html")
+								window_tools.setTitle("Authme (Import)")
 
-								import_shown = true
+								window_tools.maximize()
+								window_tools.show()
 
-								logger.log("Import shown")
+								tools_shown = true
 							} else {
-								window_import.hide()
+								if (tools_shown === false) {
+									window_tools.maximize()
+									window_tools.show()
 
-								window_application.focus()
+									tools_shown = true
 
-								import_shown = false
+									logger.log("Import shown")
+								} else {
+									if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Import)") {
+										window_tools.maximize()
+										window_tools.show()
 
-								logger.log("Import hidden")
+										logger.log("Import restored")
+									} else {
+										window_tools.hide()
+										window_application.focus()
+
+										tools_shown = false
+
+										logger.log("Import hidden")
+									}
+								}
 							}
 						}
 
@@ -1897,21 +1786,37 @@ const createMenu = () => {
 					accelerator: shortcuts ? "" : settings.shortcuts.export,
 					click: () => {
 						const toggle = () => {
-							if (export_shown === false) {
-								window_export.maximize()
-								window_export.show()
+							if (window_tools.getTitle() !== "Authme (Export)") {
+								window_tools.loadFile("./app/export/index.html")
+								window_tools.setTitle("Authme (Export)")
 
-								export_shown = true
+								window_tools.maximize()
+								window_tools.show()
 
-								logger.log("Export shown")
+								tools_shown = true
 							} else {
-								window_export.hide()
+								if (tools_shown === false) {
+									window_tools.maximize()
+									window_tools.show()
 
-								window_application.focus()
+									tools_shown = true
 
-								export_shown = false
+									logger.log("Export shown")
+								} else {
+									if (BrowserWindow.getFocusedWindow().getTitle() !== "Authme (Export)") {
+										window_tools.maximize()
+										window_tools.show()
 
-								logger.log("Export hidden")
+										logger.log("Export restored")
+									} else {
+										window_tools.hide()
+										window_application.focus()
+
+										tools_shown = false
+
+										logger.log("Export hidden")
+									}
+								}
 							}
 						}
 
@@ -2067,11 +1972,13 @@ const createMenu = () => {
 
 	// Reload menu
 	if (window_application !== undefined && platform === "windows") {
+		try {
+			window_security.webContents.send("refreshMenu")
+		} catch (error) {}
+
 		window_application.webContents.send("refreshMenu")
 		window_settings.webContents.send("refreshMenu")
-		window_import.webContents.send("refreshMenu")
-		window_export.webContents.send("refreshMenu")
-		window_edit.webContents.send("refreshMenu")
+		window_tools.webContents.send("refreshMenu")
 	}
 }
 

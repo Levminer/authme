@@ -44,24 +44,9 @@
 	stroke: white;
 }
 
-.input:hover ~ #show_pass_2 {
-	transition: 0.2s ease-in;
-	stroke: white;
-}
-
-.input:hover ~ #show_pass_21 {
-	transition: 0.2s ease-in;
-	stroke: white;
-}
-
-.input:hover ~ #show_pass_3 {
-	transition: 0.2s ease-in;
-	stroke: white;
-}
-
-.input:hover ~ #show_pass_31 {
-	transition: 0.2s ease-in;
-	stroke: white;
+.input::placeholder {
+	color: gray;
+	font-weight: normal;
 }
 
 /* button */

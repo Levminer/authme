@@ -1,13 +1,14 @@
-const { app, dialog, shell, desktopCapturer, BrowserWindow } = require("@electron/remote")
+const { app, dialog, shell, BrowserWindow } = require("@electron/remote")
 const { qrcodeConverter, time, localization } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const QrcodeDecoder = require("qrcode-decoder").default
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { chooseImages } = require(path.join(__dirname, "src", "js", "images.js"))
-const { useWebcam } = require(path.join(__dirname, "src", "js", "webcam.js"))
-const { captureFromScreen } = require(path.join(__dirname, "src", "js", "screen.js"))
+const { chooseImages } = require("./src/js/images")
+const { manualEntry } = require("./src/js/manual")
+const { captureFromScreen } = require("./src/js/screen")
+const { useWebcam } = require("./src/js/webcam")
 
 /**
  * Send error to main process
@@ -67,7 +68,7 @@ const examplesLink = () => {
  * Hide window
  */
 const hide = () => {
-	ipc.send("toggleImport")
+	ipc.invoke("toggleToolsWindow")
 }
 
 /**
@@ -200,4 +201,16 @@ const gaConvert = (data) => {
 	})
 
 	return return_string
+}
+
+/* Show/hide change password dialog */
+const manualEntryDialog = () => {
+	const /** @type{LibDialogElement} */ dialog0 = document.querySelector(".dialog0")
+	const close_dialog = document.querySelector(".dialog0Close")
+
+	close_dialog.addEventListener("click", () => {
+		dialog0.close()
+	})
+
+	dialog0.showModal()
 }

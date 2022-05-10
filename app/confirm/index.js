@@ -164,13 +164,13 @@ const unhashPassword = async () => {
 		text.style.color = "#28A443"
 		text.textContent = lang.landing_text.passwords_match
 
-		setInterval(() => {
+		setTimeout(() => {
 			password_input.fill(0)
 
 			ipc.send("toApplicationFromConfirm")
 
 			location.reload()
-		}, 1000)
+		}, 100)
 	} else {
 		logger.warn("Passwords dont match!")
 
@@ -187,7 +187,7 @@ const unhashPassword = async () => {
 let more_options_shown = false
 
 const showMoreOptions = () => {
-	const more_options = document.querySelector("#more_options")
+	const more_options = document.querySelector(".moreOptions")
 
 	if (more_options_shown === false) {
 		more_options.style.visibility = "visible"

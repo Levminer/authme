@@ -73,22 +73,23 @@ module.exports = {
 	},
 
 	"landing": [
+		"Üdv!",
+		"Válaszd ki hogy akarod használn az Auhme-t. A 2FA kódjaid minden képpen titkosítva vannak.",
+		"Kötelező Jelszó",
+		"Be kell írnod a jelszavadat minden alkalommal amikor elindítod az Authme-t.",
+		"Folytatás",
+		"Ne kérjen jelszót",
+		"Ha nem akarsz beírni egy jelszót minden alkalommal amikor elindítod az Authme-t.",
+		"Megerősítés",
+		"Több opció",
 		"Jelszó létrehozása",
 		"Hozz létre egy erős jelszót amivel titkosítva lesznek a 2FA kódjaid!",
 		"Jelszó",
 		"Jelszó megerősítése",
 		"Megerősítés",
-		"Több opció",
-		"Ne kérjen jelszót",
-		"Ha nem akarsz beírni egy jelszót minden alkalommal amikor elindítod az Authme-t.",
-		"Megerősítés",
 		"Ablak rögzítése",
 		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t.",
 	],
-
-	"landing_dialog": {
-		"no_password": "Biztos vagy benne? \n\nÍgy bárki megnézheti a 2FA kódjaidat akinek hozzáférése van a számítógépedhez!",
-	},
 
 	"landing_text": {
 		"maximum_password": "Maximum 64 karakter lehet a jelszavad hossza!",
@@ -106,7 +107,7 @@ module.exports = {
 		"Megerősítés",
 		"Több opció",
 		"Ablak rögzítése",
-		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t."
+		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t.",
 	],
 
 	"confirm_text": {
@@ -172,21 +173,18 @@ module.exports = {
 		"Képernyőképek és az ablak rögzítésének engedélyezése. Aktív amíg újra nem indítod az Atuhme-t.",
 		"Hardveres gyorsítás",
 		"A GPU használata a jobb élmény érdekébe. Kapcsold be ha laggokat vagy akadásokat tapasztalsz.",
+		"Opcionális telemetria küldése",
+		"Opcionális telemetria küldése, a küldött telemetria teljesen névtelen. Ebbe beletartozik az Authme verziója és az OP rendszered verziója.",
 		"Nyelv",
 		"Válaszd ki a nyelvet amin az Authme megjelenik. A fordítások nem tökéletesek, hibák előfordulhatnak.",
 		"Alapértelmezett",
-		"Adatok törlése",
-		"A jelszavak, a 2FA kódjaid, valamint a beállításaid törlődnek. Légy óvatos.",
-		"Adatok törlése",
-		"Mappák megnyitása",
-		"Megnyithatod az Authme álltal használt mappákat. A fájlok törlése vagy szerkesztése problémákat okozhat.",
-		"Authme mappa",
-		"Beállítások mappa",
-		"Cache mappa",
 		"Logok",
 		"Megnézheted a logokat ha hibákat tapasztalsz. Az összes logot a log mappába találod.",
 		"Legújabb log",
 		"Log mappa",
+		"Adatok törlése",
+		"A jelszavak, a 2FA kódjaid, valamint a beállításaid törlődnek. Légy óvatos.",
+		"Adatok törlése",
 		"Kódok rendezése",
 		"Itt tudod kiválasztani milyen sorrendben jelenjenek meg a kódok. Alapértelmezetten a kódok az importálás sorrendjében vannak.",
 		"Alapértelmezett",
@@ -200,9 +198,6 @@ module.exports = {
 		"Ezeket a gyorsgombokat bárhol hasznáhatod, még az alkalmazáson kívűl is. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
 		"Gyorsgombok",
 		"Ezeket a gyorsgombokat csak az alkalmazáson belül használhatod. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
-		"Kísérleti funkciók",
-		"Ezek a fukciók fejlesztés alatt állnak és instabilak lehetnek! Csak saját felelősségre!",
-		"Funkciók",
     ],
 
 	"settings_dialog": {
@@ -229,11 +224,14 @@ module.exports = {
 		"Sokféleképpen tudod importálni a 2FA kódjaidat. Válaszd ki a számodra legkényelmesebb módot.",
 		"Képek kiválasztása",
 		"Válassz olyan képeket amik 2FA QR-kódokat tartalmaznak.",
-		"Webkamera",
-		"Használd a webkamerádat a 2FA QR-kód beszkenneléséhez.",
+		"Manuális hozzáadás",
+		"Írj be egy TOTP secret key-t és egy nevet manuálisan.",
+		"Több opció",
 		"Képernyő felvétel",
 		"2FA QR-kód importálása a képernyődről.",
-		"Stop"
+		"Webkamera",
+		"Használd a webkamerádat a 2FA QR-kód beszkenneléséhez.",
+		"Elrejtés",
     ],
 
 	"import_dialog": {
@@ -250,8 +248,11 @@ module.exports = {
 		"correct_qrcode_found_1": "\n\nEl akarod menteni az import fájlt a biztonság kedvéért?",
 		"wrong_qrcode_found_0": "Nem megfelelő QR-kód van ezeken a képeken:",
 		"wrong_qrcode_found_1": "\n\nGyőződj meg róla hogy ez egy jó QR-kód!",
+		"before_capture": "Miután bezárod ezt az üzenetet 10 másodperced lesz eljutni a QR-kódhóz. \n\nAz Authme készít egy képet a képernyődről, majd beimportálja a QR-kódot.",
 		"capture_error": "Nem sikerült a képernyő rögzítése!",
 		"no_qrcode_captured": "Nem sikerült QR-kódot találni a képernyődön! Győződj meg róla hogy a QR-kód látható vagy próbálj meg egy képernyőképet készíteni a QR-kódról és importáld be képként!",
+		"issuer_required": "A név megadása kötelező. \n\nPróbálkozz újra!",
+		"secret_required": "A kulcs megadása kötelező!. \n\nPróbálkozz újra!",
 	},
 
 	"export": [

@@ -1,13 +1,40 @@
+// @ts-nocheck
 const { dialog, desktopCapturer, BrowserWindow } = require("@electron/remote")
+const { ipcRenderer: ipc } = require("electron")
 
 module.exports = {
 	/**
 	 * Read QR code from screen capture
 	 */
-	captureFromScreen: () => {
+	captureFromScreen: async () => {
+		const button = document.querySelector(".screenButton")
+		const window = BrowserWindow.getFocusedWindow()
 		let string = ""
+		let counter = 0
 
-		desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { height: 1280, width: 720 } }).then(async (sources) => {
+		await dialog.showMessageBox(window, {
+			title: "Authme",
+			buttons: [lang.button.close],
+			type: "info",
+			noLink: true,
+			defaultId: 1,
+			cancelId: 1,
+			message: `${lang.import_dialog.before_capture}`,
+		})
+
+		const interval = setInterval(() => {
+			counter++
+
+			button.textContent = `${10 - counter}s remaining`
+
+			if (counter === 10) {
+				clearInterval(interval)
+			}
+		}, 1000)
+
+		setTimeout(async () => {
+			const sources = await ipc.invoke("captureSources")
+
 			const thumbnail = sources[0].thumbnail.toDataURL()
 
 			document.querySelector(".thumbnail").src = thumbnail
@@ -34,7 +61,7 @@ module.exports = {
 
 				qrHandleStream(stream)
 			} catch (error) {
-				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+				dialog.showMessageBox(window, {
 					title: "Authme",
 					buttons: [lang.button.close],
 					type: "error",
@@ -44,7 +71,9 @@ module.exports = {
 
 				logger.error("Error starting capture!", error.stack)
 			}
-		})
+
+			button.textContent = "Screen capture"
+		}, 10000)
 
 		const qrHandleStream = async (stream) => {
 			const track = stream.getTracks()[0]
@@ -70,7 +99,7 @@ module.exports = {
 
 					const save_exists = fs.existsSync(path.join(folder_path, "codes", "codes.authme"))
 
-					const result = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					const result = await dialog.showMessageBox(window, {
 						title: "Authme",
 						buttons: [lang.button.yes, lang.button.no],
 						type: "info",
@@ -99,7 +128,7 @@ module.exports = {
 					reader.stop()
 					track.stop()
 				} else {
-					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					dialog.showMessageBox(window, {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",
@@ -114,7 +143,7 @@ module.exports = {
 
 			setTimeout(() => {
 				if (code_found === false) {
-					dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					dialog.showMessageBox(window, {
 						title: "Authme",
 						buttons: [lang.button.close],
 						type: "error",

@@ -627,7 +627,7 @@ const loadCodes = async () => {
  * Hide window
  */
 const hide = () => {
-	ipc.send("toggleEdit")
+	ipc.invoke("toggleToolsWindow")
 }
 
 /**

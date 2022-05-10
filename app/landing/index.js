@@ -157,99 +157,45 @@ const hashPasswords = async () => {
 		password_input.fill(0)
 
 		ipc.send("toConfirm")
-
-		location.reload()
-	}, 1000)
+	}, 100)
 }
 
 /**
  * Don't require password
  */
 const noPassword = () => {
-	dialog
-		.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.yes, lang.button.no],
-			type: "warning",
-			defaultId: 1,
-			cancelId: 1,
-			noLink: true,
-			message: lang.landing_dialog.no_password,
-		})
-		.then((result) => {
-			if (result.response === 0) {
-				text.style.color = "#28A443"
-				text.textContent = lang.landing_text.please_wait
+	/**
+	 * Read settings
+	 * @type{LibSettings}
+	 */
+	settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-				/**
-				 * Read settings
-				 * @type{LibSettings}
-				 */
-				settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
+	const salt = aes.generateSalt().toString("base64")
+	const password = Buffer.from(aes.generateRandomKey(salt))
 
-				const salt = aes.generateSalt().toString("base64")
-				const password = Buffer.from(aes.generateRandomKey(salt))
+	settings.security.require_password = false
 
-				settings.security.require_password = false
+	/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
 
-				/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+	storage.require_password = settings.security.require_password
+	storage.password = password.toString("base64")
+	storage.key = salt
 
-				storage.require_password = settings.security.require_password
-				storage.password = password.toString("base64")
-				storage.key = salt
+	dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
 
-				dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
 
-				fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), JSON.stringify(settings, null, "\t"))
+	setInterval(() => {
+		password.fill(0)
 
-				setInterval(() => {
-					password.fill(0)
-
-					ipc.send("toApplicationFromLanding")
-
-					location.reload()
-				}, 1000)
-			}
-		})
+		ipc.send("toApplicationFromLanding")
+	}, 100)
 }
 
-/**
- * Show more options div
- */
-let more_options_shown = false
-
-const showMoreOptions = () => {
-	const more_options = document.querySelector("#more_options")
-
-	if (more_options_shown === false) {
-		more_options.style.visibility = "visible"
-
-		setTimeout(() => {
-			more_options.style.display = "block"
-		}, 10)
-
-		more_options_shown = true
-	} else {
-		more_options.style.display = "none"
-
-		more_options_shown = false
-	}
-}
-
-/**
- * Toggles window capture state
- */
-const toggleWindowCapture = () => {
-	const tgl0 = document.querySelector("#tgl0").checked
-	const tgt0 = document.querySelector("#tgt0")
-
-	if (tgl0 === false) {
-		ipc.send("disableWindowCapture")
-		tgt0.textContent = "Off"
-	} else {
-		tgt0.textContent = "On"
-		ipc.send("enableWindowCapture")
-	}
+const requirePassword = () => {
+	document.querySelector(".moreOptions").style.display = "none"
+	document.querySelector(".chooseLogin").style.display = "none"
+	document.querySelector(".createPassword").style.display = "block"
 }
 
 /**
@@ -282,3 +228,42 @@ document.querySelector("#show_pass_11").addEventListener("click", () => {
 	document.querySelector("#show_pass_1").style.display = "flex"
 	document.querySelector("#show_pass_11").style.display = "none"
 })
+
+/**
+ * Show more options div
+ */
+let more_options_shown = false
+
+const showMoreOptions = () => {
+	const more_options = document.querySelector(".moreOptions")
+
+	if (more_options_shown === false) {
+		more_options.style.visibility = "visible"
+
+		setTimeout(() => {
+			more_options.style.display = "block"
+		}, 10)
+
+		more_options_shown = true
+	} else {
+		more_options.style.display = "none"
+
+		more_options_shown = false
+	}
+}
+
+/**
+ * Toggles window capture state
+ */
+const toggleWindowCapture = () => {
+	const tgl0 = document.querySelector("#tgl0").checked
+	const tgt0 = document.querySelector("#tgt0")
+
+	if (tgl0 === false) {
+		ipc.send("disableWindowCapture")
+		tgt0.textContent = "Off"
+	} else {
+		tgt0.textContent = "On"
+		ipc.send("enableWindowCapture")
+	}
+}
