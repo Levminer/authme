@@ -1,5 +1,6 @@
 ### Authme 3.3.0 (2022. May 10.)
 
+-   [[ff1fcbf](https://github.com/Levminer/authme/commit/ff1fcbf)] Update changelog (2022-05-08)
 -   [[27aa58b](https://github.com/Levminer/authme/commit/27aa58b)] Settings cleanup (2022-05-07)
 -   [[b887d04](https://github.com/Levminer/authme/commit/b887d04)] Don't send analytics in dev mode #209 (2022-05-07)
 -   [[f3a3909](https://github.com/Levminer/authme/commit/f3a3909)] Request from main process #208 (2022-05-07)
