@@ -17,7 +17,7 @@ process.on("uncaughtException", async (error) => {
 
 	logger.error("Error on load", stack.clean(error.stack))
 
-	if (app.isPackaged === false) {
+	if (app.isPackaged === true) {
 		dialog.showErrorBox("Authme", `Authme crashed while starting, crash report sent. \n\nPlease restart Authme, if you want report this open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme/issues). \n\n${stack.clean(error.stack)}`)
 
 		try {
