@@ -62,4 +62,20 @@ test.describe("Tests", async () => {
 		await expect(landing.locator("#text")).toHaveText("Passwords match! Please wait!")
 		await landing.screenshot({ path: "tests/landing2.png" }) */
 	})
+
+	test("Test settings", async () => {
+		console.log("Settings")
+
+		// Click codes
+		await expect(settings.locator(".codes")).toHaveText("Codes")
+		await settings.locator(".codes").click()
+
+		await settings.screenshot({ path: "tests/settings0.png" })
+
+		// Click codes
+		await expect(settings.locator(".shortcuts")).toHaveText("Shortcuts")
+		await settings.locator(".shortcuts").click()
+
+		await settings.screenshot({ path: "tests/settings1.png" })
+	})
 })
