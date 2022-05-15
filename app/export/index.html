@@ -34,7 +34,7 @@
 		</div>
 
 		<!-- content -->
-		<div class="relative m-auto mt-20 mb-60 w-3/5 rounded-2xl bg-gray-700 p-1 text-center">
+		<div class="relative m-auto mt-20 mb-60 rounded-2xl bg-gray-700 p-1 text-center md:w-11/12 xl:w-3/5">
 			<!-- before export -->
 			<div class="before_export mx-auto mt-20 mb-20 w-2/3 rounded-2xl bg-gray-800 pb-1">
 				<h3 data-loc class="pt-5">Export codes</h3>
@@ -48,31 +48,32 @@
 			</div>
 			<!-- after export -->
 			<div class="after_export hidden">
-				<div class="mx-auto mt-20 mb-20 w-2/3 rounded-2xl bg-gray-800">
+				<div class="mx-auto mt-20 mb-20 rounded-2xl bg-gray-800 md:w-11/12 xl:w-2/3">
 					<h3 data-loc class="pt-5">Save exported codes</h3>
 					<h4 data-loc>You can save your exported 2FA codes, so you can use them elsewhere, and keeping a backup of your codes is always a good idea.</h4>
-					<div class="flex flex-row flex-wrap justify-center gap-3">
-						<div>
-							<button class="buttoni" id="but1" onclick="saveFile()">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-									<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-									<path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-									<path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3"></path>
+
+					<div class="flex flex-row justify-center pb-3">
+						<div class="my-3 ml-3 mr-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
+							<h4 data-loc class="m-0 mb-3">Export .authme file</h4>
+							<h5 data-loc class="m-0 mb-3">Ideal to import for Authme or other Authme apps.</h5>
+
+							<button class="buttoni my-2" onclick="saveFile()">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 								</svg>
-								<span data-loc>Export .authme file</span>
+								<span data-loc>Confirm</span>
 							</button>
-							<h5 data-loc class="m-3">Ideal to import for Authme or other Authme apps.</h5>
 						</div>
-						<div>
-							<button class="buttoni" id="but2" onclick="saveQrCodes()">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-									<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-									<path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-									<path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3"></path>
+						<div class="my-3 mr-3 ml-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
+							<h4 data-loc class="m-0 mb-3">Export .html file</h4>
+							<h5 data-loc class="m-0 mb-3">Ideal for scanning the QR codes or for security backup.</h5>
+
+							<button onclick="saveQrCodes()" class="buttoni my-2">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 								</svg>
-								<span data-loc>Export .html file</span>
+								<span data-loc>Confirm</span>
 							</button>
-							<h5 data-loc class="m-3 mb-8">Ideal for scanning the QR codes or for security backup.</h5>
 						</div>
 					</div>
 				</div>
