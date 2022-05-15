@@ -104,3 +104,20 @@ dialog[open] {
 	position: relative;
 	top: 1rem;
 }
+
+/* progress */
+.progress {
+	position: relative;
+	width: 81%;
+	height: 15px;
+	background: rgb(30, 30, 30);
+	border-radius: 30px;
+	overflow: hidden;
+}
+
+.progressFill {
+	width: 0%;
+	height: 100%;
+	background: white;
+	transition: all 0.2s;
+}

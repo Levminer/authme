@@ -41,7 +41,7 @@ process.on("uncaughtException", async (error) => {
  * Windows
  */
 let /** @type{BrowserWindow} */ window_security
-let /** @type{BrowserWindow} */ window_application
+let /** @type{BrowserWindow} */ window_codes
 let /** @type{BrowserWindow} */ window_settings
 let /** @type{BrowserWindow} */ window_tools
 
@@ -50,7 +50,7 @@ let /** @type{BrowserWindow} */ window_tools
  */
 let landing_shown = false
 let confirm_shown = false
-let application_shown = false
+let codes_shown = false
 let settings_shown = false
 let tools_shown = false
 
@@ -177,8 +177,8 @@ if (dev === false) {
 		app.on("second-instance", () => {
 			logger.log("Already running, focusing window")
 
-			window_application.maximize()
-			window_application.show()
+			window_codes.maximize()
+			window_codes.show()
 		})
 	}
 }
@@ -316,19 +316,19 @@ if (settings.settings.hardware_acceleration === false) {
  */
 const showAppFromTray = () => {
 	const toggle = () => {
-		if (application_shown === false) {
-			window_application.maximize()
-			window_application.show()
+		if (codes_shown === false) {
+			window_codes.maximize()
+			window_codes.show()
 
-			application_shown = true
+			codes_shown = true
 
 			logger.log("App shown from tray")
 		} else {
-			window_application.hide()
+			window_codes.hide()
 			window_settings.hide()
 			window_tools.hide()
 
-			application_shown = false
+			codes_shown = false
 			settings_shown = false
 			tools_shown = false
 
@@ -346,12 +346,12 @@ const showAppFromTray = () => {
 			window_security.show()
 
 			confirm_shown = true
-			application_shown = true
+			codes_shown = true
 		} else {
 			window_security.hide()
 
 			confirm_shown = false
-			application_shown = false
+			codes_shown = false
 		}
 	}
 
@@ -474,7 +474,7 @@ const createWindows = () => {
 	 * Set window bounds
 	 */
 	const positionWindow = () => {
-		settings.window = window_application.getBounds()
+		settings.window = window_codes.getBounds()
 
 		window_settings.setBounds(settings.window)
 		window_tools.setBounds(settings.window)
@@ -505,7 +505,7 @@ const createWindows = () => {
 		},
 	})
 
-	window_application = new BrowserWindow({
+	window_codes = new BrowserWindow({
 		title: `Authme (${authme_version})`,
 		x: settings.window.x,
 		y: settings.window.y,
@@ -580,18 +580,18 @@ const createWindows = () => {
 	/**
 	 * Window moved
 	 */
-	window_application.on("move", () => {
+	window_codes.on("move", () => {
 		positionWindow()
 	})
 
 	// Enable remote module
 	remote.enable(window_security.webContents)
-	remote.enable(window_application.webContents)
+	remote.enable(window_codes.webContents)
 	remote.enable(window_settings.webContents)
 	remote.enable(window_tools.webContents)
 
 	// Load window files
-	window_application.loadFile("./app/application/index.html")
+	window_codes.loadFile("./app/codes/index.html")
 	window_settings.loadFile("./app/settings/index.html")
 	window_tools.loadFile("./app/import/index.html")
 
@@ -612,7 +612,7 @@ const createWindows = () => {
 		logger.log("Application exited from landing window")
 	})
 
-	window_application.on("close", (event) => {
+	window_codes.on("close", (event) => {
 		saveWindowPosition()
 
 		if (dev === true) {
@@ -629,9 +629,9 @@ const createWindows = () => {
 			} else {
 				event.preventDefault()
 
-				window_application.hide()
+				window_codes.hide()
 
-				application_shown = false
+				codes_shown = false
 
 				createTray()
 				createMenu()
@@ -673,20 +673,20 @@ const createWindows = () => {
 	 * Disables window capture by default
 	 */
 	window_security.setContentProtection(true)
-	window_application.setContentProtection(true)
+	window_codes.setContentProtection(true)
 	window_settings.setContentProtection(true)
 	window_tools.setContentProtection(true)
 
 	/**
 	 * Event when application window opens
 	 */
-	window_application.on("show", () => {
+	window_codes.on("show", () => {
 		const api = () => {
 			axios
 				.get("https://api.levminer.com/api/v1/authme/releases")
 				.then((res) => {
 					if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
-						window_application.webContents.executeJavaScript("showUpdate()")
+						window_codes.webContents.executeJavaScript("showUpdate()")
 
 						logger.log("Manual update found!")
 					} else {
@@ -709,8 +709,8 @@ const createWindows = () => {
 	/**
 	 * Show animations and focus searchbar on windows focus
 	 */
-	window_application.on("focus", () => {
-		window_application.webContents.executeJavaScript("focusSearch()")
+	window_codes.on("focus", () => {
+		window_codes.webContents.executeJavaScript("focusSearch()")
 	})
 
 	/**
@@ -740,7 +740,7 @@ const createWindows = () => {
 	autoUpdater.on("update-available", () => {
 		logger.log("Auto update available")
 
-		window_application.webContents.executeJavaScript("updateAvailable()")
+		window_codes.webContents.executeJavaScript("updateAvailable()")
 	})
 
 	autoUpdater.on("update-not-available", () => {
@@ -764,21 +764,23 @@ const createWindows = () => {
 	autoUpdater.on("update-downloaded", () => {
 		logger.log("Update downloaded")
 
-		window_application.webContents.executeJavaScript("updateDownloaded()")
+		window_codes.webContents.executeJavaScript("updateDownloaded()")
 	})
 
 	autoUpdater.on("error", (error) => {
 		logger.error("Error during auto update", error.stack)
 
-		dialog.showMessageBox({
-			title: "Authme",
-			buttons: [lang.button.close],
-			defaultId: 0,
-			cancelId: 1,
-			noLink: true,
-			type: "error",
-			message: `${lang.dialog.update_error} \n\n${error.stack}`,
-		})
+		if (manual_update === true) {
+			dialog.showMessageBox({
+				title: "Authme",
+				buttons: [lang.button.close],
+				defaultId: 0,
+				cancelId: 1,
+				noLink: true,
+				type: "error",
+				message: `${lang.dialog.update_error} \n\n${error.stack}`,
+			})
+		}
 	})
 
 	autoUpdater.on("download-progress", (progress) => {
@@ -789,7 +791,7 @@ const createWindows = () => {
 
 		logger.log(`Downloading update: ${download_percent}% - ${download_speed}MB/s (${download_transferred}MB/${download_total}MB)`)
 
-		window_application.webContents.send("updateInfo", {
+		window_codes.webContents.send("updateInfo", {
 			download_percent,
 			download_speed,
 			download_transferred,
@@ -836,8 +838,8 @@ const createWindows = () => {
 	saveSettings()
 
 	const openInfo = () => {
-		window_application.on("show", () => {
-			window_application.webContents.executeJavaScript("showInfo()")
+		window_codes.on("show", () => {
+			window_codes.webContents.executeJavaScript("showInfo()")
 		})
 	}
 
@@ -928,16 +930,16 @@ app.whenReady()
 		}
 
 		if (settings.security.require_password === false) {
-			window_application.on("ready-to-show", () => {
+			window_codes.on("ready-to-show", () => {
 				if (authenticated === false) {
 					settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
 					setTimeout(() => {
 						if (args[1] !== "--hidden") {
-							window_application.maximize()
-							window_application.show()
+							window_codes.maximize()
+							window_codes.show()
 
-							application_shown = true
+							codes_shown = true
 						}
 					}, 100)
 
@@ -1056,8 +1058,8 @@ ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		window_application.maximize()
-		window_application.show()
+		window_codes.maximize()
+		window_codes.show()
 
 		setTimeout(() => {
 			window_security.hide()
@@ -1077,8 +1079,8 @@ ipc.on("toApplicationFromLanding", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		window_application.maximize()
-		window_application.show()
+		window_codes.maximize()
+		window_codes.show()
 
 		setTimeout(() => {
 			window_security.hide()
@@ -1170,7 +1172,7 @@ ipc.on("disableWindowCapture", () => {
 		window_security.setContentProtection(true)
 	} catch (error) {}
 
-	window_application.setContentProtection(true)
+	window_codes.setContentProtection(true)
 	window_settings.setContentProtection(true)
 	window_tools.setContentProtection(true)
 
@@ -1189,7 +1191,7 @@ ipc.on("enableWindowCapture", () => {
 		window_security.setContentProtection(false)
 	} catch (error) {}
 
-	window_application.setContentProtection(false)
+	window_codes.setContentProtection(false)
 	window_settings.setContentProtection(false)
 	window_tools.setContentProtection(false)
 
@@ -1267,7 +1269,7 @@ ipc.on("provideFeedback", () => {
 ipc.handle("sendPassword", (event, data) => {
 	password_buffer = Buffer.from(data)
 
-	window_application.webContents.executeJavaScript("loadCodes()")
+	window_codes.webContents.executeJavaScript("loadCodes()")
 })
 
 /**
@@ -1281,10 +1283,10 @@ ipc.handle("requestPassword", () => {
  * Reload application window
  */
 ipc.on("reloadApplicationWindow", () => {
-	window_application.reload()
+	window_codes.reload()
 
 	if (settings.security.require_password === true) {
-		window_application.webContents.executeJavaScript("loadCodes()")
+		window_codes.webContents.executeJavaScript("loadCodes()")
 	}
 })
 
@@ -1363,10 +1365,10 @@ ipc.handle("statistics", () => {
  * Receive imported codes and send to application
  */
 ipc.handle("importCodes", (event, codes) => {
-	window_application.webContents.executeJavaScript("location.reload()")
+	window_codes.webContents.executeJavaScript("location.reload()")
 
 	setTimeout(() => {
-		window_application.webContents.executeJavaScript(`importCodes("${codes}")`)
+		window_codes.webContents.executeJavaScript(`importCodes("${codes}")`)
 	}, 150)
 })
 
@@ -1374,10 +1376,10 @@ ipc.handle("importCodes", (event, codes) => {
  * Receive imported codes and send to application
  */
 ipc.handle("importExistingCodes", (event, codes) => {
-	window_application.webContents.executeJavaScript("location.reload()")
+	window_codes.webContents.executeJavaScript("location.reload()")
 
 	setTimeout(() => {
-		window_application.webContents.executeJavaScript(`importExistingCodes("${codes}")`)
+		window_codes.webContents.executeJavaScript(`importExistingCodes("${codes}")`)
 	}, 150)
 })
 
@@ -1513,11 +1515,11 @@ const feedback = () => {
  */
 power.on("lock-screen", () => {
 	if (settings.security.require_password === true) {
-		window_application.hide()
+		window_codes.hide()
 		window_settings.hide()
 		window_tools.hide()
 
-		application_shown = false
+		codes_shown = false
 		settings_shown = false
 		tools_shown = false
 
@@ -1542,7 +1544,7 @@ const createTray = () => {
 		},
 		{ type: "separator" },
 		{
-			label: application_shown ? lang.tray.hide_app : lang.tray.show_app,
+			label: codes_shown ? lang.tray.hide_app : lang.tray.show_app,
 			accelerator: shortcuts ? "" : settings.global_shortcuts.show,
 			click: () => {
 				showAppFromTray()
@@ -1582,7 +1584,7 @@ const createMenu = () => {
 			label: lang.menu.file,
 			submenu: [
 				{
-					label: application_shown ? lang.menu.hide_app : lang.menu.show_app,
+					label: codes_shown ? lang.menu.hide_app : lang.menu.show_app,
 					accelerator: shortcuts ? "" : settings.shortcuts.show,
 					click: () => {
 						showAppFromTray()
@@ -1615,7 +1617,7 @@ const createMenu = () => {
 								} else {
 									window_settings.hide()
 
-									window_application.focus()
+									window_codes.focus()
 
 									settings_shown = false
 
@@ -1710,7 +1712,7 @@ const createMenu = () => {
 										logger.log("Edit restored")
 									} else {
 										window_tools.hide()
-										window_application.focus()
+										window_codes.focus()
 
 										tools_shown = false
 
@@ -1760,7 +1762,7 @@ const createMenu = () => {
 										logger.log("Import restored")
 									} else {
 										window_tools.hide()
-										window_application.focus()
+										window_codes.focus()
 
 										tools_shown = false
 
@@ -1810,7 +1812,7 @@ const createMenu = () => {
 										logger.log("Export restored")
 									} else {
 										window_tools.hide()
-										window_application.focus()
+										window_codes.focus()
 
 										tools_shown = false
 
@@ -1971,12 +1973,12 @@ const createMenu = () => {
 	Menu.setApplicationMenu(menu)
 
 	// Reload menu
-	if (window_application !== undefined && platform === "windows") {
+	if (window_codes !== undefined && platform === "windows") {
 		try {
 			window_security.webContents.send("refreshMenu")
 		} catch (error) {}
 
-		window_application.webContents.send("refreshMenu")
+		window_codes.webContents.send("refreshMenu")
 		window_settings.webContents.send("refreshMenu")
 		window_tools.webContents.send("refreshMenu")
 	}
