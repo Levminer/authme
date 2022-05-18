@@ -181,7 +181,6 @@ module.exports = {
 		"Logs",
 		"You can view the logs for debugging. You can view all the logs in the settings folder.",
 		"Latest log",
-		"Logs folder",
 		"Clear data",
 		"Clear password, 2FA codes and all other settings. Be careful.",
 		"Clear data",
