@@ -195,8 +195,6 @@ module.exports = {
 		"Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.",
 		"Global shortcuts",
 		"You can use these shortcuts everywhere, even outside the application. Use english characters only, during editing shortcuts don't work.",
-		"Shortcuts",
-		"You can use these shortcuts inside the application only. Use english characters only, during editing shortcuts don't work.",
     ],
 
 	"settings_dialog": {

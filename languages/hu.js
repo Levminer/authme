@@ -195,8 +195,6 @@ module.exports = {
 		"A keresőmező törlése keresés után. Hasznos ha sok kódot másolsz.",
 		"Globális gyorsgombok",
 		"Ezeket a gyorsgombokat bárhol hasznáhatod, még az alkalmazáson kívűl is. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
-		"Gyorsgombok",
-		"Ezeket a gyorsgombokat csak az alkalmazáson belül használhatod. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
     ],
 
 	"settings_dialog": {
