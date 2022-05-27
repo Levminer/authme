@@ -844,15 +844,15 @@ const createWindows = () => {
 	}
 
 	if (settings.statistics.rated === true && settings.statistics.feedback === true) {
-		if (opens % 100 === 0) {
+		if (opens > 100) {
 			openInfo()
 		}
 	} else if (settings.statistics.rated === true || settings.statistics.feedback === true) {
-		if (opens % 50 === 0) {
+		if (opens > 50) {
 			openInfo()
 		}
 	} else {
-		if (opens % 15 === 0) {
+		if (opens > 15) {
 			openInfo()
 		}
 	}
@@ -1236,6 +1236,7 @@ ipc.on("support", () => {
 ipc.on("rateAuthme", () => {
 	shell.openExternal("ms-windows-store://review/?ProductId=XP9M33RJSVD6JR")
 
+	settings.statistics.opens = 0
 	settings.statistics.rated = true
 
 	saveSettings()
@@ -1247,6 +1248,7 @@ ipc.on("rateAuthme", () => {
 ipc.on("starAuthme", () => {
 	shell.openExternal("https://github.com/Levminer/authme/")
 
+	settings.statistics.opens = 0
 	settings.statistics.rated = true
 
 	saveSettings()
