@@ -21,7 +21,7 @@ process.on("uncaughtException", async (error) => {
 		dialog.showErrorBox("Authme", `Authme crashed while starting, crash report sent. \n\nPlease restart Authme, if you want report this open a GitHub Issue with a screenshot of this error (https://github.com/Levminer/authme/issues). \n\n${stack.clean(error.stack)}`)
 
 		try {
-			await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+			await axios.post("https://analytics.levminer.com/api/v1/authme/analytics/post", {
 				type: "load_crash",
 				version: app.getVersion(),
 				build: number,
@@ -416,7 +416,7 @@ const saveWindowPosition = () => {
 const crashReport = async (crash_type, error) => {
 	if (dev === false) {
 		try {
-			await axios.post("https://api.levminer.com/api/v1/authme/analytics/post", {
+			await axios.post("https://analytics.levminer.com/api/v1/authme/analytics/post", {
 				type: crash_type,
 				version: authme_version,
 				build: build_number,
@@ -954,7 +954,7 @@ app.whenReady()
 		// Optional analytics
 		if (settings.settings.analytics === true && dev === false) {
 			try {
-				axios.post("https://api.levminer.com/api/v1/authme/analytics/post", { version: authme_version, build: build_number, os: os_version, lang: app.getLocaleCountryCode(), date: new Date() })
+				axios.post("https://analytics.levminer.com/api/v1/authme/analytics/post", { version: authme_version, build: build_number, os: os_version, lang: app.getLocaleCountryCode(), date: new Date() })
 			} catch (error) {
 				logger.error("Failed to post analytics", error)
 			}

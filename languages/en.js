@@ -119,7 +119,7 @@ module.exports = {
 		"New Authme version available. Starting the update...",
 		"Restart",
 		"Release notes",
-		"Enjoying Authme?",
+		"Enjoying Authme? Please give Authme a rating.",
 		"Rate on Microsoft Store",
 		"Star on GitHub",
 		"Provide feedback",

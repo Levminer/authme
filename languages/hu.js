@@ -119,7 +119,7 @@ module.exports = {
 		"Új Authme verzió elérhető. Frissítés kezdése...",
 		"Újraindítás",
 		"Újdonságok",
-		"Tetszik az Authme?",
+		"Tetszik az Authme? Kérlek értékeld!",
 		"Értékelés a Microsoft Store-on",
 		"Csillagozás a GitHub-on",
 		"Visszajelzés",
