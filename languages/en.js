@@ -6,10 +6,10 @@ module.exports = {
 	},
 
     "tray": {
-		"show_app": "Show App",
-		"hide_app": "Hide App",
+		"show_app": "Show Authme",
+		"hide_app": "Hide Authme",
 		"settings": "Settings",
-		"exit_app": "Exit App",
+		"exit_app": "Exit Authme",
 	},
 
 	"menu": {

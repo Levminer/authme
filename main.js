@@ -61,9 +61,9 @@ let authenticated = false
 let shortcuts = false
 let update_seen = false
 let manual_update = false
-let password_buffer = null
-let tray = null
-let menu = null
+let /** @type{Buffer} */ password_buffer = null
+let /** @type{Tray} */ tray = null
+let /** @type{Menu} */ menu = null
 let lang = en
 
 /**
@@ -941,12 +941,12 @@ app.whenReady()
 
 							codes_shown = true
 						}
+
+						authenticated = true
+
+						createTray()
+						createMenu()
 					}, 100)
-
-					authenticated = true
-
-					createTray()
-					createMenu()
 				}
 			})
 		}
@@ -1539,12 +1539,6 @@ power.on("lock-screen", () => {
  */
 const createTray = () => {
 	const contextmenu = Menu.buildFromTemplate([
-		{
-			label: `Authme (${authme_version})`,
-			enabled: false,
-			icon: path.join(__dirname, "img/traymenu.png"),
-		},
-		{ type: "separator" },
 		{
 			label: codes_shown ? lang.tray.hide_app : lang.tray.show_app,
 			accelerator: shortcuts ? "" : settings.global_shortcuts.show,
