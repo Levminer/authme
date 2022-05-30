@@ -1249,7 +1249,6 @@ ipc.on("starAuthme", () => {
 	shell.openExternal("https://github.com/Levminer/authme/")
 
 	settings.statistics.opens = 0
-	settings.statistics.rated = true
 
 	saveSettings()
 })
@@ -1453,7 +1452,7 @@ const releaseNotes = () => {
 					cancelId: 1,
 					noLink: true,
 					type: "info",
-					message: markdown.convert(res.data.body).split("Changelog")[0],
+					message: markdown.convert(res.data.body).split("Other")[0],
 				})
 				.then((result) => {
 					if (result.response === 0) {
