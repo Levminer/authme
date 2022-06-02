@@ -14,8 +14,8 @@ module.exports = {
 
 	"menu": {
 		"file": "File",
-		"show_app": "Show App",
-		"hide_app": "Hide App",
+		"show_app": "Show Authme",
+		"hide_app": "Hide Authme",
 		"settings": "Settings",
 		"exit": "Exit",
 		"view": "View",
