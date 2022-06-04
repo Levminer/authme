@@ -485,6 +485,7 @@ const createWindows = () => {
 	 */
 	window_security = new BrowserWindow({
 		title: `Authme (${authme_version})`,
+		icon: path.join(__dirname, "img/icon.png"),
 		width: 1900,
 		height: 1000,
 		minWidth: 1000,
@@ -507,6 +508,7 @@ const createWindows = () => {
 
 	window_codes = new BrowserWindow({
 		title: `Authme (${authme_version})`,
+		icon: path.join(__dirname, "img/icon.png"),
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -531,6 +533,7 @@ const createWindows = () => {
 
 	window_settings = new BrowserWindow({
 		title: "Authme (Settings)",
+		icon: path.join(__dirname, "img/icon.png"),
 		x: settings.window.x,
 		y: settings.window.y,
 		width: 1900,
@@ -2053,3 +2056,4 @@ ipc.handle("refreshShortcuts", () => {
 
 	logger.log("Shortcuts refreshed")
 })
+
