@@ -48,7 +48,8 @@
 		"linux": {
 			"target": [
 				"appImage",
-				"zip"
+				"zip",
+				"snap"
 			],
 			"maintainer": "levminer@levminer.com",
 			"icon": "img/icon.png",
@@ -61,6 +62,9 @@
 		},
 		"appImage": {
 			"artifactName": "authme-${version}-linux-x64-installer.appimage"
+		},
+		"snap": {
+			"artifactName": "authme-${version}-linux-x64-installer.snap"
 		},
 		"mac": {
 			"target": [
