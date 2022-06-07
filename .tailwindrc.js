@@ -35,6 +35,8 @@ module.exports = {
 				lg: "1400px",
 				md: "200px",
 				"3xl": "2000px",
+
+				small: { max: "1650px" },
 			},
 
 			stroke: (theme) => ({
