@@ -24,26 +24,22 @@
 
 <img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
 
-## Latest Release
+## Downloads (Release)
 
 -   Latest release version for users that want a stable and polished experience.
 
 [![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release)](https://tooomm.github.io/github-release-stats/?username=Levminer&repository=authme)
-[![Windows Download](https://img.shields.io/badge/Windows-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/windows)
-[![Linux Download](https://img.shields.io/badge/Linux-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/linux)
-[![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/release/mac)
+[![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://authme.levminer.com/#downloads)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/releases)
 
--   Also available on: [Microsoft Store](https://link.levminer.com/authme-ms-store), [winget](https://winget.run/pkg/Levminer/Authme)
+-   Also available on: [Microsoft Store](https://link.levminer.com/authme-ms-store), [Snapcraft](https://snapcraft.io/authme), [winget](https://winstall.app/apps/Levminer.Authme)
 
-## Latest Alpha
+## Downloads (Alpha)
 
 -   Latest alpha version for users that want to try out new features early.
 
 [![Latest alpha](https://img.shields.io/github/package-json/v/levminer/authme/dev?label=Alpha&color=blue)](https://tooomm.github.io/github-release-stats/?username=Levminer&repository=authme)
-[![Windows Download](https://img.shields.io/badge/Windows-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/windows)
-[![Linux Download](https://img.shields.io/badge/Linux-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/linux)
-[![Mac Download](https://img.shields.io/badge/Mac-download-brightgreen)](https://api.levminer.com/api/v1/authme/alpha/mac)
+[![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://authme.levminer.com/#downloads-alpha)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 
 ## Translating

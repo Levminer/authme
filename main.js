@@ -2056,4 +2056,3 @@ ipc.handle("refreshShortcuts", () => {
 
 	logger.log("Shortcuts refreshed")
 })
-
