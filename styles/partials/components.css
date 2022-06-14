@@ -70,20 +70,6 @@
 	border-color: rgb(30, 30, 30) !important;
 }
 
-/* dialog */
-.dialog {
-	text-align: center;
-	background-color: #191919 !important;
-	color: white;
-	padding: 3rem;
-	border-radius: 15px;
-	margin: auto;
-
-	& > * {
-		margin: 0 0 0.5rem 0;
-	}
-}
-
 .dialog::backdrop {
 	background: rgb(0 0 0 / 0.9);
 }
@@ -103,4 +89,21 @@ dialog[open] {
 	animation: fadeEffect 0.5s;
 	position: relative;
 	top: 1rem;
+}
+
+/* progress */
+.progress {
+	position: relative;
+	width: 81%;
+	height: 15px;
+	background: rgb(30, 30, 30);
+	border-radius: 30px;
+	overflow: hidden;
+}
+
+.progressFill {
+	width: 0%;
+	height: 100%;
+	background: white;
+	transition: all 0.2s;
 }

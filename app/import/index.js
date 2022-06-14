@@ -5,10 +5,10 @@ const QrcodeDecoder = require("qrcode-decoder").default
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
 const fs = require("fs")
-const { chooseImages } = require("./src/js/images")
-const { manualEntry } = require("./src/js/manual")
-const { captureFromScreen } = require("./src/js/screen")
-const { useWebcam } = require("./src/js/webcam")
+const { chooseImages } = require("./functions/images")
+const { manualEntry } = require("./functions/manual")
+const { captureFromScreen } = require("./functions/screen")
+const { useWebcam } = require("./functions/webcam")
 
 /**
  * Send error to main process

@@ -21,19 +21,19 @@
 		</div>
 
 		<!-- content -->
-		<div class="relative m-auto mt-40 mb-60 rounded-2xl bg-gray-700 p-1 text-center md:w-11/12 xl:w-3/5">
-			<h1>Authme</h1>
+		<div class="relative m-auto mt-40 mb-60 w-3/5 rounded-2xl bg-gray-700 p-1 text-center">
+			<h1 class="mb-10">Authme</h1>
 
-			<div class="chooseLogin mx-auto mb-20 rounded-2xl bg-gray-800 md:w-11/12 xl:w-2/3">
+			<div class="chooseLogin mx-auto mb-20 w-2/3 rounded-2xl bg-gray-800">
 				<h3 data-loc class="pt-5">Welcome to Authme!</h3>
 				<h4 data-loc>Choose how you want to use Authme. Your 2FA codes are encrypted either way.</h4>
 
-				<div class="flex flex-row justify-center pb-3">
+				<div class="small:flex-wrap flex flex-row justify-center pb-3">
 					<div class="my-3 ml-3 mr-1.5 flex w-1/2 flex-wrap items-center justify-center rounded-2xl bg-gray-700 p-4">
 						<h4 data-loc class="m-0 mb-3">Require password</h4>
 						<h5 data-loc class="m-0 mb-3">You have to type in your password every time you launch Authme.</h5>
 
-						<button class="buttoni my-2" onclick="requirePassword()">
+						<button class="buttoni requirePassword my-2" onclick="requirePassword()">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
 							</svg>
@@ -89,7 +89,7 @@
 						</svg>
 					</div>
 				</div>
-				<button class="buttoni mb-8" onclick="comparePasswords()">
+				<button class="buttoni comparePasswords mb-8" onclick="comparePasswords()">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 					</svg>

@@ -119,7 +119,7 @@ module.exports = {
 		"Új Authme verzió elérhető. Frissítés kezdése...",
 		"Újraindítás",
 		"Újdonságok",
-		"Tetszik az Authme?",
+		"Tetszik az Authme? Kérlek értékeld!",
 		"Értékelés a Microsoft Store-on",
 		"Csillagozás a GitHub-on",
 		"Visszajelzés",
@@ -181,7 +181,6 @@ module.exports = {
 		"Logok",
 		"Megnézheted a logokat ha hibákat tapasztalsz. Az összes logot a log mappába találod.",
 		"Legújabb log",
-		"Log mappa",
 		"Adatok törlése",
 		"A jelszavak, a 2FA kódjaid, valamint a beállításaid törlődnek. Légy óvatos.",
 		"Adatok törlése",
@@ -196,8 +195,6 @@ module.exports = {
 		"A keresőmező törlése keresés után. Hasznos ha sok kódot másolsz.",
 		"Globális gyorsgombok",
 		"Ezeket a gyorsgombokat bárhol hasznáhatod, még az alkalmazáson kívűl is. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
-		"Gyorsgombok",
-		"Ezeket a gyorsgombokat csak az alkalmazáson belül használhatod. Csak angol karaktereket használj, szerkesztés közben a gyorsgombok nem működnek.",
     ],
 
 	"settings_dialog": {
@@ -263,9 +260,9 @@ module.exports = {
 		"Megerősítés",
 		"Exportált kódok mentése",
 		"El tudod mententi a 2FA kódjaidat hogy máshol használd azokat, vagy egy biztonsági mentés mindig jó ötlet.",
-		".authme fájl",
+		"Export .authme fájl",
 		"Ideális ha az Authme-be vagy más Authme alkalmzásba akarsz importálni.",
-		".html fájl",
+		"Export .html fájl",
 		"Ideális ha be akarod olvasni a QR-kódokat vagy biztonsági mentésnek.",
 	],
 

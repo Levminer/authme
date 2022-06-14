@@ -211,23 +211,24 @@ const generateCodeElements = (data) => {
 
 			if (codes_description === false) {
 				element.innerHTML = `					
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
-					<div class="flex flex-row justify-center items-center">
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="mt-4">${lang.text.name}</h3>
-							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 3xl:w-2/4 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div class="flex flex-row py-6 justify-center items-center px-10">
+						<div class="flex flex-1 justify-start">
+							<h3 id="name${i}" tabindex="0" class="text-3xl font-normal mt-3">${lang.text.name}</h3>
 						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1 mt-4">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
+						<div class="flex flex-1 justify-center">
+							<p id="code${i}" tabindex="0" class="bg-gray-600 px-5 py-3 rounded-2xl text-2xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
 						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="mt-4">${lang.text.time}</h3>
-							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
+						<div class="flex flex-1 justify-end">
+							<h3 id="time${i}" tabindex="0" class="text-3xl font-normal mt-3">${lang.text.time}</h3>
 						</div>
 					</div>
-					<div class="flex flex-col justify-center items-center">
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] relative top-1 mb-8">
+					<div class="flex flex-col justify-center items-center -mt-5">
+						<div class="progress">
+						<div id="progress${i}" class="progressFill"></div>
+					</div>
+					<div class="flex flex-col justify-center items-center pt-6">
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[180px] mb-7">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -238,24 +239,25 @@ const generateCodeElements = (data) => {
 					`
 			} else {
 				element.innerHTML = `					
-					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 bg-gray-800 mt-10 mb-10 pb-4 rounded-2xl mx-auto flex flex-col h-[310px]">
-					<div class="flex flex-row justify-center items-center">
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="mt-4">${lang.text.name}</h3>
-							<h2 id="name${i}" tabindex="0" class="text-2xl font-normal mt-3">${lang.text.name}</h2>
+					<div id="codes${i}" class="lg:w-2/3 md:w-11/12 3xl:w-2/4 bg-gray-800 mt-10 mb-10 rounded-2xl mx-auto flex flex-col">
+					<div class="flex flex-row py-6 justify-center items-center px-10">
+						<div class="flex flex-1 justify-start">
+							<h3 id="name${i}" tabindex="0" class="text-3xl font-normal mt-3">${lang.text.name}</h3>
 						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="relative -top-1 mt-4">${lang.text.code}</h3>
-							<p id="code${i}" tabindex="0" class="input w-[126px] text-xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
+						<div class="flex flex-1 justify-center">
+							<p id="code${i}" tabindex="0" class="bg-gray-600 px-5 py-3 rounded-2xl text-2xl relative -top-[6px] select-all" id="code${i}">${lang.text.code}</p>
 						</div>
-						<div class="flex flex-col flex-1 justify-center items-center">
-							<h3 class="mt-4">${lang.text.time}</h3>
-							<h2 id="time${i}" class="text-center text-2xl font-normal mt-3">${lang.text.time}</h2>
+						<div class="flex flex-1 justify-end">
+							<h3 id="time${i}" tabindex="0" class="text-3xl font-normal mt-3">${lang.text.time}</h3>
 						</div>
 					</div>
-					<div class="flex flex-col justify-center items-center">
-						<p tabindex="0" class="text-2xl bg-gray-700 px-3 py-1.5 rounded-2xl select-all mb-[10px] mt-1" id="description${i}">Description</p>
-						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[194px] relative top-1">
+					<div class="flex flex-col justify-center items-center -mt-5">
+						<div class="progress">
+						<div id="progress${i}" class="progressFill"></div>
+					</div>
+					<p tabindex="0" class="text-2xl bg-gray-600 px-5 py-3 rounded-2xl select-all mt-6" id="description${i}">Description</p>
+					<div class="flex flex-col justify-center items-center pt-6">
+						<button onclick="copyCode(${i})" id="copy${i}" class="buttoni w-[170px] mb-7">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
 							</svg>
@@ -263,7 +265,7 @@ const generateCodeElements = (data) => {
 						</button>
 					</div>
 					</div>
-					`
+				`
 			}
 
 			// set div in html
@@ -284,6 +286,7 @@ const generateCodeElements = (data) => {
 			const code = document.querySelector(`#code${i}`)
 			const time = document.querySelector(`#time${i}`)
 			const description = document.querySelector(`#description${i}`)
+			const progress = document.querySelector(`#progress${i}`)
 
 			// add to query
 			query.push(`${issuers[i].toLowerCase().trim()} ${names[i].toLowerCase().trim()}`)
@@ -303,6 +306,10 @@ const generateCodeElements = (data) => {
 
 			// remaining time
 			const remaining_time = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+			// progress bar
+			const value = remaining_time * (100 / 30)
+			progress.style.width = `${value}%`
 
 			// set content
 			name.textContent = issuers[i]
@@ -346,6 +353,7 @@ const refreshCodes = (secrets) => {
 	for (let i = 0; i < secrets.length; i++) {
 		const code = document.querySelector(`#code${i}`)
 		const time = document.querySelector(`#time${i}`)
+		const progress = document.querySelector(`#progress${i}`)
 
 		// generate token
 		const token = speakeasy.totp({
@@ -355,6 +363,10 @@ const refreshCodes = (secrets) => {
 
 		// generate time
 		const remaining = 30 - Math.floor((new Date(Date.now()).getTime() / 1000.0) % 30)
+
+		// progress bar
+		const value = remaining * (100 / 30)
+		progress.style.width = `${value}%`
 
 		// set content
 		code.textContent = token

@@ -1,22 +1,19 @@
 {
 	"name": "authme",
 	"productName": "Authme",
-	"version": "3.3.0",
+	"version": "3.3.1",
 	"description": "Simple cross platform two-factor authentication app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
 	"scripts": {
-		"dev": "npm run start",
 		"start": "node scripts/alpha-build.js && electron .",
 		"release": "node scripts/release-build.js && electron .",
-		"build": "npm run build:release",
-		"build:release": "node scripts/release-build.js && electron-builder --publish=never --x64",
+		"build": "node scripts/release-build.js && electron-builder --publish=never --x64",
 		"build:beta": "node scripts/beta-build.js && electron-builder --publish=never --x64",
 		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64",
 		"build:test": "node scripts/alpha-build.js && electron-builder --publish=never --x64 --dir -c scripts/test-build.json",
-		"watch:styles": "concurrently 'npm:watch:tw' 'npm:watch:gb'",
-		"watch:gb": "sass styles/global.scss styles/global.css --no-source-map --style compressed --watch",
-		"watch:tw": "tailwindcss build -i styles/tailwind.scss -o styles/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
+		"watch": "tailwindcss build -i styles/index.css -o styles/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
+		"test": "npx playwright test",
 		"lint": "eslint --fix .",
 		"eslint": "eslint ."
 	},
@@ -51,7 +48,8 @@
 		"linux": {
 			"target": [
 				"appImage",
-				"zip"
+				"zip",
+				"snap"
 			],
 			"maintainer": "levminer@levminer.com",
 			"icon": "img/icon.png",
@@ -64,6 +62,9 @@
 		},
 		"appImage": {
 			"artifactName": "authme-${version}-linux-x64-installer.appimage"
+		},
+		"snap": {
+			"artifactName": "authme-${version}-linux-x64-installer.snap"
 		},
 		"mac": {
 			"target": [
@@ -87,28 +88,28 @@
 		"auto-launch": "^5.0.5",
 		"axios": "^0.27.2",
 		"bcryptjs": "^2.4.3",
-		"electron-context-menu": "^3.1.2",
+		"electron-context-menu": "^3.2.0",
 		"electron-debug": "^3.2.0",
-		"electron-updater": "^5.0.3",
+		"electron-updater": "^5.0.1",
 		"protons": "^2.0.3",
-		"qrcode-decoder": "^0.2.2",
+		"qrcode-decoder": "^0.3.1",
 		"qrcode-generator": "^1.4.4"
 	},
 	"devDependencies": {
-		"@tailwindcss/forms": "^0.5.1",
-		"concurrently": "^7.1.0",
-		"electron": "^18.2.0",
-		"electron-builder": "^23.0.8",
-		"eslint": "^8.14.0",
+		"@playwright/test": "^1.22.2",
+		"@tailwindcss/forms": "^0.5.2",
+		"concurrently": "^7.2.1",
+		"electron": "^19.0.4",
+		"electron-builder": "^23.0.3",
+		"eslint": "^8.17.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-config-standard": "^17.0.0-1",
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-promise": "^6.0.0",
 		"prettier": "^2.6.2",
-		"prettier-plugin-tailwindcss": "^0.1.10",
-		"sass": "^1.51.0",
-		"tailwindcss": "^3.0.24"
+		"prettier-plugin-tailwindcss": "^0.1.11",
+		"tailwindcss": "^3.1.2"
 	},
 	"engines": {
 		"node": ">=16.0.0",

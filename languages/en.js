@@ -6,16 +6,16 @@ module.exports = {
 	},
 
     "tray": {
-		"show_app": "Show App",
-		"hide_app": "Hide App",
+		"show_app": "Show Authme",
+		"hide_app": "Hide Authme",
 		"settings": "Settings",
-		"exit_app": "Exit App",
+		"exit_app": "Exit Authme",
 	},
 
 	"menu": {
 		"file": "File",
-		"show_app": "Show App",
-		"hide_app": "Hide App",
+		"show_app": "Show Authme",
+		"hide_app": "Hide Authme",
 		"settings": "Settings",
 		"exit": "Exit",
 		"view": "View",
@@ -119,7 +119,7 @@ module.exports = {
 		"New Authme version available. Starting the update...",
 		"Restart",
 		"Release notes",
-		"Enjoying Authme?",
+		"Enjoying Authme? Please give Authme a rating.",
 		"Rate on Microsoft Store",
 		"Star on GitHub",
 		"Provide feedback",
@@ -181,7 +181,6 @@ module.exports = {
 		"Logs",
 		"You can view the logs for debugging. You can view all the logs in the settings folder.",
 		"Latest log",
-		"Logs folder",
 		"Clear data",
 		"Clear password, 2FA codes and all other settings. Be careful.",
 		"Clear data",
@@ -196,8 +195,6 @@ module.exports = {
 		"Reset the search bar after you copied a code. Useful if you copy and search for a lot of codes.",
 		"Global shortcuts",
 		"You can use these shortcuts everywhere, even outside the application. Use english characters only, during editing shortcuts don't work.",
-		"Shortcuts",
-		"You can use these shortcuts inside the application only. Use english characters only, during editing shortcuts don't work.",
     ],
 
 	"settings_dialog": {
