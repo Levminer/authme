@@ -22,7 +22,7 @@ jobs:
       - name: Install modules
         run: npm ci
       - name: Build project
-        run: npm run build:release
+        run: npm run build
       - uses: octokit/request-action@v2.x
         id: get_latest_release
         with:
