@@ -866,3 +866,10 @@ const barLink = () => {
 			break
 	}
 }
+
+/* Focus search with ctrl+k */
+document.addEventListener("keypress", (event) => {
+	if (event.ctrlKey === true && event.code === "KeyK") {
+		focusSearch()
+	}
+})
