@@ -8,9 +8,9 @@ const fs = require("fs")
 /**
  * Send error to main process
  */
-window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "settings", error })
-}
+window.addEventListener("error", (err) => {
+	ipc.invoke("rendererError", { renderer: "settings", error: err.error.stack })
+})
 
 /**
  * Start logger

@@ -9,9 +9,9 @@ const fs = require("fs")
 /**
  * Send error to main process
  */
-window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "application", error })
-}
+window.addEventListener("error", (err) => {
+	ipc.invoke("rendererError", { renderer: "codes", error: err.error.stack })
+})
 
 /**
  * Start logger
@@ -327,6 +327,38 @@ const generateCodeElements = (data) => {
 			logger.error("Error refreshing codes")
 		}
 	}, 500)
+
+	if (settings.settings.search_filter) {
+		const http = require("http")
+
+		/**
+		 * Handle requests
+		 * @type {http.RequestListener}
+		 */
+		const requestListener = (req, res) => {
+			const headers = {
+				"Access-Control-Allow-Origin": "*",
+			}
+
+			const key = "asd"
+			const url = req.url
+			const param = req.url.split("apiKey=")[1]
+
+			if (url.startsWith("/codes") && param === key) {
+				res.writeHead(200, headers)
+				res.end(JSON.stringify({ names, secrets, issuers }))
+			} else {
+				res.writeHead(403, headers)
+				res.end(JSON.stringify({ message: "403 - Access denied" }))
+			}
+		}
+
+		const server = http.createServer(requestListener)
+
+		server.listen(1010, () => {
+			console.log("Server started")
+		})
+	}
 
 	// latest search from history
 	const latest_search = settings.search_history.latest

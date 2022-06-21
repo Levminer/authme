@@ -13,9 +13,9 @@ const { useWebcam } = require("./functions/webcam")
 /**
  * Send error to main process
  */
-window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "import", error })
-}
+window.addEventListener("error", (err) => {
+	ipc.invoke("rendererError", { renderer: "import", error: err.error.stack })
+})
 
 /**
  * Start logger

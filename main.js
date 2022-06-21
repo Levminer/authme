@@ -27,6 +27,7 @@ process.on("uncaughtException", async (error) => {
 				build: number,
 				os: `${os.type()} ${os.arch()} ${os.release()}`,
 				stack: stack.clean(error.stack),
+				lang: app.getLocaleCountryCode(),
 				date: new Date(),
 			})
 		} catch (error) {
@@ -107,7 +108,7 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
 
 // Check if /Levminer path exists
 if (!fs.existsSync(full_path)) {
-	fs.mkdirSync(path.join(full_path))
+	fs.mkdirSync(full_path)
 }
 
 // Check if /Authme path exists
@@ -1336,7 +1337,7 @@ ipc.on("reloadExportWindow", () => {
 /**
  * Receive error from renderer
  */
-ipc.on("rendererError", async (event, data) => {
+ipc.handle("rendererError", async (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
 
 	if (dev === false) {
