@@ -177,7 +177,10 @@ if (dev === false) {
 		app.on("second-instance", () => {
 			logger.log("Already running, focusing window")
 
-			window_codes.maximize()
+			if (settings.window.maximized === true) {
+				window_codes.maximize()
+			}
+
 			window_codes.show()
 		})
 	}
@@ -248,6 +251,7 @@ const settings_file = {
 		y: 0,
 		height: 1900,
 		width: 1000,
+		maximized: true,
 	},
 }
 
@@ -288,7 +292,14 @@ if (settings.window === undefined) {
 		y: 0,
 		height: 1900,
 		width: 1000,
+		maximized: true,
 	}
+
+	saveSettings()
+}
+
+if (settings.window.maximized === undefined) {
+	settings.window.maximized = true
 
 	saveSettings()
 }
@@ -317,7 +328,10 @@ if (settings.settings.hardware_acceleration === false) {
 const showAppFromTray = () => {
 	const toggle = () => {
 		if (codes_shown === false) {
-			window_codes.maximize()
+			if (settings.window.maximized === true) {
+				window_codes.maximize()
+			}
+
 			window_codes.show()
 
 			codes_shown = true
@@ -475,6 +489,7 @@ const createWindows = () => {
 	 */
 	const positionWindow = () => {
 		settings.window = window_codes.getBounds()
+		settings.window.maximized = window_codes.isMaximized()
 
 		window_settings.setBounds(settings.window)
 		window_tools.setBounds(settings.window)
@@ -511,8 +526,8 @@ const createWindows = () => {
 		icon: path.join(__dirname, "img/icon.png"),
 		x: settings.window.x,
 		y: settings.window.y,
-		width: 1900,
-		height: 1000,
+		width: settings.window.width,
+		height: settings.window.height,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
@@ -584,6 +599,10 @@ const createWindows = () => {
 	 * Window moved
 	 */
 	window_codes.on("move", () => {
+		positionWindow()
+	})
+
+	window_codes.on("resized", () => {
 		positionWindow()
 	})
 
@@ -939,7 +958,10 @@ app.whenReady()
 
 					setTimeout(() => {
 						if (args[1] !== "--hidden") {
-							window_codes.maximize()
+							if (settings.window.maximized === true) {
+								window_codes.maximize()
+							}
+
 							window_codes.show()
 
 							codes_shown = true
@@ -1061,7 +1083,10 @@ ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		window_codes.maximize()
+		if (settings.window.maximized === true) {
+			window_codes.maximize()
+		}
+
 		window_codes.show()
 
 		setTimeout(() => {
