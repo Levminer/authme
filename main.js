@@ -607,6 +607,10 @@ const createWindows = () => {
 		positionWindow()
 	})
 
+	window_codes.on("maximize", () => {
+		positionWindow()
+	})
+
 	// Enable remote module
 	remote.enable(window_security.webContents)
 	remote.enable(window_codes.webContents)
