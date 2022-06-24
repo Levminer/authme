@@ -17,7 +17,7 @@ module.exports = {
         "show_app": "Authme Megjelenítése",
         "hide_app": "Authme Elrejtése",
         "settings": "Beállítások",
-        "exit": "Kilépés",
+        "exit": "Authme Bezárása",
         "view": "Nézet",
         "reset": "Zoom Visszaállítása",
         "zoom_in": "Nagyítás",

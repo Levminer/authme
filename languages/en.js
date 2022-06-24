@@ -17,7 +17,7 @@ module.exports = {
 		"show_app": "Show Authme",
 		"hide_app": "Hide Authme",
 		"settings": "Settings",
-		"exit": "Exit",
+		"exit": "Exit Authme",
 		"view": "View",
 		"reset": "Reset Zoom",
 		"zoom_in": "Zoom In",
