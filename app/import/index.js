@@ -65,13 +65,6 @@ const examplesLink = () => {
 }
 
 /**
- * Hide window
- */
-const hide = () => {
-	ipc.invoke("toggleToolsWindow")
-}
-
-/**
  * Build number
  */
 const buildNumber = async () => {

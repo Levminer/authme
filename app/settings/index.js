@@ -731,13 +731,6 @@ const githubIssues = () => {
 }
 
 /**
- * Hide window
- */
-const hide = () => {
-	ipc.send("toggleSettings")
-}
-
-/**
  * Menu
  */
 document.querySelector(".general").disabled = true

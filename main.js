@@ -636,7 +636,7 @@ const createWindows = () => {
 	window_security.on("close", () => {
 		app.exit()
 
-		logger.log("Application exited from landing window")
+		logger.log("Application exited from security window")
 	})
 
 	window_codes.on("close", (event) => {
@@ -655,7 +655,6 @@ const createWindows = () => {
 				logger.log("Application exited from application window")
 			} else {
 				event.preventDefault()
-
 				window_codes.hide()
 
 				codes_shown = false
@@ -665,35 +664,27 @@ const createWindows = () => {
 			}
 		}
 
-		logger.log("Application closed")
+		logger.log("Application window closed")
 	})
 
 	window_settings.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
+		event.preventDefault()
+		window_settings.hide()
+		window_codes.focus()
 
-			window_settings.hide()
+		settings_shown = false
 
-			settings_shown = false
-		}
-
-		logger.log("Settings closed")
+		logger.log("Settings window closed")
 	})
 
 	window_tools.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
+		event.preventDefault()
+		window_tools.hide()
+		window_codes.focus()
 
-			window_tools.hide()
+		tools_shown = false
 
-			tools_shown = false
-		}
-
-		logger.log("Edit closed")
+		logger.log("Tools window closed")
 	})
 
 	/**

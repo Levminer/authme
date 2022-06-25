@@ -624,13 +624,6 @@ const loadCodes = async () => {
 }
 
 /**
- * Hide window
- */
-const hide = () => {
-	ipc.invoke("toggleToolsWindow")
-}
-
-/**
  * Send reload events
  */
 const reloadApplicationWindow = () => {

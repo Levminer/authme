@@ -164,7 +164,6 @@ module.exports = {
 		"Version",
 		"Settings",
 		"You can configure the app settings here.",
-		"Close window",
 		"Launch on startup",
 		"Start Authme after your computer started. Authme will start on the system tray.",
 		"Close app to tray",
@@ -205,7 +204,6 @@ module.exports = {
 
     "import": [
 		"You can import your 2FA codes here, see supported QR codes for more information.",
-		"Close window",
 		"Supported QR codes",
 		"List of the currently supported QR codes. You can import from more types at the same time.",
 		"Examples",
@@ -254,7 +252,6 @@ module.exports = {
 
 	"export": [
 		"You can export the 2FA codes you saved.",
-		"Close window",
 		"Export codes",
 		"Your saved codes can be exported here. Ideal if you want to use your codes elsewhere or for a security backup.",
 		"Confirm",
@@ -275,7 +272,6 @@ module.exports = {
 	"edit": [
 		"Edit codes",
 		"You can edit or delete your existing codes and you can add more codes.",
-		"Close window",
 		"Restore",
 		"You can restore the latest save. If you load your codes below it will overwrite the current save!",
 		"Restore",

@@ -203,13 +203,6 @@ const saveQrCodes = () => {
 }
 
 /**
- * Hide window
- */
-const hide = () => {
-	ipc.invoke("toggleToolsWindow")
-}
-
-/**
  * No saved codes found
  */
 const error = () => {
