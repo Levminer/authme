@@ -42,6 +42,7 @@ interface LibSettings {
 		search_history: boolean
 		hardware_acceleration: boolean
 		analytics: boolean
+		integrations: boolean
 		language: null | string
 		sort: null | number
 		search_filter: {

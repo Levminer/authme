@@ -42,7 +42,7 @@
 			"license": "LICENSE.md",
 			"oneClick": false,
 			"allowToChangeInstallationDirectory": true,
-			"createDesktopShortcut": "always",
+			"createDesktopShortcut": true,
 			"artifactName": "authme-${version}-windows-x64-installer.exe"
 		},
 		"linux": {

@@ -328,7 +328,7 @@ const generateCodeElements = (data) => {
 		}
 	}, 500)
 
-	if (settings.settings.search_filter) {
+	if (settings.settings.integrations === true) {
 		const http = require("http")
 
 		/**
@@ -356,7 +356,7 @@ const generateCodeElements = (data) => {
 		const server = http.createServer(requestListener)
 
 		server.listen(1010, () => {
-			console.log("Server started")
+			logger.log("Server started")
 		})
 	}
 

@@ -1,5 +1,5 @@
 const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
-const { convert, localization } = require("@levminer/lib")
+const { convert, localization, aes } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
@@ -88,6 +88,9 @@ const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
 const tgl8 = document.querySelector("#tgl8")
 const tgt8 = document.querySelector("#tgt8")
+
+const integrationsToggle = document.querySelector("#integrationsToggle")
+const integrationsLabel = document.querySelector("#integrationsLabel")
 
 // launch on startup
 let launch_startup_state = settings.settings.launch_on_startup
@@ -209,6 +212,17 @@ if (analytics_state === false) {
 } else {
 	tgt8.textContent = "On"
 	tgl8.checked = true
+}
+
+// integrations
+let integrations_state = settings.settings.integrations
+
+if (integrations_state === false) {
+	integrationsLabel.textContent = "Off"
+	integrationsToggle.checked = false
+} else {
+	integrationsLabel.textContent = "On"
+	integrationsToggle.checked = true
 }
 
 /**
@@ -843,7 +857,7 @@ try {
 const restart = () => {
 	setTimeout(() => {
 		app.relaunch()
-		app.quit()
+		app.exit()
 	}, 300)
 }
 
@@ -1182,4 +1196,34 @@ const resetShortcut = (value) => {
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 
 	ipc.invoke("refreshShortcuts")
+}
+
+/* Integrations */
+const integrations = () => {
+	const key = aes.generateRandomKey(aes.generateSalt())
+	const hash = aes.hash(key)
+
+	console.log(hash)
+
+	if (integrations_state === true) {
+		settings.settings.integrations = false
+
+		save()
+
+		integrationsLabel.textContent = "Off"
+		integrationsToggle.checked = false
+
+		integrations_state = false
+	} else {
+		settings.settings.integrations = true
+
+		save()
+
+		integrationsLabel.textContent = "On"
+		integrationsToggle.checked = true
+
+		integrations_state = true
+	}
+
+	reloadApplicationWindow()
 }

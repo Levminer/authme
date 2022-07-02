@@ -211,6 +211,7 @@ const settings_file = {
 		language: null,
 		sort: null,
 		analytics: true,
+		integrations: true,
 	},
 	security: {
 		require_password: null,
@@ -307,6 +308,12 @@ if (settings.window.maximized === undefined) {
 
 if (settings.settings.analytics === undefined) {
 	settings.settings.analytics = true
+
+	saveSettings()
+}
+
+if (settings.settings.integrations === undefined) {
+	settings.settings.integrations = false
 
 	saveSettings()
 }
@@ -643,7 +650,7 @@ const createWindows = () => {
 		saveWindowPosition()
 
 		if (dev === true) {
-			app.quit()
+			app.exit()
 		} else {
 			if (settings.settings.close_to_tray === false) {
 				try {
