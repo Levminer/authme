@@ -211,7 +211,7 @@ const settings_file = {
 		language: null,
 		sort: null,
 		analytics: true,
-		integrations: true,
+		integrations: false,
 	},
 	security: {
 		require_password: null,
@@ -949,6 +949,8 @@ app.whenReady()
 
 							confirm_shown = true
 						}
+
+						logger.log("Showing security window")
 					}, 100)
 				}
 			})
@@ -968,6 +970,8 @@ app.whenReady()
 							window_codes.show()
 
 							codes_shown = true
+
+							logger.log("Showing codes window")
 						}
 
 						authenticated = true

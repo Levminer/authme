@@ -1200,11 +1200,6 @@ const resetShortcut = (value) => {
 
 /* Integrations */
 const integrations = () => {
-	const key = aes.generateRandomKey(aes.generateSalt())
-	const hash = aes.hash(key)
-
-	console.log(hash)
-
 	if (integrations_state === true) {
 		settings.settings.integrations = false
 
@@ -1215,6 +1210,33 @@ const integrations = () => {
 
 		integrations_state = false
 	} else {
+		const key = aes.generateRandomKey(aes.generateSalt()).toString("base64")
+		const hash = aes.hash(key)
+
+		/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+		storage.apiKey = hash
+
+		dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+
+		const url = `http://localhost:1010/codes?apiKey=${key}`
+
+		dialog
+			.showMessageBox(BrowserWindow.getFocusedWindow(), {
+				title: "Authme",
+				buttons: [lang.button.copy, lang.button.close],
+				defaultId: 1,
+				cancelId: 1,
+				noLink: true,
+				type: "warning",
+				message: "You can copy your URL with your api key.\n\nYou can only copy the url once.",
+			})
+			.then(async (result) => {
+				if (result.response === 0) {
+					navigator.clipboard.writeText(url)
+				}
+			})
+
 		settings.settings.integrations = true
 
 		save()

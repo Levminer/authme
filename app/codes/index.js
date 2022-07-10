@@ -340,9 +340,15 @@ const generateCodeElements = (data) => {
 				"Access-Control-Allow-Origin": "*",
 			}
 
-			const key = "asd"
+			/** @type{LibStorage} */ const storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+			const key = storage.apiKey
 			const url = req.url
-			const param = req.url.split("apiKey=")[1]
+			let param = req.url.split("apiKey=")[1]
+
+			if (param !== undefined) {
+				param = aes.hash(param)
+			}
 
 			if (url.startsWith("/codes") && param === key) {
 				res.writeHead(200, headers)
