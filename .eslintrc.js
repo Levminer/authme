@@ -6,7 +6,6 @@ module.exports = {
 		node: true,
 	},
 	extends: ["standard", "eslint:recommended", "plugin:node/recommended", "plugin:promise/recommended", "plugin:prettier/recommended"],
-	plugins: ["prettier"],
 	ignorePatterns: ["/node_modules/*", "/dist/*", "/build/*", "/src/*"],
 	parserOptions: {
 		ecmaVersion: 12,
