@@ -1229,7 +1229,7 @@ const integrations = () => {
 				cancelId: 1,
 				noLink: true,
 				type: "warning",
-				message: "You can copy your URL with your api key.\n\nYou can only copy the url once.",
+				message: "You can copy your URL with your api key.\n\nYou can only copy the URL once.",
 			})
 			.then(async (result) => {
 				if (result.response === 0) {

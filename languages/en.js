@@ -74,11 +74,11 @@ module.exports = {
 
 	"landing": [
 		"Welcome to Authme!",
-		"Choose how you want to use Authme. Your 2FA codes are encrypted either way.",
+		"Choose how you want to use Authme.",
 		"Require password",
 		"You have to type in your password every time you launch Authme.",
 		"Continue",
-		"Don't require password",
+		"No password",
 		"If you don't want to type in your password every time you launch Authme.",
 		"Confirm",
 		"More options",
