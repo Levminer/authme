@@ -20,6 +20,11 @@ interface LibStorage {
 	key: string
 	issuers: string[]
 	settings_page: string
+	apiKey: string
+}
+
+interface LibWindow extends Electron.Rectangle {
+	maximized?: boolean
 }
 
 interface LibSettings {
@@ -37,6 +42,7 @@ interface LibSettings {
 		search_history: boolean
 		hardware_acceleration: boolean
 		analytics: boolean
+		integrations: boolean
 		language: null | string
 		sort: null | number
 		search_filter: {
@@ -85,7 +91,7 @@ interface LibSettings {
 		info: string
 	}
 
-	window: Electron.Rectangle
+	window: LibWindow
 
 	experimental?: {}
 }

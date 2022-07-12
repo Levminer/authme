@@ -8,9 +8,9 @@ const fs = require("fs")
 /**
  * Send error to main process
  */
-window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "edit", error })
-}
+window.addEventListener("error", (err) => {
+	ipc.invoke("rendererError", { renderer: "edit", error: err.error.stack })
+})
 
 /**
  * Start logger
@@ -621,13 +621,6 @@ const loadCodes = async () => {
 			}
 		})
 	}
-}
-
-/**
- * Hide window
- */
-const hide = () => {
-	ipc.invoke("toggleToolsWindow")
 }
 
 /**

@@ -27,6 +27,7 @@ process.on("uncaughtException", async (error) => {
 				build: number,
 				os: `${os.type()} ${os.arch()} ${os.release()}`,
 				stack: stack.clean(error.stack),
+				lang: app.getLocaleCountryCode(),
 				date: new Date(),
 			})
 		} catch (error) {
@@ -107,7 +108,7 @@ const folder_path = dev ? path.join(app.getPath("appData"), "Levminer", "Authme 
 
 // Check if /Levminer path exists
 if (!fs.existsSync(full_path)) {
-	fs.mkdirSync(path.join(full_path))
+	fs.mkdirSync(full_path)
 }
 
 // Check if /Authme path exists
@@ -177,7 +178,10 @@ if (dev === false) {
 		app.on("second-instance", () => {
 			logger.log("Already running, focusing window")
 
-			window_codes.maximize()
+			if (settings.window.maximized === true) {
+				window_codes.maximize()
+			}
+
 			window_codes.show()
 		})
 	}
@@ -207,6 +211,7 @@ const settings_file = {
 		language: null,
 		sort: null,
 		analytics: true,
+		integrations: false,
 	},
 	security: {
 		require_password: null,
@@ -248,6 +253,7 @@ const settings_file = {
 		y: 0,
 		height: 1900,
 		width: 1000,
+		maximized: true,
 	},
 }
 
@@ -288,13 +294,26 @@ if (settings.window === undefined) {
 		y: 0,
 		height: 1900,
 		width: 1000,
+		maximized: true,
 	}
+
+	saveSettings()
+}
+
+if (settings.window.maximized === undefined) {
+	settings.window.maximized = true
 
 	saveSettings()
 }
 
 if (settings.settings.analytics === undefined) {
 	settings.settings.analytics = true
+
+	saveSettings()
+}
+
+if (settings.settings.integrations === undefined) {
+	settings.settings.integrations = false
 
 	saveSettings()
 }
@@ -317,7 +336,10 @@ if (settings.settings.hardware_acceleration === false) {
 const showAppFromTray = () => {
 	const toggle = () => {
 		if (codes_shown === false) {
-			window_codes.maximize()
+			if (settings.window.maximized === true) {
+				window_codes.maximize()
+			}
+
 			window_codes.show()
 
 			codes_shown = true
@@ -475,6 +497,7 @@ const createWindows = () => {
 	 */
 	const positionWindow = () => {
 		settings.window = window_codes.getBounds()
+		settings.window.maximized = window_codes.isMaximized()
 
 		window_settings.setBounds(settings.window)
 		window_tools.setBounds(settings.window)
@@ -511,8 +534,8 @@ const createWindows = () => {
 		icon: path.join(__dirname, "img/icon.png"),
 		x: settings.window.x,
 		y: settings.window.y,
-		width: 1900,
-		height: 1000,
+		width: settings.window.width,
+		height: settings.window.height,
 		minWidth: 1000,
 		minHeight: 600,
 		show: false,
@@ -587,6 +610,14 @@ const createWindows = () => {
 		positionWindow()
 	})
 
+	window_codes.on("resized", () => {
+		positionWindow()
+	})
+
+	window_codes.on("maximize", () => {
+		positionWindow()
+	})
+
 	// Enable remote module
 	remote.enable(window_security.webContents)
 	remote.enable(window_codes.webContents)
@@ -612,14 +643,14 @@ const createWindows = () => {
 	window_security.on("close", () => {
 		app.exit()
 
-		logger.log("Application exited from landing window")
+		logger.log("Application exited from security window")
 	})
 
 	window_codes.on("close", (event) => {
 		saveWindowPosition()
 
 		if (dev === true) {
-			app.quit()
+			app.exit()
 		} else {
 			if (settings.settings.close_to_tray === false) {
 				try {
@@ -631,7 +662,6 @@ const createWindows = () => {
 				logger.log("Application exited from application window")
 			} else {
 				event.preventDefault()
-
 				window_codes.hide()
 
 				codes_shown = false
@@ -641,35 +671,27 @@ const createWindows = () => {
 			}
 		}
 
-		logger.log("Application closed")
+		logger.log("Application window closed")
 	})
 
 	window_settings.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
+		event.preventDefault()
+		window_settings.hide()
+		window_codes.focus()
 
-			window_settings.hide()
+		settings_shown = false
 
-			settings_shown = false
-		}
-
-		logger.log("Settings closed")
+		logger.log("Settings window closed")
 	})
 
 	window_tools.on("close", (event) => {
-		if (dev === true) {
-			app.quit()
-		} else {
-			event.preventDefault()
+		event.preventDefault()
+		window_tools.hide()
+		window_codes.focus()
 
-			window_tools.hide()
+		tools_shown = false
 
-			tools_shown = false
-		}
-
-		logger.log("Edit closed")
+		logger.log("Tools window closed")
 	})
 
 	/**
@@ -927,6 +949,8 @@ app.whenReady()
 
 							confirm_shown = true
 						}
+
+						logger.log("Showing security window")
 					}, 100)
 				}
 			})
@@ -939,10 +963,15 @@ app.whenReady()
 
 					setTimeout(() => {
 						if (args[1] !== "--hidden") {
-							window_codes.maximize()
+							if (settings.window.maximized === true) {
+								window_codes.maximize()
+							}
+
 							window_codes.show()
 
 							codes_shown = true
+
+							logger.log("Showing codes window")
 						}
 
 						authenticated = true
@@ -1061,7 +1090,10 @@ ipc.on("toApplicationFromConfirm", () => {
 	if (authenticated === false) {
 		settings = JSON.parse(fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"))
 
-		window_codes.maximize()
+		if (settings.window.maximized === true) {
+			window_codes.maximize()
+		}
+
 		window_codes.show()
 
 		setTimeout(() => {
@@ -1311,7 +1343,7 @@ ipc.on("reloadExportWindow", () => {
 /**
  * Receive error from renderer
  */
-ipc.on("rendererError", async (event, data) => {
+ipc.handle("rendererError", async (event, data) => {
 	logger.error(`Error in ${data.renderer}`, data.error)
 
 	if (dev === false) {

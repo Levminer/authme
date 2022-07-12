@@ -1,5 +1,5 @@
 const { shell, app, dialog, BrowserWindow } = require("@electron/remote")
-const { convert, localization } = require("@levminer/lib")
+const { convert, localization, aes } = require("@levminer/lib")
 const logger = require("@levminer/lib/logger/renderer")
 const { ipcRenderer: ipc } = require("electron")
 const path = require("path")
@@ -8,9 +8,9 @@ const fs = require("fs")
 /**
  * Send error to main process
  */
-window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "settings", error })
-}
+window.addEventListener("error", (err) => {
+	ipc.invoke("rendererError", { renderer: "settings", error: err.error.stack })
+})
 
 /**
  * Start logger
@@ -88,6 +88,9 @@ const tgl7 = document.querySelector("#tgl7")
 const tgt7 = document.querySelector("#tgt7")
 const tgl8 = document.querySelector("#tgl8")
 const tgt8 = document.querySelector("#tgt8")
+
+const integrationsToggle = document.querySelector("#integrationsToggle")
+const integrationsLabel = document.querySelector("#integrationsLabel")
 
 // launch on startup
 let launch_startup_state = settings.settings.launch_on_startup
@@ -209,6 +212,17 @@ if (analytics_state === false) {
 } else {
 	tgt8.textContent = "On"
 	tgl8.checked = true
+}
+
+// integrations
+let integrations_state = settings.settings.integrations
+
+if (integrations_state === false) {
+	integrationsLabel.textContent = "Off"
+	integrationsToggle.checked = false
+} else {
+	integrationsLabel.textContent = "On"
+	integrationsToggle.checked = true
 }
 
 /**
@@ -731,13 +745,6 @@ const githubIssues = () => {
 }
 
 /**
- * Hide window
- */
-const hide = () => {
-	ipc.send("toggleSettings")
-}
-
-/**
  * Menu
  */
 document.querySelector(".general").disabled = true
@@ -850,7 +857,7 @@ try {
 const restart = () => {
 	setTimeout(() => {
 		app.relaunch()
-		app.quit()
+		app.exit()
 	}, 300)
 }
 
@@ -1189,4 +1196,56 @@ const resetShortcut = (value) => {
 	fs.writeFileSync(path.join(folder_path, "settings", "settings.json"), convert.fromJSON(settings))
 
 	ipc.invoke("refreshShortcuts")
+}
+
+/* Integrations */
+const integrations = () => {
+	if (integrations_state === true) {
+		settings.settings.integrations = false
+
+		save()
+
+		integrationsLabel.textContent = "Off"
+		integrationsToggle.checked = false
+
+		integrations_state = false
+	} else {
+		const key = aes.generateRandomKey(aes.generateSalt()).toString("base64")
+		const hash = aes.hash(key)
+
+		/** @type{LibStorage} */ storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+		storage.apiKey = hash
+
+		dev ? localStorage.setItem("dev_storage", JSON.stringify(storage)) : localStorage.setItem("storage", JSON.stringify(storage))
+
+		const url = `http://localhost:1010/codes?apiKey=${key}`
+
+		dialog
+			.showMessageBox(BrowserWindow.getFocusedWindow(), {
+				title: "Authme",
+				buttons: [lang.button.copy, lang.button.close],
+				defaultId: 1,
+				cancelId: 1,
+				noLink: true,
+				type: "warning",
+				message: "You can copy your URL with your api key.\n\nYou can only copy the URL once.",
+			})
+			.then(async (result) => {
+				if (result.response === 0) {
+					navigator.clipboard.writeText(url)
+				}
+			})
+
+		settings.settings.integrations = true
+
+		save()
+
+		integrationsLabel.textContent = "On"
+		integrationsToggle.checked = true
+
+		integrations_state = true
+	}
+
+	reloadApplicationWindow()
 }

@@ -9,9 +9,9 @@ const fs = require("fs")
 /**
  * Send error to main process
  */
-window.onerror = (error) => {
-	ipc.send("rendererError", { renderer: "application", error })
-}
+window.addEventListener("error", (err) => {
+	ipc.invoke("rendererError", { renderer: "codes", error: err.error.stack })
+})
 
 /**
  * Start logger
@@ -327,6 +327,44 @@ const generateCodeElements = (data) => {
 			logger.error("Error refreshing codes")
 		}
 	}, 500)
+
+	if (settings.settings.integrations === true) {
+		const http = require("http")
+
+		/**
+		 * Handle requests
+		 * @type {http.RequestListener}
+		 */
+		const requestListener = (req, res) => {
+			const headers = {
+				"Access-Control-Allow-Origin": "*",
+			}
+
+			/** @type{LibStorage} */ const storage = dev ? JSON.parse(localStorage.getItem("dev_storage")) : JSON.parse(localStorage.getItem("storage"))
+
+			const key = storage.apiKey
+			const url = req.url
+			let param = req.url.split("apiKey=")[1]
+
+			if (param !== undefined) {
+				param = aes.hash(param)
+			}
+
+			if (url.startsWith("/codes") && param === key) {
+				res.writeHead(200, headers)
+				res.end(JSON.stringify({ names, secrets, issuers }))
+			} else {
+				res.writeHead(403, headers)
+				res.end(JSON.stringify({ message: "403 - Access denied" }))
+			}
+		}
+
+		const server = http.createServer(requestListener)
+
+		server.listen(1010, () => {
+			logger.log("Server started")
+		})
+	}
 
 	// latest search from history
 	const latest_search = settings.search_history.latest
@@ -866,3 +904,10 @@ const barLink = () => {
 			break
 	}
 }
+
+/* Focus search with ctrl+k */
+document.addEventListener("keypress", (event) => {
+	if (event.ctrlKey === true && event.code === "KeyK") {
+		focusSearch()
+	}
+})

@@ -17,7 +17,7 @@ module.exports = {
         "show_app": "Authme Megjelenítése",
         "hide_app": "Authme Elrejtése",
         "settings": "Beállítások",
-        "exit": "Kilépés",
+        "exit": "Authme Bezárása",
         "view": "Nézet",
         "reset": "Zoom Visszaállítása",
         "zoom_in": "Nagyítás",
@@ -164,7 +164,6 @@ module.exports = {
 		"Verzió",
 		"Beállítások",
 		"Itt tudod szerkeszteni a beállításokat.",
-		"Ablak bezárása",
 		"Autómatikus indítás",
 		"Az Authme elindul a számítógépeddel együtt. Az alkalmazás a tálcán fog indulni.",
 		"Tálcára kicsinyítés",
@@ -205,7 +204,6 @@ module.exports = {
 
 	"import": [
 		"Itt tudod importálni a 2FA kódjaidat, több információért nézd meg a támogatott QR-kódokat.",
-		"Ablak bezárása",
 		"Támogatott QR-kódok",
 		"A jelenleg támogatott QR-kódok listája. Több féle típusból is importálhatsz egyszerre.",
 		"Példák",
@@ -254,7 +252,6 @@ module.exports = {
 
 	"export": [
 		"Itt exportálhatod az elmentett 2FA kódjaidat.",
-		"Ablak bezárása",
 		"Kódok exportálása",
 		"Az elmentett kódjaidat itt tudod exportálni. Ideális ha máshol is akarod használni a kódjaidat vagy egy biztonsági mentéshez.",
 		"Megerősítés",
@@ -275,7 +272,6 @@ module.exports = {
 	"edit": [
 		"Kódok szerkesztése",
 		"Itt tudod szerkeszteni vagy törölni a mentett kódjaidat vagy új kódokat hozzáadni.",
-		"Ablak bezárása",
 		"Visszaállítás",
 		"Vissza tudod állítani az előző mentést. Ha lentebb betöltöd a kódjaidat az felül fogja írni a jelenlegi mentést.",
 		"Visszaállítás",
