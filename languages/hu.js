@@ -33,7 +33,7 @@ module.exports = {
         "about": "Névjegy",
         "show_licenses": "Licenszek",
         "update": "Frissítés",
-        "info": "Verzió",
+        "info": "Authme Névjegye",
     },
 
 	"dialog": {
@@ -161,7 +161,7 @@ module.exports = {
 		"Gyorsgombok",
 		"Kísérletek",
 		"Visszajelzés",
-		"Verzió",
+		"Névjegy",
 		"Beállítások",
 		"Itt tudod szerkeszteni a beállításokat.",
 		"Autómatikus indítás",
