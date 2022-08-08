@@ -28,6 +28,7 @@ process.on("uncaughtException", async (error) => {
 				os: `${os.type()} ${os.arch()} ${os.release()}`,
 				stack: stack.clean(error.stack),
 				lang: app.getLocaleCountryCode(),
+				settings: fs.readFileSync(path.join(folder_path, "settings", "settings.json"), "utf-8"),
 				date: new Date(),
 			})
 		} catch (error) {
