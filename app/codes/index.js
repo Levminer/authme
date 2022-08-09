@@ -73,9 +73,9 @@ if (!fs.existsSync(path.join(folder_path, "codes", "codes.authme"))) {
 
 let saved_codes = false
 let save_text = ""
-const query = []
-const description_query = []
-const name_query = []
+let query = []
+let description_query = []
+let name_query = []
 
 const codes_description = settings.settings.codes_description
 const reset_after_copy = settings.settings.reset_after_copy
@@ -178,6 +178,10 @@ const importExistingCodes = async (res) => {
  * @param {string} text
  */
 const processData = (text) => {
+	query = []
+	description_query = []
+	name_query = []
+
 	const data = convert.fromText(text, sort)
 
 	generateCodeElements(data)

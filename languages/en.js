@@ -33,7 +33,7 @@ module.exports = {
 		"about": "About",
 		"show_licenses": "Licenses",
 		"update": "Update",
-		"info": "Version",
+		"info": "About Authme",
 	},
 
 	"dialog": {
@@ -161,7 +161,7 @@ module.exports = {
 		"Shortcuts",
 		"Experimental",
 		"Feedback",
-		"Version",
+		"About",
 		"Settings",
 		"You can configure the app settings here.",
 		"Launch on startup",

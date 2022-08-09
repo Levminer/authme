@@ -1,3 +1,16 @@
+### Authme 3.3.2 (2022. July 12.)
+
+-   [[4295b95](https://github.com/Levminer/authme/commit/4295b95)] Update transaltions (2022-07-10)
+-   [[9e2ec88](https://github.com/Levminer/authme/commit/9e2ec88)] Copy api key #217 (2022-07-10)
+-   [[d19552e](https://github.com/Levminer/authme/commit/d19552e)] Update packages (2022-07-10)
+-   [[fc27195](https://github.com/Levminer/authme/commit/fc27195)] Integrations #217 (2022-07-02)
+-   [[6277135](https://github.com/Levminer/authme/commit/6277135)] Remove close window buttons (2022-06-25)
+-   [[970c728](https://github.com/Levminer/authme/commit/970c728)] Translation fixes (2022-06-24)
+-   [[113a50c](https://github.com/Levminer/authme/commit/113a50c)] Improve reliability #216 (2022-06-23)
+-   [[56d8cb3](https://github.com/Levminer/authme/commit/56d8cb3)] Improved renderer error handling (2022-06-21)
+-   [[8ce8ffe](https://github.com/Levminer/authme/commit/8ce8ffe)] Remember window position #216 (2022-06-21)
+-   [[3bf1ce5](https://github.com/Levminer/authme/commit/3bf1ce5)] Use ctrl+k to focus search (2022-06-17)
+
 ### Authme 3.3.1 (2022. June 14.)
 
 -   [[446d288](https://github.com/Levminer/authme/commit/446d288)] Merge branch 'main' into dev (2022-06-14)
