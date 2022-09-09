@@ -1,7 +1,7 @@
 {
 	"name": "authme",
 	"productName": "Authme",
-	"version": "3.3.3",
+	"version": "3.3.4",
 	"description": "Simple cross platform two-factor authentication app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -98,8 +98,8 @@
 	"devDependencies": {
 		"@playwright/test": "^1.25.1",
 		"@tailwindcss/forms": "^0.5.2",
-		"concurrently": "^7.3.0",
-		"electron": "^20.1.0",
+		"concurrently": "^7.4.0",
+		"electron": "^20.1.2",
 		"electron-builder": "^23.3.3",
 		"eslint": "^8.23.0",
 		"eslint-config-prettier": "^8.5.0",

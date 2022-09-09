@@ -611,11 +611,15 @@ const createWindows = () => {
 		positionWindow()
 	})
 
-	window_codes.on("resized", () => {
+	window_codes.on("resize", () => {
 		positionWindow()
 	})
 
 	window_codes.on("maximize", () => {
+		positionWindow()
+	})
+
+	window_codes.on("unmaximize", () => {
 		positionWindow()
 	})
 
@@ -1449,7 +1453,7 @@ const logs = () => {
  * About dialog
  */
 const version = () => {
-	const text = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChrome: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
+	const text = `Authme: ${authme_version} \n\nElectron: ${electron_version}\nChromium: ${chrome_version} \n\nOS version: ${os_version}\nHardware info: ${os_info} \n\nRelease date: ${release_date}\nBuild number: ${build_number} \n\nCreated by: Lőrik Levente\n`
 
 	shell.beep()
 
