@@ -1,3 +1,11 @@
+### Authme 3.3.3 (2022. August. 9.)
+
+-   [[550d870](https://github.com/Levminer/authme/commit/550d870)] Update screenshots and translations (2022-08-08)
+-   [[f4044ed](https://github.com/Levminer/authme/commit/f4044ed)] Send settings file on crash (2022-08-08)
+-   [[cff2157](https://github.com/Levminer/authme/commit/cff2157)] Fix searching imported codes #219 (2022-08-08)
+-   [[321bd2e](https://github.com/Levminer/authme/commit/321bd2e)] Update packages and electron (2022-08-04)
+-   [[542d9fb](https://github.com/Levminer/authme/commit/542d9fb)] Bump version (2022-07-13)
+
 ### Authme 3.3.2 (2022. July 12.)
 
 -   [[4295b95](https://github.com/Levminer/authme/commit/4295b95)] Update transaltions (2022-07-10)
