@@ -806,13 +806,6 @@ window.addEventListener("click", (event) => {
 })
 
 /**
- * Display release notes
- */
-const releaseNotes = () => {
-	ipc.send("releaseNotes")
-}
-
-/**
  * Download manual update
  */
 const manualUpdate = () => {
@@ -863,4 +856,16 @@ const release = new Date("2021-11-08")
 if (date > release) {
 	document.querySelector(".deprecation").style.display = "block"
 	document.querySelector(".deprecationNotice").style.display = "none"
+}
+
+const downloadUpdate = () => {
+	shell.openExternal("https://authme.levminer.com/#downloads")
+}
+
+const releaseNotes = () => {
+	shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+}
+
+const migrationGuide = () => {
+	shell.openExternal("https://github.com/Levminer/authme#migration")
 }

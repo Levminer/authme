@@ -21,6 +21,63 @@
 			</div>
 		</div>
 
+		<!-- deprecation notice -->
+		<div class="bg-popup-magenta deprecationNotice w-full font-bold text-white">
+			<div class="container mx-auto mb-5 flex flex-row items-center justify-between px-6 py-4">
+				<div class="flex">
+					<svg xmlns="http://www.w3.org/2000/svg" class="relative top-2.5" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+
+					<p class="relative mx-3 flex flex-row justify-center">Authme 4 is releasing on November 8., this means there is no update coming to Authme 3. Please migrate when Authme 4 comes out!</p>
+				</div>
+				<a onclick="this.parentElement.style.display='none'" class="relative transform cursor-pointer rounded-md p-1 transition-colors duration-200 hover:text-gray-800">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</a>
+			</div>
+		</div>
+
+		<!-- deprecation -->
+		<div class="bg-popup-magenta deprecation hidden w-full font-bold text-white">
+			<div class="container mx-auto flex flex-row items-center justify-between px-6 py-4">
+				<div class="flex">
+					<svg xmlns="http://www.w3.org/2000/svg" class="relative top-7" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+
+					<div class="relative top-3 mx-3 mb-5 flex flex-row flex-wrap">
+						Authme 3 is deprecated. Please upgrade to Authme 4!<br />
+						This is a major release so there are some minor breaking changes, please follow the migration guide.<br />
+						But there are some notable changes to: Auto update, import from camera, macOS support and more!
+						<div class="flex flex-wrap gap-1 pt-5 pl-5">
+							<button type="button" onclick="migrationGuide()" class="relative -top-1.5 mr-2 ml-3 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
+								<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+								</svg>
+								Migration guide
+							</button>
+
+							<button type="button" onclick="downloadUpdate()" class="relative -top-1.5 mr-2 ml-2 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
+								<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+								</svg>
+								Download
+							</button>
+
+							<button type="button" onclick="releaseNotes()" class="relative -top-1.5 mr-2 ml-3 cursor-pointer rounded-full border-2 border-white bg-white py-1 px-3 text-center text-base font-bold text-black transition duration-200 ease-in hover:bg-transparent hover:text-white">
+								<svg xmlns="http://www.w3.org/2000/svg" class="relative top-1" height="20" width="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+								</svg>
+								Release notes
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- content -->
 		<div class="content relative mx-auto mt-40 mb-60 rounded-2xl bg-gray-700 pb-5 text-center md:w-9/12 lg:w-3/5">
 			<h1 class="h1 m-0 p-6">Authme</h1>
