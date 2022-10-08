@@ -67,6 +67,7 @@ let /** @type{Buffer} */ password_buffer = null
 let /** @type{Tray} */ tray = null
 let /** @type{Menu} */ menu = null
 let lang = en
+let final = true
 
 /**
  * Check if running in development mode
@@ -81,6 +82,7 @@ if (app.isPackaged === false) {
 	})
 
 	dev = true
+	final = false
 }
 
 /**
@@ -729,7 +731,7 @@ const createWindows = () => {
 		}
 
 		// Check for manual update
-		if (update_seen == false && platform !== "windows") {
+		if (update_seen == false && platform !== "windows" && final === false) {
 			api()
 
 			update_seen = true
@@ -746,7 +748,7 @@ const createWindows = () => {
 	/**
 	 * Auto update on Windows
 	 */
-	if (dev === false && platform === "windows") {
+	if (dev === false && platform === "windows" && final === false) {
 		axios
 			.get("https://api.levminer.com/api/v1/authme/releases")
 			.then((res) => {
@@ -1943,50 +1945,15 @@ const createMenu = () => {
 					label: lang.menu.update,
 					accelerator: shortcuts ? "" : settings.shortcuts.update,
 					click: () => {
-						if (platform === "windows") {
-							if (dev === false) {
-								manual_update = true
-
-								autoUpdater.checkForUpdates()
-							}
-						} else {
-							axios
-								.get("https://api.levminer.com/api/v1/authme/releases")
-								.then((res) => {
-									if (res.data.tag_name > authme_version && res.data.tag_name != undefined && res.data.prerelease != true) {
-										dialog
-											.showMessageBox({
-												title: "Authme",
-												buttons: ["Yes", "No"],
-												defaultId: 0,
-												cancelId: 1,
-												noLink: true,
-												type: "info",
-												message: `Update available: Authme ${res.data.tag_name} \n\nDo you want to download it? \n\nYou currently running: Authme ${authme_version}`,
-											})
-											.then((result) => {
-												if (result.response === 0) {
-													shell.openExternal("https://authme.levminer.com#downloads")
-												}
-											})
-									} else {
-										dialog.showMessageBox({
-											title: "Authme",
-											buttons: [lang.button.close],
-											defaultId: 0,
-											cancelId: 1,
-											noLink: true,
-											type: "info",
-											message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${authme_version}`,
-										})
-									}
-								})
-								.catch((error) => {
-									dialog.showErrorBox("Authme", "Error getting update manually \n\nTry again later!")
-
-									logger.error("Error getting update manually", error.stack)
-								})
-						}
+						dialog.showMessageBox({
+							title: "Authme",
+							buttons: [lang.button.close],
+							defaultId: 0,
+							cancelId: 1,
+							noLink: true,
+							type: "info",
+							message: `No update available: \n\nYou are running the latest version! \n\nYou are currently running: Authme ${authme_version}`,
+						})
 					},
 				},
 				{
