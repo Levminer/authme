@@ -851,7 +851,7 @@ document.addEventListener("keypress", (event) => {
 
 /* Deprecation notice */
 const date = new Date()
-const release = new Date("2021-11-08")
+const release = new Date("2022-11-10")
 
 if (date > release) {
 	document.querySelector(".deprecation").style.display = "block"
