@@ -51,8 +51,8 @@ Tutorial on how to migrate to Authme 4 from Authme 3:
 1. Go to the settings: Top menu > File > Settings.
 1. Inside the general options: Click Clear data and confirm.
 1. Now uninstall Authme from you computer.
-1. Download Authme 4.
-1. Go through the getting started.
+1. Download [Authme 4](https://authme.levminer.com/#downloads) and install it.
+1. Go through the getting started wizard.
 1. In the codes page select Choose file and choose the .authme file you saved.
 
 ## Contributing and development
