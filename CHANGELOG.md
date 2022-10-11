@@ -1,3 +1,13 @@
+### Authme 3.3.5 (2022. October 11.)
+
+-   [[c4e5783](https://github.com/Levminer/authme/commit/c4e5783)] Deprecation fixes (2022-10-10)
+-   [[cee2f2f](https://github.com/Levminer/authme/commit/cee2f2f)] Migration instructions (2022-10-10)
+-   [[eeadc02](https://github.com/Levminer/authme/commit/eeadc02)] Fix deprecation date (2022-10-09)
+-   [[6f1a360](https://github.com/Levminer/authme/commit/6f1a360)] Deprecation notice #235 (2022-10-08)
+-   [[c2e0d61](https://github.com/Levminer/authme/commit/c2e0d61)] Remove deprecated functions (2022-10-08)
+-   [[5d13337](https://github.com/Levminer/authme/commit/5d13337)] Update electron (2022-10-07)
+-   [[fe55b52](https://github.com/Levminer/authme/commit/fe55b52)] Bump version and update changelog (2022-10-04)
+
 ### Authme 3.3.4 (2022. September 13.)
 
 -   [[dff82af](https://github.com/Levminer/authme/commit/dff82af)] Update electron #230 (2022-09-12)
