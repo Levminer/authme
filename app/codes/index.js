@@ -463,8 +463,6 @@ const copyCode = (id) => {
  * Search codes
  */
 const search = () => {
-	document.querySelector(".infoBar").style.display = "none"
-
 	const search = document.querySelector("#search")
 	const input = search.value.toLowerCase()
 	let i = 0
@@ -569,7 +567,7 @@ const showUpdate = () => {
  * Show info popup
  */
 const showInfo = () => {
-	document.querySelector(".info").style.display = "block"
+	return "Removed"
 }
 
 /**
@@ -808,13 +806,6 @@ window.addEventListener("click", (event) => {
 })
 
 /**
- * Display release notes
- */
-const releaseNotes = () => {
-	ipc.send("releaseNotes")
-}
-
-/**
  * Download manual update
  */
 const manualUpdate = () => {
@@ -851,67 +842,30 @@ const updateRestart = () => {
 	ipc.send("updateRestart")
 }
 
-/* info bar */
-const random = Math.floor(Math.random() * 3)
-
-const infoBar = async () => {
-	const { opens } = await ipc.invoke("statistics")
-	const bar = document.querySelector(".bar")
-	const bar_link = document.querySelector(".barLink")
-	const info_bar = document.querySelector(".infoBar")
-
-	if (opens % 4 === 0) {
-		switch (random) {
-			case 0:
-				info_bar.style.display = "flex"
-				bar.textContent = lang.info_bar.feedback
-				bar_link.textContent = lang.info_bar.feedback_link
-				break
-
-			case 1:
-				info_bar.style.display = "flex"
-				bar.textContent = lang.info_bar.rate
-				bar_link.textContent = lang.info_bar.rate_link
-				break
-
-			case 2:
-				info_bar.style.display = "flex"
-				bar.textContent = lang.info_bar.translate
-				bar_link.textContent = lang.info_bar.translate_link
-				break
-
-			default:
-				info_bar.style.display = "flex"
-				break
-		}
-	}
-}
-
-infoBar()
-
-const barLink = () => {
-	switch (random) {
-		case 0:
-			provideFeedback()
-			break
-
-		case 1:
-			rateAuthme()
-			break
-
-		case 2:
-			shell.openExternal("https://github.com/Levminer/authme/blob/dev/.github/CONTRIBUTING.md#translation")
-			break
-
-		default:
-			provideFeedback()
-			break
-	}
-}
-
 /* Focus search with ctrl+k */
 document.addEventListener("keypress", (event) => {
 	if (event.ctrlKey === true && event.code === "KeyK") {
 		focusSearch()
 	}
 })
+
+/* Deprecation notice */
+const date = new Date()
+const release = new Date("2022-11-10")
+
+if (date > release) {
+	document.querySelector(".deprecation").style.display = "block"
+	document.querySelector(".deprecationNotice").style.display = "none"
+}
+
+const downloadUpdate = () => {
+	shell.openExternal("https://authme.levminer.com/#downloads")
+}
+
+const releaseNotes = () => {
+	shell.openExternal("https://github.com/Levminer/authme/releases/latest")
+}
+
+const migrationGuide = () => {
+	shell.openExternal("https://github.com/Levminer/authme#migration")
+}

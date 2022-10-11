@@ -42,10 +42,18 @@
 [![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://authme.levminer.com/#downloads-alpha)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/actions/workflows/alpha-artifacts.yml)
 
-## Translating
+## Migration
 
--   Help translate Authme: [Translation](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md#translation)
--   You can translate on Crowdin to: [Crowdin](https://crowdin.com/project/authme-2fa)
+Tutorial on how to migrate to Authme 4 from Authme 3:
+
+1. Inside Authme: Top menu > Tools > Export.
+1. Click confirm, and export the .authme file.
+1. Go to the settings: Top menu > File > Settings.
+1. Inside the general options: Click Clear data and confirm.
+1. Now uninstall Authme from you computer.
+1. Download [Authme 4](https://authme.levminer.com/#downloads) and install it.
+1. Go through the getting started wizard.
+1. In the codes page select Choose file and choose the .authme file you saved.
 
 ## Contributing and development
 
