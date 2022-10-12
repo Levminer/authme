@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		"target": "es2017",
+		"useDefineForClassFields": true,
+		"module": "esnext",
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"allowJs": true,
+		"checkJs": true,
+		"importsNotUsedAsValues": "error",
+		"preserveValueImports": true,
+		"sourceMap": true,
+		"strict": false,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["interface/**/*.d.ts", "interface/**/*.ts", "interface/**/*.js", "interface/**/*.svelte", "libraries/**/*.d.ts", "libraries/**/*.ts"],
+	"exclude": ["dist"]
+}
