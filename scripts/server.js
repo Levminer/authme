@@ -37,7 +37,7 @@ esbuild
 			onRebuild(error, result) {
 				clients.forEach((res) => res.write("data: update\n\n"))
 				clients.length = 0
-				console.log(error || "Hot reload complete")
+				console.log(error ? `[reload] Hot reload: ${error}` : "[reload] Hot reload complete")
 			},
 		},
 	})
