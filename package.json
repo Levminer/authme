@@ -11,7 +11,7 @@
 		"dev": "node scripts/server.js",
 		"build": "node scripts/buildNumber.cjs alpha false && tauri build",
 		"build:alpha": "node scripts/buildNumber.cjs alpha false && tauri build",
-		"build:bundle": "node scripts/build.js",
+		"build:bundle": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
 		"check": "svelte-check && tsc --noEmit && eslint ."
 	},
 	"devDependencies": {

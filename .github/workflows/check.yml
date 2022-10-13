@@ -10,5 +10,7 @@ jobs:
                 node-version: "16"
             - name: Install modules
               run: npm ci
+            - name: Setup project
+              run: npm run build:bundle
             - name: Run Lint
               run: npm run check
