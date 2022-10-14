@@ -31,6 +31,7 @@
 	import { Route, router } from "tinro"
 	import { onMount } from "svelte"
 	import { state } from "../stores/state"
+	import logger from "interface/utils/logger"
 
 	import UpdateAlert from "../components/updateAlert.svelte"
 	import BuildNumber from "../components/buildNumber.svelte"
@@ -46,10 +47,16 @@
 	import Edit from "../windows/edit/edit.svelte"
 
 	onMount(() => {
+		// Listen for router events
 		router.subscribe((data) => {
 			console.log("Path changed:", data)
 
 			document.querySelector(".top").scrollIntoView()
+		})
+
+		// Listen for errors
+		window.addEventListener("unhandledrejection", (error) => {
+			logger.error(`Unknown runtime error occurred: ${error.reason}`)
 		})
 	})
 </script>

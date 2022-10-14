@@ -50,8 +50,7 @@ export const clearData = async () => {
 }
 
 export const showLogs = async () => {
-	const folderPath = await path.join(await path.configDir(), "Levminer", "Authme 4")
-
+	const folderPath = await path.join(await path.cacheDir(), "com.levminer.authme", "logs")
 	open(folderPath)
 }
 

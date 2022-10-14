@@ -1,6 +1,7 @@
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
-use std::env;
+use std::{env, fs};
+use std::io::Write;
 use tauri::{GlobalShortcutManager, Manager};
 
 #[tauri::command]
@@ -53,4 +54,16 @@ pub fn logger(message: String, time: String, kind: &str) {
             time, message
         ),
     }
+}
+
+#[tauri::command]
+pub fn write_logs(name: String, message: String) {
+    let mut file = fs::OpenOptions::new()
+        .write(true)
+        .append(true)
+        .create(true)
+        .open(name)
+        .unwrap();
+
+    write!(file, "{}", message).unwrap();
 }

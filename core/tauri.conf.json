@@ -16,7 +16,7 @@
 		"allowlist": {
 			"all": true,
 			"fs": {
-				"scope": ["$CONFIG/Levminer/*"]
+				"scope": ["$CACHE/com.levminer.authme/*"]
 			}
 		},
 		"bundle": {
