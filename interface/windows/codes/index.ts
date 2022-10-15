@@ -1,6 +1,6 @@
 import { textConverter } from "../../utils/convert"
 import { TOTP } from "otpauth"
-import { dialog, fs } from "@tauri-apps/api"
+import { clipboard, dialog, fs } from "@tauri-apps/api"
 import { getSettings, setSettings } from "../../stores/settings"
 import { getState, setState } from "../../stores/state"
 import { decryptData, encryptData } from "interface/utils/encryption"
@@ -129,7 +129,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 			time.textContent = remainingTime.toString()
 
 			button.addEventListener("click", () => {
-				navigator.clipboard.writeText(code.textContent)
+				clipboard.writeText(code.textContent)
 
 				button.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

@@ -1,5 +1,11 @@
+import { dialog } from "@tauri-apps/api"
+import { getState, setState } from "interface/stores/state"
+import { TOTP } from "otpauth"
 import protobuf from "protocol-buffers"
 import { encode } from "./base32"
+import logger from "./logger"
+
+const state = getState()
 
 const protoContent = `
 syntax = "proto3";
@@ -107,6 +113,20 @@ export const textConverter = (text: string, sortNumber: number): LibImportFile =
 		// Push secrets to array
 		if (data[i].startsWith("Secret")) {
 			const secret = data[i].slice(8).trim()
+
+			try {
+				new TOTP({
+					secret,
+				}).generate()
+			} catch (error) {
+				dialog.message("Failed to generate TOTP code from secret. \n\nMake sure you import file is correct!", { type: "error" })
+				logger.error("Failed to generate TOTP code from secret")
+
+				state.importData = null
+				setState(state)
+
+				return
+			}
 
 			secrets.push(secret)
 		}
