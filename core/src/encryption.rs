@@ -59,8 +59,7 @@ pub fn decrypt_data(data: String) -> String {
 }
 
 #[tauri::command]
-pub fn set_entry(name: String, data: String) -> String {
-    let service = "authme";
+pub fn set_entry(name: String, data: String, service: String) -> String {
     let entry = keyring::Entry::new(&service, &name);
 
     let res = entry.set_password(data.as_str());
@@ -72,8 +71,7 @@ pub fn set_entry(name: String, data: String) -> String {
 }
 
 #[tauri::command]
-pub fn get_entry(name: String) -> String {
-    let service = "authme";
+pub fn get_entry(name: String, service: String) -> String {
     let entry = keyring::Entry::new(&service, &name);
 
     let item = entry.get_password().unwrap_or_else(|error| "error".into());
@@ -82,8 +80,7 @@ pub fn get_entry(name: String) -> String {
 }
 
 #[tauri::command]
-pub fn delete_entry(name: String) {
-    let service = "authme";
+pub fn delete_entry(name: String, service: String) {
     let entry = keyring::Entry::new(&service, &name);
 
     let item = entry.delete_password();
@@ -95,6 +92,6 @@ pub fn receive_encryption_key(key: String) {
 }
 
 #[tauri::command]
-pub fn set_encryption_key() {
-    *ENCRYPTION_KEY.lock().unwrap() = get_entry("encryptionKey".to_string())
+pub fn set_encryption_key(service: String) {
+    *ENCRYPTION_KEY.lock().unwrap() = get_entry("encryptionKey".to_string(), service)
 }

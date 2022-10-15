@@ -1,8 +1,10 @@
 import { invoke, dialog } from "@tauri-apps/api"
 import { getSettings, setSettings } from "interface/stores/settings"
 import logger from "./logger"
+import { dev } from "../../build.json"
 
 const settings = getSettings()
+const service = dev ? "authme_dev" : "authme"
 
 /**
  * Generates random key
@@ -35,7 +37,7 @@ export const decryptData = async (data: string): Promise<string> => {
  * Sets an entry on the system keychain
  */
 export const setEntry = async (name: string, data: string) => {
-	const res = await invoke("set_entry", { name, data })
+	const res = await invoke("set_entry", { name, data, service })
 
 	if (res === "error") {
 		dialog.message("Failed to set the encryption key on your systems keychain!\n\n You can use the password method.", { type: "error" })
@@ -48,7 +50,7 @@ export const setEntry = async (name: string, data: string) => {
  * Set the encryption key on the backend
  */
 export const setEncryptionKey = async () => {
-	const res: string = await invoke("set_encryption_key")
+	const res: string = await invoke("set_encryption_key", { service })
 
 	if (res === "error") {
 		dialog.message("Failed to set the encryption key on your systems keychain!\n\n Please restart the app and try again!", { type: "error" })
@@ -68,7 +70,7 @@ export const sendEncryptionKey = async (key: string) => {
  * Delete encryption key
  */
 export const deleteEncryptionKey = async (name: string) => {
-	return await invoke("delete_entry", { name })
+	return await invoke("delete_entry", { name, service })
 }
 
 /**
