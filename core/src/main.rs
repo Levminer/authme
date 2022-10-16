@@ -83,7 +83,8 @@ fn main() {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            auto_launch::auto_launch,
+            auto_launch::enable_auto_launch,
+            auto_launch::disable_auto_launch,
             system_info::system_info,
             encryption::encrypt_password,
             encryption::verify_password,

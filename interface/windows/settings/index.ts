@@ -1,8 +1,11 @@
 import build from "../../../build.json"
-import { path, invoke, os, dialog, app } from "@tauri-apps/api"
+import { path, invoke, os, dialog, app, process } from "@tauri-apps/api"
 import { UAParser } from "ua-parser-js"
 import { navigate, open } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
+import { getSettings } from "interface/stores/settings"
+
+const settings = getSettings()
 
 export const about = async () => {
 	const appVersion = await app.getVersion()
@@ -44,8 +47,13 @@ export const clearData = async () => {
 
 		await deleteEncryptionKey("encryptionKey")
 
-		navigate("/")
-		location.reload()
+		if (build.dev === false) {
+			await invoke("disable_auto_launch")
+			process.exit()
+		} else {
+			navigate("/")
+			location.reload()
+		}
 	}
 }
 
@@ -55,5 +63,9 @@ export const showLogs = async () => {
 }
 
 export const launchOnStartup = () => {
-	invoke("auto_launch")
+	if (settings.settings.launchOnStartup === true) {
+		invoke("disable_auto_launch")
+	} else {
+		invoke("enable_auto_launch")
+	}
 }

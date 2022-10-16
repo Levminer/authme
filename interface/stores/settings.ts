@@ -44,7 +44,7 @@ const defaultSettings: LibSettings = {
 
 // Setup auto launch on first start
 if (build.dev === false && localStorage.settings === undefined) {
-	invoke("auto_launch")
+	invoke("enable_auto_launch")
 }
 
 // Create store
