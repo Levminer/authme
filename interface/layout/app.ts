@@ -56,7 +56,7 @@ event.listen("openCodes", (data: any) => {
 window.appWindow.onFocusChanged((focused) => {
 	if (focused.payload === true && state.authenticated === true) {
 		if (location.pathname === "/codes") {
-			document.querySelector<HTMLInputElement>(".search").focus()
+			document.querySelector<HTMLInputElement>(".search").select()
 		}
 	}
 })

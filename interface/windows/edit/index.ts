@@ -137,8 +137,8 @@ export const deleteCodes = async () => {
 	const confirm1 = await dialog.ask("Are you absolutely sure? \n\nThere is no way back!", { type: "warning" })
 
 	if (confirm1 === true) {
-		const filePath = await path.join(await path.configDir(), "Levminer", "Authme 4", "codes", "codes.authme")
-		await fs.removeFile(filePath)
+		settings.vault.codes = null
+		setSettings(settings)
 
 		navigate("codes")
 	}

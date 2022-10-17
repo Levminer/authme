@@ -316,7 +316,7 @@ export const loadCodes = async () => {
 			generateCodeElements(textConverter(decryptedText, settings.settings.sortCodes))
 		}
 
-		document.querySelector<HTMLInputElement>(".search").focus()
+		document.querySelector<HTMLInputElement>(".search").select()
 	} else {
 		if (state.importData !== null) {
 			// There are no saved codes, but new codes imported
