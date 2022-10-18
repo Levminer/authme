@@ -9,8 +9,9 @@
 	"scripts": {
 		"start": "node scripts/buildNumber.cjs alpha true && tauri dev",
 		"dev": "node scripts/server.js",
-		"build": "node scripts/buildNumber.cjs alpha false && tauri build",
+		"build": "node scripts/buildNumber.cjs release false && tauri build",
 		"build:alpha": "node scripts/buildNumber.cjs alpha false && tauri build",
+		"build:beta": "node scripts/buildNumber.cjs beta false && tauri build",
 		"build:bundle": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
 		"check": "svelte-check && tsc --noEmit && eslint ."
 	},
