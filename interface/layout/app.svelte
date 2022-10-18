@@ -4,7 +4,9 @@
 	{/if}
 
 	<div class="w-full overflow-hidden overflow-y-scroll">
-		<BuildNumber />
+		{#if number.startsWith("alpha") || number.startsWith("beta")}
+			<BuildNumber />
+		{/if}
 
 		{#if $state.updateAvailable}
 			<UpdateAlert />
@@ -31,6 +33,7 @@
 	import { Route, router } from "tinro"
 	import { onMount } from "svelte"
 	import { state } from "../stores/state"
+	import { number } from "../../build.json"
 	import logger from "interface/utils/logger"
 
 	import UpdateAlert from "../components/updateAlert.svelte"
