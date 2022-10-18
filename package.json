@@ -13,6 +13,7 @@
 		"build:alpha": "node scripts/buildNumber.cjs alpha false && tauri build",
 		"build:beta": "node scripts/buildNumber.cjs beta false && tauri build",
 		"build:bundle": "node scripts/build.js",
+		"setup": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
 		"check": "svelte-check && tsc --noEmit && eslint ."
 	},
 	"devDependencies": {

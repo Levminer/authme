@@ -11,6 +11,6 @@ jobs:
             - name: Install modules
               run: npm ci
             - name: Setup project
-              run: npm run build:bundle
+              run: npm run setup
             - name: Run Lint
               run: npm run check

@@ -3,7 +3,7 @@
 -   Node.js 16+, Git, [Tauri](https://tauri.app/v1/guides/getting-started/prerequisites)
 -   Clone the repository: `git clone https://github.com/Levminer/authme`
 -   Install node modules: `npm i`
--   Setup project: `npm run build:bundle`
+-   Setup project: `npm run setup`
 -   Run start command: `npm run start`
 
 ## Building
