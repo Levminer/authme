@@ -58,8 +58,8 @@
 		})
 
 		// Listen for errors
-		window.addEventListener("unhandledrejection", (error) => {
-			logger.error(`Unknown runtime error occurred: ${error.reason}`)
+		window.addEventListener("unhandledrejection", (error: any) => {
+			logger.error(`Unknown runtime error occurred: ${error.reason} \nStack: ${error.target.location.href}`)
 		})
 	})
 </script>

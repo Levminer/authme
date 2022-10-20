@@ -7,6 +7,7 @@ import { getState } from "interface/stores/state"
 import { dev } from "../../build.json"
 import { optionalAnalyticsPayload } from "interface/utils/analytics"
 import { checkForUpdate } from "interface/utils/update"
+import logger from "interface/utils/logger"
 
 const settings = getSettings()
 const state = getState()
@@ -94,14 +95,18 @@ const optionalAnalytics = async () => {
 	if (settings.settings.optionalAnalytics === true && dev === false) {
 		const payload = JSON.stringify(await optionalAnalyticsPayload())
 
-		fetch("https://analytics.levminer.com/api/v1/authme/analytics/post", {
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-			body: payload,
-		})
+		try {
+			fetch("https://analytics.levminer.com/api/v1/authme/analytics/post", {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: payload,
+			})
+		} catch (error) {
+			logger.error(`Failed to send analytics: ${error}`)
+		}
 	}
 }
 
