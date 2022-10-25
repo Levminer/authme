@@ -33,7 +33,7 @@
 	import { Route, router } from "tinro"
 	import { onMount } from "svelte"
 	import { state } from "../stores/state"
-	import { number } from "../../build.json"
+	import { number, version } from "../../build.json"
 	import logger from "interface/utils/logger"
 
 	import UpdateAlert from "../components/updateAlert.svelte"
@@ -50,16 +50,19 @@
 	import Edit from "../windows/edit/edit.svelte"
 
 	onMount(() => {
+		// Debug info
+		logger.log(`Authme ${version} ${number}`)
+
 		// Listen for router events
 		router.subscribe((data) => {
-			console.log("Path changed:", data)
+			logger.log(`Path changed: ${data.path}`)
 
 			document.querySelector(".top").scrollIntoView()
 		})
 
 		// Listen for errors
-		window.addEventListener("unhandledrejection", (error: any) => {
-			logger.error(`Unknown runtime error occurred: ${error.reason} \nStack: ${error.target.location.href}`)
+		window.addEventListener("unhandledrejection", (error) => {
+			logger.error(`Unknown runtime error occurred: ${error.reason}`)
 		})
 	})
 </script>

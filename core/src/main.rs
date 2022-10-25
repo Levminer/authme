@@ -9,7 +9,6 @@ use tauri::*;
 
 mod auto_launch;
 mod encryption;
-mod system_info;
 mod utils;
 
 #[derive(Clone, serde::Serialize)]
@@ -85,7 +84,6 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             auto_launch::enable_auto_launch,
             auto_launch::disable_auto_launch,
-            system_info::system_info,
             encryption::encrypt_password,
             encryption::verify_password,
             encryption::encrypt_data,
@@ -99,7 +97,8 @@ fn main() {
             utils::update_tray,
             utils::random_values,
             utils::logger,
-            utils::write_logs
+            utils::write_logs,
+            utils::system_info,
         ])
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);

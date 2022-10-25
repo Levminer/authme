@@ -1,7 +1,8 @@
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
-use std::{env, fs};
 use std::io::Write;
+use std::{env, fs};
+use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{GlobalShortcutManager, Manager};
 
 #[tauri::command]
@@ -66,4 +67,18 @@ pub fn write_logs(name: String, message: String) {
         .unwrap();
 
     write!(file, "{}", message).unwrap();
+}
+
+#[tauri::command]
+pub fn system_info() -> String {
+    let mut sys = System::new_all();
+    sys.refresh_all();
+
+    let name = sys.name().unwrap();
+    let cpu = sys.cpus()[0].brand();
+    let mem = sys.total_memory();
+
+    let res = format!("{}+{}+{}", name, cpu, mem);
+
+    res.into()
 }
