@@ -43,6 +43,7 @@ jobs:
           rm -rf core/target/release/build
           rm -rf core/target/release/deps
           rm -rf core/target/release/bundle/appimage/authme.AppDir
+          npm run rename
         shell: bash        
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
