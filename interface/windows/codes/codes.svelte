@@ -6,7 +6,7 @@
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 			</svg>
 
-			<input on:keyup={search} class="search input w-96 pl-12 pr-12" type="text" />
+			<input on:keyup={search} spellcheck="false" class="search input w-96 pl-12 pr-12" type="text" />
 
 			<div class="relative right-9 top-0.5">
 				<SearchFilter />

@@ -1,5 +1,5 @@
 import build from "../../../build.json"
-import { path, invoke, os, dialog, app, process } from "@tauri-apps/api"
+import { path, invoke, os, dialog, app, process, clipboard } from "@tauri-apps/api"
 import { UAParser } from "ua-parser-js"
 import { navigate, open } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
@@ -28,7 +28,10 @@ export const about = async () => {
 	const memory = `${Math.round(parseInt(hardware[2]) / 1024 / 1024)}GB`
 	const osName = hardware[0]
 
-	dialog.message(`Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu}${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`)
+	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu}${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
+
+	dialog.message(info)
+	clipboard.writeText(info)
 }
 
 export const clearData = async () => {
