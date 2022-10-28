@@ -96,7 +96,7 @@ const optionalAnalytics = async () => {
 		const payload = JSON.stringify(await optionalAnalyticsPayload())
 
 		try {
-			fetch("https://analytics.levminer.com/api/v1/authme/analytics/post", {
+			fetch("https://api.levminer.com/api/v1/authme/analytics/post", {
 				method: "POST",
 				headers: {
 					Accept: "application/json",
