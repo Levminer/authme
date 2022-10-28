@@ -8,9 +8,7 @@
 			</div>
 			<div class="ml-20 flex gap-3 sm:ml-0 sm:mt-5">
 				<button class="button" on:click={showTOTPDialog}>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					Instructions
 				</button>
 			</div>
@@ -23,9 +21,7 @@
 			</div>
 			<div class="ml-20 flex gap-3 sm:ml-0 sm:mt-5">
 				<button class="button" on:click={showGADialog}>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					Instructions
 				</button>
 			</div>
@@ -43,13 +39,7 @@
 			</div>
 			<div class="ml-10 flex gap-3">
 				<button class="button" on:click={chooseImages}>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-						<line x1="15" y1="8" x2="15.01" y2="8" />
-						<rect x="4" y="4" width="16" height="16" rx="3" />
-						<path d="M4 15l4 -4a3 5 0 0 1 3 0l5 5" />
-						<path d="M14 14l1 -1a3 5 0 0 1 3 0l2 2" />
-					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><circle cx="10" cy="13" r="2" /><path d="m20 17-1.09-1.09a2 2 0 0 0-2.82 0L10 22" /></svg>
 					Choose images
 				</button>
 			</div>
@@ -62,17 +52,7 @@
 			</div>
 			<div class="ml-10 flex gap-3">
 				<button class="button" on:click={showManualEntry}>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-						<rect x="2" y="6" width="20" height="12" rx="2" />
-						<line x1="6" y1="10" x2="6" y2="10" />
-						<line x1="10" y1="10" x2="10" y2="10" />
-						<line x1="14" y1="10" x2="14" y2="10" />
-						<line x1="18" y1="10" x2="18" y2="10" />
-						<line x1="6" y1="14" x2="6" y2="14.01" />
-						<line x1="18" y1="14" x2="18" y2="14.01" />
-						<line x1="10" y1="14" x2="14" y2="14" />
-					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2" /><path d="M6 8h.001" /><path d="M10 8h.001" /><path d="M14 8h.001" /><path d="M18 8h.001" /><path d="M8 12h.001" /><path d="M12 12h.001" /><path d="M16 12h.001" /><path d="M7 16h10" /></svg>
 					<span>Manual entry</span>
 				</button>
 			</div>
@@ -86,12 +66,7 @@
 				</div>
 				<div>
 					<button class="smallButton" on:click={useWebcam}>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-							<circle cx="12" cy="10" r="7" />
-							<circle cx="12" cy="10" r="3" />
-							<path d="M8 16l-2.091 3.486a1 1 0 0 0 .857 1.514h10.468a1 1 0 0 0 .857 -1.514l-2.091 -3.486" />
-						</svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
 						Use webcam
 					</button>
 				</div>
@@ -103,13 +78,7 @@
 				</div>
 				<div>
 					<button class="smallButton" on:click={captureScreen}>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-							<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-							<rect x="3" y="4" width="18" height="12" rx="1" />
-							<line x1="7" y1="20" x2="17" y2="20" />
-							<line x1="9" y1="16" x2="9" y2="20" />
-							<line x1="15" y1="16" x2="15" y2="20" />
-						</svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3" /><path d="M8 21h8" /><path d="M12 17v4" /><path d="m17 8 5-5" /><path d="M17 3h5v5" /></svg>
 						Capture screen
 					</button>
 				</div>
@@ -121,9 +90,7 @@
 				</div>
 				<div>
 					<button class="smallButton" on:click={chooseFile}>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" />
-						</svg>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v3" /><polyline points="14 2 14 8 20 8" /><path d="M5 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" /><path d="m9 18-1.5-1.5" /></svg>
 						Choose file
 					</button>
 				</div>
