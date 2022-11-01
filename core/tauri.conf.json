@@ -65,7 +65,8 @@
 				"minWidth": 1000,
 				"minHeight": 600,
 				"maximized": true,
-				"visible": false
+				"visible": false,
+				"theme": "Dark"
 			}
 		]
 	}

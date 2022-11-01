@@ -1,8 +1,8 @@
 import build from "../../build.json"
-import { os } from "@tauri-apps/api"
+import { invoke, os } from "@tauri-apps/api"
 
 export const optionalAnalyticsPayload = async () => {
-	const osType = await os.type()
+	const osType = (await invoke<string>("system_info")).split("+")[0]
 	const osArch = await os.arch()
 	const osVersion = await os.version()
 
@@ -10,7 +10,7 @@ export const optionalAnalyticsPayload = async () => {
 		version: build.version,
 		build: build.number,
 		os: `${osType} ${osArch.replace("x86_64", "x64")} ${osVersion}`,
-		lang: navigator.language.slice(0, 2),
+		lang: navigator.language,
 		date: new Date(),
 	}
 }

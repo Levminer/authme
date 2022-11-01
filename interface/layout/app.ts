@@ -33,7 +33,8 @@ const setBackground = async () => {
 	}
 }
 
-setBackground()
+// TODO transparency
+// setBackground()
 
 // Tray settings open handler
 event.listen("openSettings", (data: any) => {
