@@ -247,3 +247,16 @@ export const migrationImageConverter = (data: string): string => {
 
 	return returnString
 }
+
+/**
+ * Convert markdown to text
+ */
+export const markdownConverter = (text: string) => {
+	const body = text
+		.replaceAll("###", "")
+		.replaceAll("*", " -")
+		.replaceAll(/(#[0-9])\w+/g, "")
+		.replaceAll("-  ", "- ")
+
+	return body
+}

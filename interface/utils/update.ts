@@ -1,11 +1,12 @@
-import { updater, dialog } from "@tauri-apps/api"
+import { updater, dialog, os } from "@tauri-apps/api"
 import { relaunch } from "@tauri-apps/api/process"
 import { getState, setState } from "interface/stores/state"
 import { dev } from "../../build.json"
+import { markdownConverter } from "./convert"
 import logger from "./logger"
+import { open } from "./navigate"
 
 const state = getState()
-let releaseNotes: string
 
 /**
  * Check for auto update
@@ -15,9 +16,7 @@ export const checkForUpdate = async () => {
 		try {
 			const { shouldUpdate, manifest } = await updater.checkUpdate()
 			if (shouldUpdate) {
-				releaseNotes = manifest.body
-
-				logger.log(`Latest update: ${JSON.stringify(manifest)}`)
+				logger.log(`Latest update: ${JSON.stringify(manifest)} ${manifest.body}`)
 
 				state.updateAvailable = true
 				setState(state)
@@ -29,12 +28,20 @@ export const checkForUpdate = async () => {
 }
 
 export const installUpdate = async () => {
-	document.querySelector(".updateText").textContent = "Downloading update... Please wait!"
+	const system = await os.type()
 
-	await updater.installUpdate()
-	await relaunch()
+	if (system !== "Windows_NT") {
+		open("https://authme.levminer.com/#downloads")
+	} else {
+		document.querySelector(".updateText").textContent = "Downloading update... Please wait!"
+		document.querySelector(".installUpdate").style.display = "none"
+
+		await updater.installUpdate()
+		await relaunch()
+	}
 }
 
-export const showReleaseNotes = () => {
-	dialog.message(releaseNotes)
+export const showReleaseNotes = async () => {
+	const res = await (await fetch("https://api.levminer.com/api/v1/authme/releases")).json()
+	dialog.message(markdownConverter(res.body.split("Other")[0]))
 }
