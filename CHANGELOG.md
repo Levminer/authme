@@ -1,3 +1,13 @@
+### Authme 4.00.-beta.2 (2022. November 1.)
+
+-   [[f7060e4](https://github.com/Levminer/authme/commit/f7060e4)] Force dark mode and analytics fixes (2022-11-01)
+-   [[0e4ad03](https://github.com/Levminer/authme/commit/0e4ad03)] Bump version (2022-10-31)
+-   [[3dc4859](https://github.com/Levminer/authme/commit/3dc4859)] Update icons (2022-10-28)
+-   [[ecb4ac6](https://github.com/Levminer/authme/commit/ecb4ac6)] Settings rewording (2022-10-28)
+-   [[5dbf894](https://github.com/Levminer/authme/commit/5dbf894)] Disable search spellcheck and version fixes (2022-10-28)
+-   [[23dc6db](https://github.com/Levminer/authme/commit/23dc6db)] Update CHANGELOG.md (2022-10-27)
+-   [[db58b58](https://github.com/Levminer/authme/commit/db58b58)] Rename script (2022-10-26)
+
 ### Authme 4.0.0-beta.1 (2022. October 25.)
 
 -   [[c0e3534](https://github.com/Levminer/authme/commit/c0e3534)] Bump version and upgrade packages (2022-10-25)
