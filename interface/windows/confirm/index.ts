@@ -27,7 +27,7 @@ export const confirmPassword = async () => {
 
 		navigate("codes")
 	} else {
-		dialog.message("Passwords don't match! \n\nPlease try again!", { type: "error" })
+		dialog.message("Wrong password! \n\nPlease try again!", { type: "error" })
 	}
 }
 
