@@ -1,0 +1,118 @@
+name: Release Artifacts
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  test-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            NAME: macos
+          - os: ubuntu-latest
+            NAME: linux
+          - os: windows-latest
+            NAME: windows
+    runs-on: ${{ matrix.os}}
+    env:
+      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Install webkit2gtk (ubuntu only)
+        if: matrix.NAME == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+      - name: Install app dependencies and build it
+        run: npm ci && npm run build:alpha
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove useless folders
+        run: |
+          rm -rf core/target/release/build
+          rm -rf core/target/release/deps
+          rm -rf core/target/release/bundle/appimage/authme.AppDir
+          npm run rename
+        shell: bash
+
+      - uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/:repository/releases?per_page=1
+          repository: ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get upload url
+        id: get_upload_url
+        run: >
+          url=$(echo "$response" | jq -r ".[0].upload_url")
+          echo "::set-output name=url::$url"
+        env:
+          response: ${{ steps.get_latest_release.outputs.data }}
+        shell: bash
+
+      - name: Get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: package.json
+          prop_path: version
+
+      # Windows
+      - name: Upload the windows installer asset
+        if: runner.os == 'Windows'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-windows-x64.msi
+          asset_name: authme-${{steps.version.outputs.prop}}-windows-x64.msi
+          asset_content_type: application/octet-stream
+
+      # Linux
+      - name: Upload the linux installer asset
+        if: runner.os == 'Linux'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-linux-x64.appimage
+          asset_name: authme-${{steps.version.outputs.prop}}-linux-x64.appimage
+          asset_content_type: application/octet-stream
+  
+      # Mac
+      - name: Upload the mac installer asset
+        if: runner.os == 'macOS'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{steps.get_upload_url.outputs.url}}
+          asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-macos-x64.dmg
+          asset_name: authme-${{steps.version.outputs.prop}}-macos-x64.dmg
+          asset_content_type: application/octet-stream
+      
+      - name: Hash
+        run: cat ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-${{matrix.NAME}}-x64.sig
+        shell: bash
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: authme-latest-release-${{matrix.NAME}}-x64-installer-portable
+          path: dist
+          
