@@ -22,7 +22,7 @@
 
 ## Screenshot
 
-<img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/application.png?raw=true">
+<img src="https://raw.githubusercontent.com/Levminer/authme/dev/screenshots/codes.png?raw=true">
 
 ## Downloads (Release)
 

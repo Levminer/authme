@@ -1,7 +1,0 @@
-{
-	"productName": "Authme Test",
-	"appId": "com.levminer.authme-test",
-	"asar": false,
-	"files": ["!screenshots", "!sample", "!scripts", "!**/*.scss", "!**/*.ts", "!.*"],
-	"icon": "../img/icon.ico"
-}

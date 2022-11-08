@@ -1,118 +1,57 @@
 {
 	"name": "authme",
-	"productName": "Authme",
-	"version": "3.3.5",
-	"description": "Simple cross platform two-factor authentication app for desktop.",
+	"version": "4.0.0",
+	"description": "Simple cross-platform two-factor (2FA) authenticator app for desktop.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
+	"private": true,
+	"type": "module",
 	"scripts": {
-		"start": "node scripts/alpha-build.js && electron .",
-		"release": "node scripts/release-build.js && electron .",
-		"build": "node scripts/release-build.js && electron-builder --publish=never --x64",
-		"build:beta": "node scripts/beta-build.js && electron-builder --publish=never --x64",
-		"build:alpha": "node scripts/alpha-build.js && electron-builder --publish=never --x64",
-		"build:test": "node scripts/alpha-build.js && electron-builder --publish=never --x64 --dir -c scripts/test-build.json",
-		"watch": "tailwindcss build -i styles/index.css -o styles/tailwind.css -c .tailwindrc.js --no-autoprefixer --minify --watch",
-		"test": "npx playwright test",
-		"lint": "eslint --fix .",
-		"eslint": "eslint ."
-	},
-	"main": "main.js",
-	"build": {
-		"appId": "com.levminer.authme",
-		"files": [
-			"!screenshots",
-			"!samples",
-			"!scripts",
-			"!**/*.scss",
-			"!.*"
-		],
-		"win": {
-			"target": [
-				"nsis",
-				"zip"
-			],
-			"icon": "img/icon.ico",
-			"artifactName": "authme-${version}-windows-x64-portable.zip"
-		},
-		"nsis": {
-			"installerIcon": "img/icon.ico",
-			"uninstallerIcon": "img/icon.ico",
-			"uninstallDisplayName": "Authme",
-			"license": "LICENSE.md",
-			"oneClick": false,
-			"allowToChangeInstallationDirectory": true,
-			"createDesktopShortcut": true,
-			"artifactName": "authme-${version}-windows-x64-installer.exe"
-		},
-		"linux": {
-			"target": [
-				"appImage",
-				"zip",
-				"snap"
-			],
-			"maintainer": "levminer@levminer.com",
-			"icon": "img/icon.png",
-			"category": "Utility",
-			"desktop": {
-				"Name": "Authme",
-				"Type": "Application"
-			},
-			"artifactName": "authme-${version}-linux-x64-portable.zip"
-		},
-		"appImage": {
-			"artifactName": "authme-${version}-linux-x64-installer.appimage"
-		},
-		"snap": {
-			"artifactName": "authme-${version}-linux-x64-installer.snap"
-		},
-		"mac": {
-			"target": [
-				"dmg",
-				"zip"
-			],
-			"icon": "img/icon.icns",
-			"category": "public.app-category.utilities",
-			"artifactName": "authme-${version}-mac-x64-portable.zip"
-		},
-		"dmg": {
-			"artifactName": "authme-${version}-mac-x64-installer.dmg"
-		}
-	},
-	"dependencies": {
-		"@6c65726f79/custom-titlebar": "^0.9.1",
-		"@electron/remote": "^2.0.8",
-		"@levminer/languages": "file:languages",
-		"@levminer/lib": "file:lib",
-		"@levminer/speakeasy": "^1.4.0",
-		"auto-launch": "^5.0.5",
-		"axios": "^0.27.2",
-		"bcryptjs": "^2.4.3",
-		"electron-context-menu": "^3.5.0",
-		"electron-debug": "^3.2.0",
-		"electron-updater": "^5.2.1",
-		"protons": "^2.0.3",
-		"qrcode-decoder": "^0.3.1",
-		"qrcode-generator": "^1.4.4"
+		"start": "node scripts/buildNumber.cjs alpha true && tauri dev",
+		"dev": "node scripts/server.js",
+		"build": "node scripts/buildNumber.cjs release false && tauri build",
+		"build:alpha": "node scripts/buildNumber.cjs alpha false && tauri build",
+		"build:beta": "node scripts/buildNumber.cjs beta false && tauri build",
+		"build:bundle": "node scripts/build.js",
+		"setup": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
+		"rename": "node scripts/rename.js",
+		"check": "svelte-check && tsc --noEmit && eslint ."
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.26.1",
+		"@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+		"@rgossiaux/svelte-headlessui": "^1.0.2",
 		"@tailwindcss/forms": "^0.5.3",
-		"concurrently": "^7.4.0",
-		"electron": "^21.1.0",
-		"electron-builder": "^23.3.3",
-		"eslint": "^8.24.0",
+		"@tauri-apps/api": "^1.1.0",
+		"@tauri-apps/cli": "^1.1.1",
+		"@types/node": "^18.11.9",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"autoprefixer": "^10.4.13",
+		"esbuild": "^0.15.13",
+		"esbuild-style-plugin": "^1.6.0",
+		"esbuild-svelte": "^0.7.1",
+		"eslint": "^8.26.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-config-standard": "^17.0.0-1",
-		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-prettier": "^4.2.1",
-		"eslint-plugin-promise": "^6.0.1",
-		"prettier": "^2.7.1",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-promise": "^6.1.1",
+		"eslint-plugin-svelte": "^2.12.0",
+		"postcss": "^8.4.18",
+		"prettier": "^2.7.0",
 		"prettier-plugin-tailwindcss": "^0.1.13",
-		"tailwindcss": "^3.1.8"
+		"svelte": "^3.52.0",
+		"svelte-check": "^2.9.2",
+		"svelte-preprocess": "^4.10.7",
+		"tailwindcss": "^3.2.1",
+		"tinro": "^0.6.12",
+		"typescript": "^4.8.4"
 	},
-	"engines": {
-		"node": ">=16.0.0",
-		"npm": ">=7.0.0"
+	"dependencies": {
+		"otpauth": "^8.0.3",
+		"protocol-buffers": "^5.0.0",
+		"qrcode-decoder": "^0.2.2",
+		"qrcode-generator": "^1.4.4",
+		"ua-parser-js": "^1.0.2"
 	}
 }

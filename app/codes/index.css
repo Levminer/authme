@@ -1,8 +1,0 @@
-.custom-titlebar-container {
-	overflow-y: scroll !important;
-}
-
-#search:hover ~ .searchIcon {
-	transition: 0.2s ease-in;
-	stroke: white;
-}

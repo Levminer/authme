@@ -1,30 +1,53 @@
 name: Alpha Artifacts
 on:
-    push:
-        branches: [dev]
+  push:
+    branches:
+      - dev
 jobs:
-    build:
-        runs-on: ${{matrix.os}}
-        strategy:
-            matrix:
-                include:
-                    - os: macos-latest
-                      NAME: mac
-                    - os: ubuntu-latest
-                      NAME: linux
-                    - os: windows-latest
-                      NAME: windows
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
-              with:
-                node-version: '16'
-            - name: Install modules
-              run: npm ci
-            - name: Run build
-              run: npm run build:alpha
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v2
-              with:
-                  name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
-                  path: dist
+  test-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            NAME: mac
+          - os: ubuntu-latest
+            NAME: linux
+          - os: windows-latest
+            NAME: windows
+    runs-on: ${{ matrix.os}}
+    env:
+      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Install webkit2gtk (ubuntu only)
+        if: matrix.NAME == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+      - name: Install app dependencies and build it
+        run: npm ci && npm run build:alpha
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove useless folders
+        run: |
+          rm -rf core/target/release/build
+          rm -rf core/target/release/deps
+          rm -rf core/target/release/bundle/appimage/authme.AppDir
+          npm run rename
+        shell: bash        
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
+          path: core/target/release
+          
