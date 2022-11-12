@@ -1,4 +1,15 @@
-### Authme 4.00.-beta.2 (2022. November 1.)
+### Authme 4.0.0 (2022. November 8.)
+
+-   [[2824bd6](https://github.com/Levminer/authme/commit/2824bd6)] update release artifacts (2022-11-08)
+-   [[0eef2c5](https://github.com/Levminer/authme/commit/0eef2c5)] Fix release artifacts (2022-11-07)
+-   [[4daa6d0](https://github.com/Levminer/authme/commit/4daa6d0)] Test release artifacts (2022-11-07)
+-   [[2ba899f](https://github.com/Levminer/authme/commit/2ba899f)] Update screenshots (2022-11-06)
+-   [[fcdb590](https://github.com/Levminer/authme/commit/fcdb590)] Fix confirm password (2022-11-05)
+-   [[68e52df](https://github.com/Levminer/authme/commit/68e52df)] Bump version and update changelog (2022-11-04)
+-   [[4501aba](https://github.com/Levminer/authme/commit/4501aba)] Updater improvements (2022-11-03)
+-   [[d2dd8eb](https://github.com/Levminer/authme/commit/d2dd8eb)] Fix icons (2022-11-02)
+
+### Authme 4.0.0-beta.2 (2022. November 1.)
 
 -   [[f7060e4](https://github.com/Levminer/authme/commit/f7060e4)] Force dark mode and analytics fixes (2022-11-01)
 -   [[0e4ad03](https://github.com/Levminer/authme/commit/0e4ad03)] Bump version (2022-10-31)
