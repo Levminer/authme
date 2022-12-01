@@ -125,4 +125,4 @@ jobs:
               uses: actions/upload-artifact@v2
               with:
                   name: authme-latest-release-${{matrix.NAME}}-x64-installer-portable
-                  path: dist
+                  path: core/target/release
