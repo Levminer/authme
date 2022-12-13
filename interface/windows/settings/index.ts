@@ -25,10 +25,10 @@ export const about = async () => {
 		.replaceAll("(R)", "")
 		.replaceAll("(TM)", "")
 		.replace(/ +(?= )/g, "")
-	const memory = `${Math.round(parseInt(hardware[2]) / 1024 / 1024)}GB`
+	const memory = `${Math.round(parseInt(hardware[2]) / 1024 / 1024)} GB`
 	const osName = hardware[0]
 
-	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu}${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
+	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
 
 	dialog.message(info)
 	clipboard.writeText(info)
