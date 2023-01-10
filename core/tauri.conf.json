@@ -29,6 +29,7 @@
 			"externalBin": [],
 			"icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
 			"identifier": "com.levminer.authme",
+			"publisher": "Levminer",
 			"longDescription": "Simple cross-platform two-factor (2FA) authenticator app for desktop.",
 			"macOS": {
 				"entitlements": null,
