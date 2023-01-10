@@ -1,3 +1,12 @@
+### Authme 4.0.1 (2022. December 13.)
+
+-   [[6fdbd2b](https://github.com/Levminer/authme/commit/6fdbd2b)] Update hardware info (2022-12-13)
+-   [[3273cac](https://github.com/Levminer/authme/commit/3273cac)] Update packages and Tauri #244 (2022-12-13)
+-   [[9684538](https://github.com/Levminer/authme/commit/9684538)] Update release-artifacts.yml (2022-12-01)
+-   [[70dd3b6](https://github.com/Levminer/authme/commit/70dd3b6)] Update packages (2022-12-01)
+-   [[4221899](https://github.com/Levminer/authme/commit/4221899)] Update tauri (2022-11-13)
+-   [[9821d36](https://github.com/Levminer/authme/commit/9821d36)] Update packages and changelog (2022-11-12)
+
 ### Authme 4.0.0 (2022. November 8.)
 
 -   [[2824bd6](https://github.com/Levminer/authme/commit/2824bd6)] update release artifacts (2022-11-08)
