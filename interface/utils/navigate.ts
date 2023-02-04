@@ -1,5 +1,5 @@
 import { shell } from "@tauri-apps/api"
-import { router } from "tinro"
+import { router } from "@baileyherbert/tinro"
 
 /**
  * Go to the specified link

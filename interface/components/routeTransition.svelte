@@ -5,6 +5,6 @@
 {/key}
 
 <script>
-	import { router } from "tinro"
+	import { router } from "@baileyherbert/tinro"
 	import { fade } from "svelte/transition"
 </script>

@@ -18,6 +18,7 @@
 		"check": "svelte-check && tsc --noEmit && eslint ."
 	},
 	"devDependencies": {
+		"@baileyherbert/tinro": "^1.0.0",
 		"@esbuild-plugins/node-globals-polyfill": "^0.1.1",
 		"@esbuild-plugins/node-modules-polyfill": "^0.1.4",
 		"@rgossiaux/svelte-headlessui": "^1.0.2",
@@ -44,13 +45,12 @@
 		"svelte-check": "^3.0.3",
 		"svelte-preprocess": "^5.0.1",
 		"tailwindcss": "^3.2.4",
-		"tinro": "^0.6.12",
 		"typescript": "^4.9.4"
 	},
 	"dependencies": {
 		"otpauth": "^8.0.3",
 		"protocol-buffers": "^5.0.0",
-		"qrcode-decoder": "^0.3.3",
+		"qrcode-decoder": "^0.2.2",
 		"qrcode-generator": "^1.4.4",
 		"ua-parser-js": "^1.0.33"
 	}
