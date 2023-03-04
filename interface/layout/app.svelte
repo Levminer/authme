@@ -30,7 +30,7 @@
 </div>
 
 <script lang="ts">
-	import { Route, router } from "tinro"
+	import { Route, router } from "@baileyherbert/tinro"
 	import { onMount } from "svelte"
 	import { state } from "../stores/state"
 	import { number, version } from "../../build.json"
