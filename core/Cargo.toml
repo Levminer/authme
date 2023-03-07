@@ -27,6 +27,7 @@ keyring = "1.2.0"
 once_cell = "1.15.0"
 tauri-plugin-single-instance = { git = "https://github.com/tauri-apps/tauri-plugin-single-instance" }
 rand = "0.8.5"
+google_authenticator_converter = { path = "crates/google_authenticator_converter" }
 
 [features]
 # by default Tauri runs in production mode
@@ -41,3 +42,9 @@ panic = "abort" # Strip expensive panic clean-up logic
 codegen-units = 1 # Compile crates one after another so the compiler can optimize better
 lto = true # Enables link to optimizations
 opt-level = "s" # Optimize for binary size
+
+[workspace]
+
+members = [
+    "crates/*",
+]

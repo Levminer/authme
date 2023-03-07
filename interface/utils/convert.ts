@@ -1,71 +1,9 @@
-import { dialog } from "@tauri-apps/api"
+import { dialog, invoke } from "@tauri-apps/api"
 import { getState, setState } from "interface/stores/state"
 import { TOTP } from "otpauth"
-import protobuf from "protocol-buffers"
-import { encode } from "./base32"
 import logger from "./logger"
 
 const state = getState()
-
-const protoContent = `
-syntax = "proto3";
-package googleauth;
-message MigrationPayload {
-enum Algorithm {
-    ALGO_INVALID = 0;
-    ALGO_SHA1 = 1;
-}
-enum OtpType {
-    OTP_INVALID = 0;
-    OTP_HOTP = 1;
-    OTP_TOTP = 2;
-}
-message OtpParameters {
-    bytes secret = 1;
-    string name = 2;
-    string issuer = 3;
-    Algorithm algorithm = 4;
-    int32 digits = 5;
-    OtpType type = 6;
-    int64 counter = 7;
-}
-repeated OtpParameters otp_parameters = 1;
-int32 version = 2;
-int32 batch_size = 3;
-int32 batch_index = 4;
-int32 batch_id = 5;
-}
-`
-/**
- * Convert Google Authenticator export QR code to Authme Import file structure
- * @param {string} url
- * @return {LibCodesFormat[]} arr
- */
-export const googleAuthenticatorConverter = (url: string): LibCodesFormat[] => {
-	const buffer = Buffer.from(decodeURIComponent(url), "base64")
-	const proto = protobuf(protoContent)
-	const data = proto.MigrationPayload.decode(buffer).otp_parameters
-
-	const arr: LibCodesFormat[] = []
-
-	for (let i = 0; i < data.length; i++) {
-		const secret = encode(data[i].secret)
-
-		const obj: LibCodesFormat = {
-			name: data[i].name,
-			secret: secret.replaceAll("=", ""),
-			issuer: data[i].issuer,
-		}
-
-		if (obj.issuer === "") {
-			obj.issuer = obj.name
-		}
-
-		arr.push(obj)
-	}
-
-	return arr
-}
 
 /**
  * Convert codes from plain text to arrays
@@ -229,15 +167,12 @@ export const totpImageConverter = (data: string): string => {
  * @param {string} data
  * @return {string} string
  */
-export const migrationImageConverter = (data: string): string => {
+export const migrationImageConverter = async (data: string): Promise<string> => {
 	// return string
 	let returnString = ""
 
-	// split string
-	const uri = data.split("=")
-
 	// decode data
-	const decoded = googleAuthenticatorConverter(uri[1])
+	const decoded: LibCodesFormat[] = await invoke("google_authenticator_converter", { secret: data })
 
 	// make a string
 	decoded.forEach((element) => {

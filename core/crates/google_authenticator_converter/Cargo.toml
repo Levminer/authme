@@ -1,0 +1,14 @@
+[package]
+name = "google_authenticator_converter"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description= "Extract name, secret and issuer from a Google Authenticator migration QR code"
+
+[dependencies]
+base32 = "0.4.0"
+base64 = "0.21.0"
+urlencoding = "2.1.2"
+protobuf = { version = "2" }
+serde_json = { version = "1"}
+serde = {version = "1", features = ["derive"] }

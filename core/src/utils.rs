@@ -4,6 +4,7 @@ use std::io::Write;
 use std::{env, fs};
 use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{GlobalShortcutManager, Manager};
+use google_authenticator_converter::{process_data, Account};
 
 #[tauri::command]
 pub fn get_args() -> Vec<String> {
@@ -79,6 +80,13 @@ pub fn system_info() -> String {
     let mem = sys.total_memory();
 
     let res = format!("{}+{}+{}", name, cpu, mem);
+
+    res.into()
+}
+
+#[tauri::command]
+pub fn google_authenticator_converter(secret: &str) -> Vec<Account> {
+    let res = process_data(secret);
 
     res.into()
 }
