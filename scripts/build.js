@@ -7,6 +7,9 @@ import tw from "tailwindcss"
 import ap from "autoprefixer"
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill"
 import { existsSync, copyFileSync, mkdirSync } from "fs"
+import { copy } from "esbuild-plugin-copy"
+import { replace } from "esbuild-plugin-replace"
+import { ZBAR_WASM_REPOSITORY } from "@undecaf/barcode-detector-polyfill/zbar-wasm"
 
 if (existsSync("./dist/index.html") === false) {
 	mkdirSync("./dist")
@@ -34,6 +37,20 @@ esbuild
 			NodeModulesPolyfillPlugin(),
 			NodeGlobalsPolyfillPlugin({
 				buffer: true,
+			}),
+			replace({
+				values: {
+					[ZBAR_WASM_REPOSITORY]: "@undecaf/zbar-wasm",
+					"/dist/main.js": "",
+					"/dist/index.js": "",
+				},
+			}),
+
+			copy({
+				assets: {
+					from: ["node_modules/@undecaf/zbar-wasm/dist/zbar.wasm"],
+					to: ["."],
+				},
 			}),
 		],
 	})

@@ -1,4 +1,4 @@
-import QrcodeDecoder from "qrcode-decoder"
+import { BarcodeDetectorPolyfill } from "@undecaf/barcode-detector-polyfill"
 import { fs, dialog } from "@tauri-apps/api"
 import { getState, setState } from "../../stores/state"
 import { totpImageConverter, migrationImageConverter } from "../../utils/convert"
@@ -15,49 +15,54 @@ export const chooseImages = async () => {
 		return
 	}
 
-	const images: string[] = []
+	const images: ImageBitmap[] = []
 
+	// Read images
 	for (let i = 0; i < filePaths.length; i++) {
 		const file = await fs.readBinaryFile(filePaths[i])
 
 		const blob = new Blob([file], { type: "application/octet-binary" })
-		const url = URL.createObjectURL(blob)
+		const img = await createImageBitmap(blob)
 
-		images.push(url)
+		images.push(img)
 	}
 
 	let importString = ""
 
+	// Read QR codes from images
 	for (let i = 0; i < images.length; i++) {
 		const processImages = async () => {
-			const qr = new QrcodeDecoder()
+			try {
+				const detector = new BarcodeDetectorPolyfill()
+				const res = (await detector.detect(images[i]))[0]
 
-			// Decode image
-			const res = await qr.decodeFromImage(images[i])
+				if (res.rawValue.startsWith("otpauth://totp/") || res.rawValue.startsWith("otpauth-migration://")) {
+					if (res.rawValue.startsWith("otpauth://totp/")) {
+						importString += totpImageConverter(res.rawValue)
+					} else {
+						const converted = await migrationImageConverter(res.rawValue)
+						importString += converted
+					}
 
-			if (res === false) {
-				// No qr code found on the picture
-				dialog.message(`No QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
-			} else if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
-				if (res.data.startsWith("otpauth://totp/")) {
-					importString += totpImageConverter(res.data)
-				} else {
-					importString += migrationImageConverter(res.data)
-				}
-
-				if (images.length === i + 1) {
 					// QR codes found on all images
-					dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+					if (images.length === i + 1) {
+						dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
 
-					const state = getState()
-					state.importData += importString
-					setState(state)
+						const state = getState()
+						state.importData += importString
+						setState(state)
 
-					navigate("codes")
+						navigate("codes")
+					}
+				} else {
+					// Wrong QR code found
+					logger.error(`Error while reading QR code: ${res.rawValue}}`)
+					dialog.message(`Wrong QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
 				}
-			} else {
-				// Wrong QR code found
-				dialog.message(`Wrong QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
+			} catch (error) {
+				// Error while reading QR code
+				logger.error(`Error while reading QR code: ${error}}`)
+				dialog.message(`No QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
 			}
 		}
 

@@ -6,6 +6,9 @@ import postCssPlugin from "esbuild-style-plugin"
 import tw from "tailwindcss"
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill"
 import { createServer, request } from "http"
+import { copy } from "esbuild-plugin-copy"
+import { replace } from "esbuild-plugin-replace"
+import { ZBAR_WASM_REPOSITORY } from "@undecaf/barcode-detector-polyfill/zbar-wasm"
 
 const clients = []
 
@@ -30,6 +33,20 @@ esbuild
 			NodeModulesPolyfillPlugin(),
 			NodeGlobalsPolyfillPlugin({
 				buffer: true,
+			}),
+			replace({
+				values: {
+					[ZBAR_WASM_REPOSITORY]: "@undecaf/zbar-wasm",
+					"/dist/main.js": "",
+					"/dist/index.js": "",
+				},
+			}),
+
+			copy({
+				assets: {
+					from: ["node_modules/@undecaf/zbar-wasm/dist/zbar.wasm"],
+					to: ["."],
+				},
 			}),
 		],
 		banner: { js: " (() => new EventSource('/esbuild').onmessage = () => location.reload())();" },
