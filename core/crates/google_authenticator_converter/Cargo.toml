@@ -1,9 +1,10 @@
 [package]
 name = "google_authenticator_converter"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 description= "Extract name, secret and issuer from a Google Authenticator migration QR code"
+repository = "https://github.com/Levminer/authme/tree/dev/core/crates/google_authenticator_converter"
 
 [dependencies]
 base32 = "0.4.0"

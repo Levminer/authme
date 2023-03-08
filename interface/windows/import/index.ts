@@ -41,7 +41,12 @@ export const chooseImages = async () => {
 						importString += totpImageConverter(res.rawValue)
 					} else {
 						const converted = await migrationImageConverter(res.rawValue)
-						importString += converted
+
+						if (converted === "") {
+							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+						} else {
+							importString += converted
+						}
 					}
 
 					// QR codes found on all images

@@ -174,6 +174,10 @@ export const migrationImageConverter = async (data: string): Promise<string> => 
 	// decode data
 	const decoded: LibCodesFormat[] = await invoke("google_authenticator_converter", { secret: data })
 
+	if (decoded.length === 0) {
+		return ""
+	}
+
 	// make a string
 	decoded.forEach((element) => {
 		const tempString = `\nName:   ${element.name} \nSecret: ${element.secret} \nIssuer: ${element.issuer} \nType:   OTP_TOTP\n`

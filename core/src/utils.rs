@@ -1,10 +1,10 @@
+use google_authenticator_converter::{process_data, Account};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use std::io::Write;
 use std::{env, fs};
 use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{GlobalShortcutManager, Manager};
-use google_authenticator_converter::{process_data, Account};
 
 #[tauri::command]
 pub fn get_args() -> Vec<String> {
@@ -88,5 +88,10 @@ pub fn system_info() -> String {
 pub fn google_authenticator_converter(secret: &str) -> Vec<Account> {
     let res = process_data(secret);
 
-    res.into()
+    println!("{:?}", res);
+
+    match res {
+        Ok(accounts) => accounts,
+        Err(_) => vec![],
+    }
 }
