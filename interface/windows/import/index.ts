@@ -288,53 +288,80 @@ export const useWebcam = async () => {
 	} else {
 		const dialogElement: LibDialogElement = document.querySelector(".dialog1")
 		const videoElement: HTMLVideoElement = document.querySelector(".video")
+		let interval: NodeJS.Timeout
 
-		dialogElement.showModal()
-
-		document.querySelector(".stopVideo").addEventListener("click", () => {
-			reader.stop()
-
-			dialogElement.close()
-		})
-
-		const reader = new QrcodeDecoder()
+		document.querySelector(".dialog1Title").textContent = "Webcam import"
 
 		try {
-			const res = await reader.decodeFromCamera(videoElement)
+			videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "environment" } })
+			const track = videoElement.srcObject.getTracks()[0]
 
-			let importString = ""
+			dialogElement.showModal()
 
-			if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
-				if (res.data.startsWith("otpauth://totp/")) {
-					importString += totpImageConverter(res.data)
-				} else {
-					importString += migrationImageConverter(res.data)
-				}
-
-				const state = getState()
-				state.importData += importString
-				setState(state)
-
-				reader.stop()
-
-				dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
-
-				navigate("codes")
-			} else {
-				// Wrong QR code found
-				dialog.message("Wrong QR code found on the picture! \n\nPlease try again with another picture!", { type: "error" })
-				logger.error(`Wrong QR code found on the picture: ${JSON.stringify(res)}`)
+			document.querySelector(".stopVideo").addEventListener("click", () => {
+				clearInterval(interval)
+				track.stop()
 
 				dialogElement.close()
-				reader.stop()
+			})
+
+			const detect = async () => {
+				logger.log("Checking for QR code with webcam...")
+
+				const detector = new BarcodeDetectorPolyfill()
+				const results = await detector.detect(videoElement)
+
+				// Check if a QR code was found
+				if (results.length === 0) {
+					return
+				}
+
+				const res = results[0]
+
+				let importString = ""
+
+				if (res.rawValue.startsWith("otpauth://totp/") || res.rawValue.startsWith("otpauth-migration://")) {
+					if (res.rawValue.startsWith("otpauth://totp/")) {
+						importString += totpImageConverter(res.rawValue)
+					} else {
+						const converted = await migrationImageConverter(res.rawValue)
+
+						if (converted === "") {
+							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+						} else {
+							importString += converted
+						}
+					}
+
+					const state = getState()
+					state.importData = importString
+					setState(state)
+
+					clearInterval(interval)
+					track.stop()
+
+					dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+
+					navigate("codes")
+				} else {
+					// Wrong QR code found
+					dialog.message("Wrong type of QR code found during webcam import! \n\nPlease try again with another picture!", { type: "error" })
+					logger.error(`Wrong type of QR code found during webcam import: ${JSON.stringify(res)}`)
+
+					clearInterval(interval)
+					track.stop()
+
+					dialogElement.close()
+				}
 			}
+
+			// Check for QR code every second
+			interval = setInterval(detect, 1000)
 		} catch (err) {
-			// Unknown error
-			dialog.message(`Error occurred while using the webcam: \n\n${err}`, { type: "error" })
-			logger.error(`Error during webcam import: ${err}`)
+			logger.error(`Error occurred while using the webcam: ${err}`)
+			dialog.message(`Error occurred while using the webcam:: \n\n${err}`, { type: "error" })
 
 			dialogElement.close()
-			reader.stop()
 		}
 	}
 }
