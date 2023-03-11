@@ -1,6 +1,6 @@
 import { fs, dialog } from "@tauri-apps/api"
 import { generateTimestamp } from "../../utils/time"
-import { textConverter } from "../../utils/convert"
+import { encodeBase64, textConverter } from "../../utils/convert"
 import { getSettings } from "../../stores/settings"
 import qrcode from "qrcode-generator"
 import { decryptData, verifyWebAuthnLogin } from "interface/utils/encryption"
@@ -44,7 +44,7 @@ export const exportAuthmeFile = async () => {
 	const saveFile: LibAuthmeFile = {
 		role: "codes",
 		encrypted: false,
-		codes: Buffer.from(codesText).toString("base64"),
+		codes: encodeBase64(codesText),
 		date: generateTimestamp(),
 		version: 3,
 	}

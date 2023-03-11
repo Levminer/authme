@@ -199,3 +199,17 @@ export const markdownConverter = (text: string) => {
 
 	return body
 }
+
+/**
+ * Convert base64 to text
+ */
+export const decodeBase64 = (text: string) => {
+	return atob(text)
+}
+
+/**
+ * Convert text to base64
+ */
+export const encodeBase64 = (text: string) => {
+	return btoa(text)
+}

@@ -4,6 +4,7 @@ import { getState, setState } from "../../stores/state"
 import { dialog, invoke } from "@tauri-apps/api"
 import { setEntry, generateRandomKey, setEncryptionKey, createWebAuthnLogin, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { search } from "interface/utils/password"
+import { encodeBase64 } from "@utils/convert"
 
 export const noPassword = async () => {
 	const settings = getSettings()
@@ -24,8 +25,9 @@ export const noPassword = async () => {
 	}
 
 	const key = await generateRandomKey(32)
+	const decoder = new TextDecoder()
 
-	await setEntry("encryptionKey", key.toString("base64"))
+	await setEntry("encryptionKey", encodeBase64(decoder.decode(key)))
 	await setEncryptionKey()
 
 	settings.security.requireAuthentication = false
@@ -76,9 +78,7 @@ export const createPassword = async () => {
 		}
 	}
 
-	const password = Buffer.from(await invoke("encrypt_password", { password: input0.value }))
-
-	settings.security.password = password.toString("base64")
+	settings.security.password = encodeBase64(await invoke("encrypt_password", { password: input0.value }))
 	settings.security.requireAuthentication = true
 
 	setSettings(settings)

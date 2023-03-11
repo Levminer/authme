@@ -1,4 +1,4 @@
-import { textConverter } from "../../utils/convert"
+import { decodeBase64, textConverter } from "../../utils/convert"
 import { TOTP } from "otpauth"
 import { clipboard, dialog, fs } from "@tauri-apps/api"
 import { getSettings, setSettings } from "../../stores/settings"
@@ -258,7 +258,7 @@ export const chooseImportFile = async () => {
 	if (filePath !== null) {
 		const loadedFile = await fs.readTextFile(filePath.toString())
 		const file: LibAuthmeFile = JSON.parse(loadedFile)
-		const importString = Buffer.from(file.codes, "base64").toString()
+		const importString = decodeBase64(file.codes)
 
 		saveText = importString
 

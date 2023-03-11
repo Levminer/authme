@@ -1,9 +1,9 @@
 import { BarcodeDetectorPolyfill } from "@undecaf/barcode-detector-polyfill"
 import { fs, dialog } from "@tauri-apps/api"
 import { getState, setState } from "../../stores/state"
-import { totpImageConverter, migrationImageConverter } from "../../utils/convert"
 import { navigate } from "../../utils/navigate"
 import logger from "interface/utils/logger"
+import { decodeBase64, migrationImageConverter, totpImageConverter } from "@utils/convert"
 
 /**
  * Choose images, then read QR codes
@@ -160,7 +160,7 @@ export const chooseFile = async () => {
 	if (filePath !== null) {
 		const loadedFile = await fs.readTextFile(filePath.toString())
 		const file: LibAuthmeFile = JSON.parse(loadedFile)
-		const importString = Buffer.from(file.codes, "base64").toString()
+		const importString = decodeBase64(file.codes)
 
 		dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
 
