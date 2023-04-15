@@ -9,8 +9,6 @@
 		"baseUrl": ".",
 		"allowJs": true,
 		"checkJs": true,
-		"importsNotUsedAsValues": "error",
-		"preserveValueImports": true,
 		"sourceMap": true,
 		"strict": false,
 		"esModuleInterop": true,

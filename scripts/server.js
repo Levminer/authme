@@ -1,10 +1,8 @@
 import esbuild from "esbuild"
 import esbuildSvelte from "esbuild-svelte"
 import sveltePreprocess from "svelte-preprocess"
-import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill"
 import postCssPlugin from "esbuild-style-plugin"
 import tw from "tailwindcss"
-import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill"
 import { createServer, request } from "http"
 import { copy } from "esbuild-plugin-copy"
 import { replace } from "esbuild-plugin-replace"
@@ -29,10 +27,6 @@ esbuild
 			}),
 			esbuildSvelte({
 				preprocess: sveltePreprocess(),
-			}),
-			NodeModulesPolyfillPlugin(),
-			NodeGlobalsPolyfillPlugin({
-				buffer: true,
 			}),
 			replace({
 				values: {
