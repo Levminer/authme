@@ -19,7 +19,7 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2.0", features = ["api-all", "system-tray", "updater"] }
 auto-launch = "0.3.0"
-sysinfo = "0.25.3"
+sysinfo = "0.28.4"
 argon2 = "0.4"
 rand_core = { version = "0.6", features = ["std"] }
 magic-crypt = "3.1.10"
