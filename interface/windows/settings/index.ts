@@ -11,7 +11,7 @@ export const about = async () => {
 	const tauriVersion = await app.getTauriVersion()
 	const osVersion = await os.version()
 	const browser = new UAParser().getBrowser()
-	const osArch = (await os.arch()).replace("x86_64", "x64")
+	const osArch = (await os.arch()).replace("x86_64", "x64").replace("aarch64", "arm64")
 
 	// Browser version
 	const browserName = browser.name.replace("Edge", "Chromium").replace("Safari", "WebKit")
@@ -25,7 +25,7 @@ export const about = async () => {
 		.replaceAll("(R)", "")
 		.replaceAll("(TM)", "")
 		.replace(/ +(?= )/g, "")
-	const memory = `${Math.round(parseInt(hardware[2]) / 1024 / 1024)} GB`
+	const memory = `${Math.round(parseInt(hardware[2]) / 1024 / 1024 / 1024)} GB`
 	const osName = hardware[0]
 
 	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
