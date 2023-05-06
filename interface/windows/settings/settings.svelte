@@ -105,7 +105,7 @@
 						<input id="shortcut{i}" bind:value={$settings.shortcuts[id]} readonly class="input mt-1" type="text" />
 					</div>
 				</div>
-				<div class="ml-10 flex flex-wrap gap-3 sm:mt-10 sm:ml-0 sm:w-full">
+				<div class="ml-10 flex flex-wrap gap-3 sm:ml-0 sm:mt-10 sm:w-full">
 					<button on:click={() => editShortcut(i)} id="editShortcut{i}" class="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="2" x2="22" y2="6" /><path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z" /></svg>
 						Edit
