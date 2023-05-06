@@ -15,7 +15,8 @@
 		"build:bundle": "node scripts/build.js",
 		"setup": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
 		"rename": "node scripts/rename.js",
-		"check": "svelte-check && tsc --noEmit && eslint ."
+		"check": "svelte-check && tsc --noEmit && eslint .",
+		"tauri": "tauri"
 	},
 	"devDependencies": {
 		"@baileyherbert/tinro": "^1.0.0",

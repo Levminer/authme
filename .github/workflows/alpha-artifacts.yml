@@ -24,10 +24,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
       - name: "Apple silicon target"
         if: matrix.NAME == 'mac'
         run : |
