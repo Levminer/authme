@@ -122,7 +122,7 @@
 	<h2>Manual entry</h2>
 	<h3>Please enter the 2FA secret and name!</h3>
 
-	<div class="mt-10 flex flex-row space-x-5">
+	<div class="mt-10 flex flex-row gap-5 sm:flex-col">
 		<div>
 			<h5>Name (Required)</h5>
 			<input class="input name mt-1" type="text" placeholder="Google" />
