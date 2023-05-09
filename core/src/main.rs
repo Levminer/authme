@@ -99,6 +99,7 @@ fn main() {
             utils::logger,
             utils::write_logs,
             utils::system_info,
+            utils::google_authenticator_converter,
         ])
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);

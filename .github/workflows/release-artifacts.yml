@@ -83,6 +83,17 @@ jobs:
                   asset_name: authme-${{steps.version.outputs.prop}}-windows-x64.msi
                   asset_content_type: application/octet-stream
 
+            - name: Upload the windows updater asset
+              if: runner.os == 'Windows'
+              uses: actions/upload-release-asset@v1.0.2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{steps.get_upload_url.outputs.url}}
+                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-windows-x64.zip
+                  asset_name: authme-${{steps.version.outputs.prop}}-windows-x64.zip
+                  asset_content_type: application/octet-stream
+
             # Linux
             - name: Upload the linux installer asset
               if: runner.os == 'Linux'

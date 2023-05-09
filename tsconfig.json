@@ -9,13 +9,17 @@
 		"baseUrl": ".",
 		"allowJs": true,
 		"checkJs": true,
-		"importsNotUsedAsValues": "error",
-		"preserveValueImports": true,
 		"sourceMap": true,
 		"strict": false,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"paths": {
+			"@utils/*": ["interface/utils/*"],
+			"@components/*": ["interface/components/*"],
+			"@stores/*": ["interface/stores/*"],
+		}
 	},
 	"include": ["interface/**/*.d.ts", "interface/**/*.ts", "interface/**/*.js", "interface/**/*.svelte", "libraries/**/*.d.ts", "libraries/**/*.ts"],
 	"exclude": ["dist"]

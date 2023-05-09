@@ -1,3 +1,10 @@
+### Authme 4.0.3 (2022. March 2.)
+
+-   [[15cef99](https://github.com/Levminer/authme/commit/15cef99)] Update version (2023-03-04)
+-   [[fa240ee](https://github.com/Levminer/authme/commit/fa240ee)] Fix CSP (2023-03-02)
+-   [[97309ec](https://github.com/Levminer/authme/commit/97309ec)] Fix type errors (2023-02-04)
+-   [[9c651db](https://github.com/Levminer/authme/commit/9c651db)] Update packages and changelog (2023-01-26)
+
 ### Authme 4.0.2 (2022. January 10.)
 
 -   [[ee8828a](https://github.com/Levminer/authme/commit/ee8828a)] Update packages and Tauri #246 (2023-01-10)

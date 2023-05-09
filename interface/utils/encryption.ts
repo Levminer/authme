@@ -9,8 +9,8 @@ const service = dev ? "authme_dev" : "authme"
 /**
  * Generates random key
  */
-export const generateRandomKey = async (length: number): Promise<Buffer> => {
-	return Buffer.from(await invoke("random_values", { length }))
+export const generateRandomKey = async (length: number): Promise<ArrayBuffer> => {
+	return new ArrayBuffer(await invoke("random_values", { length }))
 }
 
 /**

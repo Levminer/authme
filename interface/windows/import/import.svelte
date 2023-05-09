@@ -58,20 +58,8 @@
 			</div>
 		</div>
 
-		<Details>
+		<Details openByDefault={true}>
 			<div class="flex justify-between">
-				<div>
-					<h4 class="text-white">Webcam</h4>
-					<h5>Use your webcam to scan a 2FA QR code.</h5>
-				</div>
-				<div>
-					<button class="smallButton" on:click={useWebcam}>
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
-						Use webcam
-					</button>
-				</div>
-			</div>
-			<div class="mt-5 flex justify-between">
 				<div>
 					<h4 class="text-white">Screen capture</h4>
 					<h5>Capture a 2FA QR code from your screen.</h5>
@@ -83,6 +71,19 @@
 					</button>
 				</div>
 			</div>
+			<div class="mt-5 flex justify-between">
+				<div>
+					<h4 class="text-white">Webcam</h4>
+					<h5>Use your webcam to scan a 2FA QR code.</h5>
+				</div>
+				<div>
+					<button class="smallButton" on:click={useWebcam}>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></svg>
+						Use webcam
+					</button>
+				</div>
+			</div>
+
 			<div class="mt-5 flex justify-between">
 				<div>
 					<h4 class="text-white">Authme file</h4>
@@ -122,7 +123,7 @@
 	<h2>Manual entry</h2>
 	<h3>Please enter the 2FA secret and name!</h3>
 
-	<div class="mt-10 flex flex-row space-x-5">
+	<div class="mt-10 flex flex-row gap-5 sm:flex-col">
 		<div>
 			<h5>Name (Required)</h5>
 			<input class="input name mt-1" type="text" placeholder="Google" />
@@ -155,16 +156,14 @@
 
 <dialog class="dialog dialog2">
 	<h2>Google Authenticator QR code</h2>
-	<h3>Short tutorial on how to import your codes to Authme from Google Authenticator.</h3>
+	<h3>Short tutorial on how to import your codes into Authme from Google Authenticator.</h3>
 
 	<div class="mt-10 flex flex-row space-x-5">
 		<ol class="instructions">
-			<li>Export the QR codes from the Google Authenticator app: Tap on the three dots on the top right of the screen > Transfer Accounts > Export Accounts</li>
-			<li>Save the two or more QR code with a screenshot or take a picture of them from another phone. Then transfer the pictures to your computer</li>
-			<li>Back to Authme, go to the Import page: Sidebar > Import</li>
-			<li>Click the Choose images button</li>
-			<li>A popup windows will open, just select the picture(s)</li>
-			<li>That's it you are done!</li>
+			<li>Export the QR codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts</li>
+			<li>Save the two or more QR code with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer</li>
+			<li>In Authme, go to the Import page: Sidebar > Import</li>
+			<li>Click the Choose images button and select the picture(s) you transferred from your phone</li>
 		</ol>
 	</div>
 
@@ -180,16 +179,14 @@
 
 <dialog class="dialog dialog3">
 	<h2>TOTP 2FA QR code</h2>
-	<h3>Short tutorial on how to import your codes to Authme from any TOTP 2FA QR code.</h3>
+	<h3>Short tutorial on how to import your codes into Authme from any TOTP 2FA QR code.</h3>
 
 	<div class="mt-10 flex flex-row space-x-5">
 		<ol class="instructions">
-			<li>Go to the website(s) you want to get the QR codes from</li>
-			<li>Take screenshots (Windows key + Shift + S key combination on Windows) of the QR codes, and save the pictures</li>
-			<li>Back to Authme, go to the Import page: Sidebar > Import</li>
-			<li>Click the Choose images button</li>
-			<li>A popup windows will open, just select the picture(s)</li>
-			<li>That's it you are done!</li>
+			<li>Go to the website where you want to setup 2FA</li>
+			<li>Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the pictures</li>
+			<li>In Authme, go to the Import page: Sidebar > Import</li>
+			<li>Click the Choose images button and select the pictures(s)</li>
 		</ol>
 	</div>
 

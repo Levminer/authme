@@ -1,9 +1,9 @@
-import QrcodeDecoder from "qrcode-decoder"
+import { BarcodeDetectorPolyfill } from "@undecaf/barcode-detector-polyfill"
 import { fs, dialog } from "@tauri-apps/api"
 import { getState, setState } from "../../stores/state"
-import { totpImageConverter, migrationImageConverter } from "../../utils/convert"
 import { navigate } from "../../utils/navigate"
 import logger from "interface/utils/logger"
+import { decodeBase64, migrationImageConverter, totpImageConverter } from "@utils/convert"
 
 /**
  * Choose images, then read QR codes
@@ -15,49 +15,59 @@ export const chooseImages = async () => {
 		return
 	}
 
-	const images: string[] = []
+	const images: ImageBitmap[] = []
 
+	// Read images
 	for (let i = 0; i < filePaths.length; i++) {
 		const file = await fs.readBinaryFile(filePaths[i])
 
 		const blob = new Blob([file], { type: "application/octet-binary" })
-		const url = URL.createObjectURL(blob)
+		const img = await createImageBitmap(blob)
 
-		images.push(url)
+		images.push(img)
 	}
 
 	let importString = ""
 
+	// Read QR codes from images
 	for (let i = 0; i < images.length; i++) {
 		const processImages = async () => {
-			const qr = new QrcodeDecoder()
+			try {
+				const detector = new BarcodeDetectorPolyfill()
+				const res = (await detector.detect(images[i]))[0]
 
-			// Decode image
-			const res = await qr.decodeFromImage(images[i])
+				if (res.rawValue.startsWith("otpauth://totp/") || res.rawValue.startsWith("otpauth-migration://")) {
+					if (res.rawValue.startsWith("otpauth://totp/")) {
+						importString += totpImageConverter(res.rawValue)
+					} else {
+						const converted = await migrationImageConverter(res.rawValue)
 
-			if (res === false) {
-				// No qr code found on the picture
-				dialog.message(`No QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
-			} else if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
-				if (res.data.startsWith("otpauth://totp/")) {
-					importString += totpImageConverter(res.data)
-				} else {
-					importString += migrationImageConverter(res.data)
-				}
+						if (converted === "") {
+							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+						} else {
+							importString += converted
+						}
+					}
 
-				if (images.length === i + 1) {
 					// QR codes found on all images
-					dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+					if (images.length === i + 1) {
+						dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
 
-					const state = getState()
-					state.importData += importString
-					setState(state)
+						const state = getState()
+						state.importData = importString
+						setState(state)
 
-					navigate("codes")
+						navigate("codes")
+					}
+				} else {
+					// Wrong QR code found
+					logger.error(`Error while reading QR code: ${res.rawValue}}`)
+					dialog.message(`Wrong QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
 				}
-			} else {
-				// Wrong QR code found
-				dialog.message(`Wrong QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
+			} catch (error) {
+				// Error while reading QR code
+				logger.error(`Error while reading QR code: ${error}}`)
+				dialog.message(`No QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
 			}
 		}
 
@@ -150,7 +160,7 @@ export const chooseFile = async () => {
 	if (filePath !== null) {
 		const loadedFile = await fs.readTextFile(filePath.toString())
 		const file: LibAuthmeFile = JSON.parse(loadedFile)
-		const importString = Buffer.from(file.codes, "base64").toString()
+		const importString = decodeBase64(file.codes)
 
 		dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
 
@@ -167,55 +177,75 @@ export const chooseFile = async () => {
 export const captureScreen = async () => {
 	const dialogElement: LibDialogElement = document.querySelector(".dialog1")
 	const videoElement: HTMLVideoElement = document.querySelector(".video")
+	let interval: NodeJS.Timeout
 
 	document.querySelector(".dialog1Title").textContent = "Capture screen import"
 
 	try {
 		videoElement.srcObject = await navigator.mediaDevices.getDisplayMedia({ audio: false })
-
 		const track = videoElement.srcObject.getTracks()[0]
 
 		dialogElement.showModal()
 
 		document.querySelector(".stopVideo").addEventListener("click", () => {
-			reader.stop()
+			clearInterval(interval)
 			track.stop()
 
 			dialogElement.close()
 		})
 
-		const reader = new QrcodeDecoder()
+		const detect = async () => {
+			logger.log("Checking for QR code on screen...")
 
-		const res = await reader.decodeFromVideo(videoElement)
+			const detector = new BarcodeDetectorPolyfill()
+			const results = await detector.detect(videoElement)
 
-		let importString = ""
-
-		if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
-			if (res.data.startsWith("otpauth://totp/")) {
-				importString += totpImageConverter(res.data)
-			} else {
-				importString += migrationImageConverter(res.data)
+			// Check if a QR code was found
+			if (results.length === 0) {
+				return
 			}
 
-			const state = getState()
-			state.importData += importString
-			setState(state)
+			const res = results[0]
 
-			reader.stop()
-			track.stop()
+			let importString = ""
 
-			dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+			if (res.rawValue.startsWith("otpauth://totp/") || res.rawValue.startsWith("otpauth-migration://")) {
+				if (res.rawValue.startsWith("otpauth://totp/")) {
+					importString += totpImageConverter(res.rawValue)
+				} else {
+					const converted = await migrationImageConverter(res.rawValue)
 
-			navigate("codes")
-		} else {
-			// Wrong QR code found
-			dialog.message("Wrong QR code found on the picture! \n\nPlease try again with another picture!", { type: "error" })
-			logger.error(`Wrong QR code found on the picture: ${JSON.stringify(res)}`)
+					if (converted === "") {
+						return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+					} else {
+						importString += converted
+					}
+				}
 
-			dialogElement.close()
-			reader.stop()
-			track.stop()
+				const state = getState()
+				state.importData = importString
+				setState(state)
+
+				clearInterval(interval)
+				track.stop()
+
+				dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+
+				navigate("codes")
+			} else {
+				// Wrong QR code found
+				logger.error(`Wrong type of QR code found during screen capture: ${JSON.stringify(res)}`)
+				dialog.message("Wrong type of QR code found during screen capture! \n\nPlease try again with another picture!", { type: "error" })
+
+				clearInterval(interval)
+				track.stop()
+
+				dialogElement.close()
+			}
 		}
+
+		// Check for QR code every second
+		interval = setInterval(detect, 1000)
 	} catch (err) {
 		logger.error(`Error during screen capture: ${err}`)
 		dialog.message(`Error occurred during the screen capture: \n\n${err}`, { type: "error" })
@@ -258,53 +288,80 @@ export const useWebcam = async () => {
 	} else {
 		const dialogElement: LibDialogElement = document.querySelector(".dialog1")
 		const videoElement: HTMLVideoElement = document.querySelector(".video")
+		let interval: NodeJS.Timeout
 
-		dialogElement.showModal()
-
-		document.querySelector(".stopVideo").addEventListener("click", () => {
-			reader.stop()
-
-			dialogElement.close()
-		})
-
-		const reader = new QrcodeDecoder()
+		document.querySelector(".dialog1Title").textContent = "Webcam import"
 
 		try {
-			const res = await reader.decodeFromCamera(videoElement)
+			videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "environment" } })
+			const track = videoElement.srcObject.getTracks()[0]
 
-			let importString = ""
+			dialogElement.showModal()
 
-			if (res.data.startsWith("otpauth://totp/") || res.data.startsWith("otpauth-migration://")) {
-				if (res.data.startsWith("otpauth://totp/")) {
-					importString += totpImageConverter(res.data)
-				} else {
-					importString += migrationImageConverter(res.data)
-				}
-
-				const state = getState()
-				state.importData += importString
-				setState(state)
-
-				reader.stop()
-
-				dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
-
-				navigate("codes")
-			} else {
-				// Wrong QR code found
-				dialog.message("Wrong QR code found on the picture! \n\nPlease try again with another picture!", { type: "error" })
-				logger.error(`Wrong QR code found on the picture: ${JSON.stringify(res)}`)
+			document.querySelector(".stopVideo").addEventListener("click", () => {
+				clearInterval(interval)
+				track.stop()
 
 				dialogElement.close()
-				reader.stop()
+			})
+
+			const detect = async () => {
+				logger.log("Checking for QR code with webcam...")
+
+				const detector = new BarcodeDetectorPolyfill()
+				const results = await detector.detect(videoElement)
+
+				// Check if a QR code was found
+				if (results.length === 0) {
+					return
+				}
+
+				const res = results[0]
+
+				let importString = ""
+
+				if (res.rawValue.startsWith("otpauth://totp/") || res.rawValue.startsWith("otpauth-migration://")) {
+					if (res.rawValue.startsWith("otpauth://totp/")) {
+						importString += totpImageConverter(res.rawValue)
+					} else {
+						const converted = await migrationImageConverter(res.rawValue)
+
+						if (converted === "") {
+							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+						} else {
+							importString += converted
+						}
+					}
+
+					const state = getState()
+					state.importData = importString
+					setState(state)
+
+					clearInterval(interval)
+					track.stop()
+
+					dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+
+					navigate("codes")
+				} else {
+					// Wrong QR code found
+					dialog.message("Wrong type of QR code found during webcam import! \n\nPlease try again with another picture!", { type: "error" })
+					logger.error(`Wrong type of QR code found during webcam import: ${JSON.stringify(res)}`)
+
+					clearInterval(interval)
+					track.stop()
+
+					dialogElement.close()
+				}
 			}
+
+			// Check for QR code every second
+			interval = setInterval(detect, 1000)
 		} catch (err) {
-			// Unknown error
-			dialog.message(`Error occurred while using the webcam: \n\n${err}`, { type: "error" })
-			logger.error(`Error during webcam import: ${err}`)
+			logger.error(`Error occurred while using the webcam: ${err}`)
+			dialog.message(`Error occurred while using the webcam:: \n\n${err}`, { type: "error" })
 
 			dialogElement.close()
-			reader.stop()
 		}
 	}
 }

@@ -1,3 +1,4 @@
+use google_authenticator_converter::{process_data, Account};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use std::io::Write;
@@ -81,4 +82,16 @@ pub fn system_info() -> String {
     let res = format!("{}+{}+{}", name, cpu, mem);
 
     res.into()
+}
+
+#[tauri::command]
+pub fn google_authenticator_converter(secret: &str) -> Vec<Account> {
+    let res = process_data(secret);
+
+    println!("{:?}", res);
+
+    match res {
+        Ok(accounts) => accounts,
+        Err(_) => vec![],
+    }
 }

@@ -3,13 +3,14 @@ import { getSettings } from "../../stores/settings"
 import { dialog, invoke } from "@tauri-apps/api"
 import { getState, setState } from "../../stores/state"
 import { sendEncryptionKey, verifyWebAuthnLogin } from "interface/utils/encryption"
+import { decodeBase64 } from "@utils/convert"
 
 export const confirmPassword = async () => {
 	const settings = getSettings()
 	const state = getState()
 	const input = document.querySelector(".passwordInput").value
 
-	const result = await invoke("verify_password", { password: input, hash: Buffer.from(settings.security.password, "base64").toString() })
+	const result = await invoke("verify_password", { password: input, hash: decodeBase64(settings.security.password) })
 
 	if (result === true) {
 		if (settings.security.hardwareAuthentication === true) {
