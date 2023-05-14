@@ -30,8 +30,11 @@ export const about = async () => {
 
 	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
 
-	dialog.message(info)
-	clipboard.writeText(info)
+	const res = await dialog.confirm(info, { cancelLabel: "Close", okLabel: "Copy" })
+
+	if (res) {
+		clipboard.writeText(info)
+	}
 }
 
 export const clearData = async () => {
