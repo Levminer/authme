@@ -1,5 +1,5 @@
 import build from "../../../build.json"
-import { path, invoke, os, dialog, app, process, clipboard } from "@tauri-apps/api"
+import { path, invoke, os, dialog, app, process, clipboard, window } from "@tauri-apps/api"
 import { UAParser } from "ua-parser-js"
 import { navigate, open } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
@@ -73,4 +73,8 @@ export const launchOnStartup = () => {
 	} else {
 		invoke("enable_auto_launch")
 	}
+}
+
+export const toggleWindowCapture = (windowCapture: boolean) => {
+	window.appWindow.setContentProtected(windowCapture)
 }

@@ -34,6 +34,16 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
+				<h2>Window capture</h2>
+				<h3>By default Authme can't be captured by outside programs. If you turn this on it applies until you restart Authme.</h3>
+			</div>
+			<div class="ml-20 flex gap-3">
+				<Toggle bind:checked={windowCapture} on:click={() => toggleWindowCapture(windowCapture)} />
+			</div>
+		</div>
+
+		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
+			<div>
 				<h2>Clear data</h2>
 				<h3>Clear password, 2FA codes and all other settings. Be careful.</h3>
 			</div>
@@ -176,8 +186,10 @@
 <script>
 	import Select from "../../components/select.svelte"
 	import Toggle from "../../components/toggle.svelte"
-	import { about, clearData, showLogs, launchOnStartup } from "./index"
+	import { about, clearData, showLogs, launchOnStartup, toggleWindowCapture } from "./index"
 	import { settings } from "../../stores/settings"
 	import { open } from "../../utils/navigate"
 	import { deleteShortcut, editShortcut, resetShortcut, shortcuts } from "../../utils/shortcuts"
+
+	$: windowCapture = false
 </script>

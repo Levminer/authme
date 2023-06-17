@@ -80,6 +80,9 @@ document.addEventListener("contextmenu", (event) => {
 	event.preventDefault()
 })
 
+// Reset window capture
+window.appWindow.setContentProtected(true)
+
 // Handle launch options
 const launchOptions = async () => {
 	const args: string[] = await invoke("get_args")
