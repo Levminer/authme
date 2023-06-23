@@ -13,9 +13,7 @@ let secrets: string[] = []
  * Generate the edit elements from the saved codes
  */
 const generateEditElements = () => {
-	document.querySelector(".editSavedCodes").style.display = "block"
 	document.querySelector(".loadedCodes").style.display = "block"
-	document.querySelector(".loadSavedCodes").style.display = "none"
 
 	for (let i = 0; i < names.length; i++) {
 		// create div
@@ -69,7 +67,9 @@ export const loadSavedCodes = async () => {
 	const codes = settings.vault.codes
 
 	if (codes === null) {
-		return dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
+		await dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
+
+		return navigate("import")
 	}
 
 	const decryptedText = await decryptData(codes)
@@ -86,12 +86,6 @@ export const loadSavedCodes = async () => {
  * Save the current changes
  */
 export const saveChanges = async () => {
-	const confirm = await dialog.ask("Are you sure you want to save the changes? \n\nThis will overwrite your saved codes!", { type: "warning" })
-
-	if (confirm === false) {
-		return
-	}
-
 	let saveText = ""
 
 	for (let i = 0; i < names.length; i++) {
@@ -103,21 +97,6 @@ export const saveChanges = async () => {
 
 	settings.vault.codes = encryptedText
 	setSettings(settings)
-
-	navigate("codes")
-}
-
-/**
- * Revert all current changes
- */
-export const revertChanges = async () => {
-	const confirm = await dialog.ask("Are you sure you want to revert all changes? \n\nYou will lose all current changes!", { type: "warning" })
-
-	if (confirm === false) {
-		return
-	}
-
-	location.reload()
 }
 
 /**
@@ -143,7 +122,7 @@ export const deleteCodes = async () => {
 /**
  * Edit a specific code
  */
-export const editCode = (id: number) => {
+export const editCode = async (id: number) => {
 	const issuer: HTMLInputElement = document.querySelector(`#issuer${id}`)
 	const name: HTMLInputElement = document.querySelector(`#name${id}`)
 
@@ -167,10 +146,17 @@ export const editCode = (id: number) => {
 		const newIssuer = document.querySelector(`#issuer${id}`).value
 		const newName = document.querySelector(`#name${id}`).value
 
-		issuers[id] = newIssuer
-		names[id] = newName
+		const res = await dialog.ask("Do you want to save your changes?", { type: "warning" })
 
-		dialog.message("Code edited. \n\nYou can save or revert this change at the top of the page.")
+		if (res === true) {
+			issuers[id] = newIssuer
+			names[id] = newName
+
+			saveChanges()
+		} else {
+			issuer.value = issuers[id]
+			name.value = names[id]
+		}
 	}
 }
 
@@ -178,7 +164,7 @@ export const editCode = (id: number) => {
  * Delete a specific code
  */
 export const deleteCode = async (id: number) => {
-	const res = await dialog.ask("Are you sure you want to delete this code? \n\nYou can save or revert this change at the top of the page.", { type: "warning" })
+	const res = await dialog.ask("Are you sure you want to delete this code? \n\nYou can not revert this.", { type: "warning" })
 
 	if (res === true) {
 		names.splice(id, 1)
@@ -186,5 +172,7 @@ export const deleteCode = async (id: number) => {
 		issuers.splice(id, 1)
 
 		document.querySelector(`#edit${id}`).remove()
+
+		saveChanges()
 	}
 }
