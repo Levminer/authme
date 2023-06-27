@@ -26,7 +26,6 @@ export const exportCodes = async () => {
 		}
 
 		document.querySelector(".saveExportedCodes").style.display = "block"
-		document.querySelector(".exportCodes").style.display = "none"
 
 		const decryptedText = await decryptData(codes)
 
