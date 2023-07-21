@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	color-scheme: dark;
+}
+
+* {
+	scroll-behavior: smooth;
+	outline: none !important;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-family: system-ui, Arial, Helvetica, sans-serif;
+	color: white;
+	background: linear-gradient(to right, #0f0f0f, #262829, #2c3031);
+}
+
+@layer components {
+	.button {
+		@apply flex items-center justify-center rounded-full border-2 border-white bg-white px-4 py-2 text-xl font-medium text-black duration-200 ease-in hover:bg-transparent hover:text-white focus:outline-none gap-1;
+	}
+
+	.buttont {
+		@apply flex items-center justify-center rounded-full border-2 border-white bg-transparent px-4 py-2 text-xl font-medium text-white duration-200 ease-in hover:bg-white hover:text-black focus:outline-none;
+	}
+}
+
+@keyframes Hover {
+	0%,
+	100% {
+		bottom: 0;
+	}
+	50% {
+		bottom: 10px;
+	}
+}
+
+.hover {
+	position: relative;
+	animation: Hover 1s linear infinite;
+}
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+	left: -50px;
+}
+
+#activeLink {
+	color: darkgrey;
+}
+
+.animation {
+	animation: fadeEffect 0.25s ease-in;
+}
+
+@keyframes fadeEffect {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
