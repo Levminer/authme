@@ -4,6 +4,7 @@ import { encodeBase64, textConverter } from "../../utils/convert"
 import { getSettings } from "../../stores/settings"
 import qrcode from "qrcode-generator"
 import { decryptData, verifyWebAuthnLogin } from "interface/utils/encryption"
+import { navigate } from "@utils/navigate"
 
 let codesArray: LibImportFile
 let codesText: string
@@ -32,7 +33,9 @@ export const exportCodes = async () => {
 		codesArray = textConverter(decryptedText, 0)
 		codesText = decryptedText
 	} else {
-		return dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
+		dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
+
+		return navigate("import")
 	}
 }
 

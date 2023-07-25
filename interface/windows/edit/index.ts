@@ -67,7 +67,7 @@ export const loadSavedCodes = async () => {
 	const codes = settings.vault.codes
 
 	if (codes === null) {
-		await dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
+		dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
 
 		return navigate("import")
 	}
