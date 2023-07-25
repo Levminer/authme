@@ -1,3 +1,8 @@
+<svelte:head>
+	<title>Authme</title>
+	<meta name="description" content="Authme - Two-factor authenticator for desktop" />
+</svelte:head>
+
 <header class="sticky top-0 z-50 bg-gray-900 text-gray-50 small:static my-5 mx-10 rounded-xl">
 	<div class="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
 		<a href="/" class="space-x-2 flex items-center hover:text-gray-300 duration-200">
@@ -14,46 +19,6 @@
 			<a href="#downloads" class="mr-5 text-2xl duration-200 ease-in hover:text-gray-300">
 				Downloads
 			</a>
-
-			<div class="dropdown relative">
-				<button class="mr-5 text-2xl">
-					<h1 class="mr-1 duration-200 ease-in hover:text-gray-300">More</h1>
-				</button>
-				<ul
-					class="dropdown-menu animation absolute z-50 hidden rounded-lg bg-gray-700 text-white shadow-2xl"
-				>
-					<li>
-						<a
-							class="block whitespace-nowrap rounded-t-lg py-2 px-8 duration-200 ease-in hover:bg-gray-600"
-							target="_blank"
-							href="https://web.authme.levminer.com"
-							rel="noopener noreferrer"
-						>
-							Authme Web
-						</a>
-					</li>
-					<li>
-						<a
-							class="block whitespace-nowrap py-2 px-8 duration-200 ease-in hover:bg-gray-600"
-							target="_blank"
-							href="https://authme.levminer.com/licenses"
-							rel="noopener noreferrer"
-						>
-							Licenses
-						</a>
-					</li>
-					<li>
-						<a
-							class="block whitespace-nowrap rounded-b-lg py-2 px-8 duration-200 ease-in hover:bg-gray-600"
-							target="_blank"
-							href="https://github.com/levminer/authme"
-							rel="noopener noreferrer"
-						>
-							GitHub
-						</a>
-					</li>
-				</ul>
-			</div>
 		</nav>
 		<a
 			target="_blank"
