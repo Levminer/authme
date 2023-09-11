@@ -8,7 +8,7 @@ import logger from "interface/utils/logger"
 
 const settings = getSettings()
 const state = getState()
-let codesRefresher: NodeJS.Timer
+let codesRefresher: NodeJS.Timeout
 let searchQuery: LibSearchQuery[] = []
 let saveText: string = ""
 

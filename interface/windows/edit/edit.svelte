@@ -5,7 +5,7 @@
 
 <script lang="ts">
 	import { onMount } from "svelte"
-	import { deleteCodes, loadSavedCodes } from "./index"
+	import { loadSavedCodes } from "./index"
 
 	onMount(() => {
 		loadSavedCodes()
