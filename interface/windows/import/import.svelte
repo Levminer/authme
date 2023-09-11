@@ -1,10 +1,10 @@
 <div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10">Supported QR codes</h1>
+	<h1 class="px-10">Supported 2FA types</h1>
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left sm:flex-wrap">
 			<div>
 				<h2>TOTP 2FA QR code</h2>
-				<h3>A TOTP QR code is that you find mostly everywhere, if you want to setup 2FA. Consist of 6 digits which are changing every 30 seconds.</h3>
+				<h3>A TOTP QR code is what you find mostly everywhere, if you want to setup 2FA. Consist of 6 digits which are changing every 30 seconds.</h3>
 			</div>
 			<div class="ml-20 flex gap-3 sm:ml-0 sm:mt-5">
 				<button class="button" on:click={showTOTPDialog}>
@@ -160,8 +160,8 @@
 
 	<div class="mt-10 flex flex-row space-x-5">
 		<ol class="instructions">
-			<li>Export the QR codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts</li>
-			<li>Save the two or more QR code with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer</li>
+			<li>Export the 2FA codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts</li>
+			<li>Save the migration QR code(s) with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer</li>
 			<li>In Authme, go to the Import page: Sidebar > Import</li>
 			<li>Click the Choose images button and select the picture(s) you transferred from your phone</li>
 		</ol>
@@ -184,9 +184,9 @@
 	<div class="mt-10 flex flex-row space-x-5">
 		<ol class="instructions">
 			<li>Go to the website where you want to setup 2FA</li>
-			<li>Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the pictures</li>
+			<li>Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the picture</li>
 			<li>In Authme, go to the Import page: Sidebar > Import</li>
-			<li>Click the Choose images button and select the pictures(s)</li>
+			<li>Click the Choose images button and select the picture</li>
 		</ol>
 	</div>
 
