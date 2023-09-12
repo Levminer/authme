@@ -19,7 +19,6 @@ struct Payload {
 fn make_tray() -> SystemTray {
     let menu = SystemTrayMenu::new()
         .add_item(CustomMenuItem::new("toggle".to_string(), "Hide Authme"))
-        .add_item(CustomMenuItem::new("settings".to_string(), "Settings"))
         .add_item(CustomMenuItem::new("exit".to_string(), "Exit Authme"));
     return SystemTray::new().with_menu(menu);
 }
@@ -47,28 +46,14 @@ fn handle_tray_event(app: &AppHandle, event: SystemTrayEvent) {
     };
 
     if let SystemTrayEvent::LeftClick { position, size, .. } = event {
-        toggle_window(app.clone())
+        if cfg!(target_os = "windows") {
+            toggle_window(app.clone())
+        }
     }
 
     if let SystemTrayEvent::MenuItemClick { id, .. } = event {
         if id.as_str() == "exit" {
             std::process::exit(0);
-        }
-
-        if id.as_str() == "settings" {
-            let window = app.get_window("main").unwrap();
-            let window_visible = window.is_visible().unwrap();
-
-            if window_visible {
-                window.hide().unwrap();
-            } else {
-                window.show().unwrap();
-                window.unminimize().unwrap();
-                window.set_focus().unwrap();
-            }
-
-            app.emit_all("openSettings", Payload { event: true })
-                .unwrap()
         }
 
         if id.as_str() == "toggle" {

@@ -67,7 +67,8 @@
 				"minHeight": 600,
 				"maximized": true,
 				"visible": false,
-				"theme": "Dark"
+				"theme": "Dark",
+				"contentProtected": true
 			}
 		]
 	}
