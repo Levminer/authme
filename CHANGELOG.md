@@ -1,3 +1,19 @@
+### Authme 4.2.0 (2023. September 12.)
+
+-   [[13e1c49](https://github.com/Levminer/authme/commit/13e1c49)] Update descriptions (2023-09-11)
+-   [[5e84305](https://github.com/Levminer/authme/commit/5e84305)] Fix check (2023-09-11)
+-   [[7b72444](https://github.com/Levminer/authme/commit/7b72444)] Update version and packages (2023-09-10)
+-   [[5dcec1d](https://github.com/Levminer/authme/commit/5dcec1d)] Update tray menu (2023-09-10)
+-   [[53d55da](https://github.com/Levminer/authme/commit/53d55da)] New website (#266) (2023-07-28)
+-   [[9835447](https://github.com/Levminer/authme/commit/9835447)] Fix edit error message (2023-07-25)
+-   [[c06743b](https://github.com/Levminer/authme/commit/c06743b)] Improved export codes #261 (2023-06-27)
+-   [[7712123](https://github.com/Levminer/authme/commit/7712123)] Edit codes improvements #259 (2023-06-23)
+-   [[ab9ccb2](https://github.com/Levminer/authme/commit/ab9ccb2)] Update eslint config (2023-06-20)
+-   [[1006942](https://github.com/Levminer/authme/commit/1006942)] Update tauri (2023-06-18)
+-   [[c7eabd8](https://github.com/Levminer/authme/commit/c7eabd8)] Disable window capture #257 (2023-06-17)
+-   [[6de93c1](https://github.com/Levminer/authme/commit/6de93c1)] About dialog copy (2023-05-14)
+-   [[8966654](https://github.com/Levminer/authme/commit/8966654)] Update packages and changelog (2023-05-11)
+
 ### Authme 4.1.0 (2023. May 9.)
 
 -   [[019bead](https://github.com/Levminer/authme/commit/019bead)] Merge remote-tracking branch 'origin/main' into dev (2023-05-11)
