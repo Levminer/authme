@@ -1,6 +1,7 @@
 use google_authenticator_converter::{process_data, Account};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
+use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::{env, fs};
 use sysinfo::{CpuExt, System, SystemExt};
@@ -70,16 +71,31 @@ pub fn write_logs(name: String, message: String) {
     write!(file, "{}", message).unwrap();
 }
 
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SystemInfo {
+    pub os_name: String,
+    pub os_arch: String,
+    pub cpu_name: String,
+    pub total_mem: u64,
+}
+
 #[tauri::command]
-pub fn system_info() -> String {
+pub fn system_info() -> SystemInfo {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    let name = sys.name().unwrap();
-    let cpu = sys.cpus()[0].brand();
-    let mem = sys.total_memory();
+    let os_name = sys.name().unwrap();
+    let cpu_name = sys.cpus()[0].brand().to_string();
+    let total_mem = sys.total_memory();
+    let os_arch = env::consts::ARCH.to_string();
 
-    let res = format!("{}+{}+{}", name, cpu, mem);
+    let res = SystemInfo {
+        os_name,
+        cpu_name,
+        total_mem,
+        os_arch,
+    };
 
     res.into()
 }

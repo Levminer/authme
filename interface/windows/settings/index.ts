@@ -7,26 +7,33 @@ import { getSettings } from "interface/stores/settings"
 
 const settings = getSettings()
 
+interface SystemInfo {
+	osName: string
+	osArch: string
+	cpuName: string
+	totalMem: number
+}
+
 export const about = async () => {
 	const tauriVersion = await app.getTauriVersion()
 	const osVersion = await os.version()
 	const browser = new UAParser().getBrowser()
-	const osArch = (await os.arch()).replace("x86_64", "x64").replace("aarch64", "arm64")
 
 	// Browser version
 	const browserName = browser.name.replace("Edge", "Chromium").replace("Safari", "WebKit")
 	const browserVersion = browser.version
 
 	// System info
-	const systemInfo: string = await invoke("system_info")
-	const hardware = systemInfo.split("+")
-	const cpu = hardware[1]
+	const systemInfo: SystemInfo = await invoke("system_info")
+
+	const cpu = systemInfo.cpuName
 		.split("@")[0]
 		.replaceAll("(R)", "")
 		.replaceAll("(TM)", "")
 		.replace(/ +(?= )/g, "")
-	const memory = `${Math.round(parseInt(hardware[2]) / 1024 / 1024 / 1024)} GB`
-	const osName = hardware[0]
+	const memory = `${Math.round(systemInfo.totalMem / 1024 / 1024 / 1024)} GB`
+	const osName = systemInfo.osName
+	const osArch = systemInfo.osArch.replace("x86_64", "x64").replace("aarch64", "arm64")
 
 	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
 
