@@ -19,9 +19,9 @@ if (os === "win32") {
 	}
 } else if (os === "darwin") {
 	try {
-		copyFileSync(`./core/target/release/bundle/dmg/Authme_${version}_x64.dmg`, `./core/target/release/upload/authme-${version}-macos-x64.dmg`)
-		copyFileSync("./core/target/release/bundle/macos/Authme.app.tar.gz", `./core/target/release/upload/authme-${version}-macos-x64.tar.gz`)
-		copyFileSync("./core/target/release/bundle/macos/Authme.app.tar.gz.sig", `./core/target/release/upload/authme-${version}-macos-x64.sig`)
+		copyFileSync(`./core/target/universal-apple-darwin/release/bundle/dmg/Authme_${version}_x64.dmg`, `./core/target/release/upload/authme-${version}-macos-x64.dmg`)
+		copyFileSync("./core/target/universal-apple-darwin/release/bundle/macos/Authme.app.tar.gz", `./core/target/release/upload/authme-${version}-macos-x64.tar.gz`)
+		copyFileSync("./core/target/universal-apple-darwin/release/bundle/macos/Authme.app.tar.gz.sig", `./core/target/release/upload/authme-${version}-macos-x64.sig`)
 	} catch (err) {
 		console.log("File not found")
 	}
