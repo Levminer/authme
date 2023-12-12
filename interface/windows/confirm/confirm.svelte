@@ -1,4 +1,4 @@
-<div class="transparent-900 m-auto mt-40 mb-60 w-3/5 rounded-2xl p-10 text-center">
+<div class="transparent-900 m-auto mb-60 mt-40 w-3/5 rounded-2xl p-10 text-center">
 	<h1>Welcome back!</h1>
 
 	<div class="mx-auto flex w-4/5 flex-col items-center justify-center rounded-2xl p-10">
@@ -49,6 +49,8 @@
 	import { confirmPassword, showPassword } from "./index"
 
 	onMount(() => {
+		document.querySelector<HTMLInputElement>(".passwordInput").focus()
+
 		document.querySelector<HTMLInputElement>(".passwordInput").addEventListener("keypress", (event) => {
 			if (event.key === "Enter") {
 				confirmPassword()
