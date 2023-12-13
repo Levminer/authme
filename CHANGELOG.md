@@ -1,3 +1,12 @@
+### AUthme 4.2.1 (2023. December 12.)
+
+-   [[3bada3b](https://github.com/Levminer/authme/commit/3bada3b)] Delete samples (2023-12-11)
+-   [[302b06c](https://github.com/Levminer/authme/commit/302b06c)] Focus confirm password input #273 (2023-12-07)
+-   [[6a34ca8](https://github.com/Levminer/authme/commit/6a34ca8)] Refactor system info (2023-12-05)
+-   [[dcfea73](https://github.com/Levminer/authme/commit/dcfea73)] update tauri (2023-12-05)
+-   [[27d9c0b](https://github.com/Levminer/authme/commit/27d9c0b)] Bump version and update packages (2023-12-05)
+-   [[47a1108](https://github.com/Levminer/authme/commit/47a1108)] Update CHANGELOG.md (2023-09-13)
+
 ### Authme 4.2.0 (2023. September 12.)
 
 -   [[13e1c49](https://github.com/Levminer/authme/commit/13e1c49)] Update descriptions (2023-09-11)
