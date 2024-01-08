@@ -1,59 +1,67 @@
 name: Alpha Artifacts
-on:
-  push:
-    branches:
-      - dev
+on: push
 jobs:
-  test-tauri:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: macos-latest
-            NAME: mac
-          - os: ubuntu-latest
-            NAME: linux
-          - os: windows-latest
-            NAME: windows
-    runs-on: ${{ matrix.os}}
-    env:
-      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Rust setup
-        uses: dtolnay/rust-toolchain@stable
-      - name: "Apple silicon target"
-        if: matrix.NAME == 'mac'
-        run : |
-          rustup target add aarch64-apple-darwin
-      - name: Install webkit2gtk (ubuntu only)
-        if: matrix.NAME == 'linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
-      - name: Install app dependencies and build it
-        if: matrix.NAME == 'linux' || matrix.NAME == 'windows'
-        run: npm ci && npm run build:alpha
-      - name: Install app dependencies and build it
-        if: matrix.NAME == 'mac'
-        run: npm ci && npm run build:alpha -- --target universal-apple-darwin
-      - uses: tauri-apps/tauri-action@v0
+    test-tauri:
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - os: macos-latest
+                      NAME: mac
+                    - os: ubuntu-latest
+                      NAME: linux
+                    - os: windows-latest
+                      NAME: windows
+        runs-on: ${{ matrix.os }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Remove useless folders
-        run: |
-          rm -rf core/target/release/build
-          rm -rf core/target/release/deps
-          rm -rf core/target/release/bundle/appimage/authme.AppDir
-          npm run rename
-        shell: bash        
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
-          path: core/target/release
-          
+            TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "npm"
+
+            - name: Rust setup
+              uses: dtolnay/rust-toolchain@stable
+
+            - name: Rust cache
+              uses: swatinem/rust-cache@v2
+              with:
+                  workspaces: "./core -> target"
+
+            - name: "Apple silicon target"
+              if: matrix.NAME == 'mac'
+              run: |
+                  rustup target add aarch64-apple-darwin
+
+            - name: Install webkit2gtk (ubuntu only)
+              if: matrix.NAME == 'linux'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+
+            - name: Install app dependencies and build it
+              if: matrix.NAME == 'linux' || matrix.NAME == 'windows'
+              run: npm ci && npm run build:alpha
+
+            - name: Install app dependencies and build it
+              if: matrix.NAME == 'mac'
+              run: npm ci && npm run build:alpha -- --target universal-apple-darwin
+
+            - name: Remove useless folders
+              run: |
+                  rm -rf core/target/release/build
+                  rm -rf core/target/release/deps
+                  rm -rf core/target/release/bundle/appimage/authme.AppDir
+                  npm run rename
+              shell: bash
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
+                  path: core/target/release
