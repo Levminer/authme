@@ -7,7 +7,7 @@ import { getSettings } from "interface/stores/settings"
 
 const settings = getSettings()
 
-interface SystemInfo {
+export interface SystemInfo {
 	osName: string
 	osArch: string
 	cpuName: string
