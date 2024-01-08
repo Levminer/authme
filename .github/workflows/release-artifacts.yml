@@ -49,15 +49,11 @@ jobs:
 
             - name: Install app dependencies and build it
               if: matrix.NAME == 'linux' || matrix.NAME == 'windows'
-              run: npm ci && npm run build:alpha
+              run: npm ci && npm run build:release
     
             - name: Install app dependencies and build it
               if: matrix.NAME == 'mac'
-              run: npm ci && npm run build:alpha -- --target universal-apple-darwin
-
-            - uses: tauri-apps/tauri-action@v0
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: npm ci && npm run build:release -- --target universal-apple-darwin
 
             - name: Remove useless folders
               run: |

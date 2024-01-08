@@ -12,7 +12,7 @@ jobs:
                       NAME: linux
                     - os: windows-latest
                       NAME: windows
-        runs-on: ${{ matrix.os}}
+        runs-on: ${{ matrix.os }}
         env:
             TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
         steps:
@@ -51,10 +51,6 @@ jobs:
             - name: Install app dependencies and build it
               if: matrix.NAME == 'mac'
               run: npm ci && npm run build:alpha -- --target universal-apple-darwin
-
-            - uses: tauri-apps/tauri-action@v0
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Remove useless folders
               run: |
