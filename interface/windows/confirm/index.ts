@@ -4,6 +4,9 @@ import { dialog, invoke } from "@tauri-apps/api"
 import { getState, setState } from "../../stores/state"
 import { sendEncryptionKey, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { decodeBase64 } from "@utils/convert"
+import { getLanguage } from "@utils/language"
+
+const language = getLanguage()
 
 export const confirmPassword = async () => {
 	const settings = getSettings()
@@ -28,7 +31,7 @@ export const confirmPassword = async () => {
 
 		navigate("codes")
 	} else {
-		dialog.message("Wrong password! \n\nPlease try again!", { type: "error" })
+		dialog.message(language.confirm.dialog.wrongPassword, { type: "error" })
 	}
 }
 

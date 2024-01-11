@@ -5,6 +5,9 @@ import { dialog, invoke } from "@tauri-apps/api"
 import { setEntry, generateRandomKey, setEncryptionKey, createWebAuthnLogin, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { search } from "interface/utils/password"
 import { encodeBase64 } from "@utils/convert"
+import { getLanguage } from "@utils/language"
+
+const language = getLanguage()
 
 export const noPassword = async () => {
 	const settings = getSettings()
@@ -51,17 +54,17 @@ export const createPassword = async () => {
 	const input1 = document.querySelector(".passwordInput1")
 
 	if (input0.value !== input1.value) {
-		return dialog.message("Passwords don't match. \n\nPlease try again!", { type: "error" })
+		dialog.message(language.landing.dialog.passwordsNotMatch, { type: "error" })
 	}
 
 	if (input0.value.length < 8) {
-		return dialog.message("Minimum password length is 8 characters. \n\nPlease try again!", { type: "error" })
+		return dialog.message(language.landing.dialog.passwordMinLength, { type: "error" })
 	} else if (input0.value.length > 64) {
-		return dialog.message("Maximum password length is 64 characters. \n\nPlease try again!", { type: "error" })
+		return dialog.message(language.landing.dialog.passwordMaxLength, { type: "error" })
 	}
 
 	if (search(input0.value)) {
-		return dialog.message("This password is on the list of the top 1000 most common passwords. Please choose a more secure password!", { type: "error" })
+		return dialog.message(language.landing.dialog.commonPassword, { type: "error" })
 	}
 
 	if (settings.security.hardwareAuthentication === true) {
