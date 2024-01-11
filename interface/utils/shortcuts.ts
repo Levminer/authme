@@ -3,16 +3,18 @@ import { exit } from "@tauri-apps/api/process"
 import { getSettings, setSettings } from "interface/stores/settings"
 import { getState } from "interface/stores/state"
 import { navigate } from "./navigate"
+import { getLanguage } from "@utils/language"
 
+const language = getLanguage()
 const settings = getSettings()
 const state = getState()
 let modify = true
 let inputName: HTMLInputElement
 
 export const shortcuts = [
-	{ id: "show", name: "Show Authme" },
-	{ id: "settings", name: "Settings" },
-	{ id: "exit", name: "Exit Authme" },
+	{ id: "show", name: language.menu.show },
+	{ id: "settings", name: language.menu.settings },
+	{ id: "exit", name: language.menu.exit },
 ]
 const defaultShortcuts = ["CmdOrCtrl+Shift+a", "CmdOrCtrl+Shift+s", "CmdOrCtrl+Shift+d"]
 
