@@ -4,6 +4,9 @@ import { getState, setState } from "../../stores/state"
 import { navigate } from "../../utils/navigate"
 import logger from "interface/utils/logger"
 import { decodeBase64, migrationImageConverter, totpImageConverter } from "@utils/convert"
+import { getLanguage } from "@utils/language"
+
+const language = getLanguage()
 
 /**
  * Choose images, then read QR codes
@@ -51,7 +54,7 @@ export const chooseImages = async () => {
 
 					// QR codes found on all images
 					if (images.length === i + 1) {
-						dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+						dialog.message(language.codes.dialog.codesImported)
 
 						const state = getState()
 						state.importData = importString
@@ -162,7 +165,7 @@ export const chooseFile = async () => {
 		const file: LibAuthmeFile = JSON.parse(loadedFile)
 		const importString = decodeBase64(file.codes)
 
-		dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+		dialog.message(language.codes.dialog.codesImported)
 
 		state.importData = importString
 		setState(state)
@@ -229,7 +232,7 @@ export const captureScreen = async () => {
 				clearInterval(interval)
 				track.stop()
 
-				dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+				dialog.message(language.codes.dialog.codesImported)
 
 				navigate("codes")
 			} else {
@@ -340,7 +343,7 @@ export const useWebcam = async () => {
 					clearInterval(interval)
 					track.stop()
 
-					dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+					dialog.message(language.codes.dialog.codesImported)
 
 					navigate("codes")
 				} else {
