@@ -5,9 +5,11 @@ import { getSettings } from "../../stores/settings"
 import qrcode from "qrcode-generator"
 import { decryptData, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { navigate } from "@utils/navigate"
+import { getLanguage } from "@utils/language"
 
 let codesArray: LibImportFile
 let codesText: string
+const language = getLanguage()
 
 /**
  * Export the saved codes
@@ -33,7 +35,7 @@ export const exportCodes = async () => {
 		codesArray = textConverter(decryptedText, 0)
 		codesText = decryptedText
 	} else {
-		dialog.message("No save file found. \n\nGo to the codes or the import page and import your codes!", { type: "error" })
+		dialog.message(language.codes.dialog.noSaveFileFound, { type: "error" })
 
 		return navigate("import")
 	}
