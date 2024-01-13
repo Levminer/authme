@@ -5,9 +5,11 @@ import { getSettings, setSettings } from "../../stores/settings"
 import { getState, setState } from "../../stores/state"
 import { decryptData, encryptData } from "interface/utils/encryption"
 import logger from "interface/utils/logger"
+import { getLanguage } from "@utils/language"
 
 const settings = getSettings()
 const state = getState()
+const language = getLanguage()
 let codesRefresher: NodeJS.Timeout
 let searchQuery: LibSearchQuery[] = []
 let saveText: string = ""
@@ -34,7 +36,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 						<h3 id="name${i}" tabindex="0" class="whitespace-nowrap mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
 					</div>
 					<div class="flex flex-1 justify-center px-3">
-						<p id="code${i}" tabindex="0" class="transparent-900 relative mt-1.5 w-[140px] select-all rounded-2xl py-3 px-5 text-2xl focusRing">-</p>
+						<p id="code${i}" tabindex="0" class="transparent-900 relative mt-1.5 w-[150px] select-all rounded-2xl py-3 px-5 text-2xl focusRing">-</p>
 					</div>
 					<div class="flex flex-1 justify-end">
 						<h3 id="time${i}" tabindex="0" class="mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
@@ -46,9 +48,9 @@ export const generateCodeElements = (data: LibImportFile) => {
 					</div>
 				</div>
 				<div class="mb-5 mt-5 flex items-center justify-center">
-					<button id="button${i}" class="button w-[140px] py-3 px-5">
+					<button id="button${i}" class="button w-[150px] py-3 px-5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
-						Copy
+						${language.common.copy}
 					</button>
 				</div>`
 			} else {
@@ -58,7 +60,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 						<h3 id="name${i}" tabindex="0" class="whitespace-nowrap mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
 					</div>
 					<div class="flex flex-1 justify-center px-3">
-						<p id="code${i}" tabindex="0" class="transparent-900 relative mt-1.5 w-[140px] select-all rounded-2xl py-3 px-5 text-2xl focusRing">-</p>
+						<p id="code${i}" tabindex="0" class="transparent-900 relative mt-1.5 w-[150px] select-all rounded-2xl py-3 px-5 text-2xl focusRing">-</p>
 					</div>
 					<div class="flex flex-1 justify-end">
 						<h3 id="time${i}" tabindex="0" class="mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
@@ -71,9 +73,9 @@ export const generateCodeElements = (data: LibImportFile) => {
 				</div>
 				<p tabindex="0" class="text-2xl transparent-900 py-3 px-5 rounded-2xl select-all mt-5" id="description${i}">Description</p>
 				<div class="mb-5 mt-5 flex items-center justify-center">
-					<button id="button${i}" class="button w-[140px] py-3 px-5">
+					<button id="button${i}" class="button w-[150px] py-3 px-5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
-						Copy
+						${language.common.copy}
 					</button>
 				</div>`
 			}
@@ -129,13 +131,13 @@ export const generateCodeElements = (data: LibImportFile) => {
 
 				button.innerHTML = `
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg>
-				Copied
+				${language.common.copied}
 				`
 
 				setTimeout(() => {
 					button.innerHTML = `
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
-					Copy
+					${language.common.copy}
 					`
 				}, 800)
 			})
@@ -262,7 +264,7 @@ export const chooseImportFile = async () => {
 
 		saveText = importString
 
-		dialog.message("Codes imported. \n\nYou can edit your codes on the edit page.")
+		dialog.message(language.codes.dialog.codesImported)
 
 		state.importData = importString
 		setState(state)
