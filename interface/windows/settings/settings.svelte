@@ -1,11 +1,11 @@
 <div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10">General</h1>
+	<h1 class="px-10">{language.settings.general}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Launch on startup</h2>
-				<h3>Start Authme after your computer started. Authme will start on the system tray.</h3>
+				<h2>{language.settings.launchOnStartup}</h2>
+				<h3>{language.settings.launchOnStartupText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.settings.launchOnStartup} on:click={launchOnStartup} />
@@ -14,8 +14,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Minimize to tray</h2>
-				<h3>When closing the app Authme will not quit. You can open Authme from the system tray.</h3>
+				<h2>{language.settings.minimizeToTray}</h2>
+				<h3>{language.settings.minimizeToTrayText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.settings.minimizeToTray} />
@@ -24,8 +24,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Optional analytics</h2>
-				<h3>Send optional analytics, the sent data is completely anonymous. This includes your Authme version and your OS version.</h3>
+				<h2>{language.settings.optionalAnalytics}</h2>
+				<h3>{language.settings.optionalAnalyticsText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.settings.optionalAnalytics} />
@@ -34,8 +34,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Window capture</h2>
-				<h3>By default Authme can't be captured by outside programs. If you turn this on it applies until you restart Authme.</h3>
+				<h2>{language.settings.windowCapture}</h2>
+				<h3>{language.settings.windowCaptureText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={windowCapture} on:click={() => toggleWindowCapture(windowCapture)} />
@@ -44,13 +44,13 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Clear data</h2>
-				<h3>Clear password, 2FA codes and all other settings. Be careful, this can not be undone.</h3>
+				<h2>{language.settings.clearData}</h2>
+				<h3>{language.settings.clearDataText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<button class="button" on:click={clearData}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-					Clear data
+					{language.settings.clearDataButton}
 				</button>
 			</div>
 		</div>
@@ -58,13 +58,13 @@
 </div>
 
 <div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10">Codes</h1>
+	<h1 class="px-10">{language.settings.codes}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Codes description</h2>
-				<h3>2FA codes description will be visible. You can copy it after clicking it.</h3>
+				<h2>{language.settings.codesDescription}</h2>
+				<h3>{language.settings.codesDescriptionText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.settings.codesDescription} />
@@ -73,8 +73,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Blur codes</h2>
-				<h3>Blur the saved codes. You can still copy the codes or hover over the codes to show them.</h3>
+				<h2>{language.settings.blurCodes}</h2>
+				<h3>{language.settings.blurCodesText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.settings.blurCodes} />
@@ -83,8 +83,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Codes layout</h2>
-				<h3>You can choose your preferred layout. Grid displays more items and adapts to the screen size.</h3>
+				<h2>{language.settings.codesLayout}</h2>
+				<h3>{language.settings.codesLayoutText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Select options={["Grid", "List"]} setting={"codesLayout"} />
@@ -93,8 +93,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Sort codes</h2>
-				<h3>You can choose how to sort the codes. By default codes are sorted by importing order.</h3>
+				<h2>{language.settings.sortCodes}</h2>
+				<h3>{language.settings.sortCodesText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Select options={["Default", "A-Z", "Z-A"]} setting={"sortCodes"} />
@@ -103,13 +103,13 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Delete codes</h2>
-				<h3>Delete all imported 2FA codes. Be careful, this can not be undone.</h3>
+				<h2>{language.settings.deleteCodes}</h2>
+				<h3>{language.settings.deleteCodesText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<button class="button" on:click={deleteCodes}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-					Delete codes
+					{language.settings.deleteCodesButton}
 				</button>
 			</div>
 		</div>
@@ -117,7 +117,7 @@
 </div>
 
 <div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10 pb-10">Shortcuts</h1>
+	<h1 class="px-10 pb-10">{language.settings.shortcuts}</h1>
 
 	{#each shortcuts as { id, name }, i}
 		<div class="mx-auto flex flex-col items-center justify-center rounded-2xl px-10">
@@ -131,15 +131,15 @@
 				<div class="ml-10 flex flex-wrap gap-3 sm:ml-0 sm:mt-10 sm:w-full">
 					<button on:click={() => editShortcut(i)} id="editShortcut{i}" class="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="2" x2="22" y2="6" /><path d="M7.5 20.5 19 9l-4-4L3.5 16.5 2 22z" /></svg>
-						Edit
+						{language.settings.shortcutsEditButton}
 					</button>
 					<button on:click={() => resetShortcut(i)} id="resetShortcut{i}" class="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v6h6" /><path d="M21 12A9 9 0 0 0 6 5.3L3 8" /><path d="M21 22v-6h-6" /><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7" /></svg>
-						Reset
+						{language.settings.shortcutsResetButton}
 					</button>
 					<button on:click={() => deleteShortcut(i)} id="deleteShortcut{i}" class="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-						Delete
+						{language.settings.shortcutsDeleteButton}
 					</button>
 				</div>
 			</div>
@@ -148,13 +148,13 @@
 </div>
 
 <div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10">About</h1>
+	<h1 class="px-10">{language.settings.about}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Feedback</h2>
-				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (authme@levminer.com).</h3>
+				<h2>{language.settings.feedback}</h2>
+				<h3>{language.settings.feedbackText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<button
@@ -170,26 +170,26 @@
 		</div>
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Logs</h2>
-				<h3>You can view the logs for debugging..</h3>
+				<h2>{language.settings.logs}</h2>
+				<h3>{language.settings.logsText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<button class="button" on:click={showLogs}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><line x1="10" y1="9" x2="8" y2="9" /></svg>
-					Show logs
+					{language.settings.showLogsButton}
 				</button>
 			</div>
 		</div>
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>About Authme</h2>
-				<h3>Information about your Authme build and your computer.</h3>
+				<h2>{language.settings.aboutAuthme}</h2>
+				<h3>{language.settings.aboutAuthmeText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<button class="button" on:click={about}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
-					About Authme
+					{language.settings.aboutAuthme}
 				</button>
 			</div>
 		</div>
@@ -204,6 +204,9 @@
 	import { open } from "../../utils/navigate"
 	import { deleteShortcut, editShortcut, resetShortcut, shortcuts } from "../../utils/shortcuts"
 	import { deleteCodes } from "../edit/index"
+	import { getLanguage } from "@utils/language"
+
+	const language = getLanguage()
 
 	$: windowCapture = false
 </script>

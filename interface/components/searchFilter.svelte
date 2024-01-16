@@ -7,10 +7,10 @@
 			<div class="overflow-hidden rounded-xl text-xl font-medium text-black shadow-2xl">
 				<div class="relative bg-white py-3">
 					<div>
-						<input type="checkbox" bind:checked={$settings.searchFilter.name} tabindex="-1" id="checkbox0" name="Search for names" class="checkbox" /> Name
+						<input type="checkbox" bind:checked={$settings.searchFilter.name} tabindex="-1" id="checkbox0" name="Search for names" class="checkbox" /> {language.common.name}
 					</div>
 					<div>
-						<input type="checkbox" bind:checked={$settings.searchFilter.description} tabindex="-1" id="checkbox1" name="Search for desciptions" class="checkbox" /> Desciption
+						<input type="checkbox" bind:checked={$settings.searchFilter.description} tabindex="-1" id="checkbox1" name="Search for desciptions" class="checkbox" /> {language.common.description}
 					</div>
 				</div>
 			</div>
@@ -21,4 +21,7 @@
 <script lang="ts">
 	import { Popover, PopoverButton, PopoverPanel, Transition } from "@rgossiaux/svelte-headlessui"
 	import { settings } from "../stores/settings"
+	import { getLanguage } from "@utils/language"
+
+	const language = getLanguage()
 </script>
