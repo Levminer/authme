@@ -102,26 +102,6 @@ export const saveChanges = async () => {
 }
 
 /**
- * Delete all imported codes
- */
-export const deleteCodes = async () => {
-	const confirm0 = await dialog.ask("Are you sure you want to delete all codes? \n\nYou can not revert this!", { type: "warning" })
-
-	if (confirm0 === false) {
-		return
-	}
-
-	const confirm1 = await dialog.ask("Are you absolutely sure? \n\nThere is no way back!", { type: "warning" })
-
-	if (confirm1 === true) {
-		settings.vault.codes = null
-		setSettings(settings)
-
-		navigate("codes")
-	}
-}
-
-/**
  * Edit a specific code
  */
 export const editCode = async (id: number) => {

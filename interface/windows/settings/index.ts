@@ -3,7 +3,7 @@ import { path, invoke, os, dialog, app, process, clipboard, window } from "@taur
 import { UAParser } from "ua-parser-js"
 import { navigate, open } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
-import { getSettings } from "interface/stores/settings"
+import { getSettings, setSettings } from "interface/stores/settings"
 
 const settings = getSettings()
 
@@ -67,6 +67,16 @@ export const clearData = async () => {
 			location.reload()
 		}
 	}
+}
+
+/**
+ * Delete all imported codes
+ */
+export const deleteCodes = async () => {
+	settings.vault.codes = null
+	setSettings(settings)
+
+	navigate("codes")
 }
 
 export const showLogs = async () => {

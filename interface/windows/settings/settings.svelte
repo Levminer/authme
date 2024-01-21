@@ -100,19 +100,6 @@
 				<Select options={["Default", "A-Z", "Z-A"]} setting={"sortCodes"} />
 			</div>
 		</div>
-
-		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
-			<div>
-				<h2>{language.settings.deleteCodes}</h2>
-				<h3>{language.settings.deleteCodesText}</h3>
-			</div>
-			<div class="ml-20 flex gap-3">
-				<button class="button" on:click={deleteCodes}>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-					{language.settings.deleteCodesButton}
-				</button>
-			</div>
-		</div>
 	</div>
 </div>
 
@@ -151,6 +138,20 @@
 	<h1 class="px-10">{language.settings.about}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
+		{#if build.dev}
+			<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
+				<div>
+					<h2>Delete codes</h2>
+					<h3>Delete all imported 2FA codes. Be careful, this can not be undone</h3>
+				</div>
+				<div class="ml-20 flex gap-3">
+					<button class="button" on:click={deleteCodes}>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+						Delete codes
+					</button>
+				</div>
+			</div>
+		{/if}
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
 				<h2>{language.settings.feedback}</h2>
@@ -199,12 +200,12 @@
 <script>
 	import Select from "../../components/select.svelte"
 	import Toggle from "../../components/toggle.svelte"
-	import { about, clearData, showLogs, launchOnStartup, toggleWindowCapture } from "./index"
+	import { about, clearData, showLogs, launchOnStartup, toggleWindowCapture, deleteCodes } from "./index"
 	import { settings } from "../../stores/settings"
 	import { open } from "../../utils/navigate"
 	import { deleteShortcut, editShortcut, resetShortcut, shortcuts } from "../../utils/shortcuts"
-	import { deleteCodes } from "../edit/index"
 	import { getLanguage } from "@utils/language"
+	import build from "../../../build.json"
 
 	const language = getLanguage()
 
