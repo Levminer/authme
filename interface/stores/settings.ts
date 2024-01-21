@@ -37,7 +37,7 @@ const defaultSettings: LibSettings = {
 
 	shortcuts: {
 		show: "CmdOrCtrl+Shift+a",
-		settings: "CmdOrCtrl+Shift+s",
+		settings: "None",
 		exit: "CmdOrCtrl+Shift+d",
 	},
 }

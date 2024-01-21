@@ -16,7 +16,7 @@ export const shortcuts = [
 	{ id: "settings", name: language.menu.settings },
 	{ id: "exit", name: language.menu.exit },
 ]
-const defaultShortcuts = ["CmdOrCtrl+Shift+a", "CmdOrCtrl+Shift+s", "CmdOrCtrl+Shift+d"]
+const defaultShortcuts = ["CmdOrCtrl+Shift+a", "None", "CmdOrCtrl+Shift+d"]
 
 /**
  * Delete specified shortcut

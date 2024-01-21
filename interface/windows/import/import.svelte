@@ -35,7 +35,7 @@
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
 				<h2>{language.import.importFromImage}</h2>
-				<h3>{language.import.importFromImageText}.</h3>
+				<h3>{language.import.importFromImageText}</h3>
 			</div>
 			<div class="ml-10 flex gap-3">
 				<button class="button" on:click={chooseImages}>
