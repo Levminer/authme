@@ -33,7 +33,7 @@
 				<h4>{language.landing.hardwareAuth}</h4>
 				<h5>{language.landing.hardwareAuthText}</h5>
 			</div>
-			<div class="ml-20 flex gap-3">
+			<div class="ml-20 sm:ml-0 flex gap-3 sm:mt-5">
 				<Toggle bind:checked={$settings.security.hardwareAuthentication} />
 			</div>
 		</div>

@@ -1,6 +1,6 @@
-import { decodeBase64, textConverter } from "../../utils/convert"
+import { textConverter } from "../../utils/convert"
 import { TOTP } from "otpauth"
-import { clipboard, dialog, fs } from "@tauri-apps/api"
+import { clipboard } from "@tauri-apps/api"
 import { getSettings, setSettings } from "../../stores/settings"
 import { getState, setState } from "../../stores/state"
 import { decryptData, encryptData } from "interface/utils/encryption"
@@ -20,7 +20,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 	const issuers = data.issuers
 
 	document.querySelector(".importCodes").style.display = "none"
-	document.querySelector(".gettingStarted").style.display = "none"
 	document.querySelector(".searchContainer").style.display = "flex"
 
 	const generate = () => {
@@ -254,25 +253,6 @@ export const search = () => {
 	}
 }
 
-export const chooseImportFile = async () => {
-	const filePath = await dialog.open({ filters: [{ name: "Authme file", extensions: ["authme"] }] })
-
-	if (filePath !== null) {
-		const loadedFile = await fs.readTextFile(filePath.toString())
-		const file: LibAuthmeFile = JSON.parse(loadedFile)
-		const importString = decodeBase64(file.codes)
-
-		saveText = importString
-
-		dialog.message(language.codes.dialog.codesImported)
-
-		state.importData = importString
-		setState(state)
-
-		generateCodeElements(textConverter(importString, 0))
-	}
-}
-
 const saveCodes = async () => {
 	const encryptedText = await encryptData(saveText)
 
@@ -293,7 +273,6 @@ export const loadCodes = async () => {
 	} else {
 		// No saved and no imported codes
 		document.querySelector(".importCodes").style.display = "block"
-		document.querySelector(".gettingStarted").style.display = "block"
 	}
 
 	if (savedCodes === true) {
