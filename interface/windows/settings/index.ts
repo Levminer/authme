@@ -33,7 +33,7 @@ export const about = async () => {
 		.replace(/ +(?= )/g, "")
 	const memory = `${Math.round(systemInfo.totalMem / 1024 / 1024 / 1024)} GB`
 	const osName = systemInfo.osName
-	const osArch = systemInfo.osArch.replace("x86_64", "x64").replace("aarch64", "arm64")
+	const osArch = systemInfo.osArch
 
 	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
 

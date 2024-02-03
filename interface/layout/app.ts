@@ -4,10 +4,11 @@ import { os, event, window, invoke } from "@tauri-apps/api"
 import { getSettings } from "../stores/settings"
 import { navigate } from "../utils/navigate"
 import { getState } from "interface/stores/state"
-import { dev } from "../../build.json"
+import { dev, version } from "../../build.json"
 import { optionalAnalyticsPayload } from "interface/utils/analytics"
 import { checkForUpdate } from "interface/utils/update"
 import logger from "interface/utils/logger"
+import { init, trackEvent } from "@aptabase/web"
 
 const settings = getSettings()
 const state = getState()
@@ -18,6 +19,9 @@ const app = new App({
 })
 
 export default app
+
+// Setup analytics
+init("A-EU-1557095726", { appVersion: version })
 
 // Set background color if vibrancy not supported
 const setBackground = async () => {
@@ -97,17 +101,10 @@ launchOptions()
 // Optional analytics
 const optionalAnalytics = async () => {
 	if (settings.settings.optionalAnalytics === true && dev === false) {
-		const payload = JSON.stringify(await optionalAnalyticsPayload())
+		const payload = await optionalAnalyticsPayload()
 
 		try {
-			fetch("https://api.levminer.com/api/v1/authme/analytics/post", {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				body: payload,
-			})
+			trackEvent("app_start", { version: payload.version, build: payload.build, os: payload.os, lang: payload.lang, date: payload.date.toISOString().split("T")[0] })
 		} catch (error) {
 			logger.error(`Failed to send analytics: ${error}`)
 		}

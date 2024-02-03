@@ -48,6 +48,7 @@
 		"typescript": "^5.3.2"
 	},
 	"dependencies": {
+		"@aptabase/web": "^0.4.2",
 		"@undecaf/barcode-detector-polyfill": "^0.9.16",
 		"@undecaf/zbar-wasm": "^0.9.13",
 		"otpauth": "^8.0.3",

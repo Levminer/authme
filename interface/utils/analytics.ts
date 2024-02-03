@@ -10,7 +10,7 @@ export const optionalAnalyticsPayload = async () => {
 	return {
 		version: build.version,
 		build: build.number,
-		os: `${osName} ${osArch.replace("x86_64", "x64")} ${osVersion}`,
+		os: `${osName} ${osArch.replace("x86_64", "x64").replace("aarch64", "arm64")} ${osVersion}`,
 		lang: navigator.language,
 		date: new Date(),
 	}

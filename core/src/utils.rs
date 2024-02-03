@@ -4,7 +4,7 @@ use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::{env, fs};
-use sysinfo::{CpuExt, System, SystemExt};
+use sysinfo::System;
 use tauri::{GlobalShortcutManager, Manager};
 
 #[tauri::command]
@@ -85,10 +85,21 @@ pub fn system_info() -> SystemInfo {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    let os_name = sys.name().unwrap();
+    let mut os_name = System::name().unwrap();
+    let mut os_arch = env::consts::ARCH.to_string();
     let cpu_name = sys.cpus()[0].brand().to_string();
     let total_mem = sys.total_memory();
-    let os_arch = env::consts::ARCH.to_string();
+
+    os_name = match os_name.as_str() {
+        "Darwin" => "macOS".to_string(),
+        _ => os_name,
+    };
+
+    os_arch = match os_arch.as_str() {
+        "x86_64" => "x64".to_string(),
+        "aarch64" => "arm64".to_string(),
+        _ => os_arch,
+    };
 
     let res = SystemInfo {
         os_name,
