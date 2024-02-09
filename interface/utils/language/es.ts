@@ -1,16 +1,18 @@
-export const localeES = {
+import { localeEN } from "@utils/language/en"
+
+export const localeES: typeof localeEN = {
 	common: {
-	    confirm: "Confirmar",
-        continue: "Continuar",
-        cancel: "Cancelar",
-        close: "Cerrar",
-        copy: "Copiar",
-        copied: "Copiado",
-        moreOptions: "Más opciones",
-        name: "Nombre",
-        description: "Descripción",
-        edit: "Editar",
-        delete: "Eliminar",
+		confirm: "Confirmar",
+		continue: "Continuar",
+		cancel: "Cancelar",
+		close: "Cerrar",
+		copy: "Copiar",
+		copied: "Copiado",
+		moreOptions: "Más opciones",
+		name: "Nombre",
+		description: "Descripción",
+		edit: "Editar",
+		delete: "Eliminar",
 	},
 
 	menu: {
@@ -123,7 +125,6 @@ export const localeES = {
 		exportHTMlFile: "Exportar archivo HTML",
 		exportHTMlFileText: "Ideal para escanear códigos QR o como respaldo de seguridad.",
 		exportFileButton: "Exportar archivo",
-		dialog: {},
 	},
 
 	edit: {

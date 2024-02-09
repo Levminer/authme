@@ -123,7 +123,6 @@ export const localeEN = {
 		exportHTMlFile: "Export HTML file",
 		exportHTMlFileText: "Ideal for scanning the QR codes or for security backup.",
 		exportFileButton: "Export file",
-		dialog: {},
 	},
 
 	edit: {
