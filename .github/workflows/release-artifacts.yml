@@ -10,7 +10,7 @@ jobs:
             matrix:
                 include:
                     - os: macos-latest
-                      NAME: macos
+                      NAME: mac
                     - os: ubuntu-latest
                       NAME: linux
                     - os: windows-latest
@@ -49,11 +49,11 @@ jobs:
 
             - name: Install app dependencies and build it
               if: matrix.NAME == 'linux' || matrix.NAME == 'windows'
-              run: npm ci && npm run build:release
+              run: npm ci && npm run build
     
             - name: Install app dependencies and build it
               if: matrix.NAME == 'mac'
-              run: npm ci && npm run build:release -- --target universal-apple-darwin
+              run: npm ci && npm run build -- --target universal-apple-darwin
 
             - name: Remove useless folders
               run: |
