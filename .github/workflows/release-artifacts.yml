@@ -87,6 +87,22 @@ jobs:
                   path: package.json
                   prop_path: version
 
+            # Sign the installer
+            - name: Sign files with Azure Code Signing
+              uses: azure/azure-code-signing-action@v0.2.15
+              with:
+                  azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                  azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                  azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+                  endpoint: https://eus.codesigning.azure.net/
+                  code-signing-account-name: mnr
+                  certificate-profile-name: profile1
+                  files-folder: "./core/target/release/upload"
+                  files-folder-filter: msi
+                  file-digest: SHA256
+                  timestamp-rfc3161: http://timestamp.acs.microsoft.com
+                  timestamp-digest: SHA256
+
             # Windows
             - name: Upload the windows installer asset
               if: runner.os == 'Windows'
