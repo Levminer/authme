@@ -90,6 +90,7 @@ jobs:
 
             # Sign the installer
             - name: Sign files with Azure Code Signing
+              if: runner.os == 'Windows'
               uses: azure/azure-code-signing-action@v0.2.15
               with:
                   azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
