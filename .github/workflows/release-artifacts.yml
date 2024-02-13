@@ -164,7 +164,13 @@ jobs:
                   asset_content_type: application/octet-stream
 
             - name: Hash
+              if: runner.os == 'Windows' || runner.os == 'Linux'
               run: cat ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-${{matrix.NAME}}-x64.sig
+              shell: bash
+
+            - name: Hash
+              if: runner.os == 'macOS'
+              run: cat ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-${{matrix.NAME}}-universal.sig
               shell: bash
 
             - name: Upload artifacts
