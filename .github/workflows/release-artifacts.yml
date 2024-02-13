@@ -159,8 +159,8 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   upload_url: ${{steps.get_upload_url.outputs.url}}
-                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-macos-x64.dmg
-                  asset_name: authme-${{steps.version.outputs.prop}}-macos-x64.dmg
+                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-macos-universal.dmg
+                  asset_name: authme-${{steps.version.outputs.prop}}-macos-universal.dmg
                   asset_content_type: application/octet-stream
 
             - name: Hash
