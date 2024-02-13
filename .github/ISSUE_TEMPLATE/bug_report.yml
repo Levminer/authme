@@ -14,15 +14,15 @@ body:
 - type: textarea
   attributes:
     label: Authme/System information
-    description: Paste the version information here (Top menu > Info > About Dialog > Copy) or Ctrl/Cmd + O.
+    description: Paste the version information here (Settings > About > About Authme > Copy).
     placeholder: "Authme: 2.6.0 ..."
   validations:
     required: true
 - type: textarea
   attributes:
     label: Authme log
-    description: Paste the latest log here (Top menu > Settings > Settings Window > Logs > Latest log).
-    placeholder: "[AUTHME LOG] {2021. 07. 31. 10:00:00} Authme 2.6.0 release.210713.092658  ..."
+    description: Paste the latest log here (Settings > About > Logs > Show logs).
+    placeholder: "[AUTHME LOG] {2023. 07. 31. 10:00:00} Authme 3.0.0 release.220713.092658  ..."
 - type: textarea
   attributes:
     label: Describe the bug

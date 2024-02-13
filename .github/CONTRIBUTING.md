@@ -16,9 +16,8 @@
 1. Use NPM
 1. Use VS Code
 1. Use ESLint and Prettier
-1. Variable names: snake_case
-1. Function names: camelCase
-1. Don't use new node modules
+1. Variable and function names: camelCase
+1. Don't use new npm modules
 1. Make your PR to the dev branch
 
 ## Notes
