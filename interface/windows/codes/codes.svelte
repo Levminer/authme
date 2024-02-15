@@ -1,11 +1,8 @@
 <div class="transparent-900 main m-auto my-20 w-3/5 rounded-2xl p-10 text-center sm:w-4/5">
 	<h1>Authme</h1>
-	<div class="searchContainer mx-auto mt-10 mb-5 hidden justify-center px-10">
+	<div class="searchContainer mx-auto mb-5 mt-10 hidden justify-center px-10">
 		<div class="mx-auto flex items-center justify-center">
-			<svg id="searchIcon" xmlns="http://www.w3.org/2000/svg" class="pointer-events-none relative left-9 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-			</svg>
-
+			<svg class="pointer-events-none relative left-9 h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
 			<input on:keyup={search} spellcheck="false" class="search input w-96 pl-12 pr-12" type="text" />
 
 			<div class="relative right-9 top-0.5">
@@ -36,11 +33,11 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte"
 	import { stopCodesRefresher, search, loadCodes } from "./index"
-	import { navigate, open } from "../../utils/navigate"
+	import { navigate } from "../../utils/navigate"
 	import SearchFilter from "../../components/searchFilter.svelte"
 	import { getLanguage } from "@utils/language"
 
-	const language= getLanguage()
+	const language = getLanguage()
 
 	onMount(() => {
 		loadCodes()
