@@ -4,26 +4,13 @@
 
 	const api = async () => {
 		try {
-			await fetch("https://api.levminer.com/api/v1/version/all")
+			await fetch("https://api.levminer.com/api/v1/authme/releases")
 				.then((res) => res.json())
 				.then((data) => {
 					try {
-						const alpha_date = new Date(data.authme_alpha_date)
-
-						const alpha_year = alpha_date.getFullYear()
-						const alpha_month = alpha_date.toLocaleString("en-us", { month: "long" })
-						const alpha_day = alpha_date.toISOString().substring(8, 10)
-						const alpha_time = `${alpha_date.getHours().toString().padStart(2, "0")}:${alpha_date
-							.getMinutes()
-							.toString()
-							.padStart(2, "0")}`
-
 						document.querySelector(
 							"#downloads-release",
-						).innerHTML = `Latest release (${data.authme_release_version})`
-						document.querySelector(
-							"#downloads-alpha",
-						).innerHTML = `Latest alpha (${data.authme_alpha_version}) <br> ${alpha_year}. ${alpha_month} ${alpha_day}. ${alpha_time}`
+						).innerHTML = `Latest release (${data.tag_name})`
 					} catch (error) {
 						return console.log(error)
 					}
@@ -208,7 +195,7 @@
 					</div>
 					<div class="flex-grow">
 						<h3 class="leading-relaxed text-base text-gray-300">
-							Your codes is secured by AES 256bit encryption with your own password.
+							Your codes are secured by AES 256bit encryption with your own password.
 						</h3>
 					</div>
 				</div>
@@ -276,7 +263,7 @@
 					</div>
 					<div class="flex-grow">
 						<h3 class="leading-relaxed text-base text-gray-300">
-							Easily open Authme with custom shortcuts and the app will start with your system for
+							Easily open Authme with custom shortcuts. The app will start with your system for
 							quick and easy access.
 						</h3>
 					</div>

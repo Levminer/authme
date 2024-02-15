@@ -8,9 +8,9 @@
 
 ## Features
 
--   🔒 Secure by design: Your codes is secured by AES 256bit encryption with your own password.
+-   🔒 Secure by design: Your codes are secured by AES 256bit encryption with your own password.
 -   🔑 Import codes: Import form any 2FA TOTP QR code or import directly from Google Authenticator.
--   ⌨️ Many shortcuts: Easily open Authme with custom shortcuts and the app will start with your system for quick and easy access.
+-   ⌨️ Many shortcuts: Easily open Authme with custom shortcuts. The app will start with your system for quick and easy access.
 -   📡 Completely offline: You own your data, internet is only required for updates.
 -   💻 Privacy in mind: Authme is hidden from video capture and screenshots.
 -   📃 Easy export and backup: You can export your 2FA codes anytime and you can create a backup of your codes very easily.
@@ -28,7 +28,7 @@
 
 -   Latest release version for users that want a stable and polished experience.
 
-[![Latest release](https://img.shields.io/github/package-json/v/levminer/authme/main?label=Release)](https://tooomm.github.io/github-release-stats/?username=Levminer&repository=authme)
+[![Latest release](https://img.shields.io/github/v/release/levminer/authme?label=Release)](https://tooomm.github.io/github-release-stats/?username=Levminer&repository=authme)
 [![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://authme.levminer.com/#downloads)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/main?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/releases)
 
