@@ -21,7 +21,7 @@ const app = new App({
 export default app
 
 // Setup analytics
-init("A-EU-1557095726", { appVersion: version })
+init("A-EU-1557095726", { appVersion: version, isDebug: false })
 
 // Set background color if vibrancy not supported
 const setBackground = async () => {
