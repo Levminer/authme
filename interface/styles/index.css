@@ -85,29 +85,29 @@ body {
 
 /* headings */
 h1 {
-	font-size: 64px;
+	font-size: 60px;
 	font-weight: 700;
 }
 
 /* main card */
 h2 {
-	font-size: 32px;
+	font-size: 28px;
 	font-weight: 700;
 }
 
 h3 {
-	font-size: 24px;
+	font-size: 20px;
 	color: #d3cfcf;
 }
 
 /* secondary card */
 h4 {
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: 500;
 }
 
 h5 {
-	font-size: 18px;
+	font-size: 14px;
 	color: #d3cfcf;
 }
 
