@@ -125,6 +125,20 @@ export const showTOTPDialog = () => {
 }
 
 /**
+ * Show Authme file dialog
+ */
+export const showAuthmeFileDialog = () => {
+	const dialog: LibDialogElement = document.querySelector(".dialog4")
+	const closeDialog = document.querySelector(".dialog4Close")
+
+	closeDialog.addEventListener("click", () => {
+		dialog.close()
+	})
+
+	dialog.showModal()
+}
+
+/**
  * Enter a TOTP code manually
  */
 export const manualEntry = () => {
