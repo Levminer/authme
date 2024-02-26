@@ -151,7 +151,8 @@ export const totpImageConverter = (data: string): string => {
 	url = url.slice(secret.length + 14 + 1)
 
 	// get issuer
-	let issuer = url
+	const issuerIndex = url.match(/[&]/)
+	let issuer = issuerIndex ? url.slice(0, issuerIndex.index) : url
 
 	// check if issuer is empty
 	if (issuer === "") {

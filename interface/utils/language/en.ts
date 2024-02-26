@@ -74,10 +74,10 @@ export const localeEN = {
 
 	import: {
 		supportedTypes: "Supported 2FA types",
-		totpQRCode: "TOTP QR code",
+		totpQRCode: "TOTP",
 		totpQRCodeText: "A TOTP QR code is what you find mostly everywhere, if you want to setup 2FA. Consist of 6 digits which are changing every 30 seconds.",
 		instructions: "Instructions",
-		googleAuthQRCode: "Google Authenticator QR code",
+		googleAuthQRCode: "Google Authenticator",
 		googleAuthQRCodeText: "If you are using Google Authenticator you can export all of your exiting codes and import them to Authme.",
 		chooseImportMethod: "Choose import method",
 		importFromImage: "Import from image",
@@ -92,9 +92,18 @@ export const localeEN = {
 		webcam: "Webcam",
 		webcamText: "Use your webcam to scan a compatible QR code.",
 		webcamButton: "Use webcam",
-		authmeFile: "Authme file",
-		authmeFileText: "Import all codes from an existing Authme import file.",
+		// authme
+		authme: "Authme",
+		authmeText: "Import all your codes from Authme.",
+		authmeFile: "Authme File",
+		authmeFileText: "Import all codes from an existing Authme import file you exported from Authme.",
 		authmeFileButton: "Choose file",
+		// 2FAS
+		twoFasAuth: "2FAS Authenticator",
+		twoFasAuthText: "Import all codes from from a 2FAS Authenticator backup.",
+		twoFasFile: "2FAS backup file (without password)",
+		twoFasFileText: "Import all codes from an existing 2FAS backup file without a password.",
+		twoFasFileButton: "Choose file",
 		// html dialogs
 		captureScreenTitle: "Capture screen import",
 		captureScreenWaiting: "Waiting for a QR code...",

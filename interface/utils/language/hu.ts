@@ -76,10 +76,10 @@ export const localeHU: typeof localeEN = {
 
 	import: {
 		supportedTypes: "Támogatott 2FA típusok",
-		totpQRCode: "TOTP QR kód",
+		totpQRCode: "TOTP",
 		totpQRCodeText: "A TOTP QR kódokat találod mindenhol, ha 2FA-t akarsz beállítani. 6 számjegyből áll, amik 30 másodpercenként változnak.",
 		instructions: "Útmutató",
-		googleAuthQRCode: "Google Hitelesítő QR kód",
+		googleAuthQRCode: "Google Hitelesítő",
 		googleAuthQRCodeText: "Ha a Google Hitelesítőt használod, akkor exportálhatod a kódjaidat és importálhatod az Authme-be.",
 		chooseImportMethod: "Importálási mód kiválasztása",
 		importFromImage: "Importálás képről",
@@ -94,9 +94,18 @@ export const localeHU: typeof localeEN = {
 		webcam: "Webkamera",
 		webcamText: "Használd a webkamerádat egy 2FA QR kód beolvasásához.",
 		webcamButton: "Webkamera",
-		authmeFile: "Authme fájl",
-		authmeFileText: "Importálj be minden kódot egy Authme import fájlból.",
-		authmeFileButton: "Fájl kiválasztása",
+		// authme
+		authme: "Authme",
+		authmeText: "Import all your codes from Authme.",
+		authmeFile: "Authme File",
+		authmeFileText: "Import all codes from an existing Authme import file you exported from Authme.",
+		authmeFileButton: "Choose file",
+		// 2FAS
+		twoFasAuth: "2FAS Authenticator",
+		twoFasAuthText: "Import all codes from from a 2FAS Authenticator backup.",
+		twoFasFile: "2FAS backup file (without password)",
+		twoFasFileText: "Import all codes from an existing 2FAS backup file without a password.",
+		twoFasFileButton: "Choose file",
 		// translate dialogs
 		captureScreenTitle: "Képernyőről importálás",
 		captureScreenWaiting: "Várakozás a QR kódra...",

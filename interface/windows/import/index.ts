@@ -188,6 +188,42 @@ export const chooseFile = async () => {
 	}
 }
 
+export const twoFasAuthFile = async () => {
+	const filePath = await dialog.open({ filters: [{ name: "2FAS file", extensions: ["2fas"] }] })
+
+	interface TwoFasFile {
+		services: {
+			otp: {
+				link: string
+				tokenType: string
+			}
+		}[]
+	}
+
+	if (filePath !== null) {
+		const loadedFile = await fs.readTextFile(filePath.toString())
+		const file: TwoFasFile = JSON.parse(loadedFile)
+		let importString = ""
+
+		for (let i = 0; i < file.services.length; i++) {
+			const service = file.services[i]
+
+			console.log(service)
+
+			if (service.otp.tokenType === "TOTP") {
+				importString += totpImageConverter(service.otp.link)
+			}
+		}
+
+		dialog.message(language.codes.dialog.codesImported)
+
+		const state = getState()
+		state.importData = importString
+		setState(state)
+
+		navigate("codes")
+	}
+}
 /**
  * Start a video capture, when a QR code detected try to read it
  */

@@ -76,10 +76,10 @@ export const localeES: typeof localeEN = {
 
 	import: {
 		supportedTypes: "Tipos de 2FA admitidos",
-		totpQRCode: "Código QR TOTP",
+		totpQRCode: "TOTP",
 		totpQRCodeText: "Un código QR TOTP es lo que se encuentra principalmente en todas partes, si desea configurar 2FA. Consta de 6 dígitos que cambian cada 30 segundos.",
 		instructions: "Instrucciones",
-		googleAuthQRCode: "Código QR del autenticador de Google",
+		googleAuthQRCode: "Google Authenticator",
 		googleAuthQRCodeText: "Si está utilizando Google Authenticator, puede exportar todos sus códigos existentes e importarlos a Authme.",
 		chooseImportMethod: "Elija el método de importación",
 		importFromImage: "Importar desde imagen",
@@ -94,9 +94,18 @@ export const localeES: typeof localeEN = {
 		webcam: "Webcam",
 		webcamText: "use su Webcam para escanear un código QR 2FA.",
 		webcamButton: "Use webcam",
-		authmeFile: "Archivo de Authme",
-		authmeFileText: "Importe todos los códigos de un archivo de importación de Authme existente.",
-		authmeFileButton: "Elija el archivo",
+		// authme
+		authme: "Authme",
+		authmeText: "Import all your codes from Authme.",
+		authmeFile: "Authme File",
+		authmeFileText: "Import all codes from an existing Authme import file you exported from Authme.",
+		authmeFileButton: "Choose file",
+		// 2FAS
+		twoFasAuth: "2FAS Authenticator",
+		twoFasAuthText: "Import all codes from from a 2FAS Authenticator backup.",
+		twoFasFile: "2FAS backup file (without password)",
+		twoFasFileText: "Import all codes from an existing 2FAS backup file without a password.",
+		twoFasFileButton: "Choose file",
 		// html dialogs
 		captureScreenTitle: "Importación de pantalla de captura",
 		captureScreenWaiting: "Esperando un código QR...",
