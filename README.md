@@ -15,10 +15,12 @@
 -   💻 Privacy in mind: Authme is hidden from video capture and screenshots.
 -   📃 Easy export and backup: You can export your 2FA codes anytime and you can create a backup of your codes very easily.
 
-## Compatible 2FA codes
+## Supported 2FA types
 
--   TOTP 2FA QR code: A TOTP QR code is that you find mostly everywhere, if you want to setup 2FA. Example: Google, Facebook, Microsoft, etc.
--   Google Authenticator QR code: A Google Authenticator QR code is what you can export, and contains all of your already imported codes. Example: Google Authenticator.
+-   TOTP: A TOTP QR code is that you find mostly everywhere, if you want to setup 2FA. Example: Google, Facebook, Microsoft, etc.
+-   Google Authenticator: If you are already using Google Authenticator you can export all of your exiting codes and import them to Authme.
+-   2FAS Authenticator: You can create a backup of all your codes in 2FAS and import the backup in Authme.
+-   Aegis Authenticator: You can export your vault from Aegis and import it to Authme.
 
 ## Screenshot
 
@@ -57,8 +59,8 @@ Tutorial on how to migrate to Authme 4 or 5 from Authme 3:
 
 ## Contributing and development
 
--   Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
--   Read before contributing: [Code Of Conduct](https://github.com/Levminer/authme/blob/main/.github/CODE_OF_CONDUCT.md)
+-   Contributions are always welcome! Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
+-   Do you want to translate Authme? [Instructions](https://github.com/Levminer/authme/issues/258)
 
 ## License
 

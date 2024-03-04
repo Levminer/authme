@@ -15,7 +15,7 @@ body:
   attributes:
     label: Authme/System information
     description: Paste the version information here (Settings > About > About Authme > Copy).
-    placeholder: "Authme: 2.6.0 ..."
+    placeholder: "Authme: 5.0.0 ..."
   validations:
     required: true
 - type: textarea

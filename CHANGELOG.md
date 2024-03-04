@@ -1,3 +1,12 @@
+### Authme 5.0.1 (2024. February 20.)
+
+-   [[df7b932](https://github.com/Levminer/authme/commit/df7b932)] Bump version and update tauri and deps (2024-02-20)
+-   [[334e1ea](https://github.com/Levminer/authme/commit/334e1ea)] Simplify import page (2024-02-20)
+-   [[999d3aa](https://github.com/Levminer/authme/commit/999d3aa)] Further decrease text size (2024-02-16)
+-   [[e4cf062](https://github.com/Levminer/authme/commit/e4cf062)] Update icons (2024-02-15)
+-   [[72bd649](https://github.com/Levminer/authme/commit/72bd649)] Update website and readme links (2024-02-15)
+-   [[3d7acbd](https://github.com/Levminer/authme/commit/3d7acbd)] Fix analytics mode (2024-02-15)
+
 ### Authme 5.0.0 (2024. February 13.)
 
 -   [[b70b99e](https://github.com/Levminer/authme/commit/b70b99e)] Bump version (2024-02-13)

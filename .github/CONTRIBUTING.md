@@ -4,7 +4,7 @@
 -   Clone the repository: `git clone https://github.com/Levminer/authme`
 -   Install node modules: `npm i`
 -   Setup project: `npm run setup`
--   Run start command: `npm run start`
+-   Run start command: `npm run dev`
 
 ## Building
 
