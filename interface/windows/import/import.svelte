@@ -117,6 +117,35 @@
 
 		<div class="transparent-800 flex w-full flex-col items-start rounded-xl p-5 text-left">
 			<div>
+				<h2>{language.import.aegisAuth}</h2>
+				<h3>{language.import.aegisAuthText}</h3>
+			</div>
+			<div class="mt-5 flex w-full">
+				<button class="button" on:click={showAuthmeFileDialog}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
+					{language.import.instructions}
+				</button>
+			</div>
+			<div class="mt-5 flex w-full">
+				<Details title={language.import.chooseImportMethod}>
+					<div class="flex flex-row justify-between">
+						<div>
+							<h4 class="text-white">{language.import.aegisFile}</h4>
+							<h5>{language.import.aegisFileText}</h5>
+						</div>
+						<div>
+							<button class="smallButton" on:click={aegisFile}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v3" /><polyline points="14 2 14 8 20 8" /><path d="M5 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" /><path d="m9 18-1.5-1.5" /></svg>
+								{language.import.aegisFileButton}
+							</button>
+						</div>
+					</div>
+				</Details>
+			</div>
+		</div>
+
+		<div class="transparent-800 flex w-full flex-col items-start rounded-xl p-5 text-left">
+			<div>
 				<h2>{language.import.twoFasAuth}</h2>
 				<h3>{language.import.twoFasAuthText}</h3>
 			</div>
@@ -296,7 +325,7 @@
 </dialog>
 
 <script>
-	import { captureScreen, chooseFile, chooseImages, manualEntry, showAuthmeFileDialog, showGADialog, showManualEntry, showTOTPDialog, twoFasAuthFile, useWebcam } from "./index"
+	import { aegisFile, captureScreen, chooseFile, chooseImages, manualEntry, showAuthmeFileDialog, showGADialog, showManualEntry, showTOTPDialog, twoFasAuthFile, useWebcam } from "./index"
 	import Details from "../../components/details.svelte"
 	import { getLanguage } from "@utils/language"
 

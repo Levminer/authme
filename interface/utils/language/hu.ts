@@ -102,10 +102,16 @@ export const localeHU: typeof localeEN = {
 		authmeFileButton: "Choose file",
 		// 2FAS
 		twoFasAuth: "2FAS Authenticator",
-		twoFasAuthText: "Import all codes from from a 2FAS Authenticator backup.",
+		twoFasAuthText: "Import all codes from a 2FAS Authenticator backup.",
 		twoFasFile: "2FAS backup file (without password)",
 		twoFasFileText: "Import all codes from an existing 2FAS backup file without a password.",
 		twoFasFileButton: "Choose file",
+		// aegis
+		aegisAuth: "Aegis Authenticator",
+		aegisAuthText: "Import all codes from from an Aegis vault.",
+		aegisFile: "Aegis vault file (without password)",
+		aegisFileText: "Import all codes from an existing Aegis vault file without a password.",
+		aegisFileButton: "Choose file",
 		// translate dialogs
 		captureScreenTitle: "Képernyőről importálás",
 		captureScreenWaiting: "Várakozás a QR kódra...",

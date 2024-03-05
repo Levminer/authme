@@ -188,6 +188,9 @@ export const chooseFile = async () => {
 	}
 }
 
+/**
+ * Import from a 2FAS backup file
+ */
 export const twoFasAuthFile = async () => {
 	const filePath = await dialog.open({ filters: [{ name: "2FAS file", extensions: ["2fas"] }] })
 
@@ -224,6 +227,51 @@ export const twoFasAuthFile = async () => {
 		navigate("codes")
 	}
 }
+
+/**
+ * Import from an Aegis vault file
+ */
+export const aegisFile = async () => {
+	const filePath = await dialog.open({ filters: [{ name: "Aegis vault file", extensions: ["json"] }] })
+
+	interface AegisFile {
+		db:{
+			entries: {
+				type: string
+				name: string
+				issuer: string
+				info:{
+					secret: string
+				}
+			}[]
+		}
+	}
+
+	if (filePath !== null) {
+		const loadedFile = await fs.readTextFile(filePath.toString())
+		const file: AegisFile = JSON.parse(loadedFile)
+		let importString = ""
+
+		for (let i = 0; i < file.db.entries.length; i++) {
+			const entry = file.db.entries[i]
+
+			console.log(entry)
+
+			if (entry.type === "totp") {
+				importString += totpImageConverter(`otpauth://totp/${entry.name}?secret=${entry.info.secret}&issuer=${entry.issuer}`)
+			}
+		}
+
+		dialog.message(language.codes.dialog.codesImported)
+
+		const state = getState()
+		state.importData = importString
+		setState(state)
+
+		navigate("codes")
+	}
+}
+
 /**
  * Start a video capture, when a QR code detected try to read it
  */
