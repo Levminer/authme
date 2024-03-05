@@ -121,16 +121,9 @@ export const localeES: typeof localeEN = {
 		manualEntrySecret: "Secreto (requerido)",
 		manualEntryDescription: "Descripción",
 		// tutorial
-		googleAuthTutorialTitle: "Breve tutorial sobre cómo importar sus códigos a Authme desde Google Authenticator.",
-		googleAuthTutorial0: "Exporte los códigos 2FA desde la aplicación Google Authenticator: toque el menú de hamburguesas en la esquina superior izquierda de la pantalla: Transferir cuentas > Exportar cuentas",
-		googleAuthTutorial1: "Guarde los códigos QR de migración con una captura de pantalla o tome una fotografía con otro teléfono si tiene Android. Transfiere estas imágenes a tu computadora",
-		googleAuthTutorial2: "En Authme, vaya a la página Importar: Barra lateral > Importar",
-		googleAuthTutorial3: "Haga clic en el botón Elegir imágenes y seleccione las imágenes que transfirió desde su teléfono.",
-		totpTutorialTitle: "Breve tutorial sobre cómo importar sus códigos a Authme desde cualquier código QR TOTP 2FA.",
-		totpTutorial0: "Vaya al sitio web donde desea configurar 2FA",
-		totpTutorial1: "Tome una captura de pantalla (tecla de Windows + combinación de teclas Shift + S en Windows, Cmd + Shift + 3 en macOS) del código QR y guarde la imagen.",
-		totpTutorial2: "En Authme, vaya a la página Importar: Barra lateral > Importar",
-		totpTutorial3: "Haga clic en el botón Elegir imágenes y seleccione la imagen.",
+		googleAuthTutorial: ["Export the 2FA codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts", "Save the migration QR code(s) with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer", "In Authme, go to the Import page: Sidebar > Import", "Click the Choose images button and select the picture(s) you transferred from your phone"],
+		totpTutorial: ["Go to the website where you want to setup 2FA", "Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the picture", "In Authme, go to the Import page: Sidebar > Import", "Click the Choose images button and select the picture"],
+		authmeTutorial: ["In Authme go to the Export page and choose Export Authme file", "You can import this file in Authme on the Import page"]
 	},
 
 	export: {

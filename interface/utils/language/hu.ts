@@ -121,16 +121,9 @@ export const localeHU: typeof localeEN = {
 		manualEntrySecret: "Titkos kulcs (Kötelező)",
 		manualEntryDescription: "Leírás",
 		// tutorial
-		googleAuthTutorialTitle: "Rövid útmutató, arról hogy hogyan importálhatod a kódjaidat az Authme-be a Google Hitelesítőből.",
-		googleAuthTutorial0: "Exportáld a 2FA kódokat a Google Hitelesítő alkalmazásból: Kattints a hamburger menüre a képernyő tetején balra: Átvitel > Kódok exportálása",
-		googleAuthTutorial1: "Mentsd el a migrációs QR kódot képernyőmentéssel vagy készíts egy képet egy másik telefonnal, ha Androidon vagy. Másold át ezeket a képeket a számítógépedre.",
-		googleAuthTutorial2: "Az Authme-ben menj az Importálás oldalra: Oldalsáv > Importálás",
-		googleAuthTutorial3: "Kattints a Képek kiválasztása gombra és válaszd ki a telefonodról átmásolt képeket",
-		totpTutorialTitle: "Rövid útmutató, hogyan importálhatod a kódjaidat az Authme-be bármilyen TOTP 2FA QR kódból.",
-		totpTutorial0: "Menj az oldalra, ahol 2FA-t akarsz beállítani",
-		totpTutorial1: "Készíts egy képernyőmentést (Windows billentyű + Shift + S kombináció Windows-on, Cmd + Shift + 3 macOS-en) a QR kódról, és mentsd el a képet",
-		totpTutorial2: "Az Authme-ben menj az Importálás oldalra: Oldalsáv > Importálás",
-		totpTutorial3: "Kattints a Képek kiválasztása gombra és válaszd ki a telefonodról átmásolt képet",
+		googleAuthTutorial: ["Export the 2FA codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts", "Save the migration QR code(s) with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer", "In Authme, go to the Import page: Sidebar > Import", "Click the Choose images button and select the picture(s) you transferred from your phone"],
+		totpTutorial: ["Go to the website where you want to setup 2FA", "Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the picture", "In Authme, go to the Import page: Sidebar > Import", "Click the Choose images button and select the picture"],
+		authmeTutorial: ["In Authme go to the Export page and choose Export Authme file", "You can import this file in Authme on the Import page"],
 	},
 
 	export: {

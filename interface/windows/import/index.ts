@@ -97,39 +97,45 @@ export const showManualEntry = () => {
 }
 
 /**
- * Show Google Authenticator tutorial dialog
+ * Show tutorial dialog
  */
-export const showGADialog = () => {
-	const dialog: LibDialogElement = document.querySelector(".dialog2")
-	const closeDialog = document.querySelector(".dialog2Close")
+type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas"
 
-	closeDialog.addEventListener("click", () => {
-		dialog.close()
-	})
+export const showTutorial = (type: tutorialType) => {
+	const dialog: LibDialogElement = document.querySelector(".tutorialDialog")
+	const closeDialog = document.querySelector(".tutorialDialogClose")
 
-	dialog.showModal()
-}
+	// list element
+	const list = document.querySelector(".tutorialList")
+	const tutorialTitle = document.querySelector(".tutorialTitle")
+	const tutorialDescription = document.querySelector(".tutorialDescription")
+	list.innerHTML = ""
 
-/**
- * Show TOTP tutorial dialog
- */
-export const showTOTPDialog = () => {
-	const dialog: LibDialogElement = document.querySelector(".dialog3")
-	const closeDialog = document.querySelector(".dialog3Close")
+	if (type === "google") {
+		const elements = language.import.googleAuthTutorial
+		tutorialTitle.innerHTML = language.import.googleAuthQRCode
+		tutorialDescription.innerHTML = language.import.googleAuthQRCodeText
 
-	closeDialog.addEventListener("click", () => {
-		dialog.close()
-	})
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	} else if (type === "totp") {
+		const elements = language.import.totpTutorial
+		tutorialTitle.innerHTML = language.import.totpQRCode
+		tutorialDescription.innerHTML = language.import.totpQRCodeText
 
-	dialog.showModal()
-}
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	} else if (type === "authme") {
+		const elements = language.import.authmeTutorial
+		tutorialTitle.innerHTML = language.import.authme
+		tutorialDescription.innerHTML = language.import.authmeText
 
-/**
- * Show Authme file dialog
- */
-export const showAuthmeFileDialog = () => {
-	const dialog: LibDialogElement = document.querySelector(".dialog4")
-	const closeDialog = document.querySelector(".dialog4Close")
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	}
 
 	closeDialog.addEventListener("click", () => {
 		dialog.close()
@@ -235,12 +241,12 @@ export const aegisFile = async () => {
 	const filePath = await dialog.open({ filters: [{ name: "Aegis vault file", extensions: ["json"] }] })
 
 	interface AegisFile {
-		db:{
+		db: {
 			entries: {
 				type: string
 				name: string
 				issuer: string
-				info:{
+				info: {
 					secret: string
 				}
 			}[]

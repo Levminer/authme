@@ -7,7 +7,7 @@
 				<h3>{language.import.totpQRCodeText}</h3>
 			</div>
 			<div class="mt-5 flex w-full">
-				<button class="button" on:click={showTOTPDialog}>
+				<button class="button" on:click={() => showTutorial("totp")}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					{language.import.instructions}
 				</button>
@@ -77,7 +77,7 @@
 				<h3>{language.import.googleAuthQRCodeText}</h3>
 			</div>
 			<div class="mt-5 flex w-full">
-				<button class="button" on:click={showGADialog}>
+				<button class="button" on:click={() => showTutorial("google")}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					{language.import.instructions}
 				</button>
@@ -121,7 +121,7 @@
 				<h3>{language.import.aegisAuthText}</h3>
 			</div>
 			<div class="mt-5 flex w-full">
-				<button class="button" on:click={showAuthmeFileDialog}>
+				<button class="button" on:click={() => showTutorial("aegis")}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					{language.import.instructions}
 				</button>
@@ -150,7 +150,7 @@
 				<h3>{language.import.twoFasAuthText}</h3>
 			</div>
 			<div class="mt-5 flex w-full">
-				<button class="button" on:click={showAuthmeFileDialog}>
+				<button class="button" on:click={() => showTutorial("2fas")}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					{language.import.instructions}
 				</button>
@@ -179,7 +179,7 @@
 				<h3>{language.import.authmeText}</h3>
 			</div>
 			<div class="mt-5 flex w-full">
-				<button class="button" on:click={showAuthmeFileDialog}>
+				<button class="button" on:click={() => showTutorial("authme")}>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
 					{language.import.instructions}
 				</button>
@@ -258,64 +258,16 @@
 	</div>
 </dialog>
 
-<dialog class="dialog dialog2">
-	<h2>{language.import.googleAuthQRCode}</h2>
-	<h3>{language.import.googleAuthTutorialTitle}</h3>
+<dialog class="dialog tutorialDialog">
+	<h2 class="tutorialTitle">-</h2>
+	<h3 class="tutorialDescription">-</h3>
 
 	<div class="mt-10 flex flex-row space-x-5">
-		<ol class="instructions">
-			<li>{language.import.googleAuthTutorial0}</li>
-			<li>{language.import.googleAuthTutorial1}</li>
-			<li>{language.import.googleAuthTutorial2}</li>
-			<li>{language.import.googleAuthTutorial3}</li>
-		</ol>
+		<ol class="instructions tutorialList" />
 	</div>
 
 	<div class="mt-10 flex space-x-5">
-		<button class="button dialog2Close">
-			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-			</svg>
-			{language.common.close}
-		</button>
-	</div>
-</dialog>
-
-<dialog class="dialog dialog3">
-	<h2>{language.import.totpQRCode}</h2>
-	<h3>{language.import.totpTutorialTitle}</h3>
-
-	<div class="mt-10 flex flex-row space-x-5">
-		<ol class="instructions">
-			<li>{language.import.totpTutorial0}</li>
-			<li>{language.import.totpTutorial1}</li>
-			<li>{language.import.totpTutorial2}</li>
-			<li>{language.import.totpTutorial3}</li>
-		</ol>
-	</div>
-
-	<div class="mt-10 flex space-x-5">
-		<button class="button dialog3Close">
-			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-			</svg>
-			{language.common.close}
-		</button>
-	</div>
-</dialog>
-
-<dialog class="dialog dialog4">
-	<h2>{language.import.authmeFile}</h2>
-	<h3>{language.import.authmeFileText}</h3>
-
-	<div class="mt-10 flex flex-row space-x-5">
-		<ol class="instructions">
-			<li>In Authme go to the Export page and choose Export Authme file.</li>
-		</ol>
-	</div>
-
-	<div class="mt-10 flex space-x-5">
-		<button class="button dialog4Close">
+		<button class="button tutorialDialogClose">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 			</svg>
@@ -325,7 +277,7 @@
 </dialog>
 
 <script>
-	import { aegisFile, captureScreen, chooseFile, chooseImages, manualEntry, showAuthmeFileDialog, showGADialog, showManualEntry, showTOTPDialog, twoFasAuthFile, useWebcam } from "./index"
+	import { aegisFile, captureScreen, chooseFile, chooseImages, manualEntry,showManualEntry, showTutorial, twoFasAuthFile, useWebcam } from "./index"
 	import Details from "../../components/details.svelte"
 	import { getLanguage } from "@utils/language"
 

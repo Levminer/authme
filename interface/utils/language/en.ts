@@ -119,16 +119,9 @@ export const localeEN = {
 		manualEntrySecret: "Secret (Required)",
 		manualEntryDescription: "Description",
 		// tutorial
-		googleAuthTutorialTitle: "Short tutorial on how to import your codes into Authme from Google Authenticator.",
-		googleAuthTutorial0: "Export the 2FA codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts",
-		googleAuthTutorial1: "Save the migration QR code(s) with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer",
-		googleAuthTutorial2: "In Authme, go to the Import page: Sidebar > Import",
-		googleAuthTutorial3: "Click the Choose images button and select the picture(s) you transferred from your phone",
-		totpTutorialTitle: "Short tutorial on how to import your codes into Authme from any TOTP 2FA QR code.",
-		totpTutorial0: "Go to the website where you want to setup 2FA",
-		totpTutorial1: "Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the picture",
-		totpTutorial2: "In Authme, go to the Import page: Sidebar > Import",
-		totpTutorial3: "Click the Choose images button and select the picture",
+		googleAuthTutorial: ["Export the 2FA codes from the Google Authenticator app: Tap on the hamburger menu in the top left corner of the screen: Transfer Accounts > Export Accounts", "Save the migration QR code(s) with a screenshot or take a picture with another phone if you are on Android. Transfer these pictures to your computer", "In Authme, go to the Import page: Sidebar > Import", "Click the Choose images button and select the picture(s) you transferred from your phone"],
+		totpTutorial: ["Go to the website where you want to setup 2FA", "Take a screenshot (Windows key + Shift + S key combination on Windows, Cmd + Shift + 3 on macOS) of the QR code, and save the picture", "In Authme, go to the Import page: Sidebar > Import", "Click the Choose images button and select the picture"],
+		authmeTutorial: ["In Authme go to the Export page and choose Export Authme file", "You can import this file in Authme on the Import page"]
 	},
 
 	export: {
