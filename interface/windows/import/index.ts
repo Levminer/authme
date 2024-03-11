@@ -135,6 +135,22 @@ export const showTutorial = (type: tutorialType) => {
 		for (let i = 0; i < elements.length; i++) {
 			list.innerHTML += `<li>${elements[i]}</li>`
 		}
+	} else if (type === "aegis") {
+		const elements = language.import.aegisTutorial
+		tutorialTitle.innerHTML = language.import.aegisAuth
+		tutorialDescription.innerHTML = language.import.aegisAuthText
+
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	} else if (type === "2fas") {
+		const elements = language.import.twoFasTutorial
+		tutorialTitle.innerHTML = language.import.twoFasAuth
+		tutorialDescription.innerHTML = language.import.twoFasAuthText
+
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
 	}
 
 	closeDialog.addEventListener("click", () => {

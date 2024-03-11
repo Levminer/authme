@@ -4,7 +4,7 @@
 
 [![Downloads](https://img.shields.io/github/downloads/levminer/authme/total?label=Downloads)](https://authme.levminer.com/#downloads)
 [![Support](https://img.shields.io/badge/Support-PayPal-blue)](https://paypal.me/levminer)
-[![License](https://img.shields.io/github/license/levminer/authme?label=License)](https://github.com/Levminer/authme/blob/main/LICENSE.md)
+[![License](https://img.shields.io/github/license/levminer/authme?label=License)](https://github.com/Levminer/authme/blob/dev/LICENSE.md)
 
 ## Features
 
@@ -59,10 +59,10 @@ Tutorial on how to migrate to Authme 4 or 5 from Authme 3:
 
 ## Contributing and development
 
--   Contributions are always welcome! Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/main/.github/CONTRIBUTING.md)
+-   Contributions are always welcome! Read for development and building instructions: [Contributing](https://github.com/Levminer/authme/blob/dev/.github/CONTRIBUTING.md)
 -   Do you want to translate Authme? [Instructions](https://github.com/Levminer/authme/issues/258)
 
 ## License
 
--   This software is licensed under: [GPL-3.0](https://github.com/Levminer/authme/blob/main/LICENSE.md)
+-   This software is licensed under: [GPL-3.0](https://github.com/Levminer/authme/blob/dev/LICENSE.md)
 -   If you are planning to use this software as a business please contact me at: <authme@levminer.com>
