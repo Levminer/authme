@@ -6,7 +6,7 @@
 <header class="sticky top-0 z-50 bg-gray-900 text-gray-50 small:static my-5 mx-10 rounded-xl">
 	<div class="container mx-auto flex flex-col flex-wrap items-center p-5 md:flex-row">
 		<a href="/" class="space-x-2 flex items-center hover:text-gray-300 duration-200">
-			<img width="16" height="16" class="inline-block" src="icon.png" alt="authme-logo" />
+			<img class="inline-block" src="icon.png" alt="authme-logo" />
 			<h1 class="inline-block text-lg font-bold">Authme</h1>
 		</a>
 
