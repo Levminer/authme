@@ -59,7 +59,6 @@ self.addEventListener("fetch", (event) => {
 				throw new Error("invalid response from fetch")
 			}
 
-			console.log(response)
 			if (response.status === 200 && response.url.startsWith("http")) {
 				cache.put(event.request, response.clone())
 			}

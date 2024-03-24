@@ -8,7 +8,7 @@ module.exports = {
 	parser: "@typescript-eslint/parser",
 	extends: ["standard", "eslint:recommended", "plugin:promise/recommended", "plugin:@typescript-eslint/eslint-recommended", "plugin:svelte/recommended", "prettier"],
 	plugins: ["@typescript-eslint"],
-	ignorePatterns: ["/node_modules/*", "/dist/*", "/build/*", "/core/*"],
+	ignorePatterns: ["/node_modules/*", "/dist/*", "/build/*", "/core/*", "/website/*"],
 	parserOptions: {
 		ecmaVersion: 12,
 		extraFileExtensions: [".svelte"],
