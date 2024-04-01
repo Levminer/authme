@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"lucide-svelte": "^0.364.0",
 		"otpauth": "^9.2.2",
 		"ua-parser-js": "^1.0.35"
 	}
