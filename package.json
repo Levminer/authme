@@ -18,6 +18,9 @@
 		"check": "svelte-check && tsc --noEmit && eslint .",
 		"tauri": "tauri"
 	},
+	"workspaces": [
+		"website"
+	],
 	"devDependencies": {
 		"@baileyherbert/tinro": "^1.0.0",
 		"@rgossiaux/svelte-headlessui": "^1.0.2",
