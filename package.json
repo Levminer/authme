@@ -12,7 +12,7 @@
 		"build": "node scripts/buildNumber.cjs release false && tauri build",
 		"build:alpha": "node scripts/buildNumber.cjs alpha false && tauri build",
 		"build:bundle": "node scripts/build.js",
-		"build:website": "npm run build -w website",
+		"build:website": "node scripts/buildNumber.cjs alpha false && npm run build -w website",
 		"setup": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
 		"rename": "node scripts/rename.js",
 		"check": "svelte-check && tsc --noEmit && eslint .",
