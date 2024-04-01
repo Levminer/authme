@@ -30,7 +30,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tauri-apps/api": "^1.5.3",
 		"otpauth": "^9.2.2",
 		"ua-parser-js": "^1.0.35"
 	}
