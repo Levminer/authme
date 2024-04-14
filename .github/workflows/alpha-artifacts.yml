@@ -15,6 +15,9 @@ jobs:
         runs-on: ${{ matrix.os }}
         env:
             TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+            AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -32,6 +35,11 @@ jobs:
               uses: swatinem/rust-cache@v2
               with:
                   workspaces: "./core -> target"
+
+            - name: Install trusted-signing-cli
+              if: matrix.NAME == 'windows'
+              run: |
+                  cargo install trusted-signing-cli
 
             - name: "Apple silicon target"
               if: matrix.NAME == 'mac'
