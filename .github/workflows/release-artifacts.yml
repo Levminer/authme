@@ -18,6 +18,9 @@ jobs:
         runs-on: ${{ matrix.os}}
         env:
             TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+            AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -39,7 +42,7 @@ jobs:
             - name: Install trusted-signing-cli
               if: matrix.NAME == 'windows'
               run: |
-                cargo install trusted-signing-cli@0.2.0
+                  cargo install trusted-signing-cli@0.2.0
 
             - name: "Apple silicon target"
               if: runner.os == 'macOS'
@@ -56,7 +59,7 @@ jobs:
             - name: Install app dependencies and build it
               if: runner.os == 'Linux' || runner.os == 'Windows'
               run: npm ci && npm run build
-    
+
             - name: Install app dependencies and build it
               if: runner.os == 'macOS'
               run: npm ci && npm run build -- --target universal-apple-darwin
