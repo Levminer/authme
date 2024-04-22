@@ -36,6 +36,11 @@ jobs:
               with:
                   workspaces: "./core -> target"
 
+            - name: Install trusted-signing-cli
+              if: matrix.NAME == 'windows'
+              run: |
+                cargo install trusted-signing-cli@0.2.0
+
             - name: "Apple silicon target"
               if: runner.os == 'macOS'
               run: |
@@ -92,7 +97,7 @@ jobs:
             # Sign the installer
             - name: Sign files with Azure Code Signing
               if: runner.os == 'Windows'
-              uses: azure/azure-code-signing-action@v0.2.15
+              uses: azure/trusted-signing-action@v0.3.15
               with:
                   azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
                   azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
