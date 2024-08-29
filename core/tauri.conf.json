@@ -40,13 +40,7 @@
 			},
 			"resources": [],
 			"shortDescription": "",
-			"targets": "all",
-			"windows": {
-				"certificateThumbprint": null,
-				"digestAlgorithm": "sha256",
-				"timestampUrl": "",
-				"signCommand": "trusted-signing-cli %1 -e https://wus2.codesigning.azure.net -a mnr -c Profile3"
-			}
+			"targets": "all"
 		},
 		"security": {
 			"csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'; script-src 'unsafe-eval'"

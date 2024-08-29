@@ -1,0 +1,9 @@
+{
+	"tauri": {
+		"bundle": {
+			"windows": {
+				"signCommand": "trusted-signing-cli %1 -e https://wus2.codesigning.azure.net -a mnr -c Profile3"
+			}
+		}
+	}
+}
