@@ -42,7 +42,7 @@ jobs:
             - name: Install trusted-signing-cli
               if: matrix.NAME == 'windows'
               run: |
-                  cargo install trusted-signing-cli@0.2.0
+                  cargo install trusted-signing-cli@0.3.0
 
             - name: "Apple silicon target"
               if: runner.os == 'macOS'
@@ -96,10 +96,6 @@ jobs:
               with:
                   path: package.json
                   prop_path: version
-
-            - name: Sign windows installer
-              run: |
-                npm run sign ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-windows-x64.msi
 
             # Windows
             - name: Upload the windows installer asset

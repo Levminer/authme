@@ -16,7 +16,6 @@
 		"setup": "node scripts/buildNumber.cjs alpha false && node scripts/build.js",
 		"rename": "node scripts/rename.js",
 		"check": "svelte-check && tsc --noEmit && eslint .",
-		"sign": "node scripts/sign.js",
 		"tauri": "tauri"
 	},
 	"workspaces": [
