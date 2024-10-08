@@ -1,3 +1,12 @@
+### Authme 5.3.1 (2024. October 8.)
+
+-   [[de7ec31](https://github.com/Levminer/authme/commit/de7ec31)] Allow more text for descriptions #317 (2024-09-30)
+-   [[5659f1b](https://github.com/Levminer/authme/commit/5659f1b)] Website fixes (2024-09-29)
+-   [[33e8df4](https://github.com/Levminer/authme/commit/33e8df4)] Web improved import and settings (2024-09-28)
+-   [[a2137b2](https://github.com/Levminer/authme/commit/a2137b2)] Improved codes page (2024-09-27)
+-   [[e743c27](https://github.com/Levminer/authme/commit/e743c27)] Web codes improvements and import page (2024-09-24)
+-   [[9b1a072](https://github.com/Levminer/authme/commit/9b1a072)] Fix 2FAS Invalid URL (#320) (2024-09-22)
+
 ### Authme 5.3.0 (2024. September 10.)
 
 -   [[961730a](https://github.com/Levminer/authme/commit/961730a)] Remove old delete codes (2024-09-04)
