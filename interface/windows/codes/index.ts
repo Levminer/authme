@@ -100,7 +100,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 
 			// description
 			if (settings.settings.codesDescription === true) {
-				description.textContent = names[i]
+				description.textContent = names[i].length > 35 ? `${names[i].slice(0, 35)}...` : names[i]
 			}
 
 			// add to query
