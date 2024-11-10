@@ -62,7 +62,7 @@ pub fn decrypt_data(data: String) -> String {
 pub fn set_entry(name: String, data: String, service: String) -> String {
     let entry = keyring::Entry::new(&service, &name);
 
-    let res = entry.set_password(data.as_str());
+    let res = entry.expect("Failed to create entry").set_password(data.as_str());
 
     match res {
         Ok(_) => "ok".into(),
@@ -74,7 +74,7 @@ pub fn set_entry(name: String, data: String, service: String) -> String {
 pub fn get_entry(name: String, service: String) -> String {
     let entry = keyring::Entry::new(&service, &name);
 
-    let item = entry.get_password().unwrap_or_else(|error| "error".into());
+    let item = entry.expect("Failed to get entry").get_password().unwrap_or_else(|error| "error".into());
 
     item.into()
 }
@@ -83,7 +83,7 @@ pub fn get_entry(name: String, service: String) -> String {
 pub fn delete_entry(name: String, service: String) {
     let entry = keyring::Entry::new(&service, &name);
 
-    let item = entry.delete_password();
+    let item = entry.expect("Failed to delete entry").delete_password();
 }
 
 #[tauri::command]
