@@ -74,6 +74,7 @@ declare global {
 			codes: null | string
 		}
 
+		/** @deprecated Removed in 6.0.0 */
 		shortcuts: {
 			show: string
 			settings: string

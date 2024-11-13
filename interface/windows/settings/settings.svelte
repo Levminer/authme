@@ -114,37 +114,6 @@
 </div>
 
 <div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10 pb-10">{language.settings.shortcuts}</h1>
-
-	{#each shortcuts as { id, name }, i}
-		<div class="mx-auto flex flex-col items-center justify-center rounded-2xl px-10">
-			<div class="edit">
-				<div class="flex flex-wrap gap-3">
-					<div>
-						<h5>{name}</h5>
-						<input id="shortcut{i}" bind:value={$settings.shortcuts[id]} readonly class="input mt-1" type="text" />
-					</div>
-				</div>
-				<div class="ml-10 flex flex-wrap gap-3 sm:ml-0 sm:mt-10 sm:w-full">
-					<button on:click={() => editShortcut(i)} id="editShortcut{i}" class="button">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></svg>
-						{language.settings.shortcutsEditButton}
-					</button>
-					<button on:click={() => resetShortcut(i)} id="resetShortcut{i}" class="button">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v6h6" /><path d="M21 12A9 9 0 0 0 6 5.3L3 8" /><path d="M21 22v-6h-6" /><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7" /></svg>
-						{language.settings.shortcutsResetButton}
-					</button>
-					<button on:click={() => deleteShortcut(i)} id="deleteShortcut{i}" class="button">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
-						{language.settings.shortcutsDeleteButton}
-					</button>
-				</div>
-			</div>
-		</div>
-	{/each}
-</div>
-
-<div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
 	<h1 class="px-10">{language.settings.about}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
@@ -237,7 +206,6 @@
 	import { about, clearData, showClearDataDialog, showLogs, launchOnStartup, toggleWindowCapture } from "./index"
 	import { settings } from "../../stores/settings"
 	import { open } from "../../utils/navigate"
-	import { deleteShortcut, editShortcut, resetShortcut, shortcuts } from "../../utils/shortcuts"
 	import { getLanguage } from "@utils/language"
 
 	const language = getLanguage()
