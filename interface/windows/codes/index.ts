@@ -93,11 +93,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 			const progress = document.querySelector(`#progress${i}`)
 			const button = document.querySelector(`#button${i}`)
 
-			// blur codes
-			if (settings.settings.blurCodes === true) {
-				code.classList.add("blurCodes")
-			}
-
 			// description
 			if (settings.settings.codesDescription === true) {
 				description.textContent = names[i].length > 35 ? `${names[i].slice(0, 35)}...` : names[i]
