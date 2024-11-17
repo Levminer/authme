@@ -55,10 +55,6 @@ html {
 		@apply transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left sm:flex-col sm:items-start;
 	}
 
-	.blurCodes {
-		@apply blur-md delay-500 duration-200 ease-linear hover:blur-none;
-	}
-
 	.focusRing {
 		@apply outline-none focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}

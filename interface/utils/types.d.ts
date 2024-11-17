@@ -60,6 +60,7 @@ declare global {
 			minimizeToTray: boolean
 			optionalAnalytics: boolean
 			codesDescription: boolean
+			/** @deprecated Removed in 6.0.0 */
 			blurCodes: boolean
 			sortCodes: number
 			codesLayout: number

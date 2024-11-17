@@ -83,16 +83,6 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>{language.settings.blurCodes}</h2>
-				<h3>{language.settings.blurCodesText}</h3>
-			</div>
-			<div class="ml-20 flex gap-3">
-				<Toggle bind:checked={$settings.settings.blurCodes} />
-			</div>
-		</div>
-
-		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
-			<div>
 				<h2>{language.settings.codesLayout}</h2>
 				<h3>{language.settings.codesLayoutText}</h3>
 			</div>
