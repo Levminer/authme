@@ -1,9 +1,14 @@
 import build from "../../../build.json"
-import { path, invoke, os, dialog, app, process, clipboard, window } from "@tauri-apps/api"
+import { path, app, webviewWindow } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
 import { UAParser } from "ua-parser-js"
 import { navigate, open } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
 import { getSettings, setSettings } from "interface/stores/settings"
+import * as os from "@tauri-apps/plugin-os"
+import * as dialog from "@tauri-apps/plugin-dialog"
+import * as process from "@tauri-apps/plugin-process"
+import * as clipboard from "@tauri-apps/plugin-clipboard-manager"
 
 const settings = getSettings()
 
@@ -16,7 +21,7 @@ export interface SystemInfo {
 
 export const about = async () => {
 	const tauriVersion = await app.getTauriVersion()
-	const osVersion = await os.version()
+	const osVersion = os.version()
 	const browser = new UAParser().getBrowser()
 
 	// Browser version
@@ -52,7 +57,7 @@ export const clearData = async (clearCodesOption: boolean, clearSettingsOption: 
 
 	// clear codes
 	if (clearCodesOption && !clearSettingsOption) {
-		const confirm0 = await dialog.ask("Are you sure you want to clear 2FA codes? \n\nThis cannot be undone!", { type: "warning" })
+		const confirm0 = await dialog.ask("Are you sure you want to clear 2FA codes? \n\nThis cannot be undone!", { kind: "warning" })
 
 		if (confirm0 === false) {
 			return
@@ -67,7 +72,7 @@ export const clearData = async (clearCodesOption: boolean, clearSettingsOption: 
 
 	// clear settings
 	if (!clearCodesOption && clearSettingsOption) {
-		const confirm0 = await dialog.ask("Are you sure you want to clear all settings? \n\nThis cannot be undone!", { type: "warning" })
+		const confirm0 = await dialog.ask("Are you sure you want to clear all settings? \n\nThis cannot be undone!", { kind: "warning" })
 
 		if (confirm0 === false) {
 			return
@@ -89,13 +94,13 @@ export const clearData = async (clearCodesOption: boolean, clearSettingsOption: 
 
 	// clear everything
 	if (clearCodesOption && clearSettingsOption) {
-		const confirm0 = await dialog.ask("Are you sure you want to clear all data? \n\nThis cannot be undone!", { type: "warning" })
+		const confirm0 = await dialog.ask("Are you sure you want to clear all data? \n\nThis cannot be undone!", { kind: "warning" })
 
 		if (confirm0 === false) {
 			return
 		}
 
-		const confirm1 = await dialog.ask("Are you absolutely sure? \n\nThere is no way back!", { type: "warning" })
+		const confirm1 = await dialog.ask("Are you absolutely sure? \n\nThere is no way back!", { kind: "warning" })
 
 		if (confirm1 === true) {
 			localStorage.clear()
@@ -142,5 +147,7 @@ export const launchOnStartup = () => {
 }
 
 export const toggleWindowCapture = (windowCapture: boolean) => {
-	window.appWindow.setContentProtected(windowCapture)
+	const appWindow = webviewWindow.getCurrentWebviewWindow()
+
+	appWindow.setContentProtected(windowCapture)
 }

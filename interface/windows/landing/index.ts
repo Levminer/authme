@@ -1,7 +1,8 @@
 import { navigate } from "../../utils/navigate"
 import { getSettings, setSettings } from "../../stores/settings"
 import { getState, setState } from "../../stores/state"
-import { dialog, invoke } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { setEntry, generateRandomKey, setEncryptionKey, createWebAuthnLogin, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { search } from "interface/utils/password"
 import { encodeBase64 } from "@utils/convert"
@@ -54,17 +55,17 @@ export const createPassword = async () => {
 	const input1 = document.querySelector(".passwordInput1")
 
 	if (input0.value !== input1.value) {
-		return dialog.message(language.landing.dialog.passwordsNotMatch, { type: "error" })
+		return dialog.message(language.landing.dialog.passwordsNotMatch, { kind: "error" })
 	}
 
 	if (input0.value.length < 8) {
-		return dialog.message(language.landing.dialog.passwordMinLength, { type: "error" })
+		return dialog.message(language.landing.dialog.passwordMinLength, { kind: "error" })
 	} else if (input0.value.length > 64) {
-		return dialog.message(language.landing.dialog.passwordMaxLength, { type: "error" })
+		return dialog.message(language.landing.dialog.passwordMaxLength, { kind: "error" })
 	}
 
 	if (search(input0.value)) {
-		return dialog.message(language.landing.dialog.commonPassword, { type: "error" })
+		return dialog.message(language.landing.dialog.commonPassword, { kind: "error" })
 	}
 
 	if (settings.security.hardwareAuthentication === true) {

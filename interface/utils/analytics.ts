@@ -1,11 +1,12 @@
 import { SystemInfo } from "interface/windows/settings"
 import build from "../../build.json"
-import { invoke, os } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import * as os from "@tauri-apps/plugin-os"
 
 export const optionalAnalyticsPayload = async () => {
 	const osName = (await invoke<SystemInfo>("system_info")).osName
-	const osArch = await os.arch()
-	const osVersion = await os.version()
+	const osArch = os.arch()
+	const osVersion = os.version()
 
 	return {
 		version: build.version,

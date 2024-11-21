@@ -5,25 +5,13 @@ use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::{env, fs};
 use sysinfo::System;
-use tauri::{GlobalShortcutManager, Manager};
+use tauri::Manager;
 
 #[tauri::command]
 pub fn get_args() -> Vec<String> {
     let args: Vec<String> = env::args().collect();
 
     args.into()
-}
-
-#[tauri::command]
-pub fn update_tray(app: tauri::AppHandle) {
-    let window = app.get_window("main").unwrap();
-    let menu_item = app.tray_handle().get_item("toggle");
-
-    if window.is_visible().unwrap() {
-        menu_item.set_title("Show Authme").unwrap();
-    } else {
-        menu_item.set_title("Hide Authme").unwrap();
-    }
 }
 
 #[tauri::command]
@@ -57,6 +45,11 @@ pub fn logger(message: String, time: String, kind: &str) {
             time, message
         ),
     }
+}
+
+#[tauri::command]
+pub fn create_logs_dir(path: String) {
+    fs::create_dir_all(path).unwrap();
 }
 
 #[tauri::command]
@@ -114,8 +107,6 @@ pub fn system_info() -> SystemInfo {
 #[tauri::command]
 pub fn google_authenticator_converter(secret: &str) -> Vec<Account> {
     let res = process_data(secret);
-
-    println!("{:?}", res);
 
     match res {
         Ok(accounts) => accounts,

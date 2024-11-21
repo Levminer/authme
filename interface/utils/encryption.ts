@@ -1,4 +1,5 @@
-import { invoke, dialog } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { getSettings, setSettings } from "interface/stores/settings"
 import logger from "./logger"
 import { dev } from "../../build.json"
@@ -27,7 +28,7 @@ export const decryptData = async (data: string): Promise<string> => {
 	const res: string = await invoke("decrypt_data", { data })
 
 	if (res === "error") {
-		dialog.message("Failed to decrypt your codes!\n\n Please restart the app and try again!", { type: "error" })
+		dialog.message("Failed to decrypt your codes!\n\n Please restart the app and try again!", { kind: "error" })
 	}
 
 	return res
@@ -40,7 +41,7 @@ export const setEntry = async (name: string, data: string) => {
 	const res = await invoke("set_entry", { name, data, service })
 
 	if (res === "error") {
-		dialog.message("Failed to set the encryption key on your systems keychain!\n\n You can use the password method.", { type: "error" })
+		dialog.message("Failed to set the encryption key on your systems keychain!\n\n You can use the password method.", { kind: "error" })
 	}
 
 	return res
@@ -53,7 +54,7 @@ export const setEncryptionKey = async () => {
 	const res: string = await invoke("set_encryption_key", { service })
 
 	if (res === "error") {
-		dialog.message("Failed to set the encryption key on your systems keychain!\n\n Please restart the app and try again!", { type: "error" })
+		dialog.message("Failed to set the encryption key on your systems keychain!\n\n Please restart the app and try again!", { kind: "error" })
 	}
 
 	return res
@@ -113,7 +114,7 @@ export const createWebAuthnLogin = async () => {
 		settings.security.hardwareKey = res.id
 		setSettings(settings)
 	} catch (error) {
-		dialog.message(`Failed to register your authenticator! This feature might not be supported on your machine. \n\n${error}`, { type: "error" })
+		dialog.message(`Failed to register your authenticator! This feature might not be supported on your machine. \n\n${error}`, { kind: "error" })
 
 		logger.error(`Failed to register hardware key: ${error}`)
 
@@ -135,12 +136,12 @@ export const verifyWebAuthnLogin = async () => {
 		})
 
 		if (res.id !== settings.security.hardwareKey) {
-			dialog.message("Failed to login with your authenticator. The selected hardware key ID does not match the saved key ID.", { type: "error" })
+			dialog.message("Failed to login with your authenticator. The selected hardware key ID does not match the saved key ID.", { kind: "error" })
 
 			return "error"
 		}
 	} catch (error) {
-		dialog.message(`Failed to login with your authenticator. Please try again! \n\n${error}`, { type: "error" })
+		dialog.message(`Failed to login with your authenticator. Please try again! \n\n${error}`, { kind: "error" })
 
 		logger.error(`Failed to login with hardware key: ${error}`)
 

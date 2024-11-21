@@ -1,5 +1,6 @@
 import { BarcodeDetectorPolyfill } from "@undecaf/barcode-detector-polyfill"
-import { fs, dialog } from "@tauri-apps/api"
+import * as fs from "@tauri-apps/plugin-fs"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { getState, setState } from "../../stores/state"
 import { navigate } from "../../utils/navigate"
 import logger from "interface/utils/logger"
@@ -22,7 +23,7 @@ export const chooseImages = async () => {
 
 	// Read images
 	for (let i = 0; i < filePaths.length; i++) {
-		const file = await fs.readBinaryFile(filePaths[i])
+		const file = await fs.readFile(filePaths[i])
 
 		const blob = new Blob([file], { type: "application/octet-binary" })
 		const img = await createImageBitmap(blob)
@@ -46,7 +47,7 @@ export const chooseImages = async () => {
 						const converted = await migrationImageConverter(res.rawValue)
 
 						if (converted === "") {
-							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { kind: "error" })
 						} else {
 							importString += converted
 						}
@@ -65,12 +66,12 @@ export const chooseImages = async () => {
 				} else {
 					// Wrong QR code found
 					logger.error(`Error while reading QR code: ${res.rawValue}}`)
-					dialog.message(`Wrong QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
+					dialog.message(`Wrong QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { kind: "error" })
 				}
 			} catch (error) {
 				// Error while reading QR code
 				logger.error(`Error while reading QR code: ${error}}`)
-				dialog.message(`No QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { type: "error" })
+				dialog.message(`No QR code found on the #${i + 1} picture! \n\nPlease try again with another picture!`, { kind: "error" })
 			}
 		}
 
@@ -169,11 +170,11 @@ export const manualEntry = () => {
 	let name = document.querySelector(".description").value
 
 	if (issuer === "") {
-		return dialog.message("The name field is required. \n\nPlease try again!", { type: "error" })
+		return dialog.message("The name field is required. \n\nPlease try again!", { kind: "error" })
 	}
 
 	if (secret === "") {
-		return dialog.message("The secret field is required. \n\nPlease try again!", { type: "error" })
+		return dialog.message("The secret field is required. \n\nPlease try again!", { kind: "error" })
 	}
 
 	if (name === "") {
@@ -197,7 +198,7 @@ export const chooseFile = async () => {
 	const filePath = await dialog.open({ filters: [{ name: "Authme file", extensions: ["authme"] }] })
 
 	if (filePath !== null) {
-		const loadedFile = await fs.readTextFile(filePath.toString())
+		const loadedFile = await fs.readTextFile(filePath)
 		const file: LibAuthmeFile = JSON.parse(loadedFile)
 		const importString = decodeBase64(file.codes)
 
@@ -229,7 +230,7 @@ export const twoFasAuthFile = async () => {
 	}
 
 	if (filePath !== null) {
-		const loadedFile = await fs.readTextFile(filePath.toString())
+		const loadedFile = await fs.readTextFile(filePath)
 		const file: TwoFasFile = JSON.parse(loadedFile)
 		let importString = ""
 
@@ -277,14 +278,12 @@ export const aegisFile = async () => {
 	}
 
 	if (filePath !== null) {
-		const loadedFile = await fs.readTextFile(filePath.toString())
+		const loadedFile = await fs.readTextFile(filePath)
 		const file: AegisFile = JSON.parse(loadedFile)
 		let importString = ""
 
 		for (let i = 0; i < file.db.entries.length; i++) {
 			const entry = file.db.entries[i]
-
-			console.log(entry)
 
 			if (entry.type === "totp") {
 				importString += totpImageConverter(`otpauth://totp/${entry.name}?secret=${entry.info.secret}&issuer=${entry.issuer}`)
@@ -346,7 +345,7 @@ export const captureScreen = async () => {
 					const converted = await migrationImageConverter(res.rawValue)
 
 					if (converted === "") {
-						return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+						return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { kind: "error" })
 					} else {
 						importString += converted
 					}
@@ -365,7 +364,7 @@ export const captureScreen = async () => {
 			} else {
 				// Wrong QR code found
 				logger.error(`Wrong type of QR code found during screen capture: ${JSON.stringify(res)}`)
-				dialog.message("Wrong type of QR code found during screen capture! \n\nPlease try again with another picture!", { type: "error" })
+				dialog.message("Wrong type of QR code found during screen capture! \n\nPlease try again with another picture!", { kind: "error" })
 
 				clearInterval(interval)
 				track.stop()
@@ -378,7 +377,7 @@ export const captureScreen = async () => {
 		interval = setInterval(detect, 1000)
 	} catch (err) {
 		logger.error(`Error during screen capture: ${err}`)
-		dialog.message(`Error occurred during the screen capture: \n\n${err}`, { type: "error" })
+		dialog.message(`Error occurred during the screen capture: \n\n${err}`, { kind: "error" })
 
 		dialogElement.close()
 	}
@@ -414,7 +413,7 @@ export const useWebcam = async () => {
 
 	if (hasWebcam === false) {
 		// Not found webcam
-		dialog.message("Not found webcam! \n\nPlease check if your webcam is working correctly or not used by another application.", { type: "error" })
+		dialog.message("Not found webcam! \n\nPlease check if your webcam is working correctly or not used by another application.", { kind: "error" })
 	} else {
 		const dialogElement: LibDialogElement = document.querySelector(".dialog1")
 		const videoElement: HTMLVideoElement = document.querySelector(".video")
@@ -457,7 +456,7 @@ export const useWebcam = async () => {
 						const converted = await migrationImageConverter(res.rawValue)
 
 						if (converted === "") {
-							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { type: "error" })
+							return dialog.message("Failed to decode QR code(s). \n\nPlease try again with another picture!", { kind: "error" })
 						} else {
 							importString += converted
 						}
@@ -475,7 +474,7 @@ export const useWebcam = async () => {
 					navigate("codes")
 				} else {
 					// Wrong QR code found
-					dialog.message("Wrong type of QR code found during webcam import! \n\nPlease try again with another picture!", { type: "error" })
+					dialog.message("Wrong type of QR code found during webcam import! \n\nPlease try again with another picture!", { kind: "error" })
 					logger.error(`Wrong type of QR code found during webcam import: ${JSON.stringify(res)}`)
 
 					clearInterval(interval)
@@ -489,7 +488,7 @@ export const useWebcam = async () => {
 			interval = setInterval(detect, 1000)
 		} catch (err) {
 			logger.error(`Error occurred while using the webcam: ${err}`)
-			dialog.message(`Error occurred while using the webcam:: \n\n${err}`, { type: "error" })
+			dialog.message(`Error occurred while using the webcam:: \n\n${err}`, { kind: "error" })
 
 			dialogElement.close()
 		}
