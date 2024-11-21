@@ -2,6 +2,7 @@
 	import { onDestroy, onMount } from "svelte"
 	import type {} from "@interface/utils/types.d.ts"
 	import { TOTP } from "otpauth"
+	import { settings } from "../../../../../interface/stores/settings"
 
 	$: codes = {
 		names: [],
@@ -102,12 +103,8 @@
 						<div class="flex flex-row justify-between">
 							<div class="flex flex-col justify-start mb-3">
 								<div class="flex">
-									<p class="text-2xl font-medium whitespace-nowrap">
-										{#if item.length > 16}
-											{item.slice(0, 16)}...
-										{:else}
-											{item}
-										{/if}
+									<p class="text-2xl font-medium whitespace-nowrap truncate">
+										{item}
 									</p>
 								</div>
 
@@ -140,9 +137,15 @@
 							</div>
 						</div>
 
-						<div class="progressFull">
+						<div class="progressFull mb-3">
 							<div id={`progress${i}`} class="progressFill" />
 						</div>
+
+						{#if $settings.settings.codesDescription === true}
+							<div>
+								<p class="text-xl truncate text-gray-200" id={`code${i}`}>{codes.names[i]}</p>
+							</div>
+						{/if}
 					</div>
 				{/each}
 			{/if}

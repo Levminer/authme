@@ -6,38 +6,18 @@
 		</a>
 
 		<nav class="flex flex-wrap items-center justify-center text-base md:ml-auto md:mr-auto">
-			<a href="/" class="mr-5 text-2xl duration-200 ease-in hover:text-gray-300">Home</a>
+			<a href="/" class="mr-5 text-xl duration-200 ease-in hover:text-gray-300">Home</a>
 
-			<a href="/#features" class="mr-5 text-2xl duration-200 ease-in hover:text-gray-300"
+			<a href="/#features" class="mr-5 text-xl duration-200 ease-in hover:text-gray-300"
 				>Features</a
 			>
 
-			<a href="/#downloads" class="mr-5 text-2xl duration-200 ease-in hover:text-gray-300">
+			<a href="/#downloads" class="mr-5 text-xl duration-200 ease-in hover:text-gray-300">
 				Downloads
 			</a>
 		</nav>
-		<a class="mx-3 mt-3 md:mt-0" href="/codes">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-10 w-10"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="4" /><line
-					x1="21.17"
-					x2="12"
-					y1="8"
-					y2="8"
-				/><line x1="3.95" x2="8.54" y1="6.06" y2="14" /><line
-					x1="10.88"
-					x2="15.46"
-					y1="21.94"
-					y2="14"
-				/></svg
-			>
+		<a class="mx-3 mt-3 md:mt-0 button" href="/codes">
+			Web version
 		</a>
 	</div>
 </header>
