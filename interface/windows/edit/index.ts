@@ -1,5 +1,5 @@
 import { textConverter } from "../../utils/convert"
-import { dialog } from "@tauri-apps/api"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { getSettings, setSettings } from "../../stores/settings"
 import { navigate } from "../../utils/navigate"
 import { decryptData, encryptData } from "interface/utils/encryption"
@@ -70,7 +70,7 @@ export const loadSavedCodes = async () => {
 	const codes = settings.vault.codes
 
 	if (codes === null) {
-		dialog.message(language.codes.dialog.noSaveFileFound, { type: "error" })
+		dialog.message(language.codes.dialog.noSaveFileFound, { kind: "error" })
 
 		return navigate("import")
 	}
@@ -132,7 +132,7 @@ export const editCode = async (uniqId: string) => {
 		const newIssuer = document.querySelector(`#issuer${uniqId}`).value
 		const newName = document.querySelector(`#name${uniqId}`).value
 
-		const res = await dialog.ask(language.edit.dialog.saveChanges, { type: "warning" })
+		const res = await dialog.ask(language.edit.dialog.saveChanges, { kind: "warning" })
 
 		if (res === true) {
 			issuers[id] = newIssuer
@@ -152,7 +152,7 @@ export const editCode = async (uniqId: string) => {
 export const deleteCode = async (uniqId: string) => {
 	const id = uniqIds.indexOf(uniqId)
 
-	const res = await dialog.ask(language.edit.dialog.deleteCode, { type: "warning" })
+	const res = await dialog.ask(language.edit.dialog.deleteCode, { kind: "warning" })
 
 	if (res === true) {
 		names.splice(id, 1)

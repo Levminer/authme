@@ -1,4 +1,5 @@
-import { dialog, invoke } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { getState, setState } from "../stores/state"
 import { TOTP } from "otpauth"
 import logger from "./logger"
@@ -54,7 +55,7 @@ export const textConverter = (text: string, sortNumber: number): LibImportFile =
 					secret,
 				}).generate()
 			} catch (error) {
-				dialog.message("Failed to generate TOTP code from secret. \n\nMake sure your import file is correct!", { type: "error" })
+				dialog.message("Failed to generate TOTP code from secret. \n\nMake sure your import file is correct!", { kind: "error" })
 				logger.error(`Failed to generate TOTP code from secret: ${error} - ${secret}`)
 
 				state.importData = null

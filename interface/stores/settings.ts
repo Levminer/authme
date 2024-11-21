@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
 import { writable, get } from "svelte/store"
 import build from "../../build.json"
 

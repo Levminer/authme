@@ -1,6 +1,6 @@
 import { textConverter } from "../../utils/convert"
 import { TOTP } from "otpauth"
-import { clipboard } from "@tauri-apps/api"
+import * as clipboard from "@tauri-apps/plugin-clipboard-manager"
 import { getSettings, setSettings } from "../../stores/settings"
 import { getState, setState } from "../../stores/state"
 import { decryptData, encryptData } from "interface/utils/encryption"

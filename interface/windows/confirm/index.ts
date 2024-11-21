@@ -1,6 +1,7 @@
 import { navigate } from "../../utils/navigate"
 import { getSettings } from "../../stores/settings"
-import { dialog, invoke } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { getState, setState } from "../../stores/state"
 import { sendEncryptionKey, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { decodeBase64 } from "@utils/convert"
@@ -31,7 +32,7 @@ export const confirmPassword = async () => {
 
 		navigate("codes")
 	} else {
-		dialog.message(language.confirm.dialog.wrongPassword, { type: "error" })
+		dialog.message(language.confirm.dialog.wrongPassword, { kind: "error" })
 	}
 }
 

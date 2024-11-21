@@ -1,11 +1,12 @@
-#![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
-)]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 #![allow(dead_code, unused_imports, unused_variables)]
 
 use std::env;
-use tauri::*;
+use tauri::{
+    menu::{MenuBuilder, MenuItemBuilder},
+    tray::{MouseButton, MouseButtonState, TrayIconEvent},
+    Emitter, Manager,
+};
 
 mod auto_launch;
 mod encryption;
@@ -16,56 +17,15 @@ struct Payload {
     event: bool,
 }
 
-fn make_tray() -> SystemTray {
-    let menu = SystemTrayMenu::new()
-        .add_item(CustomMenuItem::new("toggle".to_string(), "Hide Authme"))
-        .add_item(CustomMenuItem::new("exit".to_string(), "Exit Authme"));
-    return SystemTray::new().with_menu(menu);
-}
-
-fn handle_tray_event(app: &AppHandle, event: SystemTrayEvent) {
-    let toggle_window = |app: AppHandle| -> () {
-        let window = app.get_window("main").unwrap();
-        let menu_item = app.tray_handle().get_item("toggle");
-        let window_visible = window.is_visible().unwrap();
-
-        if window_visible {
-            app.emit_all("openCodes", Payload { event: false }).unwrap();
-
-            window.hide().unwrap();
-            menu_item.set_title("Show Authme").unwrap();
-        } else {
-            app.emit_all("openCodes", Payload { event: true }).unwrap();
-
-            window.show().unwrap();
-            window.unminimize().unwrap();
-            window.set_focus().unwrap();
-
-            menu_item.set_title("Hide Authme").unwrap();
-        }
-    };
-
-    if let SystemTrayEvent::LeftClick { position, size, .. } = event {
-        if cfg!(target_os = "windows") {
-            toggle_window(app.clone())
-        }
-    }
-
-    if let SystemTrayEvent::MenuItemClick { id, .. } = event {
-        if id.as_str() == "exit" {
-            std::process::exit(0);
-        }
-
-        if id.as_str() == "toggle" {
-            toggle_window(app.clone())
-        }
-    }
-}
-
 fn main() {
-    let context = tauri::generate_context!();
-
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_os::init())
         .invoke_handler(tauri::generate_handler![
             auto_launch::enable_auto_launch,
             auto_launch::disable_auto_launch,
@@ -79,29 +39,27 @@ fn main() {
             encryption::set_encryption_key,
             encryption::delete_entry,
             utils::get_args,
-            utils::update_tray,
             utils::random_values,
             utils::logger,
             utils::write_logs,
             utils::system_info,
             utils::google_authenticator_converter,
+            utils::create_logs_dir,
         ])
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
 
-            let window = app.get_window("main").unwrap();
+            let window = app.get_webview_window("main").unwrap();
 
-            app.emit_all("openCodes", Payload { event: true.into() })
+            app.emit("openCodes", Payload { event: true.into() })
                 .unwrap();
 
             window.show().unwrap();
             window.unminimize().unwrap();
             window.set_focus().unwrap();
         }))
-        .system_tray(make_tray())
-        .on_system_tray_event(handle_tray_event)
         .setup(|app| {
-            let window = app.get_window("main").unwrap();
+            let window = app.get_webview_window("main").unwrap();
 
             // Launch args
             let args: Vec<String> = env::args().collect();
@@ -114,9 +72,6 @@ fn main() {
                     window.set_focus().unwrap();
                 } else {
                     window.maximize().unwrap();
-
-                    let menu_item = app.tray_handle().get_item("toggle");
-                    menu_item.set_title("Show Authme").unwrap();
                 }
             } else {
                 window.maximize().unwrap();
@@ -124,29 +79,84 @@ fn main() {
                 window.set_focus().unwrap();
             }
 
+            // Tray
+            let toggle_window_item =
+                MenuItemBuilder::with_id("toggle_windows", "Show/Hide Authme").build(app)?;
+            let exit_item = MenuItemBuilder::with_id("exit", "Exit").build(app)?;
+            let menu = MenuBuilder::new(app)
+                .items(&[&toggle_window_item, &exit_item])
+                .build()?;
+
+            let tray = app.tray_by_id("main").unwrap();
+            tray.set_show_menu_on_left_click(false).unwrap();
+            tray.set_menu(Some(menu)).unwrap();
+            tray.on_menu_event(move |app, event| match event.id().as_ref() {
+                "toggle_windows" => {
+                    let app = window.app_handle();
+                    let window = app.get_webview_window("main").unwrap();
+                    let window_visible = window.is_visible().unwrap();
+
+                    if window_visible {
+                        app.emit("openCodes", Payload { event: false }).unwrap();
+
+                        window.hide().unwrap();
+                    } else {
+                        app.emit("openCodes", Payload { event: true }).unwrap();
+
+                        window.show().unwrap();
+                        window.unminimize().unwrap();
+                        window.set_focus().unwrap();
+                    }
+                }
+                "exit" => {
+                    app.exit(0);
+                }
+                _ => (),
+            });
+
+            if cfg!(target_os = "windows") {
+                tray.on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        let window = app.get_webview_window("main").unwrap();
+                        let window_visible = window.is_visible().unwrap();
+
+                        if window_visible {
+                            app.emit("openCodes", Payload { event: false }).unwrap();
+
+                            window.hide().unwrap();
+                        } else {
+                            app.emit("openCodes", Payload { event: true }).unwrap();
+
+                            window.show().unwrap();
+                            window.unminimize().unwrap();
+                            window.set_focus().unwrap();
+                        }
+                    }
+                });
+            }
+
             Ok(())
         })
-        .on_window_event(|event| match event.event() {
+        .on_window_event(|window, event| match event {
             tauri::WindowEvent::CloseRequested { api, .. } => {
                 api.prevent_close();
-                let app = event.window().app_handle();
-
-                let window = app.get_window("main").unwrap();
-                let menu_item = app.tray_handle().get_item("toggle");
 
                 if window.is_visible().unwrap() {
                     window.hide().unwrap();
-                    menu_item.set_title("Show Authme").unwrap();
                 } else {
                     window.show().unwrap();
                     window.unminimize().unwrap();
                     window.set_focus().unwrap();
-
-                    menu_item.set_title("Hide Authme").unwrap();
                 }
             }
             _ => {}
         })
-        .run(context)
+        .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

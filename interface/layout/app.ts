@@ -1,10 +1,12 @@
 import App from "./app.svelte"
 import "../styles/index.css"
-import { os, event, window, invoke } from "@tauri-apps/api"
+import { event, webviewWindow } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import * as os from "@tauri-apps/plugin-os"
 import { getSettings } from "../stores/settings"
 import { navigate } from "../utils/navigate"
 import { getState } from "interface/stores/state"
-import { dev} from "../../build.json"
+import { dev } from "../../build.json"
 import { optionalAnalyticsPayload } from "interface/utils/analytics"
 import { checkForUpdate } from "interface/utils/update"
 import logger from "interface/utils/logger"
@@ -12,6 +14,7 @@ import posthog from "posthog-js"
 
 const settings = getSettings()
 const state = getState()
+const appWindow = webviewWindow.getCurrentWebviewWindow()
 
 // Create the svelte app
 const app = new App({
@@ -22,8 +25,8 @@ export default app
 
 // Set background color if vibrancy not supported
 const setBackground = async () => {
-	const system = await os.type()
-	const build = await os.version()
+	const system = os.type().toString()
+	const build = os.version().toString()
 
 	if (system === "Windows_NT" && build < "10.0.22000") {
 		document.querySelector("body").style.background = "black"
@@ -37,13 +40,6 @@ const setBackground = async () => {
 // TODO transparency
 // setBackground()
 
-// Tray settings open handler
-event.listen("openSettings", (data: any) => {
-	if (state.authenticated === true) {
-		navigate("settings")
-	}
-})
-
 // Tray navigate to codes handler
 event.listen("openCodes", (data: any) => {
 	const event: boolean = data.payload.event
@@ -56,7 +52,7 @@ event.listen("openCodes", (data: any) => {
 })
 
 // Listen for focus changes
-window.appWindow.onFocusChanged((focused) => {
+appWindow.onFocusChanged((focused) => {
 	if (focused.payload === true && state.authenticated === true) {
 		if (location.pathname === "/codes") {
 			document.querySelector<HTMLInputElement>(".search").select()
@@ -65,10 +61,10 @@ window.appWindow.onFocusChanged((focused) => {
 })
 
 // Listen for close request
-window.appWindow.onCloseRequested((event) => {
+appWindow.onCloseRequested((event) => {
 	if (settings.settings.minimizeToTray === true) {
 		event.preventDefault()
-		window.appWindow.hide()
+		appWindow.hide()
 
 		if (state.authenticated === true) {
 			navigate("idle")
@@ -82,7 +78,7 @@ document.addEventListener("contextmenu", (event) => {
 })
 
 // Reset window capture
-window.appWindow.setContentProtected(true)
+appWindow.setContentProtected(true)
 
 // Handle launch options
 const launchOptions = async () => {

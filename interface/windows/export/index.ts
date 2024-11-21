@@ -1,4 +1,5 @@
-import { fs, dialog } from "@tauri-apps/api"
+import * as fs from "@tauri-apps/plugin-fs"
+import * as dialog from "@tauri-apps/plugin-dialog"
 import { generateTimestamp } from "../../utils/time"
 import { encodeBase64, textConverter } from "../../utils/convert"
 import { getSettings } from "../../stores/settings"
@@ -35,7 +36,7 @@ export const exportCodes = async () => {
 		codesArray = textConverter(decryptedText, 0)
 		codesText = decryptedText
 	} else {
-		dialog.message(language.codes.dialog.noSaveFileFound, { type: "error" })
+		dialog.message(language.codes.dialog.noSaveFileFound, { kind: "error" })
 
 		return navigate("import")
 	}
@@ -53,10 +54,13 @@ export const exportAuthmeFile = async () => {
 		version: 3,
 	}
 
+	const encoder = new TextEncoder()
 	const filePath = await dialog.save({ filters: [{ name: "Authme file", extensions: ["authme"] }] })
 
+	const file = JSON.stringify(saveFile, null, "\t")
+
 	if (filePath !== null) {
-		fs.writeFile(filePath, JSON.stringify(saveFile, null, "\t"))
+		fs.writeFile(filePath, encoder.encode(file))
 	}
 }
 
@@ -68,6 +72,7 @@ export const exportHtmlFile = async () => {
 	const secrets = codesArray.secrets
 	const issuers = codesArray.issuers
 
+	const encoder = new TextEncoder()
 	let htmlString = ""
 
 	for (let i = 0; i < names.length; i++) {
@@ -90,6 +95,6 @@ export const exportHtmlFile = async () => {
 	const filePath = await dialog.save({ filters: [{ name: "HTML file", extensions: ["html"] }] })
 
 	if (filePath !== null) {
-		fs.writeFile(filePath, htmlString)
+		fs.writeFile(filePath, encoder.encode(htmlString))
 	}
 }
