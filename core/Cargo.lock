@@ -385,6 +385,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
 
 [[package]]
+name = "authme"
+version = "0.0.0"
+dependencies = [
+ "argon2",
+ "auto-launch",
+ "google_authenticator_converter",
+ "keyring",
+ "magic-crypt",
+ "once_cell",
+ "rand 0.8.5",
+ "rand_core 0.6.4",
+ "serde",
+ "serde_json",
+ "sysinfo",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-clipboard-manager",
+ "tauri-plugin-dialog",
+ "tauri-plugin-fs",
+ "tauri-plugin-os",
+ "tauri-plugin-process",
+ "tauri-plugin-shell",
+ "tauri-plugin-single-instance",
+ "tauri-plugin-updater",
+]
+
+[[package]]
 name = "auto-launch"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -892,33 +919,6 @@ dependencies = [
  "bitflags 2.6.0",
  "core-foundation 0.10.0",
  "libc",
-]
-
-[[package]]
-name = "cores"
-version = "0.0.0"
-dependencies = [
- "argon2",
- "auto-launch",
- "google_authenticator_converter",
- "keyring",
- "magic-crypt",
- "once_cell",
- "rand 0.8.5",
- "rand_core 0.6.4",
- "serde",
- "serde_json",
- "sysinfo",
- "tauri",
- "tauri-build",
- "tauri-plugin-clipboard-manager",
- "tauri-plugin-dialog",
- "tauri-plugin-fs",
- "tauri-plugin-os",
- "tauri-plugin-process",
- "tauri-plugin-shell",
- "tauri-plugin-single-instance",
- "tauri-plugin-updater",
 ]
 
 [[package]]

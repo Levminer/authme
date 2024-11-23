@@ -63,6 +63,7 @@ declare global {
 			/** @deprecated Removed in 6.0.0 */
 			blurCodes: boolean
 			sortCodes: number
+			/** @deprecated Removed in 6.0.0 */
 			codesLayout: number
 		}
 

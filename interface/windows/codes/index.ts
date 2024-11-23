@@ -161,17 +161,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 
 		search()
 	}
-
-	if (settings.settings.codesLayout === 0) {
-		const main = document.querySelector(".main")
-		const content = document.querySelector(".content")
-
-		main.classList.remove("w-3/5")
-		main.classList.add("w-4/5")
-
-		content.classList.remove("flex-col")
-		content.classList.add("flex-row")
-	}
 }
 
 const refreshCodes = (secrets: string[]) => {

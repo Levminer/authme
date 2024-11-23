@@ -1,5 +1,5 @@
 [package]
-name = "cores"
+name = "authme"
 version = "0.0.0"
 description = "Simple cross-platform two-factor (2FA) authenticator app for desktop."
 authors = ["Lőrik Levente"]
