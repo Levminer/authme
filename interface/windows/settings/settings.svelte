@@ -1,4 +1,4 @@
-<div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
+<div class="transparent-900 m-auto my-20 w-[95%] md:w-4/5 rounded-2xl p-1 md:p-10 text-left">
 	<h1 class="px-10">{language.settings.general}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
@@ -67,7 +67,7 @@
 	</div>
 </div>
 
-<div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
+<div class="transparent-900 m-auto my-20 w-[95%] md:w-4/5 rounded-2xl p-1 md:p-10 text-left">
 	<h1 class="px-10">{language.settings.codes}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
@@ -93,7 +93,7 @@
 	</div>
 </div>
 
-<div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
+<div class="transparent-900 m-auto my-20 w-[95%] md:w-4/5 rounded-2xl p-1 md:p-10 text-left">
 	<h1 class="px-10">{language.settings.about}</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">

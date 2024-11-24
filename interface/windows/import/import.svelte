@@ -1,4 +1,4 @@
-<div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
+<div class="transparent-900 m-auto my-20 w-[95%] rounded-2xl p-1 text-left md:w-4/5 md:p-10">
 	<h1 class="px-10">{language.import.supportedTypes}</h1>
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl p-10">
 		<div class="transparent-800 flex w-full flex-col items-start rounded-xl p-5 text-left">
@@ -277,7 +277,7 @@
 </dialog>
 
 <script>
-	import { aegisFile, captureScreen, chooseFile, chooseImages, manualEntry,showManualEntry, showTutorial, twoFasAuthFile, useWebcam } from "./index"
+	import { aegisFile, captureScreen, chooseFile, chooseImages, manualEntry, showManualEntry, showTutorial, twoFasAuthFile, useWebcam } from "./index"
 	import Details from "../../components/details.svelte"
 	import { getLanguage } from "@utils/language"
 

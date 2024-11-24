@@ -1,4 +1,4 @@
-<div class="transparent-900 loadedCodes m-auto my-20 hidden w-4/5 rounded-2xl p-10 text-left">
+<div class="transparent-900 loadedCodes m-auto my-20 hidden w-[95%] md:w-4/5 rounded-2xl p-1 md:p-10 text-left">
 	<h1 class="px-10">{language.edit.editCodes}</h1>
 	<div class="content mx-auto flex flex-col items-center justify-center rounded-2xl p-10" />
 </div>

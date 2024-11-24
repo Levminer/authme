@@ -1,4 +1,4 @@
-<div class="transparent-900 saveExportedCodes m-auto my-20 hidden w-4/5 rounded-2xl p-10 text-left">
+<div class="transparent-900 saveExportedCodes m-auto my-20 hidden w-[95%] md:w-4/5 rounded-2xl p-1 md:p-10 text-left">
 	<h1 class="px-10">{language.export.exportCodes}</h1>
 	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">

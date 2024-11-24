@@ -1,4 +1,4 @@
-<div class="transparent-900 main m-auto my-20 w-4/5 rounded-2xl p-10 text-center sm:w-4/5">
+<div class="transparent-900 main mx-auto my-20 w-[95%] rounded-2xl p-10 text-center md:w-4/5">
 	<h1>Authme</h1>
 	<div class="searchContainer mx-auto mb-5 mt-10 hidden justify-center px-10">
 		<div class="mx-auto flex items-center justify-center">
@@ -11,7 +11,7 @@
 		</div>
 	</div>
 
-	<div class="content mx-auto flex flex-row flex-wrap items-center justify-center gap-10 rounded-2xl p-10 sm:w-full">
+	<div class="content mx-auto flex flex-row flex-wrap items-center justify-center gap-5 rounded-2xl p-1 md:p-10 sm:w-full">
 		<div class="importCodes transparent-800 hidden w-full max-w-2xl rounded-2xl p-5">
 			<h2>{language.codes.importCodes}</h2>
 			<h3>{language.codes.importCodesText}</h3>
