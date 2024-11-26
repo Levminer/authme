@@ -73,7 +73,7 @@ export const localeEN = {
 	},
 
 	import: {
-		supportedTypes: "Supported 2FA types",
+		supportedTypes: "Import codes",
 		totpQRCode: "TOTP",
 		totpQRCodeText: "A TOTP QR code is what you find mostly everywhere, if you want to setup 2FA. Consist of 6 digits which are changing every 30 seconds.",
 		instructions: "Instructions",

@@ -88,7 +88,11 @@ fn main() {
                 .build()?;
 
             let tray = app.tray_by_id("main").unwrap();
-            tray.set_show_menu_on_left_click(false).unwrap();
+
+            if cfg!(target_os = "windows") {
+                tray.set_show_menu_on_left_click(false).unwrap();
+            }
+
             tray.set_menu(Some(menu)).unwrap();
             tray.on_menu_event(move |app, event| match event.id().as_ref() {
                 "toggle_windows" => {
