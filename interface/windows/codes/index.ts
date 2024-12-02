@@ -28,55 +28,69 @@ export const generateCodeElements = (data: LibImportFile) => {
 			const element = document.createElement("div")
 
 			// set div content
-			if (settings.settings.codesDescription === false) {
+			if (settings.settings.codesDescription) {
 				element.innerHTML = `
-				<div class="mt-5 flex flex-row px-5">
-					<div class="flex flex-1 justify-start">
-						<h3 id="name${i}" tabindex="0" class="whitespace-nowrap mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
+				<div class="flex flex-row justify-between">
+					<div class="flex flex-col justify-start mb-3">
+						<div class="flex">
+							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate">
+								${issuers[i]}
+							</p>
+						</div>
+						<div class="flex">
+							<p id="code${i}" class="text-2xl text-gray-200" >-</p>
+						</div>
 					</div>
-					<div class="flex flex-1 justify-center px-3">
-						<p id="code${i}" tabindex="0" class="transparent-900 relative mt-1.5 w-[150px] select-all rounded-2xl py-3 px-5 text-2xl focusRing">-</p>
+					<div class="flex items-center justify-between mb-3">
+						<button
+							id="button${i}"
+							class="bg-white flex justify-center items-center font-medium rounded-full gap-1 hover:bg-gray-200 duration-200 px-4 text-black text-lg py-2"
+							>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+								<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+							</svg>
+							${language.common.copy}
+						</button>
 					</div>
-					<div class="flex flex-1 justify-end">
-						<h3 id="time${i}" tabindex="0" class="mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
 					</div>
+					<div class="pb-4 flex items-start">
+						<p id="description${i}" class="text-lg text-gray-200 transparent-800 py-1 px-2 rounded-xl select-all truncate" >${names[i]}</p>
+					</div>
+					<div class="progressFull mb-3">
+					<div id="progress${i}" class="progressFill" />
 				</div>
-				<div class="mt-5 flex flex-col items-center justify-center">
-					<div class="progress">
-						<div id="progress${i}" class="progressFill" />
-					</div>
-				</div>
-				<div class="mb-5 mt-5 flex items-center justify-center">
-					<button id="button${i}" class="button w-[150px] py-3 px-5">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
-						${language.common.copy}
-					</button>
-				</div>`
+				`
 			} else {
 				element.innerHTML = `
-				<div class="mt-5 flex flex-row px-5">
-					<div class="flex flex-1 justify-start">
-						<h3 id="name${i}" tabindex="0" class="whitespace-nowrap mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
+				<div class="flex flex-row justify-between">
+					<div class="flex flex-col justify-start mb-3">
+						<div class="flex">
+							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate">
+								${issuers[i]}
+							</p>
+						</div>
+						<div class="flex">
+							<p id="code${i}" class="text-2xl text-gray-200" >-</p>
+						</div>
 					</div>
-					<div class="flex flex-1 justify-center px-3">
-						<p id="code${i}" tabindex="0" class="transparent-900 relative mt-1.5 w-[150px] select-all rounded-2xl py-3 px-5 text-2xl focusRing">-</p>
+					<div class="flex items-center justify-between mb-3">
+						<button
+							id="button${i}"
+							class="bg-white flex justify-center items-center font-medium rounded-full gap-1 hover:bg-gray-200 duration-200 px-4 text-black text-lg py-2"
+							>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+								<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+							</svg>
+							${language.common.copy}
+						</button>
 					</div>
-					<div class="flex flex-1 justify-end">
-						<h3 id="time${i}" tabindex="0" class="mt-3 text-3xl font-normal focusRing rounded-2xl">-</h3>
 					</div>
+					<div class="progressFull mb-3">
+					<div id="progress${i}" class="progressFill" />
 				</div>
-				<div class="mt-5 flex flex-col items-center justify-center">
-					<div class="progress">
-						<div id="progress${i}" class="progressFill" />
-					</div>
-				</div>
-				<p tabindex="0" class="text-2xl transparent-900 py-3 px-5 rounded-2xl select-all mt-5" id="description${i}">Description</p>
-				<div class="mb-5 mt-5 flex items-center justify-center">
-					<button id="button${i}" class="button w-[150px] py-3 px-5">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
-						${language.common.copy}
-					</button>
-				</div>`
+				`
 			}
 
 			// add div
@@ -86,17 +100,10 @@ export const generateCodeElements = (data: LibImportFile) => {
 			document.querySelector(".content").appendChild(element)
 
 			// get elements
-			const name = document.querySelector(`#name${i}`)
 			const code = document.querySelector(`#code${i}`)
-			const time = document.querySelector(`#time${i}`)
-			const description = document.querySelector(`#description${i}`)
+			// const time = document.querySelector(`#time${i}`)
 			const progress = document.querySelector(`#progress${i}`)
 			const button = document.querySelector(`#button${i}`)
-
-			// description
-			if (settings.settings.codesDescription === true) {
-				description.textContent = names[i].length > 35 ? `${names[i].slice(0, 35)}...` : names[i]
-			}
 
 			// add to query
 			searchQuery.push({
@@ -116,9 +123,8 @@ export const generateCodeElements = (data: LibImportFile) => {
 			const value = remainingTime * (100 / 30)
 			progress.style.width = `${value}%`
 
-			name.textContent = issuers[i]
 			code.textContent = token
-			time.textContent = remainingTime.toString()
+			// time.textContent = remainingTime.toString()
 
 			button.addEventListener("click", () => {
 				clipboard.writeText(code.textContent)
@@ -166,7 +172,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 const refreshCodes = (secrets: string[]) => {
 	for (let i = 0; i < secrets.length; i++) {
 		const code = document.querySelector(`#code${i}`)
-		const time = document.querySelector(`#time${i}`)
+		// const time = document.querySelector(`#time${i}`)
 		const progress = document.querySelector(`#progress${i}`)
 
 		// generate token
@@ -183,7 +189,7 @@ const refreshCodes = (secrets: string[]) => {
 
 		// set content
 		code.textContent = token
-		time.textContent = remainingTime.toString()
+		// time.textContent = remainingTime.toString()
 	}
 }
 
@@ -199,7 +205,7 @@ export const search = () => {
 	// restart
 	for (let i = 0; i < searchQuery.length; i++) {
 		const div = document.querySelector(`#codes${[i]}`)
-		div.style.display = "flex"
+		div.style.display = "block"
 	}
 
 	document.querySelector(".noSearchResults").style.display = "none"
