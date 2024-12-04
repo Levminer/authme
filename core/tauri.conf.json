@@ -56,7 +56,11 @@
 				"visible": false,
 				"theme": "Dark",
 				"contentProtected": true,
-				"useHttpsScheme": true
+				"useHttpsScheme": true,
+				"transparent": true,
+				"windowEffects": {
+					"effects": ["mica"]
+				}
 			}
 		],
 		"security": {

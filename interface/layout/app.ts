@@ -25,20 +25,20 @@ export default app
 
 // Set background color if vibrancy not supported
 const setBackground = async () => {
-	const system = os.type().toString()
+	const system = os.type()
 	const build = os.version().toString()
 
-	if (system === "Windows_NT" && build < "10.0.22000") {
-		document.querySelector("body").style.background = "black"
+	if (system !== "windows") {
+		document.querySelector("body").style.background = "#0a0a0a"
 	}
 
-	if (system === "Linux") {
-		document.querySelector("body").style.background = "black"
+	if (system === "windows" && build < "10.0.22000") {
+		document.querySelector("body").style.background = "#0a0a0a"
 	}
 }
 
-// TODO transparency
-// setBackground()
+// transparency
+setBackground()
 
 // Tray navigate to codes handler
 event.listen("openCodes", (data: any) => {
