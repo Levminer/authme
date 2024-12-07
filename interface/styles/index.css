@@ -26,11 +26,11 @@ html {
 	}
 
 	.menuButton {
-		@apply transparent-900-hover mx-3 mb-3 mt-0 flex h-16 w-16 flex-col items-center justify-center rounded-xl text-sm font-semibold outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply transparent-900-hover mx-3 mb-3 mt-0 flex h-14 w-14 flex-col items-center justify-center rounded-xl text-sm font-semibold outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
 	.selectedMenuButton {
-		@apply mx-3 mb-3 mt-0 flex h-16 w-16 flex-col items-center justify-center rounded-xl bg-white text-sm font-semibold !text-black outline-none duration-200 ease-linear hover:bg-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply mx-3 mb-3 mt-0 flex h-14 w-14 flex-col items-center justify-center rounded-xl bg-white text-sm font-semibold !text-black outline-none duration-200 ease-linear hover:bg-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
 	.select {
