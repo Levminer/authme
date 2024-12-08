@@ -161,5 +161,7 @@ export const localeHU: typeof localeEN = {
 		showLogsButton: "Log-ok mutatása",
 		aboutAuthme: "Authme névjegye",
 		aboutAuthmeText: "Információ az Authme build-edről és a számítógépedről",
+		language: "Nyelv",
+		languageText: "Válaszd ki a kívánt nyelvet. Alapértelmezetten a rendszer nyelve van kiválasztva.",
 	},
 }

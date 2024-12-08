@@ -161,5 +161,7 @@ export const localeZH: typeof localeEN = {
 		showLogsButton: "显示日志",
 		aboutAuthme: "关于 Authme",
 		aboutAuthmeText: "当前 Authme 版本和计算机信息.",
+		language: "Language",
+		languageText: "Select your preferred language. By default it will be the system language.",
 	},
 }

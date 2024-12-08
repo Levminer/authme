@@ -159,5 +159,7 @@ export const localeEN = {
 		showLogsButton: "Show logs",
 		aboutAuthme: "About Authme",
 		aboutAuthmeText: "Information about your Authme build and your computer.",
+		language: "Language",
+		languageText: "Select your preferred language. By default it will be the system language.",
 	},
 }

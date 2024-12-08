@@ -149,5 +149,7 @@ export const localePL: typeof localeEN = {
 		showLogsButton: "Pokaż logi",
 		aboutAuthme: "O Authme",
 		aboutAuthmeText: "Informacje o twojej wersji Authme i twoim komputerze.",
+		language: "Language",
+		languageText: "Select your preferred language. By default it will be the system language.",
 	},
 }

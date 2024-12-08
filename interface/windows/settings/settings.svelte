@@ -44,8 +44,8 @@
 
 		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
 			<div>
-				<h2>Language</h2>
-				<h3>Select your preferred language. By default it will be the system language</h3>
+				<h2>{language.settings.language}</h2>
+				<h3>{language.settings.languageText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Select options={["Default", "English", "Hungarian", "Spanish", "French", "Russian", "German", "Chinese", "Polish"]} setting={"language"} />
