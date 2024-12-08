@@ -1,4 +1,6 @@
-export const localeZH = {
+import { localeEN } from "@utils/language/en"
+
+export const localeZH: typeof localeEN = {
 	common: {
 		confirm: "确认",
 		continue: "继续",
@@ -11,16 +13,6 @@ export const localeZH = {
 		description: "说明",
 		edit: "编辑",
 		delete: "删除",
-	},
-
-	menu: {
-		codes: "代码",
-		import: "导入",
-		export: "导出",
-		edit: "编辑",
-		settings: "设置",
-		show: "显示",
-		exit: "退出",
 	},
 
 	landing: {
@@ -159,16 +151,8 @@ export const localeZH = {
 		codes: "代码",
 		codesDescription: "代码说明",
 		codesDescriptionText: "是否显示 2FA 的代码说明. 单击说明将自动复制到剪贴板.",
-		blurCodes: "隐藏",
-		blurCodesText: "隐藏保存的代码.您仍然可以复制代码或将鼠标悬停在代码上以显示它们.",
-		codesLayout: "布局",
-		codesLayoutText: "您可以选择您喜欢的布局.网格可显示更多项目并适应屏幕尺寸.",
 		sortCodes: "排序",
 		sortCodesText: "您可以选择如何对代码进行排序.默认情况下,代码按导入顺序排序.",
-		shortcuts: "快捷方式",
-		shortcutsEditButton: "编辑",
-		shortcutsResetButton: "重置",
-		shortcutsDeleteButton: "删除",
 		about: "关于",
 		feedback: "反馈",
 		feedbackText: "感谢您的反馈! 请在 GitHub 或通过电子邮件 (authme@levminer.com) 报告问题或功能请求.",

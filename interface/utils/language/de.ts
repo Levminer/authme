@@ -15,16 +15,6 @@ export const localeDE: typeof localeEN = {
 		delete: "Löschen",
 	},
 
-	menu: {
-		codes: "Codes",
-		import: "Importieren",
-		export: "Exportieren",
-		edit: "Bearbeiten",
-		settings: "Einstellungen",
-		show: "Authme anzeigen",
-		exit: "Authme beenden",
-	},
-
 	landing: {
 		welcome: "Willkommen!",
 		gettingStarted: "Erste Schritte",
@@ -121,32 +111,11 @@ export const localeDE: typeof localeEN = {
 		manualEntrySecret: "Geheimschlüssel (Erforderlich)",
 		manualEntryDescription: "Beschreibung",
 		// tutorial
-		googleAuthTutorial: [
-			"Exportieren Sie die 2FA-Codes aus der Google Authenticator-App: Tippen Sie auf das Hamburger-Menü in der oberen linken Ecke des Bildschirms: Konten übertragen > Konten exportieren",
-			"Speichern Sie die Migrations-QR-Codes mit einem Screenshot oder machen Sie ein Foto mit einem anderen Telefon, wenn Sie Android verwenden. Übertragen Sie diese Bilder auf Ihren Computer.",
-			"Gehen Sie in Authme zur Importseite: Seitenleiste > Import",
-			"Klicken Sie auf die Schaltfläche „Bilder auswählen“ und wählen Sie die Bilder aus, die Sie von Ihrem Telefon übertragen haben."
-		],
-		totpTutorial: [
-			"Gehen Sie zur Website, auf der Sie 2FA einrichten möchten.",
-			"Erstellen Sie einen Screenshot (Tastenkombination Windows-Taste + Umschalttaste + S unter Windows, Cmd + Umschalttaste + 3 unter macOS) des QR-Codes und speichern Sie das Bild.",
-			"Gehen Sie in Authme zur Importseite: Seitenleiste > Import",
-			"Klicken Sie auf die Schaltfläche „Bilder auswählen“ und wählen Sie das Bild aus."
-		],
-		authmeTutorial: [
-			"Gehen Sie in Authme zur Exportseite und wählen Sie „Authme-Datei exportieren“.",
-			"Sie können diese Datei in Authme auf der Importseite importieren."
-		],
-		aegisTutorial: [
-			"Tippen Sie auf das Hamburger-Menü in der oberen rechten Ecke des Bildschirms: Einstellungen > Importieren & Exportieren > Exportieren",
-			"Wählen Sie das Aegis-JSON-Format aus, deaktivieren Sie das Kontrollkästchen „Verschlüsselung“ und exportieren Sie Ihren Tresor.",
-			"Übertragen Sie die Datei auf Ihren Computer und importieren Sie sie in Authme."
-		],
-		twoFasTutorial: [
-			"Tippen Sie auf Einstellungen in der Navigationsleiste: 2FAS-Backup > In Datei exportieren",
-			"Aktivieren Sie das Kontrollkästchen „Exportdatei ohne Passwort“ und tippen Sie auf „Exportieren“.",
-			"Übertragen Sie die Datei auf Ihren Computer und importieren Sie sie in Authme."
-		],
+		googleAuthTutorial: ["Exportieren Sie die 2FA-Codes aus der Google Authenticator-App: Tippen Sie auf das Hamburger-Menü in der oberen linken Ecke des Bildschirms: Konten übertragen > Konten exportieren", "Speichern Sie die Migrations-QR-Codes mit einem Screenshot oder machen Sie ein Foto mit einem anderen Telefon, wenn Sie Android verwenden. Übertragen Sie diese Bilder auf Ihren Computer.", "Gehen Sie in Authme zur Importseite: Seitenleiste > Import", "Klicken Sie auf die Schaltfläche „Bilder auswählen“ und wählen Sie die Bilder aus, die Sie von Ihrem Telefon übertragen haben."],
+		totpTutorial: ["Gehen Sie zur Website, auf der Sie 2FA einrichten möchten.", "Erstellen Sie einen Screenshot (Tastenkombination Windows-Taste + Umschalttaste + S unter Windows, Cmd + Umschalttaste + 3 unter macOS) des QR-Codes und speichern Sie das Bild.", "Gehen Sie in Authme zur Importseite: Seitenleiste > Import", "Klicken Sie auf die Schaltfläche „Bilder auswählen“ und wählen Sie das Bild aus."],
+		authmeTutorial: ["Gehen Sie in Authme zur Exportseite und wählen Sie „Authme-Datei exportieren“.", "Sie können diese Datei in Authme auf der Importseite importieren."],
+		aegisTutorial: ["Tippen Sie auf das Hamburger-Menü in der oberen rechten Ecke des Bildschirms: Einstellungen > Importieren & Exportieren > Exportieren", "Wählen Sie das Aegis-JSON-Format aus, deaktivieren Sie das Kontrollkästchen „Verschlüsselung“ und exportieren Sie Ihren Tresor.", "Übertragen Sie die Datei auf Ihren Computer und importieren Sie sie in Authme."],
+		twoFasTutorial: ["Tippen Sie auf Einstellungen in der Navigationsleiste: 2FAS-Backup > In Datei exportieren", "Aktivieren Sie das Kontrollkästchen „Exportdatei ohne Passwort“ und tippen Sie auf „Exportieren“.", "Übertragen Sie die Datei auf Ihren Computer und importieren Sie sie in Authme."],
 	},
 
 	export: {
@@ -155,14 +124,14 @@ export const localeDE: typeof localeEN = {
 		exportAuthmeFileText: "Ideal zum Importieren für Authme oder andere Authme-Apps.",
 		exportHTMlFile: "HTML-Datei exportieren",
 		exportHTMlFileText: "Ideal zum Scannen der QR-Codes oder als Sicherung.",
-		exportFileButton: "Datei exportieren"
+		exportFileButton: "Datei exportieren",
 	},
 
 	edit: {
 		editCodes: "Codes bearbeiten",
 		dialog: {
 			saveChanges: "Möchten Sie Ihre Änderungen speichern?",
-			deleteCode: "Sind Sie sicher, dass Sie diesen Code löschen möchten?"
+			deleteCode: "Sind Sie sicher, dass Sie diesen Code löschen möchten?",
 		},
 	},
 
@@ -182,16 +151,8 @@ export const localeDE: typeof localeEN = {
 		codes: "Codes",
 		codesDescription: "Codes-Beschreibung",
 		codesDescriptionText: "Die Beschreibung der 2FA-Codes anzeigen. Sie können sie nach dem Anklicken kopieren.",
-		blurCodes: "Codes verschwimmen",
-		blurCodesText: "Zeigt die die gespeicherten Codes unscharf an. Sie können die Codes weiterhin kopieren oder mit der Maus über die Codes fahren, um sie anzuzeigen.",
-		codesLayout: "Codes-Layout",
-		codesLayoutText: "Wählen Sie ihr bevorzugtes Layout. Grid zeigt mehr Elemente an und passt sich der Bildschirmgröße an.",
 		sortCodes: "Codes sortieren",
 		sortCodesText: "Sie können festlegen, wie die Codes sortiert werden sollen. Standardmäßig werden die Codes nach Importreihenfolge sortiert.",
-		shortcuts: "Tastaturkürzel",
-		shortcutsEditButton: "Bearbeiten",
-		shortcutsResetButton: "Zurücksetzen",
-		shortcutsDeleteButton: "Löschen",
 		about: "Über",
 		feedback: "Feedback",
 		feedbackText: "Vielen Dank für Ihr Feedback! Bitte melden Sie Probleme oder Funktionsanfragen auf GitHub oder per E-Mail (authme@levminer.com).",
@@ -199,6 +160,6 @@ export const localeDE: typeof localeEN = {
 		logsText: "Sie können die Logs zur Fehlerbehebung anzeigen.",
 		showLogsButton: "Logs anzeigen",
 		aboutAuthme: "Über Authme",
-		aboutAuthmeText: "Informationen zu Ihrem Authme-Build und Ihrem Computer."
+		aboutAuthmeText: "Informationen zu Ihrem Authme-Build und Ihrem Computer.",
 	},
 }

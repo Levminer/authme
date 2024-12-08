@@ -101,7 +101,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 
 			// get elements
 			const code = document.querySelector(`#code${i}`)
-			// const time = document.querySelector(`#time${i}`)
 			const progress = document.querySelector(`#progress${i}`)
 			const button = document.querySelector(`#button${i}`)
 
@@ -124,7 +123,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 			progress.style.width = `${value}%`
 
 			code.textContent = token
-			// time.textContent = remainingTime.toString()
 
 			button.addEventListener("click", () => {
 				clipboard.writeText(code.textContent)
@@ -172,7 +170,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 const refreshCodes = (secrets: string[]) => {
 	for (let i = 0; i < secrets.length; i++) {
 		const code = document.querySelector(`#code${i}`)
-		// const time = document.querySelector(`#time${i}`)
 		const progress = document.querySelector(`#progress${i}`)
 
 		// generate token
@@ -189,7 +186,6 @@ const refreshCodes = (secrets: string[]) => {
 
 		// set content
 		code.textContent = token
-		// time.textContent = remainingTime.toString()
 	}
 }
 

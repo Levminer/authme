@@ -13,16 +13,6 @@ export const localeEN = {
 		delete: "Delete",
 	},
 
-	menu: {
-		codes: "Codes",
-		import: "Import",
-		export: "Export",
-		edit: "Edit",
-		settings: "Settings",
-		show: "Show Authme",
-		exit: "Exit Authme",
-	},
-
 	landing: {
 		welcome: "Welcome!",
 		gettingStarted: "Getting started",
@@ -159,16 +149,8 @@ export const localeEN = {
 		codes: "Codes",
 		codesDescription: "Codes description",
 		codesDescriptionText: "2FA codes description will be visible. You can copy it after clicking it.",
-		blurCodes: "Blur codes",
-		blurCodesText: "Blur the saved codes. You can still copy the codes or hover over the codes to show them.",
-		codesLayout: "Codes layout",
-		codesLayoutText: "You can choose your preferred layout. Grid displays more items and adapts to the screen size.",
 		sortCodes: "Sort codes",
 		sortCodesText: "You can choose how to sort the codes. By default codes are sorted by importing order.",
-		shortcuts: "Shortcuts",
-		shortcutsEditButton: "Edit",
-		shortcutsResetButton: "Reset",
-		shortcutsDeleteButton: "Delete",
 		about: "About",
 		feedback: "Feedback",
 		feedbackText: "Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (authme@levminer.com).",

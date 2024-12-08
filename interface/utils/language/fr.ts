@@ -15,16 +15,6 @@ export const localeFR: typeof localeEN = {
 		delete: "Supprimer",
 	},
 
-	menu: {
-		codes: "Codes",
-		import: "Importer",
-		export: "Exporter",
-		edit: "Modifier",
-		settings: "Paramètres",
-		show: "Afficher Authme",
-		exit: "Quitter Authme",
-	},
-
 	landing: {
 		welcome: "Bienvenu(e)!",
 		gettingStarted: "Démarrage",
@@ -161,16 +151,8 @@ export const localeFR: typeof localeEN = {
 		codes: "Codes",
 		codesDescription: "Description des codes",
 		codesDescriptionText: "La description des codes 2FA sera visible. Vous pouvez la copier après avoir cliqué dessus.",
-		blurCodes: "Flouter les codes",
-		blurCodesText: "Floutez les codes enregistrés. Vous pouvez toujours copier les codes ou survoler les codes pour les afficher.",
-		codesLayout: "Mise en page des codes",
-		codesLayoutText: "Vous pouvez choisir votre disposition préférée. La grille affiche plus d'éléments et s'adapte à la taille de l'écran.",
 		sortCodes: "Trier les codes",
 		sortCodesText: "Vous pouvez choisir comment trier les codes. Par défaut, les codes sont triés par ordre d'importation.",
-		shortcuts: "Raccourcis",
-		shortcutsEditButton: "Modifier",
-		shortcutsResetButton: "Réinitialiser",
-		shortcutsDeleteButton: "Supprimer",
 		about: "à propos",
 		feedback: "Commentaires",
 		feedbackText: "Merci pour vos commentaires ! Veuillez signaler les problèmes ou les demandes de fonctionnalités sur GitHub ou par e-mail (authme@levminer.com).",
