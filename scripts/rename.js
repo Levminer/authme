@@ -27,10 +27,10 @@ if (os === "win32") {
 	}
 } else {
 	try {
-		copyFileSync(`./core/target/release/bundle/appimage/authme_${version}_amd64.AppImage`, `./core/target/release/upload/authme-${version}-linux-x64.appimage`)
-		copyFileSync(`./core/target/release/bundle/appimage/authme_${version}_amd64.AppImage.tar.gz`, `./core/target/release/upload/authme-${version}-linux-x64.tar.gz`)
-		copyFileSync(`./core/target/release/bundle/appimage/authme_${version}_amd64.AppImage.tar.gz.sig`, `./core/target/release/upload/authme-${version}-linux-x64.sig`)
-		copyFileSync(`./core/target/release/bundle/deb/authme_${version}_amd64.deb`, `./core/target/release/upload/authme-${version}-linux-x64.deb`)
+		copyFileSync(`./core/target/release/bundle/appimage/Authme_${version}_amd64.AppImage`, `./core/target/release/upload/authme-${version}-linux-x64.appimage`)
+		copyFileSync(`./core/target/release/bundle/appimage/Authme_${version}_amd64.AppImage.tar.gz`, `./core/target/release/upload/authme-${version}-linux-x64.tar.gz`)
+		copyFileSync(`./core/target/release/bundle/appimage/Authme_${version}_amd64.AppImage.tar.gz.sig`, `./core/target/release/upload/authme-${version}-linux-x64.sig`)
+		copyFileSync(`./core/target/release/bundle/deb/Authme_${version}_amd64.deb`, `./core/target/release/upload/authme-${version}-linux-x64.deb`)
 	} catch (err) {
 		console.log("File not found")
 	}
