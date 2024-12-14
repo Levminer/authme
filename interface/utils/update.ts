@@ -15,9 +15,15 @@ let updateObj: Update // TODO: should be an easier way
  * Check for auto update
  */
 export const checkForUpdate = async () => {
-	if (dev === false) {
+	if (!dev) {
 		try {
 			const update = await check()
+
+			// No update available
+			if (update === null) {
+				return
+			}
+
 			updateObj = update
 			if (update.available) {
 				logger.log(`Latest update: ${JSON.stringify(update)} ${update.body}`)

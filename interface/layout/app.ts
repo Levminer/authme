@@ -93,7 +93,7 @@ launchOptions()
 
 // Optional analytics
 const optionalAnalytics = async () => {
-	if (settings.settings.optionalAnalytics === true && dev === false) {
+	if (settings.settings.optionalAnalytics && !dev) {
 		const payload = await optionalAnalyticsPayload()
 
 		try {
