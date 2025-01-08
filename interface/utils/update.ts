@@ -38,9 +38,9 @@ export const checkForUpdate = async () => {
 }
 
 export const installUpdate = async () => {
-	const system = os.type().toString()
+	const system = os.type()
 
-	if (system !== "Windows_NT") {
+	if (system !== "windows") {
 		open("https://authme.levminer.com/#downloads")
 	} else {
 		document.querySelector(".updateText").textContent = "Downloading update... Please wait!"
