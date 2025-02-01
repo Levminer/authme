@@ -31,9 +31,9 @@ export const generateCodeElements = (data: LibImportFile) => {
 			if (settings.settings.codesDescription) {
 				element.innerHTML = `
 				<div class="flex flex-row justify-between">
-					<div class="flex flex-col justify-start mb-3">
-						<div class="flex">
-							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate">
+					<div class="flex flex-col justify-start mb-3 overflow-hidden">
+						<div class="flex overflow-hidden">
+							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate overflow-hidden w-full">
 								${issuers[i]}
 							</p>
 						</div>
@@ -64,9 +64,9 @@ export const generateCodeElements = (data: LibImportFile) => {
 			} else {
 				element.innerHTML = `
 				<div class="flex flex-row justify-between">
-					<div class="flex flex-col justify-start mb-3">
-						<div class="flex">
-							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate">
+					<div class="flex flex-col justify-start mb-3 overflow-hidden">
+						<div class="flex overflow-hidden">
+							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate w-full overflow-hidden">
 								${issuers[i]}
 							</p>
 						</div>
