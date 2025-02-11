@@ -67,7 +67,7 @@ export const localeHU: typeof localeEN = {
 	import: {
 		supportedTypes: "Kódok importálása",
 		totpQRCode: "TOTP",
-		totpQRCodeText: "A TOTP QR kódokat találod mindenhol, ha 2FA-t akarsz beállítani. 6 számjegyből áll, amik 30 másodpercenként változnak.",
+		totpQRCodeText: "6 számjegyből áll, amik 30 másodpercenként változnak. Álltalában használt minden oldalon.",
 		instructions: "Útmutató",
 		googleAuthQRCode: "Google Hitelesítő",
 		googleAuthQRCodeText: "Ha a Google Hitelesítőt használod, akkor exportálhatod a kódjaidat és importálhatod az Authme-be.",

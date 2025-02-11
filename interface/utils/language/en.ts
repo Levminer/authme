@@ -65,7 +65,7 @@ export const localeEN = {
 	import: {
 		supportedTypes: "Import codes",
 		totpQRCode: "TOTP",
-		totpQRCodeText: "A TOTP QR code is what you find mostly everywhere, if you want to setup 2FA. Consist of 6 digits which are changing every 30 seconds.",
+		totpQRCodeText: "Consist of 6 digits which are changing every 30 seconds. Used on most websites.",
 		instructions: "Instructions",
 		googleAuthQRCode: "Google Authenticator",
 		googleAuthQRCodeText: "If you are using Google Authenticator you can export all of your exiting codes and import them to Authme.",
