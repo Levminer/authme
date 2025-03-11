@@ -39,7 +39,7 @@ jobs:
             - name: Install trusted-signing-cli
               if: matrix.NAME == 'windows'
               run: |
-                cargo install trusted-signing-cli@0.2.0
+                cargo install trusted-signing-cli
 
             - name: "Apple silicon target"
               if: matrix.NAME == 'mac'
