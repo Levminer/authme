@@ -1,6 +1,6 @@
 import { mkdirSync, existsSync, copyFileSync } from "fs"
 import { platform } from "os"
-import json from "../package.json" assert { type: "json" }
+import json from "../package.json" with { type: "json" }
 
 const os = platform()
 const version = json.version
