@@ -116,6 +116,13 @@ export const localeFR: typeof localeEN = {
 		authmeTutorial: ["Dans Authme, allez sur la page Exporter et choisissez Exporter le fichier Authme", "Vous pouvez importer ce fichier dans Authme sur la page Importer"],
 		aegisTutorial: ["Appuyez sur le menu hamburger dans le coin supérieur droit de l'écran : Paramètres > Importer et exporter > Exporter", "Sélectionnez le format Aegis JSON et décochez la case Cryptage et exportez votre coffre-fort", "Transférez le fichier sur votre ordinateur et importez-le dans Authme"],
 		twoFasTutorial: ["Appuyez sur les paramètres dans la barre de navigation : 2FAS Backup > Export to file", "Cochez la case d'exportation du fichier sans mot de passe et appuyez sur exporter", "Transférez le fichier sur votre ordinateur et importez-le dans Authme"],
+		bitwardenTutorial: ["In Bitwarden go to the Settings page > Vault > Export vault", "Select the .json format (not encrypted) and click Export vault", "Transfer the file on your computer and import it in Authme"],
+		// bitwarden
+		bitwardenAuth: "Bitwarden",
+		bitwardenAuthText: "Import all codes from your Bitwarden vault.",
+		bitwardenFile: "Bitwarden vault export (without encryption)",
+		bitwardenFileText: "Import all codes from an existing Bitwarden vault file without a encryption.",
+		bitwardenFileButton: "Choose file",
 	},
 
 	export: {

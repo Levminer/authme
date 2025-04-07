@@ -100,7 +100,7 @@ export const showManualEntry = () => {
 /**
  * Show tutorial dialog
  */
-type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas"
+type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas" | "bitwarden"
 
 export const showTutorial = (type: tutorialType) => {
 	const dialog: LibDialogElement = document.querySelector(".tutorialDialog")
@@ -149,6 +149,13 @@ export const showTutorial = (type: tutorialType) => {
 		tutorialTitle.innerHTML = language.import.twoFasAuth
 		tutorialDescription.innerHTML = language.import.twoFasAuthText
 
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	} else if (type === "bitwarden") {
+		const elements = language.import.bitwardenTutorial
+		tutorialTitle.innerHTML = language.import.bitwardenAuth
+		tutorialDescription.innerHTML = language.import.bitwardenAuthText
 		for (let i = 0; i < elements.length; i++) {
 			list.innerHTML += `<li>${elements[i]}</li>`
 		}
@@ -237,8 +244,6 @@ export const twoFasAuthFile = async () => {
 		for (let i = 0; i < file.services.length; i++) {
 			const service = file.services[i]
 
-			console.log(service)
-
 			if (service.otp.tokenType === "TOTP") {
 				if (service.otp.source === "Link" && service.otp.link !== undefined && service.otp.link.trim()) {
 					importString += totpImageConverter(service.otp.link)
@@ -287,6 +292,44 @@ export const aegisFile = async () => {
 
 			if (entry.type === "totp") {
 				importString += totpImageConverter(`otpauth://totp/${entry.name}?secret=${entry.info.secret}&issuer=${entry.issuer}`)
+			}
+		}
+
+		dialog.message(language.codes.dialog.codesImported)
+
+		const state = getState()
+		state.importData = importString
+		setState(state)
+
+		navigate("codes")
+	}
+}
+
+/**
+ * Import from a Bitwarden export file
+ */
+export const bitwardenFile = async () => {
+	const filePath = await dialog.open({ filters: [{ name: "Bitwarden export file", extensions: ["json"] }] })
+
+	interface BitwardenFile {
+		encrypted: boolean
+		items: {
+			login: {
+				totp: string
+			}
+		}[]
+	}
+
+	if (filePath !== null) {
+		const loadedFile = await fs.readTextFile(filePath)
+		const file: BitwardenFile = JSON.parse(loadedFile)
+		let importString = ""
+
+		for (let i = 0; i < file.items.length; i++) {
+			const entry = file.items[i]
+
+			if (entry.login.totp) {
+				importString += totpImageConverter(entry.login.totp)
 			}
 		}
 
