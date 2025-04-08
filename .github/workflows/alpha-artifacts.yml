@@ -10,7 +10,7 @@ jobs:
                       NAME: mac
                     - os: ubuntu-latest
                       NAME: linux
-                    - os: ubuntu-24.04-arm
+                    - os: ubuntu-22.04-arm
                       NAME: linux
                     - os: windows-latest
                       NAME: windows
