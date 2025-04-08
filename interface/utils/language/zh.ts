@@ -116,6 +116,13 @@ export const localeZH: typeof localeEN = {
 		authmeTutorial: ["在 Authme 中，转到“导出”页面，然后选择“导出 Authme 文件”，“您可以在 Authme 的导入页面上再次导入此文件"],
 		aegisTutorial: ["点击屏幕右上角的菜单: 设置 -> 导入与导出 -> 导出", "选择 Aegis JSON 格式并且取消选中加密复选框后导出", "将导出后的文件发送到电脑并从 Authme 导入"],
 		twoFasTutorial: ["点击导航栏上的菜单: 2FAS 备份 -> 导出到文件", "选择导出文件并取消密码保护后导出", "将导出后的文件发送到电脑并从 Authme 导入"],
+		bitwardenTutorial: ["In Bitwarden go to the Settings page > Vault > Export vault", "Select the .json format (not encrypted) and click Export vault", "Transfer the file on your computer and import it in Authme"],
+		// bitwarden
+		bitwardenAuth: "Bitwarden",
+		bitwardenAuthText: "Import all codes from your Bitwarden vault.",
+		bitwardenFile: "Bitwarden vault export (without encryption)",
+		bitwardenFileText: "Import all codes from an existing Bitwarden vault file without a encryption.",
+		bitwardenFileButton: "Choose file",
 	},
 
 	export: {
