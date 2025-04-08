@@ -10,6 +10,8 @@ jobs:
                       NAME: mac
                     - os: ubuntu-latest
                       NAME: linux
+                    - os: ubuntu-22.04-arm
+                      NAME: linux
                     - os: windows-latest
                       NAME: windows
         runs-on: ${{ matrix.os }}
@@ -72,5 +74,5 @@ jobs:
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
               with:
-                  name: authme-latest-alpha-${{matrix.NAME}}-x64-installer-portable
+                  name: authme-latest-alpha-${{matrix.NAME}}-${{runner.arch}}
                   path: core/target/release

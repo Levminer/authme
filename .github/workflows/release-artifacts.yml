@@ -13,6 +13,8 @@ jobs:
                       NAME: macos
                     - os: ubuntu-latest
                       NAME: linux
+                    - os: ubuntu-arm-latest
+                      NAME: linux-arm
                     - os: windows-latest
                       NAME: windows
         runs-on: ${{ matrix.os}}
