@@ -1,6 +1,6 @@
 [package]
 name = "authme"
-version = "6.0.3"
+version = "6.1.0"
 description = "Simple cross-platform two-factor (2FA) authenticator app for desktop."
 authors = ["Lőrik Levente"]
 edition = "2021"
