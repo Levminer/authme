@@ -87,7 +87,7 @@
 			</div>
 		</div>
 		<div>
-			<h1 class="text-center text-2xl">Copyright © 2024 Lőrik Levente</h1>
+			<h1 class="text-center text-2xl">Copyright © {new Date().getFullYear()} Lőrik Levente</h1>
 		</div>
 	</div>
 </footer>

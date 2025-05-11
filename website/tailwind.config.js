@@ -27,9 +27,6 @@ export default {
 					gray: "#808080",
 				},
 			},
-			screens: {
-				small: { max: "800px" },
-			},
 		},
 	},
 	plugins: [],
