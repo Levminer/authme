@@ -1,7 +1,6 @@
 import build from "../../../build.json"
 import { path, app, webviewWindow } from "@tauri-apps/api"
 import { invoke } from "@tauri-apps/api/core"
-import { UAParser } from "ua-parser-js"
 import { navigate, open } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
 import { getSettings, setSettings } from "interface/stores/settings"
@@ -22,11 +21,25 @@ export interface SystemInfo {
 export const about = async () => {
 	const tauriVersion = await app.getTauriVersion()
 	const osVersion = os.version()
-	const browser = new UAParser().getBrowser()
 
 	// Browser version
-	const browserName = browser.name.replace("Edge", "Chromium").replace("Safari", "WebKit")
-	const browserVersion = browser.version
+	interface userAgentData {
+		fullVersionList?: { version: string }[]
+	}
+
+	let runtimeVersion = "N/A"
+
+	try {
+		// @ts-ignore
+		const ua: userAgentData = await navigator.userAgentData.getHighEntropyValues(["architecture", "model", "platform", "platformVersion", "fullVersionList"])
+
+		if (ua.fullVersionList !== undefined && ua.fullVersionList.length > 0) {
+			// @ts-ignore
+			runtimeVersion = ua.fullVersionList.filter((item) => item.brand === "Chromium")[0]?.version || "N/A"
+		}
+	} catch (error) {
+		console.log(error)
+	}
 
 	// System info
 	const systemInfo: SystemInfo = await invoke("system_info")
@@ -40,7 +53,7 @@ export const about = async () => {
 	const osName = systemInfo.osName
 	const osArch = systemInfo.osArch
 
-	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\n${browserName}: ${browserVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
+	const info = `Authme: ${build.version} \n\nTauri: ${tauriVersion}\nRuntime: ${runtimeVersion}\n\nOS version: ${osName} ${osArch} ${osVersion}\nHardware info: ${cpu} ${memory} RAM\n\nRelease date: ${build.date}\nBuild number: ${build.number}\n\nCreated by: Lőrik Levente`
 
 	const res = await dialog.confirm(info, { cancelLabel: "Close", okLabel: "Copy" })
 

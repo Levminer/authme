@@ -30,8 +30,8 @@
 		"@baileyherbert/tinro": "^1.0.0",
 		"@rgossiaux/svelte-headlessui": "^1.0.2",
 		"@tailwindcss/forms": "^0.5.7",
-		"@tauri-apps/api": "^2.4.0",
-		"@tauri-apps/cli": "^2.4.0",
+		"@tauri-apps/api": "^2.5.0",
+		"@tauri-apps/cli": "^2.5.0",
 		"@types/node": "^20.10.3",
 		"@typescript-eslint/eslint-plugin": "^6.13.2",
 		"@typescript-eslint/parser": "^6.13.2",
@@ -58,8 +58,8 @@
 	},
 	"dependencies": {
 		"@tauri-apps/plugin-clipboard-manager": "^2.2.2",
-		"@tauri-apps/plugin-dialog": "^2.2.1",
-		"@tauri-apps/plugin-fs": "^2.2.1",
+		"@tauri-apps/plugin-dialog": "^2.2.2",
+		"@tauri-apps/plugin-fs": "^2.3.0",
 		"@tauri-apps/plugin-os": "^2.2.1",
 		"@tauri-apps/plugin-process": "^2.2.1",
 		"@tauri-apps/plugin-shell": "^2.2.1",
@@ -67,8 +67,7 @@
 		"@undecaf/barcode-detector-polyfill": "^0.9.16",
 		"@undecaf/zbar-wasm": "^0.9.13",
 		"otpauth": "^8.0.3",
-		"posthog-js": "^1.145.0",
-		"qrcode-generator": "^1.4.4",
-		"ua-parser-js": "^1.0.37"
+		"posthog-js": "^1.245.0",
+		"qrcode-generator": "^1.4.4"
 	}
 }
