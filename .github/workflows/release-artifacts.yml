@@ -72,101 +72,22 @@ jobs:
                   npm run rename
               shell: bash
 
-            - uses: octokit/request-action@v2.x
-              id: get_latest_release
-              with:
-                  route: GET /repos/:repository/releases?per_page=1
-                  repository: ${{ github.repository }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Get upload url
-              id: get_upload_url
-              run: >
-                  url=$(echo "$response" | jq -r ".[0].upload_url")
-
-                  echo "::set-output name=url::$url"
-              env:
-                  response: ${{ steps.get_latest_release.outputs.data }}
-              shell: bash
-
-            - name: Get version
-              id: version
-              uses: notiz-dev/github-action-json-property@release
-              with:
-                  path: package.json
-                  prop_path: version
-
-            # Windows
-            - name: Upload the windows installer asset
-              if: runner.os == 'Windows'
-              uses: actions/upload-release-asset@v1.0.2
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{steps.get_upload_url.outputs.url}}
-                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-windows-x64.msi
-                  asset_name: authme-${{steps.version.outputs.prop}}-windows-x64.msi
-                  asset_content_type: application/octet-stream
-
-            - name: Upload the windows updater asset
-              if: runner.os == 'Windows'
-              uses: actions/upload-release-asset@v1.0.2
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{steps.get_upload_url.outputs.url}}
-                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-windows-x64.zip
-                  asset_name: authme-${{steps.version.outputs.prop}}-windows-x64.zip
-                  asset_content_type: application/octet-stream
-
-            # Linux
-            - name: Upload the linux installer asset
-              if: runner.os == 'Linux'
-              uses: actions/upload-release-asset@v1.0.2
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{steps.get_upload_url.outputs.url}}
-                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-linux-x64.appimage
-                  asset_name: authme-${{steps.version.outputs.prop}}-linux-x64.appimage
-                  asset_content_type: application/octet-stream
-
-            - name: Upload the linux installer asset
-              if: runner.os == 'Linux'
-              uses: actions/upload-release-asset@v1.0.2
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{steps.get_upload_url.outputs.url}}
-                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-linux-x64.deb
-                  asset_name: authme-${{steps.version.outputs.prop}}-linux-x64.deb
-                  asset_content_type: application/octet-stream
-
-            # Mac
-            - name: Upload the mac installer asset
-              if: runner.os == 'macOS'
-              uses: actions/upload-release-asset@v1.0.2
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{steps.get_upload_url.outputs.url}}
-                  asset_path: ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-macos-universal.dmg
-                  asset_name: authme-${{steps.version.outputs.prop}}-macos-universal.dmg
-                  asset_content_type: application/octet-stream
-
-            - name: Hash
-              if: runner.os == 'Windows' || runner.os == 'Linux'
-              run: cat ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-${{matrix.NAME}}-x64.sig
-              shell: bash
-
-            - name: Hash
-              if: runner.os == 'macOS'
-              run: cat ./core/target/release/upload/authme-${{steps.version.outputs.prop}}-${{matrix.NAME}}-universal.sig
-              shell: bash
-
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
               with:
-                  name: authme-latest-release-${{matrix.NAME}}-x64-installer-portable
+                  name: authme-${{matrix.NAME}}-${{runner.arch}}
                   path: core/target/release
+
+            - name: Run Upload To Release Action
+              uses: levminer/upload-to-release@test
+              if: startsWith(github.event.ref, 'refs/tags/')
+              id: upload
+              with:
+                  windows-files: "./core/target/release/upload/authme-%v-windows-x64.msi, ./core/target/release/upload/authme-%v-windows-x64.zip"
+                  macos-files: "./core/target/release/upload/authme-%v-macos-universal.dmg"
+                  linux-files: "./core/target/release/upload/authme-%v-linux-x64.appimage, ./core/target/release/upload/authme-%v-linux-x64.deb"
+
+            - name: Hash
+              if: runner.os == 'Windows'
+              run: cat ./core/target/release/upload/authme-${{steps.upload.outputs.version}}-${{matrix.NAME}}-x64.sig
+              shell: bash
