@@ -21,6 +21,7 @@ jobs:
             AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
             AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
             AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+            GH_TOKEN: ${{ github.token }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
