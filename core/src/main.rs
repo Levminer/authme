@@ -61,22 +61,6 @@ fn main() {
             window.set_focus().unwrap();
         }))
         .setup(|app| {
-            let webview_version = webview_version();
-
-            if webview_version.is_err() {
-                app.dialog()
-                    .message(
-                        "Please install Microsoft Edge WebView2 Runtime! \
-                        (https://developer.microsoft.com/en-gb/microsoft-edge/webview2)",
-                    )
-                    .title("Failed to get webview version")
-                    .kind(MessageDialogKind::Error)
-                    .buttons(MessageDialogButtons::OkCustom("Exit".to_string()))
-                    .blocking_show();
-
-                app.app_handle().exit(0);
-            }
-
             let window = app.get_webview_window("main").unwrap();
 
             // Launch args

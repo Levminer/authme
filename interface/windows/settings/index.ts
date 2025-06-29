@@ -1,7 +1,7 @@
 import build from "../../../build.json"
 import { path, app, webviewWindow } from "@tauri-apps/api"
 import { invoke } from "@tauri-apps/api/core"
-import { navigate, open } from "../../utils/navigate"
+import { navigate } from "../../utils/navigate"
 import { deleteEncryptionKey } from "interface/utils/encryption"
 import { getSettings, setSettings } from "interface/stores/settings"
 import * as os from "@tauri-apps/plugin-os"
