@@ -47,6 +47,7 @@
 		"core:app:allow-app-show",
 		"core:app:allow-app-hide",
 		"os:default",
-		"core:window:allow-destroy"
+		"core:window:allow-destroy",
+		"opener:default"
 	]
 }

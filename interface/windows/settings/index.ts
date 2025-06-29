@@ -8,6 +8,7 @@ import * as os from "@tauri-apps/plugin-os"
 import * as dialog from "@tauri-apps/plugin-dialog"
 import * as process from "@tauri-apps/plugin-process"
 import * as clipboard from "@tauri-apps/plugin-clipboard-manager"
+import { revealItemInDir } from "@tauri-apps/plugin-opener"
 
 const settings = getSettings()
 
@@ -148,7 +149,7 @@ export const showClearDataDialog = () => {
 
 export const showLogs = async () => {
 	const folderPath = await path.join(await path.cacheDir(), "com.levminer.authme", "logs")
-	open(folderPath)
+	revealItemInDir(folderPath)
 }
 
 export const launchOnStartup = () => {
