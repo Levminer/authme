@@ -5,7 +5,7 @@ use std::env;
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::{MouseButton, MouseButtonState, TrayIconEvent},
-    webview_version, Emitter, Manager,
+    Emitter, Manager,
 };
 use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
 
