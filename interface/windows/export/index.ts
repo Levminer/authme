@@ -84,9 +84,9 @@ export const exportHtmlFile = async () => {
 		const qrSrc = qr.createDataURL(3, 3)
 
 		const element = `
-			<div>
+			<div style="margin-bottom: 300px;">
 				<img class="img" src="${qrSrc}">
-				<h1 style=font-family:Arial;>${issuers[i]}</h1>
+				<h1 style=font-family:Arial;>${issuers[i]} (${names[i]})</h1>
 			</div>`
 
 		htmlString += element

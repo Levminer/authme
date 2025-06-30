@@ -140,7 +140,7 @@ export const totpImageConverter = (data: string): string => {
 	const uri = new URL(data)
 
 	// get name
-	const name = uri.pathname.slice(1)
+	const name = decodeURIComponent(uri.pathname.slice(1))
 
 	// get secret
 	const secret = uri.searchParams.get("secret")
