@@ -34,7 +34,7 @@ export const getLanguage = () => {
 			return localeEN
 		}
 	} else {
-		const languages = [localeEN, localeHU, localeES, localeFR, localeRU, localeDE, localeZH, localePL]
+		const languages = [localeEN, localeHU, localeES, localeFR, localeRU, localeDE, localeZH, localePL, localeJA]
 
 		return languages[settings.settings.language - 1]
 	}
