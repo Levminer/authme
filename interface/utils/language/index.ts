@@ -27,6 +27,8 @@ export const getLanguage = () => {
 			return localeZH
 		} else if (language.startsWith("pl")) {
 			return localePL
+		} else if (language.startsWith("ja")) {
+			return localeJA
 		} else {
 			return localeEN
 		}
