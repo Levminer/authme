@@ -6,6 +6,7 @@ import { localeRU } from "@utils/language/ru"
 import { localeDE } from "@utils/language/de"
 import { localeZH } from "@utils/language/zh"
 import { localePL } from "@utils/language/pl"
+import { localeJA } from "@utils/language/ja"
 import { getSettings } from "@stores/settings"
 
 export const getLanguage = () => {
@@ -27,11 +28,13 @@ export const getLanguage = () => {
 			return localeZH
 		} else if (language.startsWith("pl")) {
 			return localePL
+		} else if (language.startsWith("ja")) {
+			return localeJA
 		} else {
 			return localeEN
 		}
 	} else {
-		const languages = [localeEN, localeHU, localeES, localeFR, localeRU, localeDE, localeZH, localePL]
+		const languages = [localeEN, localeHU, localeES, localeFR, localeRU, localeDE, localeZH, localePL, localeJA]
 
 		return languages[settings.settings.language - 1]
 	}

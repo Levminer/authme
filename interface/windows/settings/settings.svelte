@@ -48,7 +48,7 @@
 				<h3>{language.settings.languageText}</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
-				<Select options={["Default", "English", "Hungarian", "Spanish", "French", "Russian", "German", "Chinese", "Polish"]} setting={"language"} />
+				<Select options={["Default", "English", "Hungarian", "Spanish", "French", "Russian", "German", "Chinese", "Polish", "Japanese"]} setting={"language"} />
 			</div>
 		</div>
 
