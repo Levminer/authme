@@ -1,4 +1,4 @@
-import { localeEN } from "@utils/language/en";
+import { localeEN } from "@utils/language/en"
 
 export const localeJA: typeof localeEN = {
 	common: {
