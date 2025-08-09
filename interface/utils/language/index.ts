@@ -6,6 +6,7 @@ import { localeRU } from "@utils/language/ru"
 import { localeDE } from "@utils/language/de"
 import { localeZH } from "@utils/language/zh"
 import { localePL } from "@utils/language/pl"
+import { localeJA } from "@utils/language/ja"
 import { getSettings } from "@stores/settings"
 
 export const getLanguage = () => {
