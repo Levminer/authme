@@ -1,6 +1,6 @@
 [package]
 name = "authme"
-version = "6.1.2"
+version = "6.2.0"
 description = "Simple cross-platform two-factor (2FA) authenticator app for desktop."
 authors = ["Lőrik Levente"]
 edition = "2021"
@@ -24,7 +24,7 @@ rand = "0.8.5"
 google_authenticator_converter = { path = "crates/google_authenticator_converter" }
 tauri-plugin-os = "2"
 tauri-plugin-process = "2"
-tauri-plugin-clipboard-manager = "2.0.2"
+tauri-plugin-clipboard-manager = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-shell = "2"
 tauri-plugin-fs = "2"

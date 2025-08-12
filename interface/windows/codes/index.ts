@@ -144,6 +144,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 
 	generate()
 
+	// Save newly imported codes
 	if (state.importData !== null) {
 		saveCodes()
 	}
@@ -245,6 +246,8 @@ const saveCodes = async () => {
 	state.importData = null
 	settings.vault.codes = encryptedText
 
+	logger.log("Codes saved")
+
 	setState(state)
 	setSettings(settings)
 }
@@ -269,10 +272,14 @@ export const loadCodes = async () => {
 			savedCodes = false
 			saveText = state.importData + decryptedText
 
-			generateCodeElements(textConverter(state.importData + decryptedText, settings.settings.sortCodes))
+			const codes = textConverter(state.importData + decryptedText, settings.settings.sortCodes)
+			logger.log(`New codes merged with existing ones. Count: ${codes.names.length}`)
+			generateCodeElements(codes)
 		} else {
 			// There are saved but not new ones
-			generateCodeElements(textConverter(decryptedText, settings.settings.sortCodes))
+			const codes = textConverter(decryptedText, settings.settings.sortCodes)
+			logger.log(`Existing codes loaded. Count: ${codes.names.length}`)
+			generateCodeElements(codes)
 		}
 
 		document.querySelector<HTMLInputElement>(".search").select()
@@ -281,7 +288,9 @@ export const loadCodes = async () => {
 			// There are no saved codes, but new codes imported
 			saveText = state.importData
 
-			generateCodeElements(textConverter(state.importData, settings.settings.sortCodes))
+			const codes = textConverter(state.importData, settings.settings.sortCodes)
+			logger.log(`New codes imported and saved. Count: ${codes.names.length}`)
+			generateCodeElements(codes)
 		}
 	}
 }
