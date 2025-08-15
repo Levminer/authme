@@ -14,7 +14,7 @@
 - 📡 Completely offline: You own your data, internet is only required for updates.
 - 💻 Privacy in mind: Authme is hidden from video capture and screenshots.
 - 📃 Easy export and backup: You can export your 2FA codes anytime and you can create a backup of your codes very easily.
-- 🌐 Multi-language: Authme is available in 🇬🇧 English, 🇭🇺 Hungarian, 🇪🇸 Spanish, 🇫🇷 French, 🇷🇺 Russian, 🇩🇪 German, 🇨🇳 Chinese, and 🇵🇱 Polish.
+- 🌐 Multi-language: Authme is available in 🇬🇧 English, 🇭🇺 Hungarian, 🇪🇸 Spanish, 🇫🇷 French, 🇷🇺 Russian, 🇩🇪 German, 🇨🇳 Chinese, 🇯🇵 Japanese and 🇵🇱 Polish.
 
 ## Supported 2FA types
 
