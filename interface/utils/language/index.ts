@@ -8,6 +8,7 @@ import { localeZH } from "@utils/language/zh"
 import { localePL } from "@utils/language/pl"
 import { localeJA } from "@utils/language/ja"
 import { getSettings } from "@stores/settings"
+import { localeAR } from "@utils/language/ar"
 
 export const getLanguage = () => {
 	const language = navigator.language
@@ -30,11 +31,13 @@ export const getLanguage = () => {
 			return localePL
 		} else if (language.startsWith("ja")) {
 			return localeJA
+		} else if (language.startsWith("ar")) {
+			return localeAR
 		} else {
 			return localeEN
 		}
 	} else {
-		const languages = [localeEN, localeHU, localeES, localeFR, localeRU, localeDE, localeZH, localePL, localeJA]
+		const languages = [localeEN, localeHU, localeES, localeFR, localeRU, localeDE, localeZH, localePL, localeJA, localeAR]
 
 		return languages[settings.settings.language - 1]
 	}
