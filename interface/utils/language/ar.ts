@@ -1,4 +1,6 @@
-export const localeAR = {
+import { localeEN } from "@utils/language/en";
+
+export const localeAR: typeof localeEN = {
 	common: {
 		confirm: "تأكيد",
 		continue: "متابعة",
