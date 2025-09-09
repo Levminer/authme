@@ -114,13 +114,20 @@ export const localeEN = {
 		authmeTutorial: ["In Authme go to the Export page and choose Export Authme file", "You can import this file in Authme on the Import page"],
 		aegisTutorial: ["Tap on the hamburger menu in the rop right corner of the screen: Settings > Import & Export > Export", "Select the Aegis JSON format and uncheck the Encryption checkbox and export you vault", "Transfer the file on your computer and import it in Authme"],
 		twoFasTutorial: ["Tap on settings on the navigation bar: 2FAS Backup > Export to file", "Check the export file without password checkbox and tap export", "Transfer the file on your computer and import it in Authme"],
-		bitwardenTutorial: ["In Bitwarden go to the Settings page > Vault > Export vault", "Select the .json format (not encrypted) and click Export vault", "Transfer the file on your computer and import it in Authme"],
 		// bitwarden
+		bitwardenTutorial: ["In Bitwarden go to the Settings page > Vault > Export vault", "Select the .json format (not encrypted) and click Export vault", "Transfer the file on your computer and import it in Authme"],
 		bitwardenAuth: "Bitwarden",
 		bitwardenAuthText: "Import all codes from your Bitwarden vault.",
 		bitwardenFile: "Bitwarden vault export (without encryption)",
 		bitwardenFileText: "Import all codes from an existing Bitwarden vault file without a encryption.",
 		bitwardenFileButton: "Choose file",
+		// proton
+		protonTutorial: ["In Proton Authenticator go to the Settings page > Export > Plain text", "Select the plain text format (not encrypted) and save the file", "Transfer the file on your computer and import it in Authme"],
+		protonAuth: "Proton Authenticator",
+		protonAuthText: "Import all codes from your Proton Authenticator.",
+		protonFile: "Proton Authenticator (plain text)",
+		protonFileText: "Import all codes from an existing Proton Authenticator plain text file.",
+		protonFileButton: "Choose file",
 	},
 
 	export: {
