@@ -123,6 +123,8 @@ export const localeAR: typeof localeEN = {
 		bitwardenFile: "ملف تصدير لخزنة Bitwarden (بدون تشفير)",
 		bitwardenFileText: "استيراد جميع الرموز من ملف بدون تشفير تم إنشاؤه من خزنة Bitwarden.",
 		bitwardenFileButton: "اختيار ملف",
+		// proton
+		protonTutorial: ["In Proton Authenticator go to the Settings page > Export > Plain text", "Select the plain text format (not encrypted) and save the file", "Transfer the file on your computer and import it in Authme"],
 		protonAuth: "Proton Authenticator",
 		protonAuthText: "Import all codes from your Proton Authenticator.",
 		protonFile: "Proton Authenticator (plain text)",
