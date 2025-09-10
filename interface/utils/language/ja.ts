@@ -124,7 +124,7 @@ export const localeJA: typeof localeEN = {
 		bitwardenFileText: "暗号化なしの Bitwarden 保管庫ファイルからすべてのコードをインポートします。",
 		bitwardenFileButton: "ファイルを選択",
 		// proton
-		protonTutorial: ["Proton Authenticator の設定ページから「エクスポート > プレーンテキスト」を選択します。", "プレーンテキスト形式 (暗号化なし) を選択してファイルを保存します。", "ファイルをコンピューターに転送して Authme にインポートします。"],
+		protonTutorial: ["Proton Authenticator の設定ページから「エクスポート > パスワードなしでデータをエクスポート」を選択します。", "プレーンテキスト形式 (暗号化なし) のファイルをエクスポートして保存します。", "ファイルをコンピューターに転送して Authme にインポートします。"],
 		protonAuth: "Proton Authenticator",
 		protonAuthText: "Proton Authenticator からすべてのコードをインポートします。",
 		protonFile: "Proton Authenticator (プレーンテキスト)",
