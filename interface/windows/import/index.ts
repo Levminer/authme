@@ -100,7 +100,7 @@ export const showManualEntry = () => {
 /**
  * Show tutorial dialog
  */
-type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas" | "bitwarden"
+type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas" | "bitwarden" | "proton"
 
 export const showTutorial = (type: tutorialType) => {
 	const dialog: LibDialogElement = document.querySelector(".tutorialDialog")
@@ -156,6 +156,14 @@ export const showTutorial = (type: tutorialType) => {
 		const elements = language.import.bitwardenTutorial
 		tutorialTitle.innerHTML = language.import.bitwardenAuth
 		tutorialDescription.innerHTML = language.import.bitwardenAuthText
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	} else if (type === "proton") {
+		const elements = language.import.protonTutorial
+		tutorialTitle.innerHTML = language.import.protonAuth
+		tutorialDescription.innerHTML = language.import.protonAuthText
+
 		for (let i = 0; i < elements.length; i++) {
 			list.innerHTML += `<li>${elements[i]}</li>`
 		}
@@ -330,6 +338,48 @@ export const bitwardenFile = async () => {
 
 			if (entry.login.totp) {
 				importString += totpImageConverter(entry.login.totp)
+			}
+		}
+
+		dialog.message(language.codes.dialog.codesImported)
+
+		const state = getState()
+		state.importData = importString
+		setState(state)
+
+		navigate("codes")
+	}
+}
+
+/**
+ * Import from a Proton Authenticator export file
+ */
+export const protonFile = async () => {
+	const filePath = await dialog.open({ filters: [{ name: "Proton Authenticator export file", extensions: ["json", "txt"] }] })
+
+	interface ProtonFile {
+		entries: {
+			content: {
+				uri: string
+				name: string
+			}
+		}[]
+	}
+
+	if (filePath !== null) {
+		const loadedFile = await fs.readTextFile(filePath)
+		const file: ProtonFile = JSON.parse(loadedFile)
+		let importString = ""
+
+		if (!file.entries) {
+			return dialog.message("No entries found in the selected file! \n\nPlease try again with another file!", { kind: "error" })
+		}
+
+		for (let i = 0; i < file.entries.length; i++) {
+			const entry = file.entries[i]
+
+			if (entry.content.uri.startsWith("otpauth://totp/")) {
+				importString += totpImageConverter(entry.content.uri)
 			}
 		}
 
