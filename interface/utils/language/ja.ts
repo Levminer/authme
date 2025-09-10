@@ -67,7 +67,7 @@ export const localeJA: typeof localeEN = {
 	import: {
 		supportedTypes: "コードをインポート",
 		totpQRCode: "TOTP",
-		totpQRCodeText: "30 秒ごとに変化する 6 桁の数字で構成されています。ほとんどのウェブサイトで使用されています。",
+		totpQRCodeText: "30 秒ごとに変化する 6 桁の数字で構成されており、ほとんどの Web サイトで使用されています。",
 		instructions: "説明",
 		googleAuthQRCode: "Google 認証システム",
 		googleAuthQRCodeText: "Google 認証システムを使用している場合は、既存のコードをすべてエクスポートして Authme にインポートできます。",
@@ -81,9 +81,9 @@ export const localeJA: typeof localeEN = {
 		screenCapture: "スクリーンキャプチャ",
 		screenCaptureText: "画面から互換性のある QR コードをキャプチャします。",
 		screenCaptureButton: "画面をキャプチャ",
-		webcam: "ウェブカメラ",
-		webcamText: "ウェブカメラを使用して互換性のある QR コードをスキャンします。",
-		webcamButton: "ウェブカメラを使用",
+		webcam: "Web カメラ",
+		webcamText: "Web カメラを使用して互換性のある QR コードをスキャンします。",
+		webcamButton: "Web カメラを使用",
 		// authme
 		authme: "Authme",
 		authmeText: "Authme からすべてのコードをインポートします。",
@@ -111,8 +111,8 @@ export const localeJA: typeof localeEN = {
 		manualEntrySecret: "シークレット (必須)",
 		manualEntryDescription: "説明",
 		// tutorial
-		googleAuthTutorial: ["Google 認証システムアプリから 2FA コードをエクスポートします。", "画面左上のハンバーガーメニューをタップして「コードを移行」>「コードをエクスポート」で移行用の QR コードをスクリーンショットで保存するか、Android の場合は別のデバイスで写真を撮ります。これらの写真をコンピューターに転送します。Authme で「インポート」ページに移動します。", "「サイドバー」>「インポート」を選択し、画像を選択ボタンをクリックしてデバイスから転送した写真を選択します。"],
-		totpTutorial: ["2FA を設定したいウェブサイトにアクセスし、QR コードのスクリーンショットを撮ります (Windows の場合は、Windows キー + Shift キー + S キー、macOS の場合は cmd + Shift キー + S キー)。", "Authme のインポートページに移動し、「サイドバー > インポート」を選択か画像を選択ボタンをクリックで画像を選択します。"],
+		googleAuthTutorial: ["Google 認証システムアプリから 2FA コードをエクスポートします。", "画面左上のハンバーガーメニューをタップして「コードを移行」>「コードをエクスポート」で移行用の QR コードをスクリーンショットで保存するか、Android の場合は別のデバイスで写真を撮ります。これらの写真をコンピューターに転送します。Authme で「インポート」ページに移動します。", "「サイドバー」>「インポート」を選択し、「画像を選択ボタン」をクリックしてデバイスから転送した写真を選択します。"],
+		totpTutorial: ["2FA を設定したい Web サイトにアクセスし、QR コードのスクリーンショットを撮ります (Windows の場合は、Windows キー + Shift キー + S キー、macOS の場合は cmd + Shift キー + S キー)。", "Authme のインポートページに移動し、「サイドバー > インポート」を選択か「画像を選択ボタン」をクリックで画像を選択します。"],
 		authmeTutorial: ["Authme のエクスポートページに移動して Authme ファイルのエクスポートを選択します。", "このファイルは Authme のインポートページでインポートできます。"],
 		aegisTutorial: ["画面の右上隅にあるハンバーガーメニューをタップして「設定 > インポートとエクスポート」を選択し、Aegis JSON 形式を選択して「暗号化のチェックボックス」をオフで保管庫をエクスポートします。", "ファイルをコンピューターに転送して Authme にインポートします。"],
 		twoFasTutorial: ["ナビゲーションバー内の設定をタップして「2FAS バックアップ > エクスポート」を選択します。", "「バックアップファイルにパスワードを設定」をオフにして、エクスポートをタップします。", "ファイルをコンピューターに転送して Authme にインポートします。"],
@@ -124,12 +124,12 @@ export const localeJA: typeof localeEN = {
 		bitwardenFileText: "暗号化なしの Bitwarden 保管庫ファイルからすべてのコードをインポートします。",
 		bitwardenFileButton: "ファイルを選択",
 		// proton
-		protonTutorial: ["In Proton Authenticator go to the Settings page > Export > Plain text", "Select the plain text format (not encrypted) and save the file", "Transfer the file on your computer and import it in Authme"],
+		protonTutorial: ["Proton Authenticator の設定ページから「エクスポート > パスワードなしでデータをエクスポート」を選択します。", "プレーンテキスト形式 (暗号化なし) のファイルをエクスポートして保存します。", "ファイルをコンピューターに転送して Authme にインポートします。"],
 		protonAuth: "Proton Authenticator",
-		protonAuthText: "Import all codes from your Proton Authenticator.",
-		protonFile: "Proton Authenticator (plain text)",
-		protonFileText: "Import all codes from an existing Proton Authenticator plain text file.",
-		protonFileButton: "Choose file",
+		protonAuthText: "Proton Authenticator からすべてのコードをインポートします。",
+		protonFile: "Proton Authenticator (プレーンテキスト)",
+		protonFileText: "Proton Authenticator のプレーンテキストファイルからすべてのコードをインポートします。",
+		protonFileButton: "ファイルを選択",
 	},
 
 	export: {
