@@ -14,7 +14,6 @@
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
-		"@types/ua-parser-js": "^0.7.36",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.24",
 		"svelte": "^4.0.0",
@@ -27,7 +26,6 @@
 	"type": "module",
 	"dependencies": {
 		"lucide-svelte": "^0.364.0",
-		"otpauth": "^9.2.2",
-		"ua-parser-js": "^1.0.35"
+		"otpauth": "^9.2.2"
 	}
 }

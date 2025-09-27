@@ -7,14 +7,10 @@
 			</h2>
 			<div class="flex gap-3">
 				<div class="flex flex-col items-center justify-center">
-					<a href="https://api.levminer.com/api/v1/authme/release/windows" id="downloadButton" class="button">
+					<a href="#downloads" id="downloadButton" class="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-to-line"><path d="M12 17V3" /><path d="m6 11 6 6 6-6" /><path d="M19 21H5" /></svg>
-						Download
+						Downloads
 					</a>
-					<h3 class="mt-1 text-center text-sm text-gray-300">
-						<p id="downloadName">(Windows x64)</p>
-						<a class="duration-200 ease-in hover:text-white" href="#downloads">Other downloads</a>
-					</h3>
 				</div>
 				<div>
 					<a href="#features" class="button border-none bg-transparent text-white hover:text-gray-300"> Features </a>
@@ -306,32 +302,3 @@
 		</div>
 	</div>
 </section>
-
-<script lang="ts">
-	import { onMount } from "svelte"
-	import { UAParser } from "ua-parser-js"
-
-	const api = async () => {
-		const os = new UAParser().getOS().name
-		const download_button = document.querySelector("#downloadButton")
-		const download_text = document.querySelector("#downloadName")
-
-		if (os !== undefined) {
-			if (os.includes("Linux") || os.includes("Ubuntu")) {
-				download_button.setAttribute("href", "https://api.levminer.com/api/v1/authme/release/linux")
-
-				download_text.textContent = "(Linux x64)"
-			}
-
-			if (os.includes("Mac OS")) {
-				download_button.setAttribute("href", "https://api.levminer.com/api/v1/authme/release/mac")
-
-				download_text.textContent = "(macOS Universal)"
-			}
-		}
-	}
-
-	onMount(() => {
-		api()
-	})
-</script>
