@@ -17,7 +17,7 @@
 		"publisher": "Levminer",
 		"longDescription": "Simple cross-platform two-factor (2FA) authenticator app for desktop.",
 		"macOS": {
-			"entitlements": null,
+			"entitlements": "./Entitlements.plist",
 			"exceptionDomain": "",
 			"frameworks": [],
 			"providerShortName": null,
