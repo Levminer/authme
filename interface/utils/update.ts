@@ -52,6 +52,6 @@ export const installUpdate = async () => {
 }
 
 export const showReleaseNotes = async () => {
-	const res = await (await fetch("https://api.levminer.com/api/v1/authme/releases")).json()
+	const res = await (await fetch("https://api.github.com/repos/Levminer/authme/releases/latest")).json()
 	dialog.message(markdownConverter(res.body.split("Other")[0]))
 }

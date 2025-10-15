@@ -229,7 +229,7 @@
 								Microsoft Store
 							</a>
 
-							<a class="button" href="https://api.levminer.com/api/v1/authme/release/windows">
+							<a class="button" href={windowsLink}>
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
 								</svg>
@@ -263,7 +263,7 @@
 								Snap Store
 							</a>
 
-							<a class="button" href="https://api.levminer.com/api/v1/authme/release/linux">
+							<a class="button" href={linuxLink}>
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
 								</svg>
@@ -289,7 +289,7 @@
 						</div>
 
 						<div class="title-font my-3 flex flex-row flex-wrap items-end justify-center gap-3 font-medium text-white">
-							<a class="button" href="https://api.levminer.com/api/v1/authme/release/mac">
+							<a class="button" href={macLink}>
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
 								</svg>
@@ -302,3 +302,11 @@
 		</div>
 	</div>
 </section>
+
+<script lang="ts">
+	import { onMount } from "svelte"
+
+	let windowsLink: string = "https://github.com/Levminer/authme/releases/latest"
+	let linuxLink: string = "https://github.com/Levminer/authme/releases/latest"
+	let macLink: string = "https://github.com/Levminer/authme/releases/latest"
+</script>
