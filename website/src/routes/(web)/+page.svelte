@@ -90,7 +90,7 @@
 						<h2 class="title-font text-lg font-medium text-white">Import codes</h2>
 					</div>
 					<div class="flex-grow">
-						<h3 class="text-base leading-relaxed text-gray-300">Import form any 2FA TOTP QR code or import directly from Google Authenticator.</h3>
+						<h3 class="text-base leading-relaxed text-gray-300">Import from any 2FA TOTP QR code or import directly from Google Authenticator.</h3>
 					</div>
 				</div>
 			</div>
