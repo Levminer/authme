@@ -11,7 +11,7 @@ import { ZBAR_WASM_REPOSITORY } from "@undecaf/barcode-detector-polyfill/zbar-wa
 const clients = []
 
 esbuild
-	.build({
+	.context({
 		entryPoints: ["interface/layout/app.ts"],
 		mainFields: ["svelte", "browser", "module", "main"],
 		bundle: true,
@@ -42,20 +42,70 @@ esbuild
 					to: ["."],
 				},
 			}),
-		],
-		banner: { js: " (() => new EventSource('/esbuild').onmessage = () => location.reload())();" },
-		watch: {
-			onRebuild(error, result) {
-				clients.forEach((res) => res.write("data: update\n\n"))
-				clients.length = 0
-				console.log(error ? `[reload] Hot reload: ${error}` : "[reload] Hot reload complete")
+			{
+				name: "rebuild-notify",
+				setup(build) {
+					build.onEnd((result) => {
+						clients.forEach((res) => res.write("data: update\n\n"))
+						clients.length = 0
+						console.log(result.errors.length ? `[reload] Hot reload: ${result.errors[0]}` : "[reload] Hot reload complete")
+					})
+				},
 			},
-		},
+		],
+		banner: { js: " (() => new EventSource('/esbuild').onmessage = () => location.reload());" },
 	})
+	.then((ctx) => ctx.watch())
 	.catch(() => process.exit(1))
 
 esbuild
-	.serve({ servedir: "./dist" }, {})
+	.context({
+		entryPoints: ["interface/layout/app.ts"],
+		mainFields: ["svelte", "browser", "module", "main"],
+		bundle: true,
+		outdir: "./dist",
+		logLevel: "info",
+		format: "esm",
+		sourcemap: "linked",
+		plugins: [
+			postCssPlugin({
+				postcss: {
+					plugins: [tw],
+				},
+			}),
+			esbuildSvelte({
+				preprocess: sveltePreprocess(),
+			}),
+			replace({
+				values: {
+					[ZBAR_WASM_REPOSITORY]: "@undecaf/zbar-wasm",
+					"/dist/main.js": "",
+					"/dist/index.js": "",
+				},
+			}),
+
+			copy({
+				assets: {
+					from: ["node_modules/@undecaf/zbar-wasm/dist/zbar.wasm"],
+					to: ["."],
+				},
+			}),
+			{
+				name: "rebuild-notify",
+				setup(build) {
+					build.onEnd((result) => {
+						clients.forEach((res) => res.write("data: update\n\n"))
+						clients.length = 0
+						console.log(result.errors.length ? `[reload] Hot reload: ${result.errors[0]}` : "[reload] Hot reload complete")
+					})
+				},
+			},
+		],
+		banner: { js: " (() => new EventSource('/esbuild').onmessage = () => location.reload());" },
+	})
+	.then((ctx) => {
+		return Promise.all([ctx.watch(), ctx.serve({ servedir: "./dist" })])
+	})
 	// eslint-disable-next-line promise/always-return
 	.then(() => {
 		createServer((req, res) => {
@@ -66,7 +116,7 @@ esbuild
 						"Content-Type": "text/event-stream",
 						"Cache-Control": "no-cache",
 						Connection: "keep-alive",
-					})
+					}),
 				)
 			const path = ~url.split("/").pop().indexOf(".") ? url : "/index.html"
 			req.pipe(
@@ -74,7 +124,7 @@ esbuild
 					res.writeHead(prxRes.statusCode, prxRes.headers)
 					prxRes.pipe(res, { end: true })
 				}),
-				{ end: true }
+				{ end: true },
 			)
 		}).listen(3000)
 	})

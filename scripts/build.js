@@ -15,7 +15,7 @@ if (existsSync("./dist/index.html") === false) {
 }
 
 esbuild
-	.build({
+	.context({
 		entryPoints: ["interface/layout/app.ts"],
 		mainFields: ["svelte", "browser", "module", "main"],
 		bundle: true,
@@ -48,4 +48,6 @@ esbuild
 			}),
 		],
 	})
+	.then((ctx) => ctx.rebuild())
+	.then(() => process.exit(0))
 	.catch(() => process.exit(1))
