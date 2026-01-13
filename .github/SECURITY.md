@@ -1,6 +1,6 @@
 ## Supported Versions
 
--   These are the currently supported versions:
+- These are the currently supported versions:
 
 | Version | Supported | Release Date       | End Of Support     |
 | ------- | --------- | ------------------ | ------------------ |
@@ -8,8 +8,10 @@
 | 2.x.x   | No        | 2020. December 1.  | 2021. December 28. |
 | 3.x.x   | No        | 2021. December 28. | 2022. November 8.  |
 | 4.x.x   | No        | 2022. November 8.  | 2024. February 13. |
-| 5.x.x   | Yes       | 2024. February 13. | -                  |
+| 5.x.x   | No        | 2024. February 13. | 2024. December 10. |
+| 6.x.x   | No        | 2024. December 10. | 2026. January 13.  |
+| 7.x.x   | Yes       | 2026. January 13 . | -                  |
 
 ## Reporting a Vulnerability
 
--   Please report security vulnerability in email at: <authme@levminer.com>
+- Please report security vulnerability in email at: <authme@levminer.com>
