@@ -9,7 +9,7 @@ pub fn enable_auto_launch() {
     let auto = AutoLaunchBuilder::new()
         .set_app_name("Authme")
         .set_app_path(exe_string)
-        .set_use_launch_agent(false)
+        .set_macos_launch_mode(MacOSLaunchMode::LaunchAgent)
         .set_args(&["--minimized"])
         .build()
         .unwrap();
@@ -27,7 +27,7 @@ pub fn disable_auto_launch() {
     let auto = AutoLaunchBuilder::new()
         .set_app_name("Authme")
         .set_app_path(exe_string)
-        .set_use_launch_agent(false)
+        .set_macos_launch_mode(MacOSLaunchMode::LaunchAgent)
         .set_args(&["--minimized"])
         .build()
         .unwrap();

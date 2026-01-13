@@ -12,12 +12,12 @@ tauri-build = { version = "2", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "2", features = ["tray-icon"] }
-auto-launch = "0.3.0"
-sysinfo = "0.30.5"
-argon2 = "0.4"
+auto-launch = "0.6.0"
+sysinfo = "0.37.2"
+argon2 = "0.5"
 rand_core = { version = "0.6", features = ["std"] }
-magic-crypt = "3.1.10"
-keyring = "2.3.3"
+magic-crypt = "4.0.1"
+keyring = { version = "3.6.3", features = ["apple-native", "windows-native", "linux-native"] }
 once_cell = "1.15.0"
 tauri-plugin-single-instance = { version = "2" }
 rand = "0.8.5"

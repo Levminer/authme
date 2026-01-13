@@ -83,7 +83,7 @@ pub fn get_entry(name: String, service: String) -> String {
 pub fn delete_entry(name: String, service: String) {
     let entry = keyring::Entry::new(&service, &name);
 
-    let item = entry.expect("Failed to delete entry").delete_password();
+    let item = entry.expect("Failed to delete entry").delete_credential();
 }
 
 #[tauri::command]
