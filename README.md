@@ -35,7 +35,7 @@
 [![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://authme.levminer.com/#downloads)
 [![Updated](https://img.shields.io/github/last-commit/levminer/authme/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/authme/releases)
 
-- Also available on: [Microsoft Store](https://link.levminer.com/authme-ms-store), [Snapcraft](https://snapcraft.io/authme), [winget](https://winstall.app/apps/Levminer.Authme), and [Scoop](https://scoop.sh/#/apps?s=2&d=1&o=true&q=authme).
+- Also available on: [Microsoft Store](https://link.levminer.com/authme-microsoft-store), [Snapcraft](https://snapcraft.io/authme), [winget](https://winstall.app/apps/Levminer.Authme), and [Scoop](https://scoop.sh/#/apps?s=2&d=1&o=true&q=authme).
 
 ## Migration
 
