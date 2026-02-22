@@ -130,6 +130,13 @@ export const localeJA: typeof localeEN = {
 		protonFile: "Proton Authenticator (プレーンテキスト)",
 		protonFileText: "Proton Authenticator のプレーンテキストファイルからすべてのコードをインポートします。",
 		protonFileButton: "ファイルを選択",
+		// authenticatorcc
+		authenticatorccTutorial: ["In Authenticator.cc go to the Settings page > Export > Plain text", "Select the plain text format (not encrypted) and save the file", "Transfer the file on your computer and import it in Authme"],
+		authenticatorccAuth: "Authenticator.cc",
+		authenticatorccAuthText: "Import all codes from your Authenticator.cc vault.",
+		authenticatorccFile: "Authenticator.cc vault file (plain text)",
+		authenticatorccFileText: "Import all codes from an existing Authenticator.cc vault file.",
+		authenticatorccFileButton: "Choose file",
 	},
 
 	export: {
