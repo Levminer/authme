@@ -156,6 +156,7 @@ export const showTutorial = (type: tutorialType) => {
 		const elements = language.import.bitwardenTutorial
 		tutorialTitle.innerHTML = language.import.bitwardenAuth
 		tutorialDescription.innerHTML = language.import.bitwardenAuthText
+		
 		for (let i = 0; i < elements.length; i++) {
 			list.innerHTML += `<li>${elements[i]}</li>`
 		}
@@ -402,7 +403,7 @@ export const protonFile = async () => {
 }
 
 /**
- * Import from a Proton Authenticator export file
+ * Import from an authenticator.cc export file
  */
 export const authenticatorcc = async () => {
 	const filePath = await dialog.open({ filters: [{ name: "Authenticator.cc export file", extensions: ["txt"] }] })
