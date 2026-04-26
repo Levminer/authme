@@ -100,7 +100,7 @@ export const showManualEntry = () => {
 /**
  * Show tutorial dialog
  */
-type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas" | "bitwarden" | "proton"
+type tutorialType = "google" | "totp" | "authme" | "aegis" | "2fas" | "bitwarden" | "proton" | "authenticatorcc"
 
 export const showTutorial = (type: tutorialType) => {
 	const dialog: LibDialogElement = document.querySelector(".tutorialDialog")
@@ -156,6 +156,7 @@ export const showTutorial = (type: tutorialType) => {
 		const elements = language.import.bitwardenTutorial
 		tutorialTitle.innerHTML = language.import.bitwardenAuth
 		tutorialDescription.innerHTML = language.import.bitwardenAuthText
+		
 		for (let i = 0; i < elements.length; i++) {
 			list.innerHTML += `<li>${elements[i]}</li>`
 		}
@@ -163,6 +164,14 @@ export const showTutorial = (type: tutorialType) => {
 		const elements = language.import.protonTutorial
 		tutorialTitle.innerHTML = language.import.protonAuth
 		tutorialDescription.innerHTML = language.import.protonAuthText
+
+		for (let i = 0; i < elements.length; i++) {
+			list.innerHTML += `<li>${elements[i]}</li>`
+		}
+	} else if (type === "authenticatorcc") {
+		const elements = language.import.authenticatorccTutorial
+		tutorialTitle.innerHTML = language.import.authenticatorccAuth
+		tutorialDescription.innerHTML = language.import.authenticatorccAuthText
 
 		for (let i = 0; i < elements.length; i++) {
 			list.innerHTML += `<li>${elements[i]}</li>`
@@ -380,6 +389,34 @@ export const protonFile = async () => {
 
 			if (entry.content.uri.startsWith("otpauth://totp/")) {
 				importString += totpImageConverter(entry.content.uri)
+			}
+		}
+
+		dialog.message(language.codes.dialog.codesImported)
+
+		const state = getState()
+		state.importData = importString
+		setState(state)
+
+		navigate("codes")
+	}
+}
+
+/**
+ * Import from an authenticator.cc export file
+ */
+export const authenticatorcc = async () => {
+	const filePath = await dialog.open({ filters: [{ name: "Authenticator.cc export file", extensions: ["txt"] }] })
+
+	if (filePath !== null) {
+		const loadedFile = await fs.readTextFile(filePath)
+		let importString = ""
+
+		for (let i = 0; i < loadedFile.split("\n").length; i++) {
+			const line = loadedFile.split("\n")[i]
+
+			if (line.startsWith("otpauth://totp/")) {
+				importString += totpImageConverter(line)
 			}
 		}
 
