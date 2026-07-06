@@ -24,6 +24,7 @@
 	import { open } from "@utils/navigate"
 	import { onMount } from "svelte"
 
+	/*
 	onMount(() => {
 		if ($settings.banners.sponsor === null) {
 			$settings.banners.sponsor = new Date()
@@ -39,6 +40,7 @@
 			}
 		}
 	})
+	*/
 
 	const sponsor = () => {
 		open("https://github.com/sponsors/Levminer?frequency=recurring")
