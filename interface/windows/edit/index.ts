@@ -27,12 +27,12 @@ const generateEditElements = () => {
 		<div class="flex flex-wrap gap-3">
 				<div>
 					<h5>${language.common.name}</h5>
-					<input id="issuer${uniqIds[i]}" class="input mt-1" type="text" value="${issuers[i]}" readonly />
+					<input id="issuer${uniqIds[i]}" class="input mt-1" type="text" readonly />
 				</div>
 
 				<div>
 					<h5>${language.common.description}</h5>
-					<input id="name${uniqIds[i]}" class="input mt-1 w-96" type="text" value="${names[i]}" readonly />
+					<input id="name${uniqIds[i]}" class="input mt-1 w-96" type="text" readonly />
 				</div>
 			</div>
 			<div class="ml-10 flex gap-3 flex-wrap sm:mt-10 sm:w-full sm:ml-0">
@@ -52,6 +52,10 @@ const generateEditElements = () => {
 		element.setAttribute("id", `edit${uniqIds[i]}`)
 
 		document.querySelector(".content").appendChild(element)
+
+		// set untrusted fields as values, never as HTML
+		document.querySelector<HTMLInputElement>(`#issuer${uniqIds[i]}`).value = issuers[i]
+		document.querySelector<HTMLInputElement>(`#name${uniqIds[i]}`).value = names[i]
 
 		document.querySelector(`#editCode${uniqIds[i]}`).addEventListener("click", () => {
 			editCode(uniqIds[i])

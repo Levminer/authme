@@ -34,7 +34,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 					<div class="flex flex-col justify-start mb-3 overflow-hidden">
 						<div class="flex overflow-hidden">
 							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate overflow-hidden w-full">
-								${issuers[i]}
 							</p>
 						</div>
 						<div class="flex">
@@ -55,7 +54,7 @@ export const generateCodeElements = (data: LibImportFile) => {
 					</div>
 					</div>
 					<div class="pb-4 flex items-start">
-						<p id="description${i}" class="text-lg text-gray-200 transparent-800 py-1 px-2 rounded-xl select-all truncate" >${names[i]}</p>
+						<p id="description${i}" class="text-lg text-gray-200 transparent-800 py-1 px-2 rounded-xl select-all truncate" ></p>
 					</div>
 					<div class="progressFull mb-3">
 					<div id="progress${i}" class="progressFill" />
@@ -67,7 +66,6 @@ export const generateCodeElements = (data: LibImportFile) => {
 					<div class="flex flex-col justify-start mb-3 overflow-hidden">
 						<div class="flex overflow-hidden">
 							<p id="name${i}" class="text-2xl font-medium whitespace-nowrap truncate w-full overflow-hidden">
-								${issuers[i]}
 							</p>
 						</div>
 						<div class="flex">
@@ -98,6 +96,13 @@ export const generateCodeElements = (data: LibImportFile) => {
 			element.setAttribute("id", `codes${i}`)
 
 			document.querySelector(".content").appendChild(element)
+
+			// set untrusted fields as text, never as HTML
+			document.querySelector(`#name${i}`).textContent = issuers[i]
+
+			if (settings.settings.codesDescription) {
+				document.querySelector(`#description${i}`).textContent = names[i]
+			}
 
 			// get elements
 			const code = document.querySelector(`#code${i}`)

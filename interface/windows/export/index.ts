@@ -65,6 +65,21 @@ export const exportAuthmeFile = async () => {
 }
 
 /**
+ * Sanitize a string with the HTML Sanitizer API, or escape it as plain text if the API is not available
+ */
+const sanitizeHtml = (text: string) => {
+	const element = document.createElement("div") as HTMLDivElement & { setHTML?: (html: string) => void }
+
+	if (typeof element.setHTML === "function") {
+		element.setHTML(text)
+	} else {
+		element.textContent = text
+	}
+
+	return element.innerHTML
+}
+
+/**
  * Save the exported codes as an .html file with pictures
  */
 export const exportHtmlFile = async () => {
@@ -86,7 +101,7 @@ export const exportHtmlFile = async () => {
 		const element = `
 			<div style="margin-bottom: 300px;">
 				<img class="img" src="${qrSrc}">
-				<h1 style=font-family:Arial;>${issuers[i]} (${names[i]})</h1>
+				<h1 style=font-family:Arial;>${sanitizeHtml(issuers[i])} (${sanitizeHtml(names[i])})</h1>
 			</div>`
 
 		htmlString += element
