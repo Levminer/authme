@@ -4,11 +4,19 @@ import sveltePreprocess from "svelte-preprocess"
 import postCssPlugin from "esbuild-style-plugin"
 import tw from "tailwindcss"
 import { createServer, request } from "http"
+import { readFileSync, copyFileSync, mkdirSync } from "fs"
 import { copy } from "esbuild-plugin-copy"
 import { replace } from "esbuild-plugin-replace"
 import { ZBAR_WASM_REPOSITORY } from "@undecaf/barcode-detector-polyfill/zbar-wasm"
 
 const clients = []
+
+// use the same CSP as the production build
+const csp = JSON.parse(readFileSync("./core/tauri.conf.json", "utf-8")).app.security.csp
+
+// create the dist directory if it doesn't exist
+mkdirSync("./dist", { recursive: true })
+copyFileSync("./interface/layout/index.html", "./dist/index.html")
 
 esbuild
 	.context({
@@ -121,7 +129,7 @@ esbuild
 			const path = ~url.split("/").pop().indexOf(".") ? url : "/index.html"
 			req.pipe(
 				request({ hostname: "0.0.0.0", port: 8000, path, method, headers }, (prxRes) => {
-					res.writeHead(prxRes.statusCode, prxRes.headers)
+					res.writeHead(prxRes.statusCode, { ...prxRes.headers, "Content-Security-Policy": csp })
 					prxRes.pipe(res, { end: true })
 				}),
 				{ end: true },

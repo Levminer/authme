@@ -66,7 +66,7 @@
 			}
 		],
 		"security": {
-			"csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'; script-src 'unsafe-eval'"
+			"csp": "default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost https: blob: data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'"
 		}
 	}
 }
