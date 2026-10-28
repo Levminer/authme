@@ -1,4 +1,3 @@
-import { path } from "@tauri-apps/api"
 import { invoke } from "@tauri-apps/api/core"
 import { dev } from "../../build.json"
 
@@ -38,14 +37,13 @@ const writeToFile = async (message: string) => {
 	}
 
 	const time = new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)
-	const folderPath = await path.join(await path.cacheDir(), "com.levminer.authme", "logs")
-	await invoke("create_logs_dir", { path: folderPath })
+	await invoke("create_logs_dir")
 
 	if (fileName === undefined) {
 		fileName = `authme-${time}.log`
 	}
 
-	invoke("write_logs", { name: `${folderPath}/${fileName}`, message: `${message}\n` })
+	invoke("write_logs", { name: fileName, message: `${message}\n` })
 }
 
 export default { log, warn, error }

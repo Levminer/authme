@@ -3,6 +3,7 @@ use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::io::Write;
+use std::path::{Path, PathBuf};
 use std::{env, fs};
 use sysinfo::System;
 use tauri::Manager;
@@ -47,21 +48,29 @@ pub fn logger(message: String, time: String, kind: &str) {
     }
 }
 
-#[tauri::command]
-pub fn create_logs_dir(path: String) {
-    fs::create_dir_all(path).unwrap();
+fn logs_dir(app: &tauri::AppHandle) -> PathBuf {
+    app.path().app_cache_dir().unwrap().join("logs")
 }
 
 #[tauri::command]
-pub fn write_logs(name: String, message: String) {
+pub fn create_logs_dir(app: tauri::AppHandle) {
+    fs::create_dir_all(logs_dir(&app)).unwrap();
+}
+
+#[tauri::command]
+pub fn write_logs(app: tauri::AppHandle, name: String, message: String) -> Result<(), String> {
+    let file_name = Path::new(&name)
+        .file_name()
+        .filter(|file_name| *file_name == name.as_str() && name.ends_with(".log"))
+        .ok_or("Invalid log file name")?;
+
     let mut file = fs::OpenOptions::new()
-        .write(true)
         .append(true)
         .create(true)
-        .open(name)
-        .unwrap();
+        .open(logs_dir(&app).join(file_name))
+        .map_err(|error| error.to_string())?;
 
-    write!(file, "{}", message).unwrap();
+    write!(file, "{}", message).map_err(|error| error.to_string())
 }
 
 #[derive(Serialize, Deserialize)]
