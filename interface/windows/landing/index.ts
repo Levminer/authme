@@ -3,7 +3,7 @@ import { getSettings, setSettings } from "../../stores/settings"
 import { getState, setState } from "../../stores/state"
 import { invoke } from "@tauri-apps/api/core"
 import * as dialog from "@tauri-apps/plugin-dialog"
-import { setEntry, generateRandomKey, setEncryptionKey, createWebAuthnLogin, verifyWebAuthnLogin } from "interface/utils/encryption"
+import { createEncryptionKey, loadEncryptionKey, createWebAuthnLogin, verifyWebAuthnLogin } from "interface/utils/encryption"
 import { search } from "interface/utils/password"
 import { encodeBase64 } from "@utils/convert"
 import { getLanguage } from "@utils/language"
@@ -28,11 +28,9 @@ export const noPassword = async () => {
 		}
 	}
 
-	const key = await generateRandomKey(32)
-	const decoder = new TextDecoder()
-
-	await setEntry("encryptionKey", encodeBase64(decoder.decode(key)))
-	await setEncryptionKey()
+	if ((await createEncryptionKey()) === "error") {
+		return
+	}
 
 	settings.security.requireAuthentication = false
 	state.authenticated = true
@@ -95,7 +93,17 @@ export const appController = async () => {
 	const state = getState()
 
 	if (settings.security.requireAuthentication === false) {
-		await setEncryptionKey()
+		const codes = await loadEncryptionKey(settings.vault.codes)
+
+		if (codes === "error") {
+			return
+		}
+
+		// Codes were migrated from a legacy encryption key
+		if (codes !== null) {
+			settings.vault.codes = codes
+			setSettings(settings)
+		}
 
 		state.authenticated = true
 		setState(state)

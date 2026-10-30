@@ -266,11 +266,11 @@ version = "7.1.1"
 dependencies = [
  "argon2",
  "auto-launch",
+ "base64 0.22.1",
  "google_authenticator_converter",
  "keyring",
  "magic-crypt",
  "once_cell",
- "rand",
  "rand_core",
  "serde",
  "serde_json",

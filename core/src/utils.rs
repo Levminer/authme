@@ -1,6 +1,4 @@
 use google_authenticator_converter::{process_data, Account};
-use rand::distributions::Alphanumeric;
-use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -13,17 +11,6 @@ pub fn get_args() -> Vec<String> {
     let args: Vec<String> = env::args().collect();
 
     args.into()
-}
-
-#[tauri::command]
-pub fn random_values(length: usize) -> String {
-    let rand_string: String = thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(length)
-        .map(char::from)
-        .collect();
-
-    rand_string.into()
 }
 
 #[tauri::command]

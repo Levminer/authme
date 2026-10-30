@@ -8,56 +8,60 @@ const settings = getSettings()
 const service = dev ? "authme_dev" : "authme"
 
 /**
- * Generates random key
- */
-export const generateRandomKey = async (length: number): Promise<ArrayBuffer> => {
-	return new ArrayBuffer(await invoke("random_values", { length }))
-}
-
-/**
  * Encrypts a string with the encryption key
  */
 export const encryptData = async (data: string): Promise<string> => {
-	return await invoke("encrypt_data", { data })
+	try {
+		return await invoke("encrypt_data", { data })
+	} catch (error) {
+		dialog.message(`Failed to encrypt your codes!\n\n Please restart the app and try again!\n\n${error}`, { kind: "error" })
+		logger.error(`Failed to encrypt codes: ${error}`)
+
+		throw error
+	}
 }
 
 /**
  * Decrypts a string with the encryption key
  */
 export const decryptData = async (data: string): Promise<string> => {
-	const res: string = await invoke("decrypt_data", { data })
+	try {
+		return await invoke("decrypt_data", { data })
+	} catch (error) {
+		dialog.message(`Failed to decrypt your codes!\n\n Please restart the app and try again!\n\n${error}`, { kind: "error" })
+		logger.error(`Failed to decrypt codes: ${error}`)
 
-	if (res === "error") {
-		dialog.message("Failed to decrypt your codes!\n\n Please restart the app and try again!", { kind: "error" })
+		throw error
 	}
-
-	return res
 }
 
 /**
- * Sets an entry on the system keychain
+ * Creates the encryption key on the systems keychain and sets it on the backend
  */
-export const setEntry = async (name: string, data: string) => {
-	const res = await invoke("set_entry", { name, data, service })
+export const createEncryptionKey = async () => {
+	try {
+		await invoke("create_encryption_key", { service })
+	} catch (error) {
+		dialog.message(`Failed to set the encryption key on your systems keychain!\n\n You can use the password method.\n\n${error}`, { kind: "error" })
+		logger.error(`Failed to create encryption key: ${error}`)
 
-	if (res === "error") {
-		dialog.message("Failed to set the encryption key on your systems keychain!\n\n You can use the password method.", { kind: "error" })
+		return "error"
 	}
-
-	return res
 }
 
 /**
- * Set the encryption key on the backend
+ * Loads the encryption key from the systems keychain and sets it on the backend
+ * Returns the re-encrypted codes if they were migrated from a legacy key
  */
-export const setEncryptionKey = async () => {
-	const res: string = await invoke("set_encryption_key", { service })
+export const loadEncryptionKey = async (codes: string | null): Promise<string | null | "error"> => {
+	try {
+		return await invoke("load_encryption_key", { service, codes })
+	} catch (error) {
+		dialog.message(`Failed to load the encryption key from your systems keychain!\n\n Please restart the app and try again!\n\n${error}`, { kind: "error" })
+		logger.error(`Failed to load encryption key: ${error}`)
 
-	if (res === "error") {
-		dialog.message("Failed to set the encryption key on your systems keychain!\n\n Please restart the app and try again!", { kind: "error" })
+		return "error"
 	}
-
-	return res
 }
 
 /**
@@ -106,7 +110,7 @@ export const createWebAuthnLogin = async () => {
 
 				timeout: 60000,
 
-				challenge: await generateRandomKey(64),
+				challenge: crypto.getRandomValues(new Uint8Array(32)),
 			},
 		})
 
@@ -130,7 +134,7 @@ export const verifyWebAuthnLogin = async () => {
 		const res = await navigator.credentials.get({
 			publicKey: {
 				timeout: 60000,
-				challenge: await generateRandomKey(64),
+				challenge: crypto.getRandomValues(new Uint8Array(32)),
 				userVerification: "discouraged",
 			},
 		})
