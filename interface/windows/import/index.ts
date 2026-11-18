@@ -331,8 +331,10 @@ export const bitwardenFile = async () => {
 	interface BitwardenFile {
 		encrypted: boolean
 		items: {
-			login: {
-				totp: string
+			name: string
+			// Only logins have one; notes, cards and identities don't
+			login?: {
+				totp: string | null
 			}
 		}[]
 	}
@@ -345,8 +347,14 @@ export const bitwardenFile = async () => {
 		for (let i = 0; i < file.items.length; i++) {
 			const entry = file.items[i]
 
-			if (entry.login.totp) {
-				importString += totpImageConverter(entry.login.totp)
+			const totp = entry.login?.totp?.trim()
+
+			if (totp?.startsWith("otpauth://")) {
+				importString += totpImageConverter(totp)
+			} else if (totp && !totp.startsWith("steam://")) {
+				// A key typed in as the bare secret
+				const name = encodeURIComponent(entry.name)
+				importString += totpImageConverter(`otpauth://totp/${name}?secret=${totp.replace(/\s/g, "")}&issuer=${name}`)
 			}
 		}
 
